@@ -3,11 +3,11 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import {Slider} from "@mui/material";
+import {LinearProgress} from "@mui/material";
 
-export default function ButtonAppBar() {
+export default function TopToolbar(props) {
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1 }} style={{position: 'fixed', top: 0, zIndex: 100, width: '100%'}}>
             <AppBar position="static">
                 <Toolbar>
                     {/*<IconButton*/}
@@ -27,6 +27,9 @@ export default function ButtonAppBar() {
                     {/*<Button color="inherit">Login</Button>*/}
                 </Toolbar>
             </AppBar>
+            {props.loading ? <Box sx={{ width: '100%' }}>
+                <LinearProgress color={"secondary"}/>
+            </Box> : null}
         </Box>
     );
 }

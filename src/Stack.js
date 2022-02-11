@@ -1,36 +1,21 @@
 import React, {Component} from "react";
 import StackGrid, {easings, transitions} from "react-stack-grid";
 import image from './assets/example.png';
-import MediaCard from "./Card";
+import MediaCard from "./MediaCard";
 import {Slider} from "@mui/material";
 import Box from "@mui/material/Box";
-import {Col, Container, Row} from "react-bootstrap";
-
-
-/**
- * Questo componente serve per modellare l'intera singola card.
- */
-// class Card extends Component {
-//     render() {
-//         return (
-//             <div style={{backgroundColor: 'grey'}}>
-//             <img src={this.props.item.image}
-//                  alt={'OK'}
-//                  className={`item item--${this.props.item.modifier}`}
-//                  style={{height: this.props.item.height}}
-//                  onClick={() => this.props.removeItem(this.props.item.id)}/>
-//             </div>)
-//     }
-// }
+import {Container, Row} from "react-bootstrap";
+import PrimarySearchAppBar from "./TopToolbar";
 
 class StackComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            loading: false,
             items: [],
             duration: 480,
             columnWidth: 100,
-            gutter: 50,
+            gutter: 30,
             easing: easings.quartOut,
             transition: 'fadeDown',
             rtl: false,
@@ -39,11 +24,16 @@ class StackComponent extends Component {
 
     componentDidMount() {
         this.getInitialCards();
-        // setInterval(() => {this.multipleAppendItem()}, 2000)
+        window.addEventListener('scroll', () => {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                this.multipleAppendItem();
+            }
+        });
 
     }
 
     multipleAppendItem() {
+        this.setState({loading: true})
         const newItems = [];
         for (let i = 0; i < 5; i++) {
             newItems.push({
@@ -54,6 +44,7 @@ class StackComponent extends Component {
         this.setState({
             items: [...this.state.items, ...newItems],
         });
+        setTimeout(() => {this.setState({loading: false})}, 500)
     }
 
     generateHeight() {
@@ -62,7 +53,7 @@ class StackComponent extends Component {
 
     getInitialCards() {
         let tmpItems = [];
-        for (let i = 0; i < 10; i += 1) {
+        for (let i = 0; i < 20; i += 1) {
             tmpItems.push({
                 height: this.generateHeight(),
                 image: image
@@ -73,11 +64,7 @@ class StackComponent extends Component {
 
     visualizeCards() {
         return this.state.items.map((item, index) =>
-            (
-                // <Card key={index} item={item}/>
-                <MediaCard item={item} index={index}/>
-
-            )
+            (<MediaCard key={index} item={item} index={index}/>)
         )
     }
 
@@ -86,7 +73,6 @@ class StackComponent extends Component {
     }
 
     handleChangesSlider(event) {
-        // console.log(event.target.value)
         this.setState({columnWidth: 130 + event.target.value})
     }
 
@@ -94,6 +80,10 @@ class StackComponent extends Component {
         const myTransition = 'fadeDown';
         return (
             <Container>
+                <PrimarySearchAppBar loading={this.state.loading}/>
+                <br/>
+                <br/>
+                <br/>
                 <Row  className="justify-content-center">
                     <Box style={{width: '25%'}}>
                         <Slider
