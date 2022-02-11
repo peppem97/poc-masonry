@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import StackGrid from "react-stack-grid";
+import StackGrid, {easings, transitions} from "react-stack-grid";
 import image from './assets/example.png';
 
 const itemModifier = [
@@ -15,8 +15,8 @@ const itemModifier = [
 ];
 
 const divStyle = {
-    // 'background-color': 'yellow',
-    'background-image': image
+    'background-color': 'yellow',
+    // 'background-image': image
 
 }
 
@@ -31,7 +31,20 @@ class Card extends Component {
 class StackComponent extends Component {
     constructor(props) {
         super(props);
-        this.getList();
+        const items = []
+
+        for (let i = 0; i < 10; i += 1) {
+            items.push(this.createItem());
+        }
+        this.state = {
+            items,
+            duration: 480,
+            columnWidth: 150,
+            gutter: 5,
+            easing: easings.quartOut,
+            transition: 'fadeDown',
+            rtl: false,
+        };
     }
 
     createItem() {
@@ -41,22 +54,41 @@ class StackComponent extends Component {
         return { id, height, modifier };
     }
 
-    getList() {
-        for (let i = 0; i < 10; i += 1) {
-            this.items.push(this.createItem());
-        }
+    removeItem() {
+        console.log('Rimuovo...')
     }
 
     render() {
+        const {
+            items,
+            duration,
+            columnWidth,
+            gutter,
+            easing,
+            transition: transitionSelect,
+            rtl,
+        } = this.state;
+        const transition = transitions[transitionSelect];
+
         return (
-            <StackGrid columnWidth={150}>
-                {this.items.map(item =>
+            <StackGrid duration={duration}
+                       columnWidth={columnWidth}
+                       gutterWidth={gutter}
+                       gutterHeight={gutter}
+                       easing={easing}
+                       appear={transition.appear}
+                       appeared={transition.appeared}
+                       enter={transition.enter}
+                       entered={transition.entered}
+                       leaved={transition.leaved}
+                       rtl={rtl}>
+                {items.map(item =>
                     (<div
                         key={item.id}
                         className={`item item--${item.modifier}`}
-                        style={{ height: item.height }}
+                        style={{ height: item.height, backgroundColor: 'yellow' }}
                         onClick={() => this.removeItem(item.id)}
-                    />)
+                    >OK</div>)
                 )}
             </StackGrid>
         );
