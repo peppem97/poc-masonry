@@ -1,11 +1,13 @@
-import './App.css';
 import {Component} from "react";
 import {Container, Row} from "react-bootstrap";
 import PrimarySearchAppBar from "./Toolbar";
-import Home from "./home";
 import Stack from "./Stack";
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+        console.disableYellowBox = true;
+    }
     render() {
         return (
             <div>

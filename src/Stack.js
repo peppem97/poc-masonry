@@ -14,30 +14,29 @@ const itemModifier = [
     'purple',
 ];
 
-const divStyle = {
-    'background-color': 'yellow',
-    // 'background-image': image
+// const divStyle = {
+//     'background-color': 'yellow',
+//     // 'background-image': image
+//
+// }
 
-}
-
-class Card extends Component {
-    render() {
-        return <div style={divStyle}>
-            Sono la card {this.props.numero}
-        </div>
-    }
-}
+// class Card extends Component {
+//     render() {
+//         return <div style={divStyle}>
+//             Sono la card {this.props.numero}
+//         </div>
+//     }
+// }
 
 class StackComponent extends Component {
+    items = [];
     constructor(props) {
         super(props);
-        const items = []
-
+        // const items = [];
         for (let i = 0; i < 10; i += 1) {
-            items.push(this.createItem());
+            this.items.push(this.generateWindowsSize());
         }
         this.state = {
-            items,
             duration: 480,
             columnWidth: 150,
             gutter: 5,
@@ -47,11 +46,11 @@ class StackComponent extends Component {
         };
     }
 
-    createItem() {
-        const id = Math.random().toString(36).substr(2, 9);
+
+    generateWindowsSize() {
         const height = Math.floor((Math.random() * (300 - 80)) + 80);
         const modifier = itemModifier[Math.floor(Math.random() * itemModifier.length)];
-        return { id, height, modifier };
+        return { height, modifier };
     }
 
     removeItem() {
@@ -59,37 +58,29 @@ class StackComponent extends Component {
     }
 
     render() {
-        const {
-            items,
-            duration,
-            columnWidth,
-            gutter,
-            easing,
-            transition: transitionSelect,
-            rtl,
-        } = this.state;
-        const transition = transitions[transitionSelect];
+        const myTransition = 'fadeDown';
 
         return (
-            <StackGrid duration={duration}
-                       columnWidth={columnWidth}
-                       gutterWidth={gutter}
-                       gutterHeight={gutter}
-                       easing={easing}
-                       appear={transition.appear}
-                       appeared={transition.appeared}
-                       enter={transition.enter}
-                       entered={transition.entered}
-                       leaved={transition.leaved}
-                       rtl={rtl}>
-                {items.map(item =>
-                    (<img
-                        key={item.id}
-                        src={image}
-                        className={`item item--${item.modifier}`}
-                        style={{ height: item.height, backgroundColor: 'yellow'}}
-                        onClick={() => this.removeItem(item.id)}
-                    />)
+            <StackGrid duration={this.state.duration}
+                       columnWidth={this.statecolumnWidth}
+                       gutterWidth={this.state.gutter}
+                       gutterHeight={this.state.gutter}
+                       easing={this.state.easing}
+                       appear={transitions[myTransition].appear}
+                       appeared={transitions[myTransition].appeared}
+                       enter={transitions[myTransition].enter}
+                       entered={transitions[myTransition].entered}
+                       leaved={transitions[myTransition].leaved}
+                       rtl={this.state.rtl}>
+                {this.items.map((item, index) =>
+                    (<div style={{backgroundColor: 'grey'}} key={index}>
+                        <img src={image}
+                            alt={'OK'}
+                            className={`item item--${item.modifier}`}
+                            style={{ height: item.height}}
+                            onClick={() => this.removeItem(item.id)}
+                        />
+                    </div>)
                 )}
             </StackGrid>
         );
