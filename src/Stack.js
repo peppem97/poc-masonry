@@ -83,12 +83,13 @@ class StackComponent extends Component {
                        leaved={transition.leaved}
                        rtl={rtl}>
                 {items.map(item =>
-                    (<div
+                    (<img
                         key={item.id}
+                        src={image}
                         className={`item item--${item.modifier}`}
-                        style={{ height: item.height, backgroundColor: 'yellow' }}
+                        style={{ height: item.height, backgroundColor: 'yellow'}}
                         onClick={() => this.removeItem(item.id)}
-                    >OK</div>)
+                    />)
                 )}
             </StackGrid>
         );
