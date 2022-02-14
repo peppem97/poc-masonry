@@ -5,11 +5,13 @@
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@fontsource/roboto": "^4.5.3",
     "@mui/icons-material": "^5.4.1",
     "@mui/material": "^5.4.1",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "bootstrap": "^5.1.3",
     "react": "^17.0.2",
     "react-bootstrap": "^2.1.2",
     "react-dom": "^17.0.2",
@@ -24,8 +26,9 @@
     "eject": "react-scripts eject",
     "stack-grid": "npm install react-stack-grid",
     "bootstrap": "npm i react-bootstrap",
-    "material-components": "npm install @mui/material @emotion/react @emotion/styled",
-    "material-icons": "npm install @mui/icons-material"
+    "material-ui": "npm install @mui/material @mui/icons-material @emotion/react @emotion/styled",
+    "bootstrap2": "npm install bootstrap",
+    "font": "npm install @fontsource/roboto"
   },
   "eslintConfig": {
     "extends": [
