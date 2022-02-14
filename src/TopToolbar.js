@@ -9,7 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import {Component} from "react";
 
-const Search = styled('div')(({ theme }) => ({
+const Search = styled('div')(({theme}) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -24,7 +24,7 @@ const Search = styled('div')(({ theme }) => ({
     },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const SearchIconWrapper = styled('div')(({theme}) => ({
     padding: theme.spacing(0, 2),
     height: '100%',
     position: 'absolute',
@@ -34,7 +34,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
     justifyContent: 'center',
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+const StyledInputBase = styled(InputBase)(({theme}) => ({
     color: 'inherit',
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
@@ -51,16 +51,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-
-class TopToolbar extends Component{
-    constructor(props) {
-        super(props);
-    }
-
+class TopToolbar extends Component {
     render() {
         return (
-            <Box sx={{ flexGrow: 1 }} style={{position: 'fixed', top: 0, zIndex: 100, width: '100%'}}>
-                <AppBar position="static" >
+            <Box sx={{flexGrow: 1}} style={{position: 'fixed', top: 0, zIndex: 100, width: '100%'}}>
+                <AppBar position="static">
                     <Toolbar style={{color: 'black', backgroundColor: '#ffcccc'}}>
                         {/*<IconButton*/}
                         {/*    size="large"*/}
@@ -75,31 +70,29 @@ class TopToolbar extends Component{
                         <Typography variant="h6"
                                     noWrap
                                     component="div"
-                                    sx={{ display: { xs: 'none', sm: 'block' } }} >
+                                    sx={{display: {xs: 'none', sm: 'block'}}}>
                             POC-Masonry
                         </Typography>
-                        <Box sx={{ flexGrow: 1 }} />
+                        <Box sx={{flexGrow: 1}}/>
                         <IconButton size="large" style={{color: 'black'}} onClick={this.props.increaseColumnsSize}>
-                            <AddIcon />
+                            <AddIcon/>
                         </IconButton>
                         <IconButton size="large" style={{color: 'black'}} onClick={this.props.decreaseColumnsSize}>
                             <HorizontalRuleIcon/>
                         </IconButton>
                         <Search>
                             <SearchIconWrapper>
-                                <SearchIcon />
+                                <SearchIcon/>
                             </SearchIconWrapper>
                             <StyledInputBase
                                 placeholder="Cerca..."
-                                inputProps={{ 'aria-label': 'Cerca qualcosa...' }}
+                                inputProps={{'aria-label': 'Cerca qualcosa...'}}
                             />
                         </Search>
-
-
                         {/*<Button color="inherit">Login</Button>*/}
                     </Toolbar>
                 </AppBar>
-                {this.props.loading ? <Box sx={{ width: '100%' }}>
+                {this.props.loading ? <Box sx={{width: '100%'}}>
                     <LinearProgress color={"secondary"}/>
                 </Box> : null}
             </Box>

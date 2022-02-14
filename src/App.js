@@ -1,6 +1,6 @@
-import {Component} from "react";
+import {Component, Fragment} from "react";
 import Stack from "./Stack";
-
+import './App.css'
 
 class App extends Component {
     constructor(props) {
@@ -10,7 +10,9 @@ class App extends Component {
 
     render() {
         return (
-            <Stack/>
+            <Fragment>
+                <Stack/>
+            </Fragment>
         );
     }
 }
