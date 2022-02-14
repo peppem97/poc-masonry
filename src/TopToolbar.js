@@ -3,8 +3,11 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import {alpha, InputBase, LinearProgress, styled} from "@mui/material";
+import {alpha, IconButton, InputBase, LinearProgress, styled} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/Add';
+import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
+import {Component} from "react";
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -49,45 +52,59 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 
-export default function TopToolbar(props) {
-    return (
-        <Box sx={{ flexGrow: 1 }} style={{position: 'fixed', top: 0, zIndex: 100, width: '100%'}}>
-            <AppBar position="static">
-                <Toolbar >
-                    {/*<IconButton*/}
-                    {/*    size="large"*/}
-                    {/*    edge="start"*/}
-                    {/*    color="inherit"*/}
-                    {/*    aria-label="menu"*/}
-                    {/*    sx={{ mr: 2 }}*/}
-                    {/*>*/}
-                    {/*    <MenuIcon />*/}
-                    {/*</IconButton>*/}
+class TopToolbar extends Component{
+    constructor(props) {
+        super(props);
+    }
 
-                    <Typography variant="h6"
-                                noWrap
-                                component="div"
-                                sx={{ display: { xs: 'none', sm: 'block' } }} >
-                        POC-Masonry
-                    </Typography>
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon />
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Search…"
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
-                    </Search>
+    render() {
+        return (
+            <Box sx={{ flexGrow: 1 }} style={{position: 'fixed', top: 0, zIndex: 100, width: '100%'}}>
+                <AppBar position="static" >
+                    <Toolbar style={{color: 'black', backgroundColor: '#ffcccc'}}>
+                        {/*<IconButton*/}
+                        {/*    size="large"*/}
+                        {/*    edge="start"*/}
+                        {/*    color="inherit"*/}
+                        {/*    aria-label="menu"*/}
+                        {/*    sx={{ mr: 2 }}*/}
+                        {/*>*/}
+                        {/*    <MenuIcon />*/}
+                        {/*</IconButton>*/}
+
+                        <Typography variant="h6"
+                                    noWrap
+                                    component="div"
+                                    sx={{ display: { xs: 'none', sm: 'block' } }} >
+                            POC-Masonry
+                        </Typography>
+                        <Box sx={{ flexGrow: 1 }} />
+                        <IconButton size="large" style={{color: 'black'}} onClick={this.props.increaseColumnsSize}>
+                            <AddIcon />
+                        </IconButton>
+                        <IconButton size="large" style={{color: 'black'}} onClick={this.props.decreaseColumnsSize}>
+                            <HorizontalRuleIcon/>
+                        </IconButton>
+                        <Search>
+                            <SearchIconWrapper>
+                                <SearchIcon />
+                            </SearchIconWrapper>
+                            <StyledInputBase
+                                placeholder="Search…"
+                                inputProps={{ 'aria-label': 'search' }}
+                            />
+                        </Search>
 
 
-                    {/*<Button color="inherit">Login</Button>*/}
-                </Toolbar>
-            </AppBar>
-            {props.loading ? <Box sx={{ width: '100%' }}>
-                <LinearProgress color={"secondary"}/>
-            </Box> : null}
-        </Box>
-    );
+                        {/*<Button color="inherit">Login</Button>*/}
+                    </Toolbar>
+                </AppBar>
+                {this.props.loading ? <Box sx={{ width: '100%' }}>
+                    <LinearProgress color={"secondary"}/>
+                </Box> : null}
+            </Box>
+        );
+    }
 }
+
+export default TopToolbar;

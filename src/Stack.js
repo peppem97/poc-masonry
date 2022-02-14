@@ -11,6 +11,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import Typography from "@mui/material/Typography";
+import TopToolbar from "./TopToolbar";
 
 class StackComponent extends Component {
     constructor(props) {
@@ -77,15 +78,21 @@ class StackComponent extends Component {
         console.log('Rimuovo...')
     }
 
-    handleChangesSlider = (e) => {
-        this.setState({columnWidth: 130 + e.target.value})
+    increaseColumnsSize = (e) => {
+        this.setState({columnWidth: this.state.columnWidth + 15})
+    }
+
+    decreaseColumnsSize = (e) => {
+        this.setState({columnWidth: this.state.columnWidth - 15})
     }
 
     render = () => {
         const myTransition = 'fadeDown';
         return (
             <Fragment>
-                <PrimarySearchAppBar loading={this.state.loading}/>
+                <TopToolbar loading={this.state.loading}
+                            increaseColumnsSize={this.increaseColumnsSize.bind(this)}
+                            decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>
                 <Container fluid>
                     <br/>
                     <br/>
@@ -136,19 +143,6 @@ class StackComponent extends Component {
                     </Row>
                 </Container>
             </Fragment>
-
-
-            // <Container>
-            //     <Row>
-            //         <Col>1 of 2</Col>
-            //         <Col>2 of 2</Col>
-            //     </Row>
-            //     <Row>
-            //         <Col>1 of 3</Col>
-            //         <Col>2 of 3</Col>
-            //         <Col>3 of 3</Col>
-            //     </Row>
-            // </Container>
         );
     }
 }
