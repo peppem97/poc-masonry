@@ -90,8 +90,8 @@ class TopToolbar extends Component{
                                 <SearchIcon />
                             </SearchIconWrapper>
                             <StyledInputBase
-                                placeholder="Search…"
-                                inputProps={{ 'aria-label': 'search' }}
+                                placeholder="Cerca..."
+                                inputProps={{ 'aria-label': 'Cerca qualcosa...' }}
                             />
                         </Search>
 
