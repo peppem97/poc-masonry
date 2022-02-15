@@ -7,7 +7,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import {Component} from "react";
 import Button from "@mui/material/Button";
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import ZoomOutIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
+import Typography from "@mui/material/Typography";
+import LocalFloristIcon from "@mui/icons-material/LocalFlorist";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -67,12 +69,12 @@ class TopToolbar extends Component {
                         {/*    <MenuIcon />*/}
                         {/*</IconButton>*/}
 
-                        {/*<Typography variant="h6"*/}
-                        {/*            noWrap*/}
-                        {/*            component="div"*/}
-                        {/*            sx={{display: {xs: 'none', sm: 'block'}}}>*/}
-                        {/*    POC-Masonry*/}
-                        {/*</Typography>*/}
+                        <Typography variant="h6"
+                                    noWrap
+                                    component="div"
+                                    sx={{display: {xs: 'none', sm: 'block'}, color: 'darkred', fontWeight: 'bold'}}>
+                            <LocalFloristIcon fontSize="inherit"/>&nbsp;Masonry
+                        </Typography>
                         <Box sx={{flexGrow: 1}}/>
                         <IconButton size="large" style={{color: 'darkred', fontWeight: 'bold'}} onClick={this.props.increaseColumnsSize}>
                             <ZoomInIcon/>

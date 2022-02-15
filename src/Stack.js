@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from "react";
 import StackGrid, {easings, transitions} from "react-stack-grid";
-import image from './assets/example.png';
+import image from './assets/example3.jpg';
 import MediaCard from "./MediaCard";
 import {Container, Row} from "react-bootstrap";
 import '@fontsource/roboto/300.css';
@@ -9,6 +9,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import Typography from "@mui/material/Typography";
 import TopToolbar from "./TopToolbar";
+import LocalFloristIcon from '@mui/icons-material/LocalFlorist';
 
 
 class StackComponent extends Component {
@@ -77,11 +78,11 @@ class StackComponent extends Component {
     }
 
     increaseColumnsSize = (e) => {
-        this.setState({columnWidth: this.state.columnWidth + 15})
+        this.setState({columnWidth: this.state.columnWidth + 50})
     }
 
     decreaseColumnsSize = (e) => {
-        this.setState({columnWidth: this.state.columnWidth - 15})
+        this.setState({columnWidth: this.state.columnWidth - 50})
     }
 
     render = () => {
@@ -91,7 +92,7 @@ class StackComponent extends Component {
                 <TopToolbar loading={this.state.loading}
                             increaseColumnsSize={this.increaseColumnsSize.bind(this)}
                             decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>
-                <Container fluid>
+                <Container>
                     <br/>
                     <br/>
                     <br/>
@@ -101,7 +102,7 @@ class StackComponent extends Component {
                     <Row>
                         {/*<h1 className="text-center">Prova</h1>*/}
                         <Typography variant="h1" gutterBottom component="div" className="text-center" style={{color: 'black', fontWeight: 'bold'}}>
-                            Masonry
+                            <LocalFloristIcon fontSize="inherit"/>&nbsp;Masonry&nbsp;<LocalFloristIcon fontSize="inherit"/>
                         </Typography>
                         <Typography variant="h3" gutterBottom component="div" className="text-center" style={{color: 'darkred'}}>
                             Descrizione Masonry
