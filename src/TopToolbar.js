@@ -2,12 +2,12 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import {alpha, IconButton, InputBase, LinearProgress, styled} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
-import AddIcon from '@mui/icons-material/Add';
-import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import {Component} from "react";
+import Button from "@mui/material/Button";
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomIn';
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -67,29 +67,34 @@ class TopToolbar extends Component {
                         {/*    <MenuIcon />*/}
                         {/*</IconButton>*/}
 
-                        <Typography variant="h6"
-                                    noWrap
-                                    component="div"
-                                    sx={{display: {xs: 'none', sm: 'block'}}}>
-                            POC-Masonry
-                        </Typography>
+                        {/*<Typography variant="h6"*/}
+                        {/*            noWrap*/}
+                        {/*            component="div"*/}
+                        {/*            sx={{display: {xs: 'none', sm: 'block'}}}>*/}
+                        {/*    POC-Masonry*/}
+                        {/*</Typography>*/}
                         <Box sx={{flexGrow: 1}}/>
-                        <IconButton size="large" style={{color: 'black'}} onClick={this.props.increaseColumnsSize}>
-                            <AddIcon/>
+                        <IconButton size="large" style={{color: 'darkred', fontWeight: 'bold'}} onClick={this.props.increaseColumnsSize}>
+                            <ZoomInIcon/>
                         </IconButton>
-                        <IconButton size="large" style={{color: 'black'}} onClick={this.props.decreaseColumnsSize}>
-                            <HorizontalRuleIcon/>
+                        <IconButton size="large"  style={{color: 'darkred', fontWeight: 'bold'}} onClick={this.props.decreaseColumnsSize}>
+                            <ZoomOutIcon/>
                         </IconButton>
+                        <Button color="inherit" style={{color: 'darkred', fontWeight: 'bold'}}>Informazioni</Button>
+                        <Button color="inherit" style={{color: 'darkred', fontWeight: 'bold'}}>Negozi</Button>
                         <Search>
                             <SearchIconWrapper>
-                                <SearchIcon/>
+                                <SearchIcon style={{color: 'darkred'}}/>
                             </SearchIconWrapper>
                             <StyledInputBase
                                 placeholder="Cerca..."
                                 inputProps={{'aria-label': 'Cerca qualcosa...'}}
                             />
                         </Search>
-                        {/*<Button color="inherit">Login</Button>*/}
+                        &nbsp;
+                        <Button variant="contained" style={{backgroundColor: 'darkred'}}>ACCEDI</Button>
+                        &nbsp;&nbsp;
+                        <Button variant="contained" style={{backgroundColor: 'white', color: 'black'}}>REGISTRATI</Button>
                     </Toolbar>
                 </AppBar>
                 {this.props.loading ? <Box sx={{width: '100%'}}>

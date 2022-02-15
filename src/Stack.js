@@ -2,7 +2,6 @@ import React, {Component, Fragment} from "react";
 import StackGrid, {easings, transitions} from "react-stack-grid";
 import image from './assets/example.png';
 import MediaCard from "./MediaCard";
-import {Slider} from "@mui/material";
 import {Container, Row} from "react-bootstrap";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -11,6 +10,7 @@ import '@fontsource/roboto/700.css';
 import Typography from "@mui/material/Typography";
 import TopToolbar from "./TopToolbar";
 
+
 class StackComponent extends Component {
     constructor(props) {
         super(props);
@@ -18,7 +18,7 @@ class StackComponent extends Component {
             loading: false,
             items: [],
             duration: 480,
-            columnWidth: 170,
+            columnWidth: 200,
             gutter: 30,
             easing: easings.quartOut,
             transition: 'fadeDown',
@@ -100,11 +100,11 @@ class StackComponent extends Component {
                     <br/>
                     <Row>
                         {/*<h1 className="text-center">Prova</h1>*/}
-                        <Typography variant="h2" gutterBottom component="div" className="text-center" style={{color: 'black', fontWeight: 'bold'}}>
-                            POC
-                        </Typography>
-                        <Typography variant="h3" gutterBottom component="div" className="text-center" style={{color: 'blue', fontWeight: 'bold'}}>
+                        <Typography variant="h1" gutterBottom component="div" className="text-center" style={{color: 'black', fontWeight: 'bold'}}>
                             Masonry
+                        </Typography>
+                        <Typography variant="h3" gutterBottom component="div" className="text-center" style={{color: 'darkred'}}>
+                            Descrizione Masonry
                         </Typography>
                         {/*<Box style={{width: '25%'}}>*/}
                         {/*    <Slider*/}
