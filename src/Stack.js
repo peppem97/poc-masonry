@@ -8,21 +8,16 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import Typography from "@mui/material/Typography";
-import TopToolbar from "./TopToolbar";
-import LocalFloristIcon from '@mui/icons-material/LocalFlorist';
-
 
 class StackComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: false,
             items: [],
-            duration: 480,
-            columnWidth: 200,
+            duration: 500,
             gutter: 30,
             easing: easings.quartOut,
-            transition: 'fadeDown',
+            transition: 'flip',
             rtl: false,
         };
     }
@@ -38,7 +33,7 @@ class StackComponent extends Component {
     }
 
     multipleAppendItem = () => {
-        this.setState({loading: true})
+        this.props.setLoading(true)
         const newItems = [];
         for (let i = 0; i < 5; i++) {
             newItems.push({
@@ -49,11 +44,13 @@ class StackComponent extends Component {
         this.setState({
             items: [...this.state.items, ...newItems],
         });
-        setTimeout(() => {this.setState({loading: false})}, 500)
+        setTimeout(() => {
+            this.props.setLoading(false)
+        }, 500)
     }
 
     generateHeight = () => {
-        return Math.floor((Math.random() * (300 - 80)) + 80);
+        return Math.floor((Math.random() * (380)) + 80);
     }
 
     getInitialCards = () => {
@@ -73,26 +70,11 @@ class StackComponent extends Component {
         )
     }
 
-    removeItem = () => {
-        console.log('Rimuovo...')
-    }
-
-    increaseColumnsSize = (e) => {
-        this.setState({columnWidth: this.state.columnWidth + 50})
-    }
-
-    decreaseColumnsSize = (e) => {
-        this.setState({columnWidth: this.state.columnWidth - 50})
-    }
-
     render = () => {
         const myTransition = 'fadeDown';
         return (
             <Fragment>
-                <TopToolbar loading={this.state.loading}
-                            increaseColumnsSize={this.increaseColumnsSize.bind(this)}
-                            decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>
-                <Container>
+                <Container fluid>
                     <br/>
                     <br/>
                     <br/>
@@ -100,32 +82,21 @@ class StackComponent extends Component {
                     <br/>
                     <br/>
                     <Row>
-                        {/*<h1 className="text-center">Prova</h1>*/}
-                        <Typography variant="h1" gutterBottom component="div" className="text-center" style={{color: 'black', fontWeight: 'bold'}}>
-                            <LocalFloristIcon fontSize="inherit"/>&nbsp;Masonry&nbsp;<LocalFloristIcon fontSize="inherit"/>
+                        <Typography variant="h1" gutterBottom component="div" className="text-center"
+                                    style={{color: 'black', fontWeight: 'bold'}}>
+                            Masonry&nbsp;
                         </Typography>
-                        <Typography variant="h3" gutterBottom component="div" className="text-center" style={{color: 'darkred'}}>
+                        <Typography variant="h3" gutterBottom component="div" className="text-center"
+                                    style={{color: 'darkred'}}>
                             Descrizione Masonry
                         </Typography>
-                        {/*<Box style={{width: '25%'}}>*/}
-                        {/*    <Slider*/}
-                        {/*        aria-label="Temperature"*/}
-                        {/*        defaultValue={30}*/}
-                        {/*        valueLabelDisplay="auto"*/}
-                        {/*        step={10}*/}
-                        {/*        marks*/}
-                        {/*        onChange={this.handleChangesSlider.bind(this)}*/}
-                        {/*        min={10}*/}
-                        {/*        max={110}*/}
-                        {/*    />*/}
-                        {/*</Box>*/}
                     </Row>
                     <br/>
                     <br/>
                     <br/>
                     <Row>
                         <StackGrid duration={this.state.duration}
-                                   columnWidth={this.state.columnWidth}
+                                   columnWidth={this.props.columnWidth}
                                    gutterWidth={this.state.gutter}
                                    gutterHeight={this.state.gutter}
                                    easing={this.state.easing}
