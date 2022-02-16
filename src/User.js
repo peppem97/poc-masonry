@@ -49,21 +49,6 @@ const useStyles = makeStyles(() => ({
         width: 48,
         height: 48,
     },
-    // tag: {
-    //     display: 'inline-block',
-    //     fontFamily: "'Sen', sans-serif",
-    //     backgroundColor: '#ff5dac',
-    //     borderRadius: '0.5rem',
-    //     padding: '2px 0.5rem',
-    //     color: '#fff',
-    //     marginBottom: '0.5rem',
-    // },
-    // title: {
-    //     fontFamily: "'Sen', sans-serif",
-    //     fontSize: '2rem',
-    //     fontWeight: 800,
-    //     color: '#fff',
-    // },
     author: {
         zIndex: 1,
         position: 'relative',

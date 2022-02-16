@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from "react";
-import Stack from "./Stack";
+import Stack from "./Home";
 import './App.css'
 import {
     BrowserRouter as Router,
