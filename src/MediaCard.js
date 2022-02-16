@@ -1,30 +1,26 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import {Component, useCallback} from "react";
-import {Avatar, CardHeader, IconButton, Link} from "@mui/material";
+import {Avatar, CardHeader, IconButton} from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import {Redirect, useHistory, useNavigate} from 'react-router-dom';
-import GoLink from "./goLink";
+import {useNavigate} from 'react-router-dom';
 
 function MediaCard(props) {
     let navigate = useNavigate();
 
-    function handleClick() {
-        navigate("/prova");
+    function goToUser() {
+        navigate("/user/" + props.index, {id: 123});
     }
 
     return (
         <Card sx={{maxWidth: 345}}>
-            <CardMedia component="img" height={props.item.height} image={props.item.image} alt="green iguana"/>
+            <CardMedia component="img" height={props.item.height} image={props.item.imageCard} alt="green iguana"/>
             <CardHeader
-                avatar={<IconButton onClick={handleClick}><Avatar >R</Avatar></IconButton>}
-                title="Utente"/>
+                avatar={<IconButton onClick={goToUser}><Avatar src={props.item.imageAvatar}>R</Avatar></IconButton>}
+                title={"Utente " + props.index}/>
             <CardActions className="justify-content-between">
                 <IconButton>
                     <OpenInNewIcon/>

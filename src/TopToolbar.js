@@ -10,6 +10,7 @@ import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import Typography from "@mui/material/Typography";
 import LocalFloristIcon from "@mui/icons-material/LocalFlorist";
+import {useNavigate} from "react-router-dom";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -53,58 +54,55 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
     },
 }));
 
-class TopToolbar extends Component {
-    render() {
-        return (
-            <Box sx={{flexGrow: 1}} style={{position: 'fixed', top: 0, zIndex: 100, width: '100%'}}>
-                <AppBar position="static">
-                    <Toolbar style={{color: 'black', backgroundColor: '#ffcccc'}}>
-                        {/*<IconButton*/}
-                        {/*    size="large"*/}
-                        {/*    edge="start"*/}
-                        {/*    color="inherit"*/}
-                        {/*    aria-label="menu"*/}
-                        {/*    sx={{ mr: 2 }}*/}
-                        {/*>*/}
-                        {/*    <MenuIcon />*/}
-                        {/*</IconButton>*/}
+function TopToolbar(props) {
+    let navigate = useNavigate();
 
-                        <Typography variant="h6"
-                                    noWrap
-                                    component="div"
-                                    sx={{display: {xs: 'none', sm: 'block'}, color: 'darkred', fontWeight: 'bold'}}>
-                            <LocalFloristIcon fontSize="inherit"/>&nbsp;Masonry
-                        </Typography>
-                        <Box sx={{flexGrow: 1}}/>
-                        <IconButton size="large" style={{color: 'darkred', fontWeight: 'bold'}} onClick={this.props.increaseColumnsSize}>
-                            <ZoomInIcon/>
-                        </IconButton>
-                        <IconButton size="large"  style={{color: 'darkred', fontWeight: 'bold'}} onClick={this.props.decreaseColumnsSize}>
-                            <ZoomOutIcon/>
-                        </IconButton>
-                        <Button color="inherit" style={{color: 'darkred', fontWeight: 'bold'}}>Informazioni</Button>
-                        <Button color="inherit" style={{color: 'darkred', fontWeight: 'bold'}}>Negozi</Button>
-                        <Search>
-                            <SearchIconWrapper>
-                                <SearchIcon style={{color: 'darkred'}}/>
-                            </SearchIconWrapper>
-                            <StyledInputBase
-                                placeholder="Cerca..."
-                                inputProps={{'aria-label': 'Cerca qualcosa...'}}
-                            />
-                        </Search>
-                        &nbsp;
-                        <Button variant="contained" style={{backgroundColor: 'darkred'}}>ACCEDI</Button>
-                        &nbsp;&nbsp;
-                        <Button variant="contained" style={{backgroundColor: 'white', color: 'black'}}>REGISTRATI</Button>
-                    </Toolbar>
-                </AppBar>
-                {this.props.loading ? <Box sx={{width: '100%'}}>
-                    <LinearProgress color={"secondary"}/>
-                </Box> : null}
-            </Box>
-        );
+    function goToHome() {
+        navigate("/");
     }
+
+    return (
+        <Box sx={{flexGrow: 1}} style={{position: 'fixed', top: 0, zIndex: 100, width: '100%'}}>
+            <AppBar position="static">
+                <Toolbar style={{color: 'black', backgroundColor: '#ffcccc'}}>
+                    <Typography variant="h6"
+                                noWrap
+                                component="div"
+                                sx={{display: {xs: 'none', sm: 'block'}, color: 'darkred', fontWeight: 'bold'}}>
+                        <Button onClick={goToHome} color="inherit"><LocalFloristIcon
+                            fontSize="inherit"/>&nbsp;Masonry</Button>
+                    </Typography>
+                    <Box sx={{flexGrow: 1}}/>
+                    <IconButton size="large" style={{color: 'darkred', fontWeight: 'bold'}}
+                                onClick={props.increaseColumnsSize}>
+                        <ZoomInIcon/>
+                    </IconButton>
+                    <IconButton size="large" style={{color: 'darkred', fontWeight: 'bold'}}
+                                onClick={props.decreaseColumnsSize}>
+                        <ZoomOutIcon/>
+                    </IconButton>
+                    <Button color="inherit" style={{color: 'darkred', fontWeight: 'bold'}}>Informazioni</Button>
+                    <Button color="inherit" style={{color: 'darkred', fontWeight: 'bold'}}>Negozi</Button>
+                    <Search>
+                        <SearchIconWrapper>
+                            <SearchIcon style={{color: 'darkred'}}/>
+                        </SearchIconWrapper>
+                        <StyledInputBase
+                            placeholder="Cerca..."
+                            inputProps={{'aria-label': 'Cerca qualcosa...'}}
+                        />
+                    </Search>
+                    &nbsp;
+                    <Button variant="contained" style={{backgroundColor: 'darkred'}}>ACCEDI</Button>
+                    &nbsp;&nbsp;
+                    <Button variant="contained" style={{backgroundColor: 'white', color: 'black'}}>REGISTRATI</Button>
+                </Toolbar>
+            </AppBar>
+            {props.loading ? <Box sx={{width: '100%'}}>
+                <LinearProgress color={"secondary"}/>
+            </Box> : null}
+        </Box>
+    );
 }
 
 export default TopToolbar;

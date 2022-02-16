@@ -4,10 +4,9 @@ import './App.css'
 import {
     BrowserRouter as Router,
     Routes,
-    Route,
-    Link
+    Route
 } from 'react-router-dom';
-import Prova from "./prova";
+import User from "./User";
 import TopToolbar from "./TopToolbar";
 
 class App extends Component {
@@ -34,21 +33,21 @@ class App extends Component {
 
     render() {
         return (
-            <Fragment>
-                <TopToolbar loading={this.state.loading}
-                            increaseColumnsSize={this.increaseColumnsSize.bind(this)}
-                            decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>
+            <>
                 <Router>
+                    <TopToolbar loading={this.state.loading}
+                                increaseColumnsSize={this.increaseColumnsSize.bind(this)}
+                                decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>
                     <Routes>
                         <Route exact path='/' element={<Stack
                             setLoading={this.setLoading.bind(this)}
                             columnWidth={this.state.columnWidth}
                             increaseColumnsSize={this.increaseColumnsSize.bind(this)}
                             decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>}/>
-                        <Route exact path='/prova' element={<Prova/>}/>
+                        <Route exact path='/user/:id' element={<User/>}/>
                     </Routes>
                 </Router>
-            </Fragment>
+            </>
 
         );
     }

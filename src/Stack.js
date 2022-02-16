@@ -38,7 +38,8 @@ class StackComponent extends Component {
         for (let i = 0; i < 5; i++) {
             newItems.push({
                 height: this.generateHeight(),
-                image: image
+                imageCard: image,
+                imageAvatar: 'https://i.pravatar.cc/300'
             });
         }
         this.setState({
@@ -58,7 +59,8 @@ class StackComponent extends Component {
         for (let i = 0; i < 20; i += 1) {
             tmpItems.push({
                 height: this.generateHeight(),
-                image: image
+                imageCard: image,
+                imageAvatar: 'https://i.pravatar.cc/300'
             });
         }
         this.setState({items: tmpItems})
