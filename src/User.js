@@ -1,6 +1,8 @@
 import React from 'react';
 import NoSsr from '@material-ui/core/NoSsr';
 import GoogleFontLoader from 'react-google-font-loader';
+import image from './assets/leone.jpg';
+
 import {makeStyles} from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
@@ -99,12 +101,10 @@ export const User = React.memo(function News3Card() {
             <br/>
             <br/>
             <Card className={styles.card}>
-                <Box className={styles.main} minHeight={300} position={'relative'}>
+                <Box className={styles.main} minHeight={500} position={'relative'}>
                     <CardMedia
                         classes={mediaStyles}
-                        image={
-                            'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80'
-                        }
+                        image={image}
                     />
                     <div className={styles.content}>
                         <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
@@ -127,7 +127,7 @@ export const User = React.memo(function News3Card() {
                     </Item>
                     <Info position={'middle'} useStyles={useNewsInfoStyles}>
                         <InfoTitle style={{fontWeight: 'bold'}}>sito.web.it</InfoTitle>
-                        <InfoSubtitle>Jul 20 | 2 Min Read</InfoSubtitle>
+                        <InfoSubtitle>+39-0922-123456</InfoSubtitle>
                     </Info>
                 </Row>
                 <Row
@@ -137,13 +137,27 @@ export const User = React.memo(function News3Card() {
                     pt={2}
                     gap={2}
                     bgcolor={'common.white'}>
-                    <Typography variant={'h2'} className="text-center" style={{color: 'black', fontWeight: 'bold'}}>
-                        Ddnjdnj
+                    <Typography variant={'h4'} className="text-center" style={{color: 'black', fontWeight: 'bold'}}>
+                        Aggiungere funzionalità
                     </Typography>
                 </Row>
                 <div className={styles.shadow}/>
                 <div className={`${styles.shadow} ${styles.shadow2}`}/>
             </Card>
+            <br/>
+            <br/>
+            <br/>
+
+            <Row className="justify-content-center">
+                {/*<Typography variant="h1" gutterBottom component="div" className="text-center"*/}
+                {/*            style={{color: 'black', fontWeight: 'bold'}}>*/}
+                {/*    Masonry&nbsp;*/}
+                {/*</Typography>*/}
+                <Typography variant="h3" gutterBottom component="div" className="text-center"
+                            style={{color: 'darkred', fontWeight: 'bold'}}>
+                    Tutti i prodotti:
+                </Typography>
+            </Row>
         </Container>
     );
 });

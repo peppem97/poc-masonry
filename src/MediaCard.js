@@ -59,7 +59,7 @@ import {useNavigate} from "react-router-dom";
 const useStyles = makeStyles(() => ({
     card: {
         borderRadius: '1rem',
-        boxShadow: 'none',
+        // boxShadow: 1,
         position: 'relative',
         minWidth: 200,
         minHeight: 200,
@@ -108,7 +108,7 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
             {/*        ]}*/}
             {/*    />*/}
             {/*</NoSsr>*/}
-            <Card className={styles.card} style={{height: props.item.height}}>
+            <Card className={styles.card} style={{height: props.item.height}} raised>
                 <CardMedia
                     classes={mediaStyles}
                     image={props.item.imageCard}
