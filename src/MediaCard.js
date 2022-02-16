@@ -6,7 +6,6 @@
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import './MediaCard.css'
 // import {useNavigate} from 'react-router-dom';
 
 // function MediaCard(props) {

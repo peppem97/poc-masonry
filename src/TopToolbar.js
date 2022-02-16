@@ -54,7 +54,7 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
     },
 }));
 
-function TopToolbar(props) {
+export default function TopToolbar(props) {
     let navigate = useNavigate();
 
     function goToHome() {
@@ -104,5 +104,3 @@ function TopToolbar(props) {
         </Box>
     );
 }
-
-export default TopToolbar;

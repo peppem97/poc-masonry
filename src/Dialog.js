@@ -12,10 +12,6 @@ import image from './assets/example3.jpg';
 
 
 const useBasicProfileStyles = makeStyles(({palette}) => ({
-    // avatar: {
-    //     borderRadius: 8,
-    //     backgroundColor: '#495869',
-    // },
     overline: {
         fontSize: 10,
         textTransform: 'uppercase',
@@ -44,23 +40,17 @@ const useCardHeaderStyles = makeStyles(() => ({
 
 export default function ProductDialog(props) {
     const {onClose, selectedValue, open} = props;
-    const theme = useTheme();
-    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const fullScreen = useMediaQuery(useTheme().breakpoints.down('md'));
     const gap = {xs: 1, sm: 1.5, lg: 2}
-    const styles = useCardHeaderStyles();
-    const styles3 = useBasicProfileStyles();
+    const descriptionStyle = useCardHeaderStyles();
+    const userInfoStyle = useBasicProfileStyles();
 
-    const handleClose = () => {
-        onClose('ho chiuso');
-    };
-
-    const handleListItemClick = (value) => {
+    const closeDialog = (value) => {
         onClose(value);
     };
 
     return (
-        <Dialog onClose={handleClose} open={open} fullScreen={fullScreen} fullWidth={true} maxWidth={'md'}>
-            {/*<DialogTitle>Dettaglio prodotto</DialogTitle>*/}
+        <Dialog onClose={closeDialog} open={open} fullScreen={fullScreen} fullWidth={true} maxWidth={'md'}>
             <DialogContent>
                 <Row p={{xs: 0.5, sm: 0.75, lg: 1}} gap={gap}>
                     <Column>
@@ -76,7 +66,7 @@ export default function ProductDialog(props) {
                                 <Typography variant='h3'>
                                     <b>{props.title}</b>
                                 </Typography>
-                                <Typography variant='subtitle1' className={styles.subheader}>
+                                <Typography variant='subtitle1' className={descriptionStyle.subheader}>
                                     {props.description}
                                 </Typography>
                             </Item>
@@ -88,8 +78,8 @@ export default function ProductDialog(props) {
                                 </IconButton>
                             </Item>
                             <Item position={'middle'} pl={{sm: 0.5, lg: 0.5}}>
-                                <Typography className={styles3.overline}>Pubblicato da:</Typography>
-                                <Typography className={styles3.name}>{props.user}</Typography>
+                                <Typography className={userInfoStyle.overline}>Pubblicato da:</Typography>
+                                <Typography className={userInfoStyle.name}>{props.user}</Typography>
                             </Item>
                         </Row>
                     </Column>

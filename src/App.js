@@ -1,5 +1,4 @@
-import React, {Component, Fragment} from "react";
-import Stack from "./Home";
+import React, {Component} from "react";
 import './App.css'
 import {
     BrowserRouter as Router,
@@ -8,6 +7,7 @@ import {
 } from 'react-router-dom';
 import User from "./User";
 import TopToolbar from "./TopToolbar";
+import Home from "./Home";
 
 class App extends Component {
     constructor(props) {
@@ -24,11 +24,11 @@ class App extends Component {
     }
 
     decreaseColumnsSize = () => {
-        this.setState({columnWidth: this.state.columnWidth - 50})
+        this.setState({columnWidth: this.state.columnWidth - 50});
     }
 
     setLoading = (stateLoading) => {
-        this.setState({loading: stateLoading})
+        this.setState({loading: stateLoading});
     }
 
     render() {
@@ -39,7 +39,7 @@ class App extends Component {
                                 increaseColumnsSize={this.increaseColumnsSize.bind(this)}
                                 decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>
                     <Routes>
-                        <Route exact path='/' element={<Stack
+                        <Route exact path='/' element={<Home
                             setLoading={this.setLoading.bind(this)}
                             columnWidth={this.state.columnWidth}
                             increaseColumnsSize={this.increaseColumnsSize.bind(this)}
@@ -48,7 +48,6 @@ class App extends Component {
                     </Routes>
                 </Router>
             </>
-
         );
     }
 }
