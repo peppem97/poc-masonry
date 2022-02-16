@@ -6,6 +6,7 @@
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import './MediaCard.css'
 // import {useNavigate} from 'react-router-dom';
 
 // function MediaCard(props) {
@@ -40,7 +41,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import React from 'react';
 import GoogleFontLoader from 'react-google-font-loader';
 import NoSsr from '@material-ui/core/NoSsr';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -50,11 +51,12 @@ import {
     InfoSubtitle,
     InfoTitle,
 } from '@mui-treasury/components/info';
-import { useGalaxyInfoStyles } from '@mui-treasury/styles/info/galaxy';
-import { useCoverCardMediaStyles } from '@mui-treasury/styles/cardMedia/cover';
+import {useGalaxyInfoStyles} from '@mui-treasury/styles/info/galaxy';
+import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
 import {CardActions, IconButton} from "@mui/material";
 import Avatar from "@material-ui/core/Avatar";
 import {useNavigate} from "react-router-dom";
+import ProductDialog from "./Dialog";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -90,48 +92,43 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const MediaCard = React.memo(function GalaxyCard(props) {
-    const mediaStyles = useCoverCardMediaStyles({ bgPosition: 'top' });
+    const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const styles = useStyles();
     let navigate = useNavigate();
+    const [open, setOpen] = React.useState(false);
 
     function goToUser() {
         navigate("/user/" + props.index, {id: 123});
     }
 
+    // function openProduct() {
+    //     console.log('Apro il prodotto ' + props.index)
+    // }
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (value) => {
+        setOpen(false);
+        // setSelectedValue(value);
+    };
+
+
     return (
         <>
-            {/*<NoSsr>*/}
-            {/*    <GoogleFontLoader*/}
-            {/*        fonts={[*/}
-            {/*            { font: 'Spartan', weights: [300] },*/}
-            {/*            { font: 'Montserrat', weights: [200, 400, 700] },*/}
-            {/*        ]}*/}
-            {/*    />*/}
-            {/*</NoSsr>*/}
-            <Card className={styles.card} style={{height: props.item.height}} raised>
-                <CardMedia
-                    classes={mediaStyles}
-                    image={props.item.imageCard}
-                />
+            <Card className={styles.card} style={{height: props.item.height}} raised onClick={handleClickOpen}>
+                <CardMedia classes={mediaStyles} image={props.item.imageCard}/>
                 <Box py={3} px={2} className={styles.contentHeader}>
                     <IconButton onClick={goToUser}>
                         <Avatar
                             className={styles.avatar}
-                            src={'https://i.pravatar.cc/300?img=13'}
-                        />
+                            src={'https://i.pravatar.cc/300?img=13'}/>
                     </IconButton>
-
-                    {/*<Info useStyles={useGalaxyInfoStyles}>*/}
-                    {/*    <InfoSubtitle>Utente {props.index}</InfoSubtitle>*/}
-                    {/*    /!*<InfoTitle>Esempio {props.index}</InfoTitle>*!/*/}
-                    {/*    /!*<InfoCaption>Breve descrizione del prodotto</InfoCaption>*!/*/}
-                    {/*</Info>*/}
                 </Box>
-                <Box py={3} px={2} className={styles.contentDescription}>
+                <Box py={3} px={2} className={styles.contentDescription} >
                     <Info useStyles={useGalaxyInfoStyles}>
-                        {/*<InfoSubtitle>Galaxy</InfoSubtitle>*/}
                         <InfoTitle>Esempio {props.index}</InfoTitle>
-                        {/*<InfoCaption>Breve descrizione del prodotto</InfoCaption>*/}
                         <CardActions className="justify-content-between">
                             <IconButton style={{color: 'white', fontWeight: 'bold'}}>
                                 <OpenInNewIcon/>
@@ -146,6 +143,11 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
                     </Info>
                 </Box>
             </Card>
+            <ProductDialog
+                selectedValue={(e) => {console.log(e)} }
+                open={open}
+                onClose={handleClose}
+            />
         </>
     );
 });
