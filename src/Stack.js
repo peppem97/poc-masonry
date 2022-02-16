@@ -14,11 +14,6 @@ class StackComponent extends Component {
         super(props);
         this.state = {
             items: [],
-            duration: 500,
-            gutter: 30,
-            easing: easings.quartOut,
-            transition: 'flip',
-            rtl: false,
         };
     }
 
@@ -97,17 +92,17 @@ class StackComponent extends Component {
                     <br/>
                     <br/>
                     <Row>
-                        <StackGrid duration={this.state.duration}
+                        <StackGrid duration={500}
                                    columnWidth={this.props.columnWidth}
-                                   gutterWidth={this.state.gutter}
-                                   gutterHeight={this.state.gutter}
-                                   easing={this.state.easing}
+                                   gutterWidth={30}
+                                   gutterHeight={30}
+                                   easing={easings.quartOut}
                                    appear={transitions[myTransition].appear}
                                    appeared={transitions[myTransition].appeared}
                                    enter={transitions[myTransition].enter}
                                    entered={transitions[myTransition].entered}
                                    leaved={transitions[myTransition].leaved}
-                                   rtl={this.state.rtl}>
+                                   rtl={false}>
                             {
                                 this.visualizeCards()
                             }

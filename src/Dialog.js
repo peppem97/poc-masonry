@@ -2,17 +2,20 @@ import * as React from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from "@mui/material/Typography";
-import {DialogContent, useMediaQuery, useTheme} from "@mui/material";
-import { makeStyles } from '@material-ui/core/styles';
+import {DialogContent, IconButton, useMediaQuery, useTheme} from "@mui/material";
+import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar';
-import { Row, Column, Item } from '@mui-treasury/components/flex';
+import {Row, Column, Item} from '@mui-treasury/components/flex';
+import CardMedia from "@material-ui/core/CardMedia";
+import image from './assets/example3.jpg';
 
-const useBasicProfileStyles = makeStyles(({ palette }) => ({
-    avatar: {
-        borderRadius: 8,
-        backgroundColor: '#495869',
-    },
+
+const useBasicProfileStyles = makeStyles(({palette}) => ({
+    // avatar: {
+    //     borderRadius: 8,
+    //     backgroundColor: '#495869',
+    // },
     overline: {
         fontSize: 10,
         textTransform: 'uppercase',
@@ -27,7 +30,7 @@ const useBasicProfileStyles = makeStyles(({ palette }) => ({
 }));
 
 const useCardHeaderStyles = makeStyles(() => ({
-    root: { paddingBottom: 0 },
+    root: {paddingBottom: 0},
     title: {
         fontSize: '1.25rem',
         color: '#122740',
@@ -40,10 +43,10 @@ const useCardHeaderStyles = makeStyles(() => ({
 
 
 export default function ProductDialog(props) {
-    const { onClose, selectedValue, open } = props;
+    const {onClose, selectedValue, open} = props;
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-    const gap = { xs: 1, sm: 1.5, lg: 2 }
+    const gap = {xs: 1, sm: 1.5, lg: 2}
     const styles = useCardHeaderStyles();
     const styles3 = useBasicProfileStyles();
 
@@ -56,29 +59,37 @@ export default function ProductDialog(props) {
     };
 
     return (
-        <Dialog onClose={handleClose} open={open} fullScreen={fullScreen} fullWidth={true} maxWidth={'sm'}>
-            <DialogTitle>Dettaglio prodotto</DialogTitle>
+        <Dialog onClose={handleClose} open={open} fullScreen={fullScreen} fullWidth={true} maxWidth={'md'}>
+            {/*<DialogTitle>Dettaglio prodotto</DialogTitle>*/}
             <DialogContent>
-                <Row p={{ xs: 0.5, sm: 0.75, lg: 1 }} gap={gap}>
-                    <Item grow>
-                        <Box minHeight={200} bgcolor={'#F4F7FA'} borderRadius={8} />
-                    </Item>
+                <Row p={{xs: 0.5, sm: 0.75, lg: 1}} gap={gap}>
                     <Column>
-                        <Row {...props}>
+                        <Item grow>
+                            <Box minHeight={200} borderRadius={8}>
+                                <img src={image} style={{borderRadius: '1rem'}}/>
+                            </Box>
+                        </Item>
+                    </Column>
+                    <Column>
+                        <Row>
                             <Item position={'middle'}>
-                                <Typography className={styles.title}>
-                                    <b>Firebase</b>
+                                <Typography variant='h3'>
+                                    <b>{props.title}</b>
                                 </Typography>
-                                <Typography className={styles.subheader}>
-                                    Similar to firebase theme
+                                <Typography variant='subtitle1' className={styles.subheader}>
+                                    {props.description}
                                 </Typography>
                             </Item>
                         </Row>
                         <Row position={'bottom'}>
-                            <Item><Avatar className={styles3.avatar}>S</Avatar></Item>
-                            <Item position={'middle'} pl={{ sm: 0.5, lg: 0.5 }}>
-                                <Typography className={styles3.overline}>CREATOR</Typography>
-                                <Typography className={styles3.name}>siriwatknp</Typography>
+                            <Item>
+                                <IconButton>
+                                    <Avatar src={'https://i.pravatar.cc/300?img=13'}/>
+                                </IconButton>
+                            </Item>
+                            <Item position={'middle'} pl={{sm: 0.5, lg: 0.5}}>
+                                <Typography className={styles3.overline}>Pubblicato da:</Typography>
+                                <Typography className={styles3.name}>{props.user}</Typography>
                             </Item>
                         </Row>
                     </Column>

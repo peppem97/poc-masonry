@@ -38,7 +38,7 @@ import './MediaCard.css'
 //
 // }
 
-import React from 'react';
+import React, {useState} from 'react';
 import GoogleFontLoader from 'react-google-font-loader';
 import NoSsr from '@material-ui/core/NoSsr';
 import {makeStyles} from '@material-ui/core/styles';
@@ -95,9 +95,9 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const styles = useStyles();
     let navigate = useNavigate();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
-    function goToUser() {
+    const goToUser = () => {
         navigate("/user/" + props.index, {id: 123});
     }
 
@@ -122,11 +122,10 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
                 <Box py={3} px={2} className={styles.contentHeader}>
                     <IconButton onClick={goToUser}>
                         <Avatar
-                            className={styles.avatar}
                             src={'https://i.pravatar.cc/300?img=13'}/>
                     </IconButton>
                 </Box>
-                <Box py={3} px={2} className={styles.contentDescription} >
+                <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles}>
                         <InfoTitle>Esempio {props.index}</InfoTitle>
                         <CardActions className="justify-content-between">
@@ -144,9 +143,15 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
                 </Box>
             </Card>
             <ProductDialog
-                selectedValue={(e) => {console.log(e)} }
+                selectedValue={(e) => {
+                    console.log(e)
+                }}
                 open={open}
+                imageProduct={props.item.imageCard}
                 onClose={handleClose}
+                title={'Prodotto ' + props.index}
+                description={'Descrizione del prodotto ' + props.index}
+                user={'Utente ' + props.index}
             />
         </>
     );
