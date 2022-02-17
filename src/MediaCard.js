@@ -97,7 +97,7 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
     const [open, setOpen] = useState(false);
 
     const goToUser = () => {
-        navigate("/user/" + props.index, {id: 123});
+        navigate("/user/1", {id: 123});
     }
 
     // function openProduct() {
@@ -125,7 +125,7 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
                 </Box>
                 <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles}>
-                        <InfoTitle>Esempio {props.index}</InfoTitle>
+                        <InfoTitle>{props.item.title}</InfoTitle>
                         <CardActions className="justify-content-between">
                             <IconButton style={{color: 'white', fontWeight: 'bold'}}>
                                 <OpenInNewIcon/>
@@ -147,9 +147,10 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
                 open={open}
                 imageProduct={props.item.imageCard}
                 onClose={handleClose}
-                title={'Prodotto ' + props.index}
-                description={'Descrizione del prodotto ' + props.index}
-                user={'Utente ' + props.index}
+                title={props.item.title}
+                description={props.item.description}
+                user={props.item.user}
+                image={props.item.imageCard}
             />
         </>
     );

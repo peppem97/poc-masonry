@@ -49,7 +49,10 @@ class Home extends Component {
             tmpItems.push({
                 height: this.generateHeight(),
                 imageCard: image,
-                imageAvatar: 'https://i.pravatar.cc/300'
+                imageAvatar: 'https://i.pravatar.cc/300',
+                user: 'Utente... ',
+                title: 'Titolo...',
+                description: 'Descrizione...'
             });
         }
         this.setState({items: tmpItems})
@@ -62,7 +65,10 @@ class Home extends Component {
             newItems.push({
                 height: this.generateHeight(),
                 imageCard: image,
-                imageAvatar: 'https://i.pravatar.cc/300'
+                imageAvatar: 'https://i.pravatar.cc/300',
+                user: 'Utente... ',
+                title: 'Titolo...',
+                description: 'Descrizione...'
             });
         }
         this.setState({

@@ -50,20 +50,20 @@ export default function ProductDialog(props) {
     };
 
     return (
-        <Dialog onClose={closeDialog} open={open} fullScreen={fullScreen} fullWidth={true} maxWidth={'md'}>
+        <Dialog onClose={closeDialog} open={open} fullScreen={fullScreen} fullWidth={true} maxWidth={'lg'}>
             <DialogContent>
                 <Row p={{xs: 0.5, sm: 0.75, lg: 1}} gap={gap}>
                     <Column>
                         <Item grow>
                             <Box minHeight={200} borderRadius={8}>
-                                <img src={image} style={{borderRadius: '1rem'}}/>
+                                <img src={props.image} style={{borderRadius: '1rem'}}/>
                             </Box>
                         </Item>
                     </Column>
                     <Column>
-                        <Row>
+                        <Row className="justify-content-center">
                             <Item position={'middle'}>
-                                <Typography variant='h3'>
+                                <Typography variant='h3' className="text-center">
                                     <b>{props.title}</b>
                                 </Typography>
                                 <Typography variant='subtitle1' className={descriptionStyle.subheader}>

@@ -35,8 +35,8 @@ const useStyles = makeStyles(() => ({
             bottom: 0,
             display: 'block',
             width: '100%',
-            height: '100%',
-            background: 'linear-gradient(to top, #014a7d, rgba(0,0,0,0))',
+            height: '25%',
+            background: 'linear-gradient(to top, #000000, rgba(0,0,0,0))',
         },
     },
     content: {
@@ -136,11 +136,11 @@ class User extends Component {
 
     componentDidMount = () => {
         this.getInitialItems();
-        // window.addEventListener('scroll', () => {
-        //     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        //         this.getMultipleItems();
-        //     }
-        // });
+        window.addEventListener('scroll', () => {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                this.getMultipleItems();
+            }
+        });
     }
 
     generateHeight = () => {
@@ -153,11 +153,36 @@ class User extends Component {
             tmpItems.push({
                 height: this.generateHeight(),
                 imageCard: image,
-                imageAvatar: 'https://i.pravatar.cc/300'
+                imageAvatar: 'https://i.pravatar.cc/300',
+                user: 'Utente... ',
+                title: 'Titolo...',
+                description: 'Descrizione...'
             });
         }
         this.setState({items: tmpItems})
     }
+
+    getMultipleItems = () => {
+        this.props.setLoading(true)
+        const newItems = [];
+        for (let i = 0; i < 5; i++) {
+            newItems.push({
+                height: this.generateHeight(),
+                imageCard: image,
+                imageAvatar: 'https://i.pravatar.cc/300',
+                user: 'Utente... ',
+                title: 'Titolo...',
+                description: 'Descrizione...'
+            });
+        }
+        this.setState({
+            items: [...this.state.items, ...newItems],
+        });
+        setTimeout(() => {
+            this.props.setLoading(false)
+        }, 500)
+    }
+
 
     render() {
         return (

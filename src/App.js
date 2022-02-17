@@ -73,12 +73,14 @@ class App extends Component {
                                 increaseColumnsSize={this.increaseColumnsSize.bind(this)}
                                 decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>
                     <Routes>
-                        <Route exact path='/' element={<Home
-                            setLoading={this.setLoading.bind(this)}
-                            columnWidth={this.state.columnWidth}
-                            increaseColumnsSize={this.increaseColumnsSize.bind(this)}
-                            decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>}/>
-                        <Route exact path='/user/:id' element={<User columnWidth={this.state.columnWidth}/>}/>
+                        <Route exact path='/' element={
+                            <Home setLoading={this.setLoading.bind(this)}
+                                  columnWidth={this.state.columnWidth}
+                                  increaseColumnsSize={this.increaseColumnsSize.bind(this)}
+                                  decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>}/>
+                        <Route exact path='/user/:id' element={
+                            <User columnWidth={this.state.columnWidth}
+                                  setLoading={this.setLoading.bind(this)}/>}/>
                     </Routes>
                 </Router>
             </>
