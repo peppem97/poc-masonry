@@ -89,7 +89,7 @@ class Home extends Component {
                 <br/>
                 <br/>
                 <Row>
-                    <GridSystem items={this.state.items} columnWidth={this.props.columnWidth}/>
+                    <GridSystem items={this.state.items} columnWidth={this.props.columnWidth} isUser={false}/>
                 </Row>
             </Container>
         );

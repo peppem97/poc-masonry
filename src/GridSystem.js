@@ -7,7 +7,7 @@ export default function GridSystem(props) {
 
     const generateCards = () => {
         return props.items.map((item, index) =>
-            (<MediaCard key={index} item={item} index={index}/>)
+            (<MediaCard key={index} item={item} index={index} showAvatar={!(props.isUser)}/>)
         )
     }
 

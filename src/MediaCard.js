@@ -113,16 +113,15 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
         // setSelectedValue(value);
     };
 
-
     return (
         <>
             <Card className={styles.card} style={{height: props.item.height}} raised onClick={handleClickOpen}>
                 <CardMedia classes={mediaStyles} image={props.item.imageCard}/>
                 <Box py={3} px={2} className={styles.contentHeader}>
-                    <IconButton onClick={goToUser}>
+                    {props.showAvatar && (<IconButton onClick={goToUser}>
                         <Avatar
                             src={'https://i.pravatar.cc/300?img=13'}/>
-                    </IconButton>
+                    </IconButton>)}
                 </Box>
                 <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles}>

@@ -179,7 +179,7 @@ class User extends Component {
                     </Row>
                 </Container>
                 <Container fluid>
-                    <GridSystem items={this.state.items} columnWidth={this.props.columnWidth}/>
+                    <GridSystem items={this.state.items} columnWidth={this.props.columnWidth} isUser={true}/>
                 </Container>
             </>
         )

@@ -22,7 +22,6 @@ class App extends Component {
     }
 
     checkIncreaseDecrease = () => {
-        console.log(this.state.columnWidth)
         if (this.state.columnWidth >= 500) {
             this.setState({disabledIncrease: true});
             this.setState({disabledDecrease: false});
