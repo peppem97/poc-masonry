@@ -73,11 +73,11 @@ export default function TopToolbar(props) {
                             fontSize="inherit"/>&nbsp;Masonry</Button>
                     </Typography>
                     <Box sx={{flexGrow: 1}}/>
-                    <IconButton size="large" style={{color: 'darkred', fontWeight: 'bold'}}
+                    <IconButton size="large" style={{color: props.disableIncrease ? 'gray' : 'darkred', fontWeight: 'bold'}}
                                 onClick={props.increaseColumnsSize}>
                         <ZoomInIcon/>
                     </IconButton>
-                    <IconButton size="large" style={{color: 'darkred', fontWeight: 'bold'}}
+                    <IconButton size="large" style={{color: props.disableDecrease ? 'gray' : 'darkred', fontWeight: 'bold'}}
                                 onClick={props.decreaseColumnsSize}>
                         <ZoomOutIcon/>
                     </IconButton>

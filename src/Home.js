@@ -75,25 +75,23 @@ class Home extends Component {
 
     render = () => {
         return (
-            <Fragment>
-                <Container fluid>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <Row>
-                        <Title/>
-                    </Row>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <Row>
-                        <GridSystem items={this.state.items} columnWidth={this.props.columnWidth}/>
-                    </Row>
-                </Container>
-            </Fragment>
+            <Container fluid>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <Row>
+                    <Title/>
+                </Row>
+                <br/>
+                <br/>
+                <br/>
+                <Row>
+                    <GridSystem items={this.state.items} columnWidth={this.props.columnWidth}/>
+                </Row>
+            </Container>
         );
     }
 

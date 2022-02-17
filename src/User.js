@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import NoSsr from '@material-ui/core/NoSsr';
 import GoogleFontLoader from 'react-google-font-loader';
 import image from './assets/leone.jpg';
@@ -14,6 +14,7 @@ import {Info, InfoSubtitle, InfoTitle} from '@mui-treasury/components/info';
 import {useNewsInfoStyles} from '@mui-treasury/styles/info/news';
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
 import {Container} from "react-bootstrap";
+import GridSystem from "./GridSystem";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -76,16 +77,10 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export const User = React.memo(function News3Card() {
+export const UserCard = React.memo(function News3Card() {
     const styles = useStyles();
     const mediaStyles = useCoverCardMediaStyles();
-    return (
-        <Container>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <Card className={styles.card}>
+    return (<Card className={styles.card}>
                 <Box className={styles.main} minHeight={500} position={'relative'}>
                     <CardMedia
                         classes={mediaStyles}
@@ -128,57 +123,67 @@ export const User = React.memo(function News3Card() {
                 </Row>
                 <div className={styles.shadow}/>
                 <div className={`${styles.shadow} ${styles.shadow2}`}/>
-            </Card>
-            <br/>
-            <br/>
-            <br/>
-
-            <Row className="justify-content-center">
-                {/*<Typography variant="h1" gutterBottom component="div" className="text-center"*/}
-                {/*            style={{color: 'black', fontWeight: 'bold'}}>*/}
-                {/*    Masonry&nbsp;*/}
-                {/*</Typography>*/}
-                <Typography variant="h3" gutterBottom component="div" className="text-center"
-                            style={{color: 'darkred', fontWeight: 'bold'}}>
-                    Tutti i prodotti:
-                </Typography>
-            </Row>
-        </Container>
-    );
+            </Card>);
 });
 
-// function User(props) {
-//     const {id} = useParams();
-//
-//     return (
-//         <>
-//             <br/>
-//             <br/>
-//             <br/>
-//             <br/>
-//             <Container fluid>
-//                 <Row className="justify-content-center">
-//                     <Avatar sx={{bgcolor: deepPurple[500], width: 56, height: 56}}>OP</Avatar>
-//                 </Row>
-//                 <br/>
-//                 <Row className="justify-content-center">
-//                     <Typography variant="h3" gutterBottom component="div" className="text-center"
-//                                 style={{color: 'black', fontWeight: 'bold'}}>
-//                         Profilo {id}
-//                     </Typography>
-//                     <Typography variant="subtitle1" gutterBottom component="div" className="text-center">
-//                         {"Una piccola descrizione del profilo " + id}
-//                     </Typography>
-//                     {/*<Typography variant="h3" gutterBottom component="div" className="text-center"*/}
-//                     {/*            style={{color: 'darkred'}}>*/}
-//                     {/*    Descrizione Profilo*/}
-//                     {/*</Typography>*/}
-//                 </Row>
-//             </Container>
-//         </>
-//
-//     )
-// }
+class User extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            items: [],
+        };
+    }
 
+    componentDidMount = () => {
+        this.getInitialItems();
+        // window.addEventListener('scroll', () => {
+        //     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        //         this.getMultipleItems();
+        //     }
+        // });
+    }
+
+    generateHeight = () => {
+        return Math.floor((Math.random() * (380)) + 80);
+    }
+
+    getInitialItems = () => {
+        let tmpItems = [];
+        for (let i = 0; i < 30; i += 1) {
+            tmpItems.push({
+                height: this.generateHeight(),
+                imageCard: image,
+                imageAvatar: 'https://i.pravatar.cc/300'
+            });
+        }
+        this.setState({items: tmpItems})
+    }
+
+    render() {
+        return (
+            <>
+                <Container>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <UserCard/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <Row className="justify-content-center">
+                        <Typography variant="h3" gutterBottom component="div" className="text-center"
+                                    style={{color: 'darkred', fontWeight: 'bold'}}>
+                            Tutti i prodotti:
+                        </Typography>
+                    </Row>
+                </Container>
+                <Container fluid>
+                    <GridSystem items={this.state.items} columnWidth={this.props.columnWidth}/>
+                </Container>
+            </>
+        )
+    }
+}
 
 export default User;

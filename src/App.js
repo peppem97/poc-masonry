@@ -15,16 +15,49 @@ class App extends Component {
         console.disableYellowBox = true;
         this.state = {
             loading: false,
+            disabledIncrease: false,
+            disabledDecrease: false,
             columnWidth: 200,
         };
     }
 
+    checkIncreaseDecrease = () => {
+        console.log(this.state.columnWidth)
+        if (this.state.columnWidth >= 500) {
+            this.setState({disabledIncrease: true});
+            this.setState({disabledDecrease: false});
+            return;
+        }
+
+        if (this.state.columnWidth <= 250) {
+            this.setState({disabledIncrease: false});
+            this.setState({disabledDecrease: true});
+            return;
+        }
+
+        this.setState({disabledIncrease: false});
+        this.setState({disabledDecrease: false});
+
+    }
+
     increaseColumnsSize = () => {
-        this.setState({columnWidth: this.state.columnWidth + 50})
+        this.checkIncreaseDecrease();
+
+        if (this.state.columnWidth >= 500) {
+            this.setState({columnWidth: this.state.columnWidth});
+        } else {
+            this.setState({columnWidth: this.state.columnWidth + 50});
+        }
     }
 
     decreaseColumnsSize = () => {
-        this.setState({columnWidth: this.state.columnWidth - 50});
+        this.checkIncreaseDecrease();
+
+        if (this.state.columnWidth <= 250) {
+            this.setState({columnWidth: this.state.columnWidth});
+        } else {
+            this.setState({columnWidth: this.state.columnWidth - 50});
+        }
     }
 
     setLoading = (stateLoading) => {
@@ -36,6 +69,8 @@ class App extends Component {
             <>
                 <Router>
                     <TopToolbar loading={this.state.loading}
+                                disableIncrease={this.state.disabledIncrease}
+                                disableDecrease={this.state.disabledDecrease}
                                 increaseColumnsSize={this.increaseColumnsSize.bind(this)}
                                 decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>
                     <Routes>
@@ -44,7 +79,7 @@ class App extends Component {
                             columnWidth={this.state.columnWidth}
                             increaseColumnsSize={this.increaseColumnsSize.bind(this)}
                             decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>}/>
-                        <Route exact path='/user/:id' element={<User/>}/>
+                        <Route exact path='/user/:id' element={<User columnWidth={this.state.columnWidth}/>}/>
                     </Routes>
                 </Router>
             </>
