@@ -9,7 +9,6 @@ class ImageUploadExample extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMmUzMmZkYzUxNWJkMDAzMTM0YWFjYSIsImlhdCI6MTY0NTE3NTIyNywiZXhwIjoxNjQ1MjYxNjI3LCJpc3MiOiJzdHJhcGkifQ.ulULRtOFmPGnjzqGtGoLu1s5bETL2T_8lIgokUhOPCI',
             picture: null,
             rawPicture: null,
             downloadedPicture: null,
@@ -43,7 +42,7 @@ class ImageUploadExample extends Component {
         formData.append('files.image', this.state.rawPicture, 'kurisu.jpg');
         formData.append('data', JSON.stringify(data));
         axios.post("http://zion.datafactor.it:40505/image-uploadeds", formData, {headers: {
-                'Authorization': 'Bearer ' + this.state.token,
+                'Authorization': 'Bearer ' + this.props.token,
             }})
             .then((response) => {
                 this.setIdle();
@@ -54,7 +53,7 @@ class ImageUploadExample extends Component {
     getImages = () => {
         this.setLoading();
         axios.get("http://zion.datafactor.it:40505/image-uploadeds", {headers: {
-                'Authorization': 'Bearer ' + this.state.token,
+                'Authorization': 'Bearer ' + this.props.token,
             }})
             .then((response) => {
                 this.setState({downloadedPicture: "http://zion.datafactor.it:40505" + response.data[0].image.url})
@@ -89,7 +88,7 @@ class ImageUploadExample extends Component {
                 <Row className="justify-content-md-center">
                     <Col className='text-center'>
                         <label htmlFor="contained-button-file" className='text-center'>
-                            <Input accept="image/*" id="contained-button-file" type="file" hidden onChange={this.onChangePicture.bind(this)}/>
+                            <Input accept="image/*" id="contained-button-file" multiple type="file" hidden onChange={this.onChangePicture.bind(this)}/>
                             <Button variant="contained" component="span">
                                 SCEGLI IMMAGINE
                             </Button>
@@ -103,13 +102,13 @@ class ImageUploadExample extends Component {
                 </Row>
                 <br/>
                 <Row className="justify-content-center">
-                    <img  src={this.state.picture}/>
+                    <img src={this.state.picture} alt=""/>
                 </Row>
                 <br/>
                 <hr/>
                 <br/>
                 <Row className="justify-content-center">
-                    <img  src={this.state.downloadedPicture}/>
+                    <img src={this.state.downloadedPicture} alt=""/>
                 </Row>
             </Container>
         )

@@ -15,6 +15,7 @@ class App extends Component {
         super(props);
         console.disableYellowBox = true;
         this.state = {
+            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMmUzMmZkYzUxNWJkMDAzMTM0YWFjYSIsImlhdCI6MTY0NTE3NTIyNywiZXhwIjoxNjQ1MjYxNjI3LCJpc3MiOiJzdHJhcGkifQ.ulULRtOFmPGnjzqGtGoLu1s5bETL2T_8lIgokUhOPCI',
             loading: false,
             disabledIncrease: false,
             disabledDecrease: false,
@@ -81,8 +82,9 @@ class App extends Component {
                                   decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>}/>
                         <Route exact path='/user/:id' element={
                             <User columnWidth={this.state.columnWidth}
+                                  token={this.state.token}
                                   setLoading={this.setLoading.bind(this)}/>}/>
-                        <Route exact path='/image-upload' element={<ImageUploadExample/>}/>
+                        <Route exact path='/image-upload' token={this.state.token} element={<ImageUploadExample/>}/>
                     </Routes>
                 </Router>
             </>

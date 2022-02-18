@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import NoSsr from '@material-ui/core/NoSsr';
-import GoogleFontLoader from 'react-google-font-loader';
 import image from './assets/leone.jpg';
-
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import PanoramaIcon from '@mui/icons-material/Panorama';
 import {makeStyles} from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
@@ -13,8 +13,11 @@ import {Row, Item} from '@mui-treasury/components/flex';
 import {Info, InfoSubtitle, InfoTitle} from '@mui-treasury/components/info';
 import {useNewsInfoStyles} from '@mui-treasury/styles/info/news';
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
-import {Container} from "react-bootstrap";
+import {Col, Container} from "react-bootstrap";
 import GridSystem from "./GridSystem";
+import Button from "@mui/material/Button";
+import axios from "axios";
+import {Input} from "@mui/material";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -77,74 +80,164 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export const UserCard = React.memo(function News3Card() {
+export const UserCard = React.memo(function News3Card(props) {
     const styles = useStyles();
     const mediaStyles = useCoverCardMediaStyles();
     return (<Card className={styles.card}>
-                <Box className={styles.main} minHeight={500} position={'relative'}>
-                    <CardMedia
-                        classes={mediaStyles}
-                        image={image}
-                    />
-                    <div className={styles.content}>
-                        <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
-                            Profilo N
-                        </Typography>
-                    </div>
-                </Box>
-                <Row
-                    className={styles.author}
-                    m={0}
-                    p={3}
-                    pt={2}
-                    gap={2}
-                    bgcolor={'common.white'}>
-                    <Item>
-                        <Avatar
-                            className={styles.avatar}
-                            src={'https://i.pravatar.cc/300?img=13'}
-                        />
-                    </Item>
-                    <Info position={'middle'} useStyles={useNewsInfoStyles}>
-                        <InfoTitle style={{fontWeight: 'bold'}}>sito.web.it</InfoTitle>
-                        <InfoSubtitle>+39-0922-123456</InfoSubtitle>
-                    </Info>
-                </Row>
-                <Row
-                    className={styles.author}
-                    m={0}
-                    p={3}
-                    pt={2}
-                    gap={2}
-                    bgcolor={'common.white'}>
-                    <Typography variant={'h4'} className="text-center" style={{color: 'black', fontWeight: 'bold'}}>
-                        Aggiungere funzionalità
-                    </Typography>
-                </Row>
-                <div className={styles.shadow}/>
-                <div className={`${styles.shadow} ${styles.shadow2}`}/>
-            </Card>);
+        <Box className={styles.main} minHeight={500} position={'relative'}>
+            <CardMedia
+                classes={mediaStyles}
+                image={props.carousel}
+            />
+            <div className={styles.content}>
+                <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
+                    {props.title}
+                </Typography>
+            </div>
+        </Box>
+        <Row
+            className={styles.author}
+            m={0}
+            p={3}
+            pt={2}
+            gap={2}
+            bgcolor={'common.white'}>
+            <Item>
+                <Avatar
+                    className={styles.avatar}
+                    src={props.avatar}
+                />
+            </Item>
+            <Info position={'middle'} useStyles={useNewsInfoStyles}>
+                <InfoTitle style={{fontWeight: 'bold'}}>{props.website}</InfoTitle>
+                <InfoSubtitle>{props.telephone}</InfoSubtitle>
+            </Info>
+        </Row>
+        <Row className={styles.author}
+             m={0}
+             p={3}
+             pt={2}
+             gap={2}
+             bgcolor={'common.white'}>
+            <Typography variant='subtitle1' className="text-center">
+                {props.description}
+            </Typography>
+        </Row>
+        <Row
+            className={styles.author}
+            m={0}
+            p={3}
+            pt={2}
+            gap={2}
+            bgcolor={'common.white'}>
+            <Col className='text-center'>
+                <Button variant="contained" endIcon={<AddShoppingCartIcon/>} style={{backgroundColor: 'grey'}}>
+                    Nuovo prodotto
+                </Button>
+            </Col>
+            <Col className='text-center'>
+                <label htmlFor="carousel-uploader" className='text-center'>
+                    <Input accept="image/*" id="carousel-uploader" type="file" hidden onChange={props.updateCarousel}/>
+                    <Button variant="contained" component="span" endIcon={<PanoramaIcon/>}
+                            style={{backgroundColor: 'darkred'}}>
+                        Cambia Copertina
+                    </Button>
+                </label>
+            </Col>
+            <Col className='text-center'>
+                <label htmlFor="avatar-uploader" className='text-center'>
+                    <Input accept="image/*" id="avatar-uploader" type="file" hidden onChange={props.updateAvatar}/>
+                    <Button variant="contained" component="span" endIcon={<AccountCircleIcon/>}
+                            style={{backgroundColor: 'darkred'}}>
+                        Cambia immagine profilo
+                    </Button>
+                </label>
+            </Col>
+        </Row>
+        <div className={styles.shadow}/>
+        <div className={`${styles.shadow} ${styles.shadow2}`}/>
+    </Card>);
 });
 
 class User extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            idShopStrapi: null,
+            email: null,
+            title: null,
+            description: null,
+            avatar: null,
+            carousel: null,
+            website: null,
+            telephone: null,
             items: [],
         };
     }
 
     componentDidMount = () => {
-        this.getInitialItems();
-        window.addEventListener('scroll', () => {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                this.getMultipleItems();
-            }
-        });
+        this.getUserInfo();
+        // this.getInitialItems();
+        // window.addEventListener('scroll', () => {
+        //     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        //         this.getMultipleItems();
+        //     }
+        // });
     }
 
     generateHeight = () => {
         return Math.floor((Math.random() * (380)) + 80);
+    }
+
+    getUserInfo = () => {
+        axios.get("http://zion.datafactor.it:40505/shops?email=shop2@shop2.it", {
+            headers: {
+                'Authorization': 'Bearer ' + this.props.token,
+            }
+        })
+            .then((response) => {
+                this.setState({
+                    idShopStrapi: response.data[0].id,
+                    email: response.data[0].email,
+                    title: response.data[0].title,
+                    description: response.data[0].description,
+                    avatar: "http://zion.datafactor.it:40505" + response.data[0].avatar.url,
+                    carousel: "http://zion.datafactor.it:40505" + response.data[0].carousel.url,
+                    telephone: response.data[0].telephone,
+                    website: response.data[0].website
+                })
+            }).catch((error) => {
+        })
+    }
+
+    updateAvatar = (e) => {
+        const formData = new FormData();
+        formData.append('files.avatar', e.target.files[0], 'avatar.jpg');
+        formData.append('data', JSON.stringify({}));
+        axios.put("http://zion.datafactor.it:40505/shops/" + this.state.idShopStrapi, formData, {
+            headers: {
+                'Authorization': 'Bearer ' + this.props.token,
+            }
+        })
+            .then((response) => {
+                this.getUserInfo();
+            }).catch((error) => {
+        })
+    }
+
+    updateCarousel = (e) => {
+        const formData = new FormData();
+        formData.append('files.carousel', e.target.files[0], 'example.jpg');
+        formData.append('data', JSON.stringify({}));
+        axios.put("http://zion.datafactor.it:40505/shops/" + this.state.idShopStrapi, formData, {
+            headers: {
+                'Authorization': 'Bearer ' + this.props.token,
+            }
+        })
+            .then((response) => {
+                this.getUserInfo();
+            }).catch((error) => {
+        })
     }
 
     getInitialItems = () => {
@@ -191,7 +284,16 @@ class User extends Component {
                     <br/>
                     <br/>
                     <br/>
-                    <UserCard/>
+                    <UserCard
+                        email={this.state.email}
+                        title={this.state.title}
+                        description={this.state.description}
+                        avatar={this.state.avatar}
+                        carousel={this.state.carousel}
+                        website={this.state.website}
+                        telephone={this.state.telephone}
+                        updateAvatar={this.updateAvatar.bind(this)}
+                        updateCarousel={this.updateCarousel.bind(this)}/>
                     <br/>
                     <br/>
                     <br/>
