@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import {alpha, IconButton, InputBase, LinearProgress, styled} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
-import {Component} from "react";
 import Button from "@mui/material/Button";
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';

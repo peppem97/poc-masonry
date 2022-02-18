@@ -1,7 +1,5 @@
-import React, {Component, Fragment} from "react";
-import StackGrid, {easings, transitions} from "react-stack-grid";
+import React, {Component} from "react";
 import image from './assets/example3.jpg';
-import MediaCard from "./MediaCard";
 import {Container, Row} from "react-bootstrap";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -100,7 +98,6 @@ class Home extends Component {
             </Container>
         );
     }
-
 }
 
 export default Home;

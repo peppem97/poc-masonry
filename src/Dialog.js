@@ -8,7 +8,6 @@ import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar';
 import {Row, Column, Item} from '@mui-treasury/components/flex';
 import CardMedia from "@material-ui/core/CardMedia";
-import image from './assets/example3.jpg';
 
 
 const useBasicProfileStyles = makeStyles(({palette}) => ({

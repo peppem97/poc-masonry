@@ -8,6 +8,7 @@ import {
 import User from "./User";
 import TopToolbar from "./TopToolbar";
 import Home from "./Home";
+import ImageUploadExample from "./ImageUploadExample";
 
 class App extends Component {
     constructor(props) {
@@ -81,6 +82,7 @@ class App extends Component {
                         <Route exact path='/user/:id' element={
                             <User columnWidth={this.state.columnWidth}
                                   setLoading={this.setLoading.bind(this)}/>}/>
+                        <Route exact path='/image-upload' element={<ImageUploadExample/>}/>
                     </Routes>
                 </Router>
             </>

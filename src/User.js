@@ -183,7 +183,6 @@ class User extends Component {
         }, 500)
     }
 
-
     render() {
         return (
             <>
