@@ -17,7 +17,8 @@ import {Col, Container} from "react-bootstrap";
 import GridSystem from "./GridSystem";
 import Button from "@mui/material/Button";
 import axios from "axios";
-import {Input} from "@mui/material";
+import {IconButton, Input} from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -91,7 +92,7 @@ export const UserCard = React.memo(function News3Card(props) {
             />
             <div className={styles.content}>
                 <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
-                    {props.title}
+                    {props.title} <IconButton color="inherit" size="large"><EditIcon fontSize="inherit" /></IconButton>
                 </Typography>
             </div>
         </Box>
@@ -110,7 +111,7 @@ export const UserCard = React.memo(function News3Card(props) {
             </Item>
             <Info position={'middle'} useStyles={useNewsInfoStyles}>
                 <InfoTitle style={{fontWeight: 'bold'}}>{props.website}</InfoTitle>
-                <InfoSubtitle>{props.telephone}</InfoSubtitle>
+                <InfoSubtitle>{props.telephone}<IconButton color="inherit" size="small"><EditIcon fontSize="inherit" /></IconButton></InfoSubtitle>
             </Info>
         </Row>
         <Row className={styles.author}
@@ -120,7 +121,7 @@ export const UserCard = React.memo(function News3Card(props) {
              gap={2}
              bgcolor={'common.white'}>
             <Typography variant='subtitle1' className="text-center">
-                {props.description}
+                {props.description} <IconButton color="inherit" size="small"><EditIcon fontSize="inherit" /></IconButton>
             </Typography>
         </Row>
         <Row
@@ -177,7 +178,7 @@ class User extends Component {
 
     componentDidMount = () => {
         this.getUserInfo();
-        // this.getInitialItems();
+        this.getInitialItems();
         // window.addEventListener('scroll', () => {
         //     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
         //         this.getMultipleItems();
@@ -210,6 +211,52 @@ class User extends Component {
         })
     }
 
+    getInitialItems = () => {
+        axios.get("http://zion.datafactor.it:40505/products", {
+            headers: {
+                'Authorization': 'Bearer ' + this.props.token,
+            }
+        }).then((response) => {
+                console.log(response)
+                let products = response.data.map((element) => ({
+                    height: this.generateHeight(),
+                    avatar: 'https://i.pravatar.cc/300',
+                    title: element.title,
+                    description: element.description,
+                    picture: "http://zion.datafactor.it:40505" + element.picture.url,
+                    titleShop: element.titleShop,
+                    emailShop: element.emailShop}))
+                // this.setState({
+                //     idShopStrapi: response.data[0].id,
+                //     email: response.data[0].email,
+                //     title: response.data[0].title,
+                //     description: response.data[0].description,
+                //     avatar: "http://zion.datafactor.it:40505" + response.data[0].avatar.url,
+                //     carousel: "http://zion.datafactor.it:40505" + response.data[0].carousel.url,
+                //     telephone: response.data[0].telephone,
+                //     website: response.data[0].website
+                // })
+            }).catch((error) => {
+        })
+
+
+
+
+
+        let tmpItems = [];
+        for (let i = 0; i < 30; i += 1) {
+            tmpItems.push({
+                height: this.generateHeight(),
+                imageCard: image,
+                imageAvatar: 'https://i.pravatar.cc/300',
+                user: 'Utente... ',
+                title: 'Titolo...',
+                description: 'Descrizione...'
+            });
+        }
+        this.setState({items: tmpItems})
+    }
+
     updateAvatar = (e) => {
         const formData = new FormData();
         formData.append('files.avatar', e.target.files[0], 'avatar.jpg');
@@ -238,21 +285,6 @@ class User extends Component {
                 this.getUserInfo();
             }).catch((error) => {
         })
-    }
-
-    getInitialItems = () => {
-        let tmpItems = [];
-        for (let i = 0; i < 30; i += 1) {
-            tmpItems.push({
-                height: this.generateHeight(),
-                imageCard: image,
-                imageAvatar: 'https://i.pravatar.cc/300',
-                user: 'Utente... ',
-                title: 'Titolo...',
-                description: 'Descrizione...'
-            });
-        }
-        this.setState({items: tmpItems})
     }
 
     getMultipleItems = () => {
