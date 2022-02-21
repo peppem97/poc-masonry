@@ -46,7 +46,6 @@ const useStyles = makeStyles(() => ({
         width: '100%',
     },
 }));
-
 export const MediaCard = React.memo(function GalaxyCard(props) {
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const styles = useStyles();
@@ -54,7 +53,7 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
     const [open, setOpen] = useState(false);
 
     const goToUser = () => {
-        navigate("/user/1", {id: 123});
+        navigate("/user/1", {id: props.item.username});
     }
 
     // function openProduct() {
@@ -73,12 +72,12 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
     return (
         <>
             <Card className={styles.card} style={{height: props.item.height}} raised onClick={handleClickOpen}>
-                <CardMedia classes={mediaStyles} image={props.item.imageCard}/>
+                <CardMedia classes={mediaStyles} image={props.item.picture}/>
                 <Box py={3} px={2} className={styles.contentHeader}>
-                    {props.showAvatar && (<IconButton onClick={goToUser}>
-                        <Avatar
-                            src={'https://i.pravatar.cc/300?img=13'}/>
-                    </IconButton>)}
+                    {props.showAvatar && (
+                        <IconButton onClick={goToUser}>
+                            <Avatar src={props.item.avatar}/>
+                        </IconButton>)}
                 </Box>
                 <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles}>
@@ -102,15 +101,15 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
                     console.log(e)
                 }}
                 open={open}
-                imageProduct={props.item.imageCard}
                 onClose={handleClose}
+                avatar={props.item.avatar}
                 title={props.item.title}
+                picture={props.item.picture}
                 description={props.item.description}
-                user={props.item.user}
-                image={props.item.imageCard}
+                titleShop={props.item.titleShop}
+                username={props.item.username}
             />
         </>
     );
 });
-
 export default MediaCard;

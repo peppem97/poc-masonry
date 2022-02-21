@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import image from './assets/leone.jpg';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -19,6 +19,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import {IconButton, Input} from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
+import {useParams} from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -84,7 +85,8 @@ const useStyles = makeStyles(() => ({
 export const UserCard = React.memo(function News3Card(props) {
     const styles = useStyles();
     const mediaStyles = useCoverCardMediaStyles();
-    return (<Card className={styles.card}>
+    return (
+        <Card className={styles.card}>
         <Box className={styles.main} minHeight={500} position={'relative'}>
             <CardMedia
                 classes={mediaStyles}
@@ -160,25 +162,21 @@ export const UserCard = React.memo(function News3Card(props) {
     </Card>);
 });
 
-class User extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            idShopStrapi: null,
-            email: null,
-            title: null,
-            description: null,
-            avatar: null,
-            carousel: null,
-            website: null,
-            telephone: null,
-            items: [],
-        };
-    }
+function User(props) {
+    const [idShopStrapi, setIdShopStrapi] = useState(null)
+    const [email, setEmail] = useState(null)
+    const [title, setTitle] = useState(null)
+    const [description, setDescription] = useState(null)
+    const [avatar, setAvatar] = useState(null)
+    const [carousel, setCarousel] = useState(null)
+    const [website, setWebsite] = useState(null)
+    const [telephone, setTelephone] = useState(null)
+    const [items, setItems] = useState([])
 
-    componentDidMount = () => {
-        this.getUserInfo();
-        this.getInitialItems();
+    const componentDidMount = () => {
+        // console.log(new URLSearchParams((new URL(window.location).search)).get('prova'))
+        getUserInfo();
+        getInitialItems();
         // window.addEventListener('scroll', () => {
         //     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
         //         this.getMultipleItems();
@@ -186,46 +184,26 @@ class User extends Component {
         // });
     }
 
-    generateHeight = () => {
+
+    const generateHeight = () => {
         return Math.floor((Math.random() * (380)) + 80);
     }
 
-    getUserInfo = () => {
+    const getUserInfo = () => {
         axios.get("http://zion.datafactor.it:40505/shops?email=shop2@shop2.it", {
             headers: {
-                'Authorization': 'Bearer ' + this.props.token,
+                'Authorization': 'Bearer ' + props.token,
             }
         })
             .then((response) => {
-                this.setState({
-                    idShopStrapi: response.data[0].id,
-                    email: response.data[0].email,
-                    title: response.data[0].title,
-                    description: response.data[0].description,
-                    avatar: "http://zion.datafactor.it:40505" + response.data[0].avatar.url,
-                    carousel: "http://zion.datafactor.it:40505" + response.data[0].carousel.url,
-                    telephone: response.data[0].telephone,
-                    website: response.data[0].website
-                })
-            }).catch((error) => {
-        })
-    }
-
-    getInitialItems = () => {
-        axios.get("http://zion.datafactor.it:40505/products", {
-            headers: {
-                'Authorization': 'Bearer ' + this.props.token,
-            }
-        }).then((response) => {
-                console.log(response)
-                let products = response.data.map((element) => ({
-                    height: this.generateHeight(),
-                    avatar: 'https://i.pravatar.cc/300',
-                    title: element.title,
-                    description: element.description,
-                    picture: "http://zion.datafactor.it:40505" + element.picture.url,
-                    titleShop: element.titleShop,
-                    emailShop: element.emailShop}))
+                setIdShopStrapi(response.data[0].id)
+                setEmail(response.data[0].email)
+                setTitle(response.data[0].title)
+                setDescription(response.data[0].description)
+                setAvatar("http://zion.datafactor.it:40505" + response.data[0].avatar.url)
+                setCarousel("http://zion.datafactor.it:40505" + response.data[0].carousel.url)
+                setTelephone(response.data[0].telephone)
+                setWebsite(response.data[0].website)
                 // this.setState({
                 //     idShopStrapi: response.data[0].id,
                 //     email: response.data[0].email,
@@ -238,61 +216,86 @@ class User extends Component {
                 // })
             }).catch((error) => {
         })
-
-
-
-
-
-        let tmpItems = [];
-        for (let i = 0; i < 30; i += 1) {
-            tmpItems.push({
-                height: this.generateHeight(),
-                imageCard: image,
-                imageAvatar: 'https://i.pravatar.cc/300',
-                user: 'Utente... ',
-                title: 'Titolo...',
-                description: 'Descrizione...'
-            });
-        }
-        this.setState({items: tmpItems})
     }
 
-    updateAvatar = (e) => {
+    const getInitialItems = () => {
+        axios.get("http://zion.datafactor.it:40505/products", {
+            headers: {
+                'Authorization': 'Bearer ' + props.token,
+            }
+        }).then((response) => {
+                let items = response.data.map((element) => ({
+                    height: generateHeight(),
+                    avatar: avatar, //devo prendere in qualche modo l'avatar dell'utente,
+                    title: element.title,
+                    description: element.description,
+                    picture: "http://zion.datafactor.it:40505" + element.picture.url,
+                    titleShop: title,
+                    emailShop: element.emailShop}))
+            setItems(items)
+
+            // this.setState({
+                //     idShopStrapi: response.data[0].id,
+                //     email: response.data[0].email,
+                //     title: response.data[0].title,
+                //     description: response.data[0].description,
+                //     avatar: "http://zion.datafactor.it:40505" + response.data[0].avatar.url,
+                //     carousel: "http://zion.datafactor.it:40505" + response.data[0].carousel.url,
+                //     telephone: response.data[0].telephone,
+                //     website: response.data[0].website
+                // })
+            }).catch((error) => {
+        })
+
+        // let tmpItems = [];
+        // for (let i = 0; i < 30; i += 1) {
+        //     tmpItems.push({
+        //         height: this.generateHeight(),
+        //         imageCard: image,
+        //         imageAvatar: 'https://i.pravatar.cc/300',
+        //         user: 'Utente... ',
+        //         title: 'Titolo...',
+        //         description: 'Descrizione...'
+        //     });
+        // }
+    }
+
+    const updateAvatar = (e) => {
         const formData = new FormData();
         formData.append('files.avatar', e.target.files[0], 'avatar.jpg');
         formData.append('data', JSON.stringify({}));
-        axios.put("http://zion.datafactor.it:40505/shops/" + this.state.idShopStrapi, formData, {
+        axios.put("http://zion.datafactor.it:40505/shops/" + idShopStrapi, formData, {
             headers: {
-                'Authorization': 'Bearer ' + this.props.token,
+                'Authorization': 'Bearer ' + props.token,
             }
         })
             .then((response) => {
-                this.getUserInfo();
+                getUserInfo();
             }).catch((error) => {
         })
     }
 
-    updateCarousel = (e) => {
+    const updateCarousel = (e) => {
         const formData = new FormData();
         formData.append('files.carousel', e.target.files[0], 'example.jpg');
         formData.append('data', JSON.stringify({}));
-        axios.put("http://zion.datafactor.it:40505/shops/" + this.state.idShopStrapi, formData, {
+        axios.put("http://zion.datafactor.it:40505/shops/" + idShopStrapi, formData, {
             headers: {
-                'Authorization': 'Bearer ' + this.props.token,
+                'Authorization': 'Bearer ' + props.token,
             }
         })
             .then((response) => {
-                this.getUserInfo();
+                getUserInfo();
             }).catch((error) => {
         })
     }
 
-    getMultipleItems = () => {
-        this.props.setLoading(true)
+    const getMultipleItems = () => {
+        props.setLoading(true)
         const newItems = [];
         for (let i = 0; i < 5; i++) {
             newItems.push({
-                height: this.generateHeight(),
+                height: generateHeight(),
                 imageCard: image,
                 imageAvatar: 'https://i.pravatar.cc/300',
                 user: 'Utente... ',
@@ -300,48 +303,48 @@ class User extends Component {
                 description: 'Descrizione...'
             });
         }
-        this.setState({
-            items: [...this.state.items, ...newItems],
-        });
+        setItems([...items, ...newItems]);
         setTimeout(() => {
-            this.props.setLoading(false)
+            props.setLoading(false)
         }, 500)
     }
 
-    render() {
-        return (
-            <>
-                <Container>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <UserCard
-                        email={this.state.email}
-                        title={this.state.title}
-                        description={this.state.description}
-                        avatar={this.state.avatar}
-                        carousel={this.state.carousel}
-                        website={this.state.website}
-                        telephone={this.state.telephone}
-                        updateAvatar={this.updateAvatar.bind(this)}
-                        updateCarousel={this.updateCarousel.bind(this)}/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <Row className="justify-content-center">
-                        <Typography variant="h3" gutterBottom component="div" className="text-center"
-                                    style={{color: 'darkred', fontWeight: 'bold'}}>
-                            Tutti i prodotti:
-                        </Typography>
-                    </Row>
-                </Container>
-                <Container fluid>
-                    <GridSystem items={this.state.items} columnWidth={this.props.columnWidth} isUser={true}/>
-                </Container>
-            </>
-        )
-    }
+    useEffect(() => {
+        componentDidMount()
+    }, [])
+
+    return (
+        <>
+            <Container>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <UserCard
+                    email={email}
+                    title={title}
+                    description={description}
+                    avatar={avatar}
+                    carousel={carousel}
+                    website={website}
+                    telephone={telephone}
+                    updateAvatar={updateAvatar}
+                    updateCarousel={updateCarousel}/>
+                <br/>
+                <br/>
+                <br/>
+                <Row className="justify-content-center">
+                    <Typography variant="h3" gutterBottom component="div" className="text-center"
+                                style={{color: 'darkred', fontWeight: 'bold'}}>
+                        Tutti i prodotti:
+                    </Typography>
+                </Row>
+            </Container>
+            <Container fluid>
+                <GridSystem items={items} columnWidth={props.columnWidth} isUser={true}/>
+            </Container>
+        </>
+    )
 }
 
 export default User;
