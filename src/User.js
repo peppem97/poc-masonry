@@ -82,7 +82,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export const UserCard = React.memo(function News3Card(props) {
+const UserCard = React.memo(function News3Card(props) {
     const styles = useStyles();
     const mediaStyles = useCoverCardMediaStyles();
     return (
@@ -162,7 +162,7 @@ export const UserCard = React.memo(function News3Card(props) {
     </Card>);
 });
 
-function User(props) {
+export default function User(props) {
     const [idShopStrapi, setIdShopStrapi] = useState(null)
     const [email, setEmail] = useState(null)
     const [title, setTitle] = useState(null)
@@ -179,12 +179,8 @@ function User(props) {
     }
 
     const getUserInfo = () => {
-        console.log(username)
         axios.get("http://zion.datafactor.it:40505/shops?username=" + username, {
-            headers: {
-                'Authorization': 'Bearer ' + props.token,
-            }
-        })
+            headers: {'Authorization': 'Bearer ' + props.token,}})
             .then((response) => {
                 setIdShopStrapi(response.data[0].id)
                 setEmail(response.data[0].email)
@@ -194,15 +190,12 @@ function User(props) {
                 setCarousel("http://zion.datafactor.it:40505" + response.data[0].carousel.url)
                 setTelephone(response.data[0].telephone)
                 setWebsite(response.data[0].website)
-            }).catch((error) => {
-        })
+            }).catch((error) => {})
     }
 
     const getInitialItems = () => {
         axios.get("http://zion.datafactor.it:40505/products?username=" + username, {
-            headers: {
-                'Authorization': 'Bearer ' + props.token,
-            }
+            headers: {'Authorization': 'Bearer ' + props.token}
         }).then((response) => {
                 let items = response.data.map((element) => ({
                     height: generateHeight(),
@@ -212,9 +205,7 @@ function User(props) {
                     picture: "http://zion.datafactor.it:40505" + element.picture.url,
                     titleShop: title,
                     emailShop: element.emailShop}))
-            setItems(items)
-            }).catch((error) => {
-        })
+            setItems(items)}).catch((error) => {})
     }
 
     const updateAvatar = (e) => {
@@ -225,11 +216,9 @@ function User(props) {
             headers: {
                 'Authorization': 'Bearer ' + props.token,
             }
-        })
-            .then((response) => {
+        }).then((response) => {
                 getUserInfo();
-            }).catch((error) => {
-        })
+            }).catch((error) => {})
     }
 
     const updateCarousel = (e) => {
@@ -237,14 +226,10 @@ function User(props) {
         formData.append('files.carousel', e.target.files[0], 'example.jpg');
         formData.append('data', JSON.stringify({}));
         axios.put("http://zion.datafactor.it:40505/shops/" + idShopStrapi, formData, {
-            headers: {
-                'Authorization': 'Bearer ' + props.token,
-            }
-        })
-            .then((response) => {
+            headers: {'Authorization': 'Bearer ' + props.token,}
+        }).then((response) => {
                 getUserInfo();
-            }).catch((error) => {
-        })
+            }).catch((error) => {})
     }
 
     // const getMultipleItems = () => {
@@ -304,5 +289,3 @@ function User(props) {
         </>
     )
 }
-
-export default User;

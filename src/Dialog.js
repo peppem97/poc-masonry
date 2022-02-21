@@ -140,11 +140,8 @@ export const MediaCard = React.memo(function PostCard(props) {
     return (
         <Dialog open={props.open} onClose={closeDialog} fullWidth={true} >
             <Card className={cx(cardStyles.root)} style={{width: '100%'}}>
-                <CardMedia
-                    classes={mediaStyles}
-                    image={props.picture}
-                />
-                <Avatar className={cardStyles.avatar} src={props.avatar} />
+                <CardMedia classes={mediaStyles} image={props.picture}/>
+                {props.showAvatar && <Avatar className={cardStyles.avatar} src={props.avatar}/>}
                 <CardContent className={cardStyles.content}>
                     <TextInfoContent
                         classes={textCardContentStyles}

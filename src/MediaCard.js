@@ -109,6 +109,7 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
                 open={open}
                 onClose={handleClose}
                 avatar={avatar}
+                showAvatar={props.showAvatar}
                 title={props.item.title}
                 token={props.item.token}
                 description={props.item.description}

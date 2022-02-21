@@ -29,9 +29,7 @@ function Home(props) {
 
     const getInitialItems = () => {
         axios.get("http://zion.datafactor.it:40505/products", {
-            headers: {
-                'Authorization': 'Bearer ' + props.token,
-            }
+            headers: {'Authorization': 'Bearer ' + props.token}
         }).then((response) => {
             let items = response.data.map((element) => ({
                 height: generateHeight(),
@@ -41,8 +39,7 @@ function Home(props) {
                 picture: "http://zion.datafactor.it:40505" + element.picture.url,
                 username: element.username}))
             setItems(items)
-        }).catch((error) => {
-        })
+        }).catch((error) => {})
     }
 
     useEffect(() => {
