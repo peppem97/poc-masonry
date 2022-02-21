@@ -19,6 +19,8 @@ import TextInfoContent from '@mui-treasury/components/content/textInfo';
 import Button from "@mui/material/Button";
 import { useBlogTextInfoContentStyles } from '@mui-treasury/styles/textInfoContent/blog';
 import { useOverShadowStyles } from '@mui-treasury/styles/shadow/over';
+import {useEffect, useState} from "react";
+import axios from "axios";
 //*******************//
 // const useBasicProfileStyles = makeStyles(({palette}) => ({
 //     overline: {
@@ -121,13 +123,23 @@ export const MediaCard = React.memo(function PostCard(props) {
     const mediaStyles = useSlopeCardMediaStyles();
     const textCardContentStyles = useN01TextInfoContentStyles();
 
+    const [shop, setShop] = useState(null)
+
     const closeDialog = (value) => {
         props.onClose(value);
     };
 
+    useEffect(() => {
+        axios.get("http://zion.datafactor.it:40505/shops?username=" + props.username, {
+            headers: {'Authorization': 'Bearer ' + props.token}
+        }).then((response) => {
+            setShop("http://zion.datafactor.it:40505" + response.data[0].title)
+        }).catch((error) => {})
+    })
+
     return (
         <Dialog open={props.open} onClose={closeDialog} fullWidth={true} >
-            <Card className={cx(cardStyles.root)}>
+            <Card className={cx(cardStyles.root)} style={{width: '100%'}}>
                 <CardMedia
                     classes={mediaStyles}
                     image={props.picture}
@@ -136,10 +148,8 @@ export const MediaCard = React.memo(function PostCard(props) {
                 <CardContent className={cardStyles.content}>
                     <TextInfoContent
                         classes={textCardContentStyles}
-                        heading={'First Snow Storm'}
-                        body={
-                            'Snow storm coming in Sommaroy island, Arctic Norway. This is something that you definitely wanna see in your life.'
-                        }
+                        heading={props.title}
+                        body={props.description}
                     />
                 </CardContent>
                 <Box px={2} pb={2} mt={-1}>

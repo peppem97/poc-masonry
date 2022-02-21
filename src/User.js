@@ -172,25 +172,15 @@ function User(props) {
     const [website, setWebsite] = useState(null)
     const [telephone, setTelephone] = useState(null)
     const [items, setItems] = useState([])
-
-    const componentDidMount = () => {
-        // console.log(new URLSearchParams((new URL(window.location).search)).get('prova'))
-        getUserInfo();
-        getInitialItems();
-        // window.addEventListener('scroll', () => {
-        //     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        //         this.getMultipleItems();
-        //     }
-        // });
-    }
-
+    const {username} = useParams();
 
     const generateHeight = () => {
         return Math.floor((Math.random() * (380)) + 80);
     }
 
     const getUserInfo = () => {
-        axios.get("http://zion.datafactor.it:40505/shops?email=shop2@shop2.it", {
+        console.log(username)
+        axios.get("http://zion.datafactor.it:40505/shops?username=" + username, {
             headers: {
                 'Authorization': 'Bearer ' + props.token,
             }
@@ -204,60 +194,27 @@ function User(props) {
                 setCarousel("http://zion.datafactor.it:40505" + response.data[0].carousel.url)
                 setTelephone(response.data[0].telephone)
                 setWebsite(response.data[0].website)
-                // this.setState({
-                //     idShopStrapi: response.data[0].id,
-                //     email: response.data[0].email,
-                //     title: response.data[0].title,
-                //     description: response.data[0].description,
-                //     avatar: "http://zion.datafactor.it:40505" + response.data[0].avatar.url,
-                //     carousel: "http://zion.datafactor.it:40505" + response.data[0].carousel.url,
-                //     telephone: response.data[0].telephone,
-                //     website: response.data[0].website
-                // })
             }).catch((error) => {
         })
     }
 
     const getInitialItems = () => {
-        axios.get("http://zion.datafactor.it:40505/products", {
+        axios.get("http://zion.datafactor.it:40505/products?username=" + username, {
             headers: {
                 'Authorization': 'Bearer ' + props.token,
             }
         }).then((response) => {
                 let items = response.data.map((element) => ({
                     height: generateHeight(),
-                    avatar: avatar, //devo prendere in qualche modo l'avatar dell'utente,
+                    avatar: avatar,
                     title: element.title,
                     description: element.description,
                     picture: "http://zion.datafactor.it:40505" + element.picture.url,
                     titleShop: title,
                     emailShop: element.emailShop}))
             setItems(items)
-
-            // this.setState({
-                //     idShopStrapi: response.data[0].id,
-                //     email: response.data[0].email,
-                //     title: response.data[0].title,
-                //     description: response.data[0].description,
-                //     avatar: "http://zion.datafactor.it:40505" + response.data[0].avatar.url,
-                //     carousel: "http://zion.datafactor.it:40505" + response.data[0].carousel.url,
-                //     telephone: response.data[0].telephone,
-                //     website: response.data[0].website
-                // })
             }).catch((error) => {
         })
-
-        // let tmpItems = [];
-        // for (let i = 0; i < 30; i += 1) {
-        //     tmpItems.push({
-        //         height: this.generateHeight(),
-        //         imageCard: image,
-        //         imageAvatar: 'https://i.pravatar.cc/300',
-        //         user: 'Utente... ',
-        //         title: 'Titolo...',
-        //         description: 'Descrizione...'
-        //     });
-        // }
     }
 
     const updateAvatar = (e) => {
@@ -290,27 +247,28 @@ function User(props) {
         })
     }
 
-    const getMultipleItems = () => {
-        props.setLoading(true)
-        const newItems = [];
-        for (let i = 0; i < 5; i++) {
-            newItems.push({
-                height: generateHeight(),
-                imageCard: image,
-                imageAvatar: 'https://i.pravatar.cc/300',
-                user: 'Utente... ',
-                title: 'Titolo...',
-                description: 'Descrizione...'
-            });
-        }
-        setItems([...items, ...newItems]);
-        setTimeout(() => {
-            props.setLoading(false)
-        }, 500)
-    }
+    // const getMultipleItems = () => {
+    //     props.setLoading(true)
+    //     const newItems = [];
+    //     for (let i = 0; i < 5; i++) {
+    //         newItems.push({
+    //             height: generateHeight(),
+    //             imageCard: image,
+    //             imageAvatar: 'https://i.pravatar.cc/300',
+    //             user: 'Utente... ',
+    //             title: 'Titolo...',
+    //             description: 'Descrizione...'
+    //         });
+    //     }
+    //     setItems([...items, ...newItems]);
+    //     setTimeout(() => {
+    //         props.setLoading(false)
+    //     }, 500)
+    // }
 
     useEffect(() => {
-        componentDidMount()
+        getUserInfo();
+        getInitialItems();
     }, [])
 
     return (

@@ -1,16 +1,11 @@
 import React, {Component} from "react";
-import './App.css'
 import {
     BrowserRouter as Router,
     Routes,
-    Route,
-    Switch
-} from 'react-router-dom';
+    Route} from 'react-router-dom';
 import User from "./User";
 import TopToolbar from "./TopToolbar";
 import Home from "./Home";
-import ImageUploadExample from "./ImageUploadExample";
-import Prova from "./prova";
 
 class App extends Component {
     constructor(props) {
@@ -83,12 +78,10 @@ class App extends Component {
                                   token={this.state.token}
                                   increaseColumnsSize={this.increaseColumnsSize.bind(this)}
                                   decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>}/>
-                        <Route exact path='/user/:id' element={
+                        <Route exact path='/user/:username' element={
                             <User columnWidth={this.state.columnWidth}
                                   token={this.state.token}
                                   setLoading={this.setLoading.bind(this)}/>}/>
-                        <Route exact path='/image-upload' token={this.state.token} element={<ImageUploadExample/>}/>
-                        <Route exact path='/prova/:id' element={<Prova/>} component={Prova}/>
                     </Routes>
                 </Router>
             </>

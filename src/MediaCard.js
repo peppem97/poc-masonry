@@ -1,7 +1,7 @@
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
@@ -13,6 +13,7 @@ import {CardActions, IconButton} from "@mui/material";
 import Avatar from "@material-ui/core/Avatar";
 import {useNavigate} from "react-router-dom";
 import ProductDialog from "./Dialog";
+import axios from "axios";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -51,18 +52,23 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
     const styles = useStyles();
     let navigate = useNavigate();
     const [open, setOpen] = useState(false);
+    const [avatar, setAvatar] = useState(null)
 
     const goToUser = () => {
-        navigate("/user/1", {id: props.item.username});
+        navigate("/user/" + props.item.username);
     }
-
-    // function openProduct() {
-    //     console.log('Apro il prodotto ' + props.index)
-    // }
 
     const handleClickOpen = () => {
         setOpen(true);
     };
+
+    useEffect(() => {
+        axios.get("http://zion.datafactor.it:40505/shops?username=" + props.item.username, {
+            headers: {'Authorization': 'Bearer ' + props.item.token}
+        }).then((response) => {
+            setAvatar("http://zion.datafactor.it:40505" + response.data[0].avatar.url)
+        }).catch((error) => {})
+    })
 
     const handleClose = (value) => {
         setOpen(false);
@@ -76,7 +82,7 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
                 <Box py={3} px={2} className={styles.contentHeader}>
                     {props.showAvatar && (
                         <IconButton onClick={goToUser}>
-                            <Avatar src={props.item.avatar}/>
+                            <Avatar src={avatar}/>
                         </IconButton>)}
                 </Box>
                 <Box py={3} px={2} className={styles.contentDescription}>
@@ -102,11 +108,11 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
                 }}
                 open={open}
                 onClose={handleClose}
-                avatar={props.item.avatar}
+                avatar={avatar}
                 title={props.item.title}
-                picture={props.item.picture}
+                token={props.item.token}
                 description={props.item.description}
-                titleShop={props.item.titleShop}
+                picture={props.item.picture}
                 username={props.item.username}
             />
         </>
