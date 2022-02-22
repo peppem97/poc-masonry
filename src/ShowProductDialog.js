@@ -120,13 +120,12 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export const ProductDialog = React.memo(function PostCard(props) {
+export const ShowProductDialog = React.memo(function PostCard(props) {
     const cardStyles = useStyles();
     const mediaStyles = useSlopeCardMediaStyles();
     const textCardContentStyles = useN01TextInfoContentStyles();
     const [shop, setShop] = useState(null)
     const appContext = useContext(AppContext);
-
 
     const closeDialog = (value) => {
         props.onClose(value);
@@ -260,4 +259,4 @@ export const ProductDialog = React.memo(function PostCard(props) {
 //     );
 // });
 
-export default ProductDialog;
+export default ShowProductDialog;

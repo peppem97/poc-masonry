@@ -7,6 +7,7 @@ import axios from "axios";
 import {useParams} from "react-router-dom";
 import AppContext from "./AppContext";
 import UserCard from "./UserCard";
+import InsertProductDialog from "./InsertProductDialog";
 
 export default function User() {
     const [idShopStrapi, setIdShopStrapi] = useState(null)
@@ -18,6 +19,7 @@ export default function User() {
     const [website, setWebsite] = useState(null)
     const [telephone, setTelephone] = useState(null)
     const [items, setItems] = useState([])
+    const [openDialog, setOpenDialog] = useState(false)
     const {username} = useParams();
     const appContext = useContext(AppContext);
 
@@ -85,6 +87,14 @@ export default function User() {
         })
     }
 
+    const openNewProductDialog = () => {
+        setOpenDialog(true)
+    }
+
+    const closeNewProductDialog = () => {
+        setOpenDialog(false)
+    }
+
     // const getMultipleItems = () => {
     //     props.setLoading(true)
     //     const newItems = [];
@@ -124,6 +134,7 @@ export default function User() {
                     carousel={carousel}
                     website={website}
                     telephone={telephone}
+                    openNewProductDialog={openNewProductDialog}
                     updateAvatar={updateAvatar}
                     updateCarousel={updateCarousel}/>
                 <br/>
@@ -136,6 +147,7 @@ export default function User() {
                     </Typography>
                 </Row>
             </Container>
+            <InsertProductDialog open={openDialog} onClose={closeNewProductDialog}/>
             <Container fluid>
                 <GridSystem items={items} columnWidth={appContext.columnWidth} isUser={true}/>
             </Container>

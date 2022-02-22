@@ -12,7 +12,7 @@ import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
 import {CardActions, IconButton} from "@mui/material";
 import Avatar from "@material-ui/core/Avatar";
 import {useNavigate} from "react-router-dom";
-import ProductDialog from "./Dialog";
+import ShowProductDialog from "./ShowProductDialog";
 import axios from "axios";
 import AppContext from "./AppContext";
 
@@ -53,7 +53,7 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const styles = useStyles();
     let navigate = useNavigate();
-    const [open, setOpen] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
     const [avatar, setAvatar] = useState(null)
     const appContext = useContext(AppContext);
 
@@ -62,8 +62,13 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
         navigate("/user/" + props.item.username);
     }
 
-    const handleClickOpen = () => {
-        setOpen(true);
+    const openShowProductDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const closeShowProductDialog = (value) => {
+        setOpenDialog(false);
+        // setSelectedValue(value);
     };
 
     useEffect(() => {
@@ -74,14 +79,11 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
         }).catch((error) => {})
     })
 
-    const handleClose = (value) => {
-        setOpen(false);
-        // setSelectedValue(value);
-    };
+
 
     return (
         <>
-            <Card className={styles.card} style={{height: props.item.height}} raised onClick={handleClickOpen}>
+            <Card className={styles.card} style={{height: props.item.height}} raised onClick={openShowProductDialog}>
                 <CardMedia classes={mediaStyles} image={props.item.picture}/>
                 <Box py={3} px={2} className={styles.contentHeader}>
                     {props.showAvatar && (
@@ -106,12 +108,12 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
                     </Info>
                 </Box>
             </Card>
-            <ProductDialog
+            <ShowProductDialog
                 selectedValue={(e) => {
                     console.log(e)
                 }}
-                open={open}
-                onClose={handleClose}
+                open={openDialog}
+                onClose={closeShowProductDialog}
                 avatar={avatar}
                 showAvatar={props.showAvatar}
                 title={props.item.title}

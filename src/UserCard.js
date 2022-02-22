@@ -133,7 +133,7 @@ export const UserCard = React.memo(function News3Card(props) {
                 gap={2}
                 bgcolor={'common.white'}>
                 <Col className='text-center'>
-                    <Button variant="contained" endIcon={<AddShoppingCartIcon/>} style={{backgroundColor: 'grey'}}>
+                    <Button variant="contained" endIcon={<AddShoppingCartIcon/>} style={{backgroundColor: 'darkred'}} onClick={props.openNewProductDialog}>
                         Nuovo prodotto
                     </Button>
                 </Col>
