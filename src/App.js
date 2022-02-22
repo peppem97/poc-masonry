@@ -1,92 +1,77 @@
-import React, {Component} from "react";
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route} from 'react-router-dom';
+import React, {useState} from "react";
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import User from "./User";
 import TopToolbar from "./TopToolbar";
 import Home from "./Home";
 
-class App extends Component {
-    constructor(props) {
-        super(props);
-        console.disableYellowBox = true;
-        this.state = {
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMmUzMmZkYzUxNWJkMDAzMTM0YWFjYSIsImlhdCI6MTY0NTQyOTY3NiwiZXhwIjoxNjQ1NTE2MDc2LCJpc3MiOiJzdHJhcGkifQ.0Mu4QBxqSU2koFu8Fg07Jc_6yC8nu4KZModJVmdHNx8',
-            loading: false,
-            disabledIncrease: false,
-            disabledDecrease: false,
-            columnWidth: 200,
-        };
-    }
+export default function  App() {
+    const [token, setToken] = useState('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMmUzMmZkYzUxNWJkMDAzMTM0YWFjYSIsImlhdCI6MTY0NTUxNzkxMywiZXhwIjoxNjQ1NjA0MzEzLCJpc3MiOiJzdHJhcGkifQ.BHhu0FRCVaf6tkiY6ijgL0ytg0qXROyNFBOAungrZ5g')
+    const [loading, setLoading] = useState(null)
+    const [disabledIncrease, setDisabledIncrease] = useState(false)
+    const [disabledDecrease, setDisabledDecrease] = useState(false)
+    const [columnWidth, setColumnWidth] = useState(200)
 
-    checkIncreaseDecrease = () => {
-        if (this.state.columnWidth >= 500) {
-            this.setState({disabledIncrease: true});
-            this.setState({disabledDecrease: false});
+    const checkIncreaseDecrease = () => {
+        if (columnWidth >= 500) {
+            setDisabledIncrease(true);
+            setDisabledDecrease(false);
             return;
         }
 
-        if (this.state.columnWidth <= 250) {
-            this.setState({disabledIncrease: false});
-            this.setState({disabledDecrease: true});
+        if (columnWidth <= 250) {
+            setDisabledIncrease(false);
+            setDisabledDecrease(true);
             return;
         }
-
-        this.setState({disabledIncrease: false});
-        this.setState({disabledDecrease: false});
-
+        setDisabledIncrease(false);
+        setDisabledDecrease(false);
     }
 
-    increaseColumnsSize = () => {
-        this.checkIncreaseDecrease();
+    const increaseColumnsSize = () => {
+        checkIncreaseDecrease();
 
-        if (this.state.columnWidth >= 500) {
-            this.setState({columnWidth: this.state.columnWidth});
+        if (columnWidth >= 500) {
+            setColumnWidth(columnWidth);
         } else {
-            this.setState({columnWidth: this.state.columnWidth + 50});
+            setColumnWidth(columnWidth + 50);
         }
     }
 
-    decreaseColumnsSize = () => {
-        this.checkIncreaseDecrease();
+    const decreaseColumnsSize = () => {
+        checkIncreaseDecrease();
 
-        if (this.state.columnWidth <= 250) {
-            this.setState({columnWidth: this.state.columnWidth});
+        if (columnWidth <= 250) {
+            setColumnWidth(columnWidth);
         } else {
-            this.setState({columnWidth: this.state.columnWidth - 50});
+            setColumnWidth(columnWidth - 50);
         }
     }
 
-    setLoading = (stateLoading) => {
-        this.setState({loading: stateLoading});
+    const setLoadingState = (loadingState) => {
+        setLoading(loadingState);
     }
 
-    render() {
-        return (
-            <>
-                <Router>
-                    <TopToolbar loading={this.state.loading}
-                                disableIncrease={this.state.disabledIncrease}
-                                disableDecrease={this.state.disabledDecrease}
-                                increaseColumnsSize={this.increaseColumnsSize.bind(this)}
-                                decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>
-                    <Routes>
-                        <Route exact path='/' element={
-                            <Home setLoading={this.setLoading.bind(this)}
-                                  columnWidth={this.state.columnWidth}
-                                  token={this.state.token}
-                                  increaseColumnsSize={this.increaseColumnsSize.bind(this)}
-                                  decreaseColumnsSize={this.decreaseColumnsSize.bind(this)}/>}/>
-                        <Route exact path='/user/:username' element={
-                            <User columnWidth={this.state.columnWidth}
-                                  token={this.state.token}
-                                  setLoading={this.setLoading.bind(this)}/>}/>
-                    </Routes>
-                </Router>
-            </>
-        );
-    }
+    return (
+        <>
+            <Router>
+                <TopToolbar loading={loading}
+                            disableIncrease={disabledIncrease}
+                            disableDecrease={disabledDecrease}
+                            increaseColumnsSize={increaseColumnsSize}
+                            decreaseColumnsSize={decreaseColumnsSize}/>
+                <Routes>
+                    <Route exact path='/' element={
+                        <Home setLoading={setLoadingState}
+                              columnWidth={columnWidth}
+                              token={token}
+                              increaseColumnsSize={increaseColumnsSize}
+                              decreaseColumnsSize={decreaseColumnsSize}/>}/>
+                    <Route exact path='/user/:username' element={
+                        <User columnWidth={columnWidth}
+                              token={token}
+                              setLoading={setLoadingState}/>}/>
+                </Routes>
+            </Router>
+        </>
+    );
 }
-
-export default App;

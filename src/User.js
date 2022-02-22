@@ -174,13 +174,14 @@ export default function User(props) {
     const [items, setItems] = useState([])
     const {username} = useParams();
 
+
     const generateHeight = () => {
         return Math.floor((Math.random() * (380)) + 80);
     }
 
     const getUserInfo = () => {
         axios.get("http://zion.datafactor.it:40505/shops?username=" + username, {
-            headers: {'Authorization': 'Bearer ' + props.token,}})
+            headers: {'Authorization': 'Bearer ' + props.token}})
             .then((response) => {
                 setIdShopStrapi(response.data[0].id)
                 setEmail(response.data[0].email)
@@ -199,12 +200,11 @@ export default function User(props) {
         }).then((response) => {
                 let items = response.data.map((element) => ({
                     height: generateHeight(),
-                    avatar: avatar,
                     title: element.title,
+                    token: props.token,
                     description: element.description,
-                    picture: "http://zion.datafactor.it:40505" + element.picture.url,
-                    titleShop: title,
-                    emailShop: element.emailShop}))
+                    username: username,
+                    picture: "http://zion.datafactor.it:40505" + element.picture.url}))
             setItems(items)}).catch((error) => {})
     }
 
