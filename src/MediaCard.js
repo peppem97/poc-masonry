@@ -48,6 +48,7 @@ const useStyles = makeStyles(() => ({
         width: '100%',
     },
 }));
+
 export const MediaCard = React.memo(function GalaxyCard(props) {
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const styles = useStyles();

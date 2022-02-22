@@ -78,7 +78,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const UserCard = React.memo(function News3Card(props) {
+export const UserCard = React.memo(function News3Card(props) {
     const styles = useStyles();
     const mediaStyles = useCoverCardMediaStyles();
     return (

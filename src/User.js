@@ -8,7 +8,6 @@ import {useParams} from "react-router-dom";
 import AppContext from "./AppContext";
 import UserCard from "./UserCard";
 
-
 export default function User() {
     const [idShopStrapi, setIdShopStrapi] = useState(null)
     const [email, setEmail] = useState(null)

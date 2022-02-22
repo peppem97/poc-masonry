@@ -9,19 +9,7 @@ import GridSystem from "./GridSystem";
 import axios from "axios";
 import AppContext from "./AppContext";
 
-function Title() {
-    return (
-        <>
-            <Typography variant="h1" gutterBottom className="text-center" style={{color: 'black', fontWeight: 'bold'}}>
-                Masonry
-            </Typography>
-            <Typography variant="h3" gutterBottom className="text-center" style={{color: 'darkred'}}>
-                Descrizione Masonry
-            </Typography>
-        </>)
-}
-
-function Home() {
+export default function Home() {
     const [items, setItems] = useState([])
     const appContext = useContext(AppContext);
 
@@ -57,7 +45,12 @@ function Home() {
             <br/>
             <br/>
             <Row>
-                <Title/>
+                <Typography variant="h1" gutterBottom className="text-center" style={{color: 'black', fontWeight: 'bold'}}>
+                    Masonry
+                </Typography>
+                <Typography variant="h3" gutterBottom className="text-center" style={{color: 'darkred'}}>
+                    Descrizione Masonry
+                </Typography>
             </Row>
             <br/>
             <br/>
@@ -68,5 +61,3 @@ function Home() {
         </Container>
     );
 }
-
-export default Home;

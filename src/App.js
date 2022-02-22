@@ -5,8 +5,7 @@ import TopToolbar from "./TopToolbar";
 import Home from "./Home";
 import AppContext from "./AppContext";
 
-
-export default function  App() {
+export default function App() {
     const [token, setToken] = useState('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMmUzMmZkYzUxNWJkMDAzMTM0YWFjYSIsImlhdCI6MTY0NTUxNzkxMywiZXhwIjoxNjQ1NjA0MzEzLCJpc3MiOiJzdHJhcGkifQ.BHhu0FRCVaf6tkiY6ijgL0ytg0qXROyNFBOAungrZ5g')
     const [loading, setLoading] = useState(null)
     const [disabledIncrease, setDisabledIncrease] = useState(false)

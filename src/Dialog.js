@@ -119,6 +119,7 @@ const useStyles = makeStyles(() => ({
         },
     },
 }));
+
 export const ProductDialog = React.memo(function PostCard(props) {
     const cardStyles = useStyles();
     const mediaStyles = useSlopeCardMediaStyles();
@@ -137,7 +138,7 @@ export const ProductDialog = React.memo(function PostCard(props) {
         }).then((response) => {
             setShop("http://zion.datafactor.it:40505" + response.data[0].title)
         }).catch((error) => {})
-    })
+    }, [])
 
     return (
         <Dialog open={props.open} onClose={closeDialog} fullWidth={true} >
