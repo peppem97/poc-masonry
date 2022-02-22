@@ -3,6 +3,8 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import User from "./User";
 import TopToolbar from "./TopToolbar";
 import Home from "./Home";
+import AppContext from "./AppContext";
+
 
 export default function  App() {
     const [token, setToken] = useState('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMmUzMmZkYzUxNWJkMDAzMTM0YWFjYSIsImlhdCI6MTY0NTUxNzkxMywiZXhwIjoxNjQ1NjA0MzEzLCJpc3MiOiJzdHJhcGkifQ.BHhu0FRCVaf6tkiY6ijgL0ytg0qXROyNFBOAungrZ5g')
@@ -10,6 +12,14 @@ export default function  App() {
     const [disabledIncrease, setDisabledIncrease] = useState(false)
     const [disabledDecrease, setDisabledDecrease] = useState(false)
     const [columnWidth, setColumnWidth] = useState(200)
+    const appSettings = {
+        //Posso includere anche delle funzioni...
+        token: token,
+        loading: loading,
+        disabledIncrease: disabledIncrease,
+        disabledDecrease: disabledDecrease,
+        columnWidth: columnWidth
+    };
 
     const checkIncreaseDecrease = () => {
         if (columnWidth >= 500) {
@@ -52,26 +62,15 @@ export default function  App() {
     }
 
     return (
-        <>
+        <AppContext.Provider value={appSettings}>
             <Router>
-                <TopToolbar loading={loading}
-                            disableIncrease={disabledIncrease}
-                            disableDecrease={disabledDecrease}
-                            increaseColumnsSize={increaseColumnsSize}
+                <TopToolbar increaseColumnsSize={increaseColumnsSize}
                             decreaseColumnsSize={decreaseColumnsSize}/>
                 <Routes>
-                    <Route exact path='/' element={
-                        <Home setLoading={setLoadingState}
-                              columnWidth={columnWidth}
-                              token={token}
-                              increaseColumnsSize={increaseColumnsSize}
-                              decreaseColumnsSize={decreaseColumnsSize}/>}/>
-                    <Route exact path='/user/:username' element={
-                        <User columnWidth={columnWidth}
-                              token={token}
-                              setLoading={setLoadingState}/>}/>
+                    <Route exact path='/home' element={<Home/>}/>
+                    <Route exact path='/user/:username' element={<User/>}/>
                 </Routes>
             </Router>
-        </>
+        </AppContext.Provider>
     );
 }

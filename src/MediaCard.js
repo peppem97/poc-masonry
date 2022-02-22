@@ -1,7 +1,7 @@
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
@@ -14,6 +14,7 @@ import Avatar from "@material-ui/core/Avatar";
 import {useNavigate} from "react-router-dom";
 import ProductDialog from "./Dialog";
 import axios from "axios";
+import AppContext from "./AppContext";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -53,6 +54,8 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
     let navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [avatar, setAvatar] = useState(null)
+    const appContext = useContext(AppContext);
+
 
     const goToUser = () => {
         navigate("/user/" + props.item.username);
@@ -64,7 +67,7 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
 
     useEffect(() => {
         axios.get("http://zion.datafactor.it:40505/shops?username=" + props.item.username, {
-            headers: {'Authorization': 'Bearer ' + props.item.token}
+            headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
             setAvatar("http://zion.datafactor.it:40505" + response.data[0].avatar.url)
         }).catch((error) => {})
@@ -111,7 +114,6 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
                 avatar={avatar}
                 showAvatar={props.showAvatar}
                 title={props.item.title}
-                token={props.item.token}
                 description={props.item.description}
                 picture={props.item.picture}
                 username={props.item.username}

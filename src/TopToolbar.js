@@ -10,6 +10,8 @@ import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import Typography from "@mui/material/Typography";
 import LocalFloristIcon from "@mui/icons-material/LocalFlorist";
 import {useNavigate} from "react-router-dom";
+import AppContext from "./AppContext";
+import {useContext} from "react";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -55,9 +57,10 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
 
 export default function TopToolbar(props) {
     let navigate = useNavigate();
+    const appContext = useContext(AppContext);
 
     function goToHome() {
-        navigate("/");
+        navigate("/home");
     }
 
     return (
@@ -72,11 +75,11 @@ export default function TopToolbar(props) {
                             fontSize="inherit"/>&nbsp;Masonry</Button>
                     </Typography>
                     <Box sx={{flexGrow: 1}}/>
-                    <IconButton size="large" style={{color: props.disableIncrease ? 'gray' : 'darkred', fontWeight: 'bold'}}
+                    <IconButton size="large" style={{color: appContext.disableIncrease ? 'gray' : 'darkred', fontWeight: 'bold'}}
                                 onClick={props.increaseColumnsSize}>
                         <ZoomInIcon/>
                     </IconButton>
-                    <IconButton size="large" style={{color: props.disableDecrease ? 'gray' : 'darkred', fontWeight: 'bold'}}
+                    <IconButton size="large" style={{color: appContext.disableDecrease ? 'gray' : 'darkred', fontWeight: 'bold'}}
                                 onClick={props.decreaseColumnsSize}>
                         <ZoomOutIcon/>
                     </IconButton>
@@ -97,7 +100,7 @@ export default function TopToolbar(props) {
                     <Button variant="contained" style={{backgroundColor: 'white', color: 'black'}}>REGISTRATI</Button>
                 </Toolbar>
             </AppBar>
-            {props.loading ? <Box sx={{width: '100%'}}>
+            {appContext.loading ? <Box sx={{width: '100%'}}>
                 <LinearProgress color={"secondary"}/>
             </Box> : null}
         </Box>

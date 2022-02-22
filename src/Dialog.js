@@ -19,8 +19,9 @@ import TextInfoContent from '@mui-treasury/components/content/textInfo';
 import Button from "@mui/material/Button";
 import { useBlogTextInfoContentStyles } from '@mui-treasury/styles/textInfoContent/blog';
 import { useOverShadowStyles } from '@mui-treasury/styles/shadow/over';
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import axios from "axios";
+import AppContext from "./AppContext";
 //*******************//
 // const useBasicProfileStyles = makeStyles(({palette}) => ({
 //     overline: {
@@ -118,12 +119,13 @@ const useStyles = makeStyles(() => ({
         },
     },
 }));
-export const MediaCard = React.memo(function PostCard(props) {
+export const ProductDialog = React.memo(function PostCard(props) {
     const cardStyles = useStyles();
     const mediaStyles = useSlopeCardMediaStyles();
     const textCardContentStyles = useN01TextInfoContentStyles();
-
     const [shop, setShop] = useState(null)
+    const appContext = useContext(AppContext);
+
 
     const closeDialog = (value) => {
         props.onClose(value);
@@ -131,7 +133,7 @@ export const MediaCard = React.memo(function PostCard(props) {
 
     useEffect(() => {
         axios.get("http://zion.datafactor.it:40505/shops?username=" + props.username, {
-            headers: {'Authorization': 'Bearer ' + props.token}
+            headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
             setShop("http://zion.datafactor.it:40505" + response.data[0].title)
         }).catch((error) => {})
@@ -257,4 +259,4 @@ export const MediaCard = React.memo(function PostCard(props) {
 //     );
 // });
 
-export default MediaCard;
+export default ProductDialog;
