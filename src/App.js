@@ -17,7 +17,10 @@ export default function App() {
         loading: loading,
         disabledIncrease: disabledIncrease,
         disabledDecrease: disabledDecrease,
-        columnWidth: columnWidth
+        columnWidth: columnWidth,
+        host: "http://zion.datafactor.it:40505",
+        hostShops: "http://zion.datafactor.it:40505/shops",
+        hostProducts: "http://zion.datafactor.it:40505/products"
     };
 
     const checkIncreaseDecrease = () => {

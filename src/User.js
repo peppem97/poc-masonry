@@ -28,7 +28,7 @@ export default function User() {
     }
 
     const getUserInfo = () => {
-        axios.get("http://zion.datafactor.it:40505/shops?username=" + username, {
+        axios.get(appContext.hostShops + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         })
             .then((response) => {
@@ -36,8 +36,8 @@ export default function User() {
                 setEmail(response.data[0].email)
                 setTitle(response.data[0].title)
                 setDescription(response.data[0].description)
-                setAvatar("http://zion.datafactor.it:40505" + response.data[0].avatar.url)
-                setCarousel("http://zion.datafactor.it:40505" + response.data[0].carousel.url)
+                setAvatar(appContext.host + response.data[0].avatar.url)
+                setCarousel(appContext.host + response.data[0].carousel.url)
                 setTelephone(response.data[0].telephone)
                 setWebsite(response.data[0].website)
             }).catch((error) => {
@@ -45,7 +45,7 @@ export default function User() {
     }
 
     const getInitialItems = () => {
-        axios.get("http://zion.datafactor.it:40505/products?username=" + username, {
+        axios.get(appContext.hostProducts + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
             let items = response.data.map((element) => ({
@@ -54,7 +54,7 @@ export default function User() {
                 token: appContext.token,
                 description: element.description,
                 username: username,
-                picture: "http://zion.datafactor.it:40505" + element.picture.url
+                picture: appContext.host + element.picture.url
             }))
             setItems(items)
         }).catch((error) => {
@@ -65,7 +65,7 @@ export default function User() {
         const formData = new FormData();
         formData.append('files.avatar', e.target.files[0], 'avatar.jpg');
         formData.append('data', JSON.stringify({}));
-        axios.put("http://zion.datafactor.it:40505/shops/" + idShopStrapi, formData, {
+        axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
             headers: {
                 'Authorization': 'Bearer ' + appContext.token,
             }
@@ -79,7 +79,7 @@ export default function User() {
         const formData = new FormData();
         formData.append('files.carousel', e.target.files[0], 'example.jpg');
         formData.append('data', JSON.stringify({}));
-        axios.put("http://zion.datafactor.it:40505/shops/" + idShopStrapi, formData, {
+        axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
             headers: {'Authorization': 'Bearer ' + appContext.token,}
         }).then((response) => {
             getUserInfo();

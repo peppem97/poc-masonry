@@ -132,10 +132,10 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
     };
 
     useEffect(() => {
-        axios.get("http://zion.datafactor.it:40505/shops?username=" + props.username, {
+        axios.get(appContext.hostShops + "?username=" + props.username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
-            setShop("http://zion.datafactor.it:40505" + response.data[0].title)
+            setShop(appContext.host + response.data[0].title)
         }).catch((error) => {})
     }, [])
 

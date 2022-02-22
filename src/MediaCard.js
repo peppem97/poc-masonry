@@ -72,10 +72,10 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
     };
 
     useEffect(() => {
-        axios.get("http://zion.datafactor.it:40505/shops?username=" + props.item.username, {
+        axios.get(appContext.hostShops + "?username=" + props.item.username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
-            setAvatar("http://zion.datafactor.it:40505" + response.data[0].avatar.url)
+            setAvatar(appContext.host + response.data[0].avatar.url)
         }).catch((error) => {})
     })
 

@@ -18,7 +18,7 @@ export default function Home() {
     }
 
     const getInitialItems = () => {
-        axios.get("http://zion.datafactor.it:40505/products", {
+        axios.get(appContext.hostProducts, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
             let items = response.data.map((element) => ({
@@ -26,7 +26,7 @@ export default function Home() {
                 title: element.title,
                 token: appContext.token,
                 description: element.description,
-                picture: "http://zion.datafactor.it:40505" + element.picture.url,
+                picture: appContext.host + element.picture.url,
                 username: element.username}))
             setItems(items)
         }).catch((error) => {})
