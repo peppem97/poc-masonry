@@ -5,7 +5,7 @@ import {Container} from "react-bootstrap";
 import GridSystem from "./GridSystem";
 import axios from "axios";
 import {useParams} from "react-router-dom";
-import AppContext from "./AppContext";
+import GlobalContext from "./GlobalContext";
 import UserCard from "./UserCard";
 import InsertProductDialog from "./InsertProductDialog";
 
@@ -21,7 +21,7 @@ export default function User() {
     const [items, setItems] = useState([])
     const [openDialog, setOpenDialog] = useState(false)
     const {username} = useParams();
-    const appContext = useContext(AppContext);
+    const appContext = useContext(GlobalContext);
 
     const generateHeight = () => {
         return Math.floor((Math.random() * (380)) + 80);

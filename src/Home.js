@@ -7,11 +7,11 @@ import '@fontsource/roboto/700.css';
 import Typography from "@mui/material/Typography";
 import GridSystem from "./GridSystem";
 import axios from "axios";
-import AppContext from "./AppContext";
+import GlobalContext from "./GlobalContext";
 
 export default function Home() {
     const [items, setItems] = useState([])
-    const appContext = useContext(AppContext);
+    const appContext = useContext(GlobalContext);
 
     const generateHeight = () => {
         return Math.floor((Math.random() * (380)) + 80);

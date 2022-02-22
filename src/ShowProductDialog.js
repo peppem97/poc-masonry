@@ -21,7 +21,7 @@ import { useBlogTextInfoContentStyles } from '@mui-treasury/styles/textInfoConte
 import { useOverShadowStyles } from '@mui-treasury/styles/shadow/over';
 import {useContext, useEffect, useState} from "react";
 import axios from "axios";
-import AppContext from "./AppContext";
+import GlobalContext from "./GlobalContext";
 //*******************//
 // const useBasicProfileStyles = makeStyles(({palette}) => ({
 //     overline: {
@@ -125,7 +125,7 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
     const mediaStyles = useSlopeCardMediaStyles();
     const textCardContentStyles = useN01TextInfoContentStyles();
     const [shop, setShop] = useState(null)
-    const appContext = useContext(AppContext);
+    const appContext = useContext(GlobalContext);
 
     const closeDialog = (value) => {
         props.onClose(value);

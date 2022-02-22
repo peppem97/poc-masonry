@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import User from "./User";
 import TopToolbar from "./TopToolbar";
 import Home from "./Home";
-import AppContext from "./AppContext";
+import GlobalContext from "./GlobalContext";
 
 export default function App() {
     const [token, setToken] = useState('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMmUzMmZkYzUxNWJkMDAzMTM0YWFjYSIsImlhdCI6MTY0NTUxNzkxMywiZXhwIjoxNjQ1NjA0MzEzLCJpc3MiOiJzdHJhcGkifQ.BHhu0FRCVaf6tkiY6ijgL0ytg0qXROyNFBOAungrZ5g')
@@ -64,7 +64,7 @@ export default function App() {
     }
 
     return (
-        <AppContext.Provider value={appSettings}>
+        <GlobalContext.Provider value={appSettings}>
             <Router>
                 <TopToolbar increaseColumnsSize={increaseColumnsSize}
                             decreaseColumnsSize={decreaseColumnsSize}/>
@@ -73,6 +73,6 @@ export default function App() {
                     <Route exact path='/user/:username' element={<User/>}/>
                 </Routes>
             </Router>
-        </AppContext.Provider>
+        </GlobalContext.Provider>
     );
 }

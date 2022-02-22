@@ -14,7 +14,7 @@ import Avatar from "@material-ui/core/Avatar";
 import {useNavigate} from "react-router-dom";
 import ShowProductDialog from "./ShowProductDialog";
 import axios from "axios";
-import AppContext from "./AppContext";
+import GlobalContext from "./GlobalContext";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -55,7 +55,7 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
     let navigate = useNavigate();
     const [openDialog, setOpenDialog] = useState(false);
     const [avatar, setAvatar] = useState(null)
-    const appContext = useContext(AppContext);
+    const appContext = useContext(GlobalContext);
 
 
     const goToUser = () => {

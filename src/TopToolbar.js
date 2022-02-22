@@ -10,7 +10,7 @@ import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import Typography from "@mui/material/Typography";
 import LocalFloristIcon from "@mui/icons-material/LocalFlorist";
 import {useNavigate} from "react-router-dom";
-import AppContext from "./AppContext";
+import GlobalContext from "./GlobalContext";
 import {useContext} from "react";
 
 const Search = styled('div')(({theme}) => ({
@@ -57,7 +57,7 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
 
 export default function TopToolbar(props) {
     let navigate = useNavigate();
-    const appContext = useContext(AppContext);
+    const appContext = useContext(GlobalContext);
 
     function goToHome() {
         navigate("/home");
