@@ -10,25 +10,45 @@ import {
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import {Col, Row} from "react-bootstrap";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import axios from "axios";
+import GlobalContext from "./GlobalContext";
 
 export default function InsertProductDialog(props) {
     const [picture, setPicure] = useState(null)
     const [rawPicture, setRawPicure] = useState(null)
-
+    const [title, setTitle] = useState(null)
+    const [description, setDescription] = useState(null)
 
     const onChangePicture = (e) => {
         setPicure(URL.createObjectURL(e.target.files[0]));
         setRawPicure(e.target.files[0])
     };
 
-    const closeDialog = (value) => {
-        props.onClose(value);
+    const onChangeTitle = (e) => {
+        setTitle(e.target.value)
+    }
+
+    const onChangeDescription = (e) => {
+        setDescription(e.target.value)
+    }
+
+    const closeDialog = () => {
+        props.onClose();
     };
+
+    const uploadProduct = () => {
+        props.uploadProduct({
+            rawPicture: rawPicture,
+            title: title,
+            description: description
+        });
+        props.onClose();
+    }
 
     useEffect(() => {
         setPicure(null)
-    }, [props.open])
+    }, [props.open]);
 
     return(
         <Dialog open={props.open} onClose={closeDialog}>
@@ -39,10 +59,11 @@ export default function InsertProductDialog(props) {
                 </DialogContentText>
                 <br/>
                 <Container>
-                    <Row className='text-center'>
+                    <Row>
                         <Col>
                             <Row>
                                 <TextField
+                                    onChange={onChangeTitle}
                                     autoFocus
                                     color='secondary'
                                     margin="dense"
@@ -52,6 +73,7 @@ export default function InsertProductDialog(props) {
                             <br/>
                             <Row>
                                 <TextField
+                                    onChange={onChangeDescription}
                                     label="Descrizione prodotto"
                                     multiline
                                     color='secondary'
@@ -69,13 +91,14 @@ export default function InsertProductDialog(props) {
                             </Row>
                             <br/>
                             <Row>
-                                <Button variant={picture ? "contained": null} component="span" style={{backgroundColor: picture ? 'darkred' : 'grey'}}>
+                                <Button onClick={uploadProduct} variant={picture ? "contained": null} component="span" style={{backgroundColor: picture ? 'darkred' : 'grey'}}>
                                     Inserisci prodotto
                                 </Button>
                             </Row>
                         </Col >
-                        <Col className='text-center'>
-                            <img src={picture} alt="" style={{width: '80%', height: 'auto', borderRadius: '1rem'}}/>
+                        <Col >
+
+                            <img src={picture} alt="" style={{width: '100%', height: 'auto', borderRadius: '1rem', filter: 'drop-shadow(5px 5px 4px #000000)'}}/>
                         </Col>
                     </Row>
                 </Container>

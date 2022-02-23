@@ -8,6 +8,7 @@ import {useParams} from "react-router-dom";
 import GlobalContext from "./GlobalContext";
 import UserCard from "./UserCard";
 import InsertProductDialog from "./InsertProductDialog";
+import EditTitleDialog from "./EditTitleDialog";
 
 export default function User() {
     const [idShopStrapi, setIdShopStrapi] = useState(null)
@@ -19,7 +20,10 @@ export default function User() {
     const [website, setWebsite] = useState(null)
     const [telephone, setTelephone] = useState(null)
     const [items, setItems] = useState([])
-    const [openDialog, setOpenDialog] = useState(false)
+    const [newProductDialog, setNewProductDialog] = useState(false)
+    const [editTitleDialog, setEditTitleDialog] = useState(false)
+    const [editDescriptionDialog, setEditDescriptionDialog] = useState(false)
+    const [editTelephoneDialog, setEditTelephoneDialog] = useState(false)
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
 
@@ -87,12 +91,70 @@ export default function User() {
         })
     }
 
+    const uploadProduct = (params) => {
+        const formData = new FormData();
+        const data = {
+            title: params.title,
+            description: params.description,
+            username: username
+        };
+        formData.append('files.picture', params.rawPicture, params.rawPicture.name);
+        formData.append('data', JSON.stringify(data));
+        axios.post(appContext.hostProducts, formData, {headers: {
+                'Authorization': 'Bearer ' + appContext.token,
+            }}).then((response) => {
+                getInitialItems();
+            }).catch((error) => {})
+    }
+
+    const uploadTitle = (params) => {
+        console.log(params)
+        // const formData = new FormData();
+        // const data = {
+        //     title: params.title,
+        //     description: params.description,
+        //     username: username
+        // };
+        // formData.append('files.picture', params.rawPicture, params.rawPicture.name);
+        // formData.append('data', JSON.stringify(data));
+        // axios.post(appContext.hostProducts, formData, {headers: {
+        //         'Authorization': 'Bearer ' + appContext.token,
+        //     }}).then((response) => {
+        //     getInitialItems();
+        // }).catch((error) => {})
+    }
+
+
     const openNewProductDialog = () => {
-        setOpenDialog(true)
+        setNewProductDialog(true)
     }
 
     const closeNewProductDialog = () => {
-        setOpenDialog(false)
+        setNewProductDialog(false)
+    }
+
+    const openEditTitleDialog = () => {
+        setEditTitleDialog(true)
+    }
+
+    const closeEditTitleDialog = () => {
+        setEditTitleDialog(false)
+    }
+
+    const openEditDescriptionDialog = () => {
+        setEditTitleDialog(true)
+    }
+
+    const closeEditDescriptionDialog = () => {
+        setEditTitleDialog(false)
+    }
+
+    const openEditTelephoneDialog = () => {
+        setEditTelephoneDialog(true)
+    }
+
+    const closeEditTelephoneDialog = () => {
+        setEditTelephoneDialog(false)
     }
 
     // const getMultipleItems = () => {
@@ -134,6 +196,9 @@ export default function User() {
                     carousel={carousel}
                     website={website}
                     telephone={telephone}
+                    openEditTitleDialog={openEditTitleDialog}
+                    openEditDescriptionDialog={openEditDescriptionDialog}
+                    openEditTelephoneDialog={openEditTelephoneDialog}
                     openNewProductDialog={openNewProductDialog}
                     updateAvatar={updateAvatar}
                     updateCarousel={updateCarousel}/>
@@ -147,7 +212,8 @@ export default function User() {
                     </Typography>
                 </Row>
             </Container>
-            <InsertProductDialog open={openDialog} onClose={closeNewProductDialog}/>
+            <InsertProductDialog open={newProductDialog} onClose={closeNewProductDialog} uploadProduct={uploadProduct}/>
+            <EditTitleDialog open={editTitleDialog} onClose={closeEditTitleDialog} uploadTitle={uploadTitle}/>
             <Container fluid>
                 <GridSystem items={items} columnWidth={appContext.columnWidth} isUser={true}/>
             </Container>

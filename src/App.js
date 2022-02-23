@@ -6,7 +6,7 @@ import Home from "./Home";
 import GlobalContext from "./GlobalContext";
 
 export default function App() {
-    const [token, setToken] = useState('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMmUzMmZkYzUxNWJkMDAzMTM0YWFjYSIsImlhdCI6MTY0NTUxNzkxMywiZXhwIjoxNjQ1NjA0MzEzLCJpc3MiOiJzdHJhcGkifQ.BHhu0FRCVaf6tkiY6ijgL0ytg0qXROyNFBOAungrZ5g')
+    const [token, setToken] = useState('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMmUzMmZkYzUxNWJkMDAzMTM0YWFjYSIsImlhdCI6MTY0NTYwNTA0MCwiZXhwIjoxNjQ1NjkxNDQwLCJpc3MiOiJzdHJhcGkifQ.cryGO3jNIIma8pTTPPu8an8V8_mCPvBgQkM5T_ZrdLQ')
     const [loading, setLoading] = useState(null)
     const [disabledIncrease, setDisabledIncrease] = useState(false)
     const [disabledDecrease, setDisabledDecrease] = useState(false)
