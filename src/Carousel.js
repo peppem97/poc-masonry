@@ -21,7 +21,7 @@ function Example(props) {
     ]
 
     return (
-        <Carousel fullHeightHover={true}>
+        <Carousel style={{objectFit: 'fill'}}>
             {
                 items.map( (item, i) => <Item key={i} item={item} /> )
             }
@@ -31,7 +31,7 @@ function Example(props) {
 
 function Item(props) {
     return (
-        <img src={props.item.image} alt="" style={{height: '100%', width: '100%', objectFit: 'cover'}}/>
+        <img src={props.item.image} alt="" style={{width: '100%', height: '100%', objectFit: 'fill'}}/>
         // <Paper>
         //     <h2>{props.item.name}</h2>
         //     <p>{props.item.description}</p>

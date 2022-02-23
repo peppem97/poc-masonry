@@ -96,9 +96,8 @@ export const UserCard = React.memo(function News3Card(props) {
             <Box className={styles.main} minHeight={500} position={'relative'}>
                 <CardMedia
                     classes={mediaStyles}
-                    image={true ? null : props.carousel}>
+                    image={null}>
                     <Example/>
-
                 </CardMedia>
 
                 <div className={styles.content}>
