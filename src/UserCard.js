@@ -103,8 +103,8 @@ export const UserCard = React.memo(function News3Card(props) {
             <Box className={styles.main} minHeight={smallScreen ? 200 : largeScreen ? 400 : 500} position={'relative'}>
                 <CardMedia
                     classes={mediaStyles}
-                    image={props.carousel}
-                    children={null}/>
+                    image={null}
+                    children={<Example/>}/>
                 <div className={styles.content}>
                     <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
                         {props.title}

@@ -36,6 +36,7 @@ export default function User() {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         })
             .then((response) => {
+                console.log(response)
                 setIdShopStrapi(response.data[0].id)
                 setEmail(response.data[0].email)
                 setTitle(response.data[0].title)
@@ -108,6 +109,7 @@ export default function User() {
     }
 
     const uploadTitle = (params) => {
+        //TODO
         console.log(params)
         // const formData = new FormData();
         // const data = {

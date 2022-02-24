@@ -9,7 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import {Info, InfoTitle,} from '@mui-treasury/components/info';
 import {useGalaxyInfoStyles} from '@mui-treasury/styles/info/galaxy';
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
-import {CardActions, IconButton} from "@mui/material";
+import {CardActions, IconButton, Skeleton} from "@mui/material";
 import Avatar from "@material-ui/core/Avatar";
 import {useNavigate} from "react-router-dom";
 import ShowProductDialog from "./ShowProductDialog";
@@ -55,6 +55,7 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
     let navigate = useNavigate();
     const [openDialog, setOpenDialog] = useState(false);
     const [avatar, setAvatar] = useState(null)
+    const [loading, setLoading] = useState(false);
     const appContext = useContext(GlobalContext);
 
 
@@ -72,13 +73,15 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
     };
 
     useEffect(() => {
+        setLoading(true)
         axios.get(appContext.hostShops + "?username=" + props.item.username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
             setAvatar(appContext.host + response.data[0].avatar.url)
-        }).catch((error) => {})
-    })
-
+            setLoading(false)
+        }).catch((error) => {
+        })
+    }, [])
 
 
     return (
@@ -88,7 +91,9 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
                 <Box py={3} px={2} className={styles.contentHeader}>
                     {props.showAvatar && (
                         <IconButton onClick={goToUser}>
-                            <Avatar src={avatar}/>
+                            {loading ? <Skeleton variant="circular">
+                                <Avatar src={avatar}/>
+                            </Skeleton> : <Avatar src={avatar}/>}
                         </IconButton>)}
                 </Box>
                 <Box py={3} px={2} className={styles.contentDescription}>
