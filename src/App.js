@@ -4,9 +4,10 @@ import User from "./User";
 import TopToolbar from "./TopToolbar";
 import Home from "./Home";
 import GlobalContext from "./GlobalContext";
+import ImageUploadExample from "./ImageUploadExample";
 
 export default function App() {
-    const [token, setToken] = useState('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMmUzMmZkYzUxNWJkMDAzMTM0YWFjYSIsImlhdCI6MTY0NTYwNTA0MCwiZXhwIjoxNjQ1NjkxNDQwLCJpc3MiOiJzdHJhcGkifQ.cryGO3jNIIma8pTTPPu8an8V8_mCPvBgQkM5T_ZrdLQ')
+    const [token, setToken] = useState('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMmUzMmZkYzUxNWJkMDAzMTM0YWFjYSIsImlhdCI6MTY0NTY5MTc4OCwiZXhwIjoxNjQ1Nzc4MTg4LCJpc3MiOiJzdHJhcGkifQ.Jnf-4eUVnwL5PUgt2Kt-dCzT5_GostQfJixccF_m5CM')
     const [loading, setLoading] = useState(null)
     const [disabledIncrease, setDisabledIncrease] = useState(false)
     const [disabledDecrease, setDisabledDecrease] = useState(false)
@@ -20,7 +21,8 @@ export default function App() {
         columnWidth: columnWidth,
         host: "http://zion.datafactor.it:40505",
         hostShops: "http://zion.datafactor.it:40505/shops",
-        hostProducts: "http://zion.datafactor.it:40505/products"
+        hostProducts: "http://zion.datafactor.it:40505/products",
+        hostExample: "http://zion.datafactor.it:40505/image-uploadeds"
     };
 
     const checkIncreaseDecrease = () => {
@@ -71,6 +73,7 @@ export default function App() {
                 <Routes>
                     <Route exact path='/home' element={<Home/>}/>
                     <Route exact path='/user/:username' element={<User/>}/>
+                    <Route exact path='/example' element={<ImageUploadExample/>}/>
                 </Routes>
             </Router>
         </GlobalContext.Provider>

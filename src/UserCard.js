@@ -4,7 +4,7 @@ import Card from "@material-ui/core/Card";
 import Box from "@material-ui/core/Box";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import {IconButton, Input} from "@mui/material";
+import {IconButton, Input, useMediaQuery, useTheme} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import {Item, Row} from "@mui-treasury/components/flex";
 import Avatar from "@material-ui/core/Avatar";
@@ -91,15 +91,20 @@ const useStyles1 = makeStyles(() => ({
 export const UserCard = React.memo(function News3Card(props) {
     const styles = useStyles1();
     const mediaStyles = useCoverCardMediaStyles();
+    const theme = useTheme();
+    const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const largeScreen = useMediaQuery(theme.breakpoints.down('lg'));
+
+
+
+
     return (
         <Card className={styles.card}>
-            <Box className={styles.main} minHeight={500} position={'relative'}>
+            <Box className={styles.main} minHeight={smallScreen ? 200 : largeScreen ? 400 : 500} position={'relative'}>
                 <CardMedia
                     classes={mediaStyles}
-                    image={null}>
-                    <Example/>
-                </CardMedia>
-
+                    image={props.carousel}
+                    children={null}/>
                 <div className={styles.content}>
                     <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
                         {props.title}

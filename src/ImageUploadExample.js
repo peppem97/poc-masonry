@@ -1,118 +1,101 @@
-import {Component} from "react";
-import {Backdrop, CircularProgress, Container, Input} from "@mui/material";
+import {useContext, useEffect, useState} from "react";
+import {Container, Input} from "@mui/material";
 import {Col, Row} from "react-bootstrap";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import GlobalContext from "./GlobalContext";
 
-class ImageUploadExample extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            picture: null,
-            rawPicture: null,
-            downloadedPicture: null,
-            loading: false
-        };
-    }
+function ImageUploadExample() {
+    const [listPictures, setListPictures] = useState([])
+    const [picture, setPicture] = useState(null);
+    const [rawPicture, setRawPicture] = useState(null);
+    const [downloadedPicture, setDownloadedPicture] = useState(null);
+    const appContext = useContext(GlobalContext);
 
-    onFileUpload = () => {
+    const onChangePicture = (e) => {
+        let tmpPicture = URL.createObjectURL(e.target.files[0])
+        let tmpRawPicture = e.target.files[0]
+        setPicture(tmpPicture);
+        setRawPicture(tmpRawPicture);
 
-        const formData = new FormData();
-        formData.append(
-            "myFile",
-            this.state.selectedFile,
-            this.state.selectedFile.name
-        );
-        console.log(this.state.selectedFile);
-        axios.post("api/uploadfile", formData);
+        let tmpList = listPictures;
+        tmpList.push(tmpRawPicture)
+        setListPictures(tmpList)
+        console.log(tmpList)
+
     };
 
-    onChangePicture = (e) => {
-        this.setState({picture: URL.createObjectURL(e.target.files[0])});
-        this.setState({rawPicture: e.target.files[0]})
-    };
-
-    uploadImage = () => {
-        this.setLoading();
+    const uploadImage = () => {
         const formData = new FormData();
         const data = {
             email: 'ok6@ok6.it',
         };
-        formData.append('files.image', this.state.rawPicture, 'kurisu.jpg');
+        formData.append('files.image', rawPicture, 'kurisu.jpg');
+        formData.append('files.carousel', listPictures[0]);
+        formData.append('files.carousel', listPictures[1]);
         formData.append('data', JSON.stringify(data));
-        axios.post("http://zion.datafactor.it:40505/image-uploadeds", formData, {headers: {
-                'Authorization': 'Bearer ' + this.props.token,
+        axios.post(appContext.hostExample, formData, {headers: {
+                'Authorization': 'Bearer ' + appContext.token,
             }})
             .then((response) => {
-                this.setIdle();
-                this.getImages();
+                getImages();
             }).catch((error) => {})
-    }
+    };
 
-    getImages = () => {
-        this.setLoading();
-        axios.get("http://zion.datafactor.it:40505/image-uploadeds", {headers: {
-                'Authorization': 'Bearer ' + this.props.token,
+    const getImages = () => {
+        axios.get(appContext.hostExample, {headers: {
+                'Authorization': 'Bearer ' + appContext.token,
             }})
             .then((response) => {
-                this.setState({downloadedPicture: "http://zion.datafactor.it:40505" + response.data[0].image.url})
-                this.setIdle();
+                console.log(response)
+                // setDownloadedPicture(appContext.host + response.data[0].image.url)
             }).catch((error) => {})
-    }
-
-    setLoading = () => {
-        this.setState({loading: true});
     };
 
-    setIdle = () => {
-        this.setState({loading: false});
-    };
+    useEffect(() => {
+        getImages()
+    }, [])
 
-    render() {
-        return (
-            <Container>
-                <Backdrop
-                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                    open={this.state.loading}>
-                    <CircularProgress color="inherit" />
-                </Backdrop>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <Row className="justify-content-md-center">
-                    <Typography variant='h2' className='text-center'>Prova upload immagine</Typography>
-                </Row>
-                <br/>
-                <Row className="justify-content-md-center">
-                    <Col className='text-center'>
-                        <label htmlFor="contained-button-file" className='text-center'>
-                            <Input accept="image/*" id="contained-button-file" multiple type="file" hidden onChange={this.onChangePicture.bind(this)}/>
-                            <Button variant="contained" component="span">
-                                SCEGLI IMMAGINE
-                            </Button>
-                        </label>
-                    </Col>
-                    <Col className='text-center'>
-                        <Button variant="contained" disabled={this.state.picture == null} onClick={this.uploadImage.bind(this)}>
-                            UPLOAD IMMAGINE
+    return (
+        <Container>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <Row className="justify-content-md-center">
+                <Typography variant='h2' className='text-center'>Prova upload immagine</Typography>
+            </Row>
+            <br/>
+            <Row className="justify-content-md-center">
+                <Col className='text-center'>
+                    <label htmlFor="contained-button-file" className='text-center'>
+                        <Input accept="image/*" id="contained-button-file" multiple type="file" hidden onChange={onChangePicture}/>
+                        <Button variant="contained" component="span">
+                            SCEGLI IMMAGINE
                         </Button>
-                    </Col>
-                </Row>
-                <br/>
-                <Row className="justify-content-center">
-                    <img src={this.state.picture} alt=""/>
-                </Row>
-                <br/>
-                <hr/>
-                <br/>
-                <Row className="justify-content-center">
-                    <img src={this.state.downloadedPicture} alt=""/>
-                </Row>
-            </Container>
-        )
-    }
+                    </label>
+                </Col>
+                <Col className='text-center'>
+                    <Button variant="contained" disabled={picture == null} onClick={uploadImage}>
+                        UPLOAD IMMAGINE
+                    </Button>
+                </Col>
+            </Row>
+            <br/>
+            <Row className="justify-content-center">
+                {/*<img src={picture} alt=""/>*/}
+                <Typography variant='h5' className='text-center'>Immagini pendenti: {listPictures.length}</Typography>
+
+            </Row>
+            <br/>
+            <hr/>
+            <br/>
+            <Row className="justify-content-center">
+                <img src={downloadedPicture} alt=""/>
+            </Row>
+        </Container>
+    );
 }
 
 export default ImageUploadExample;
