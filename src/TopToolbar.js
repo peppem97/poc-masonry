@@ -12,6 +12,7 @@ import LocalFloristIcon from "@mui/icons-material/LocalFlorist";
 import {useNavigate} from "react-router-dom";
 import GlobalContext from "./GlobalContext";
 import {useContext} from "react";
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -75,6 +76,9 @@ export default function TopToolbar(props) {
                             fontSize="inherit"/>&nbsp;Masonry</Button>
                     </Typography>
                     <Box sx={{flexGrow: 1}}/>
+                    <IconButton size="large" style={{color: 'darkred', fontWeight: 'bold'}}>
+                        <VpnKeyIcon onClick={props.getNewToken}/>
+                    </IconButton>
                     <IconButton size="large" style={{color: appContext.disableIncrease ? 'gray' : 'darkred', fontWeight: 'bold'}}
                                 onClick={props.increaseColumnsSize}>
                         <ZoomInIcon/>

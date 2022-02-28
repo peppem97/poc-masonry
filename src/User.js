@@ -110,7 +110,8 @@ export default function User() {
 
     const uploadTitle = (params) => {
         //TODO
-        console.log(params)
+
+        // console.log(params)
         // const formData = new FormData();
         // const data = {
         //     title: params.title,

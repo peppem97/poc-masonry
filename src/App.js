@@ -5,9 +5,10 @@ import TopToolbar from "./TopToolbar";
 import Home from "./Home";
 import GlobalContext from "./GlobalContext";
 import ImageUploadExample from "./ImageUploadExample";
+import axios from "axios";
 
 export default function App() {
-    const [token, setToken] = useState('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMmUzMmZkYzUxNWJkMDAzMTM0YWFjYSIsImlhdCI6MTY0NTY5MTc4OCwiZXhwIjoxNjQ1Nzc4MTg4LCJpc3MiOiJzdHJhcGkifQ.Jnf-4eUVnwL5PUgt2Kt-dCzT5_GostQfJixccF_m5CM')
+    const [token, setToken] = useState(localStorage.getItem('token'))
     const [loading, setLoading] = useState(null)
     const [disabledIncrease, setDisabledIncrease] = useState(false)
     const [disabledDecrease, setDisabledDecrease] = useState(false)
@@ -22,8 +23,19 @@ export default function App() {
         host: "http://zion.datafactor.it:40505",
         hostShops: "http://zion.datafactor.it:40505/shops",
         hostProducts: "http://zion.datafactor.it:40505/products",
-        hostExample: "http://zion.datafactor.it:40505/image-uploadeds"
+        hostExample: "http://zion.datafactor.it:40505/image-uploadeds",
+        hostSignin: "http://zion.datafactor.it:40505/auth/local"
     };
+
+    const getNewToken = () => {
+        let data = {identifier: 'prova@prova.it', password: 'provaprova'}
+        axios.post(appSettings.hostSignin, data).then((response) => {
+            console.log(response)
+            localStorage.setItem('token', response.data.jwt)
+            setToken(response.data.jwt)
+        }).catch((error) => {})
+
+    }
 
     const checkIncreaseDecrease = () => {
         if (columnWidth >= 500) {
@@ -69,7 +81,7 @@ export default function App() {
         <GlobalContext.Provider value={appSettings}>
             <Router>
                 <TopToolbar increaseColumnsSize={increaseColumnsSize}
-                            decreaseColumnsSize={decreaseColumnsSize}/>
+                            decreaseColumnsSize={decreaseColumnsSize} getNewToken={getNewToken}/>
                 <Routes>
                     <Route exact path='/home' element={<Home/>}/>
                     <Route exact path='/user/:username' element={<User/>}/>
