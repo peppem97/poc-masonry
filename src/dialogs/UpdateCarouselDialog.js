@@ -14,7 +14,7 @@ import {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import GlobalContext from "../GlobalContext";
 
-export default function EditCarouselDialog(props) {
+export default function UpdateCarouselDialog(props) {
     // const [title, setTitle] = useState(null)
 
     // const onChangeTitle = (e) => {

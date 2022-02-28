@@ -14,7 +14,7 @@ import {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import GlobalContext from "../GlobalContext";
 
-export default function InsertProductDialog(props) {
+export default function UploadProductDialog(props) {
     const [picture, setPicure] = useState(null)
     const [rawPicture, setRawPicure] = useState(null)
     const [title, setTitle] = useState(null)

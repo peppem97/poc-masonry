@@ -14,7 +14,7 @@ import {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import GlobalContext from "../GlobalContext";
 
-export default function EditTitleDialog(props) {
+export default function UpdateTitleDialog(props) {
     const [title, setTitle] = useState(null)
 
     const onChangeTitle = (e) => {
@@ -26,7 +26,7 @@ export default function EditTitleDialog(props) {
     };
 
     const uploadTitle = () => {
-        props.uploadTitle(title)
+        props.updateTitle(title)
     }
 
     return(
