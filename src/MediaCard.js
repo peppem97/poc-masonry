@@ -12,7 +12,7 @@ import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
 import {CardActions, IconButton, Skeleton} from "@mui/material";
 import Avatar from "@material-ui/core/Avatar";
 import {useNavigate} from "react-router-dom";
-import ShowProductDialog from "./ShowProductDialog";
+import ShowProductDialog from "./dialogs/ShowProductDialog";
 import axios from "axios";
 import GlobalContext from "./GlobalContext";
 

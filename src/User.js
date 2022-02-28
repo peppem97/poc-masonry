@@ -7,8 +7,8 @@ import axios from "axios";
 import {useParams} from "react-router-dom";
 import GlobalContext from "./GlobalContext";
 import UserCard from "./UserCard";
-import InsertProductDialog from "./InsertProductDialog";
-import EditTitleDialog from "./EditTitleDialog";
+import InsertProductDialog from "./dialogs/InsertProductDialog";
+import EditTitleDialog from "./dialogs/EditTitleDialog";
 import Compressor from 'compressorjs';
 
 
@@ -18,7 +18,7 @@ export default function User() {
     const [title, setTitle] = useState(null)
     const [description, setDescription] = useState(null)
     const [avatar, setAvatar] = useState(null)
-    const [carousel, setCarousel] = useState(null)
+    const [carousel, setCarousel] = useState([])
     const [website, setWebsite] = useState(null)
     const [telephone, setTelephone] = useState(null)
     const [items, setItems] = useState([])
@@ -38,13 +38,12 @@ export default function User() {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         })
             .then((response) => {
-                console.log(response)
                 setIdShopStrapi(response.data[0].id)
                 setEmail(response.data[0].email)
                 setTitle(response.data[0].title)
                 setDescription(response.data[0].description)
                 setAvatar(appContext.host + response.data[0].avatar.url)
-                setCarousel(appContext.host + response.data[0].carousel.url)
+                setCarousel(response.data[0].carousel.map((element) => ({image: appContext.host + element.url})))
                 setTelephone(response.data[0].telephone)
                 setWebsite(response.data[0].website)
             }).catch((error) => {
@@ -86,15 +85,17 @@ export default function User() {
     }
 
     const updateCarousel = (e) => {
-        const formData = new FormData();
-        formData.append('files.carousel', e.target.files[0], 'example.jpg');
-        formData.append('data', JSON.stringify({}));
-        axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
-            headers: {'Authorization': 'Bearer ' + appContext.token,}
-        }).then((response) => {
-            getUserInfo();
-        }).catch((error) => {
-        })
+        //todo
+
+        // const formData = new FormData();
+        // formData.append('files.carousel', e.target.files[0], 'example.jpg');
+        // formData.append('data', JSON.stringify({}));
+        // axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
+        //     headers: {'Authorization': 'Bearer ' + appContext.token,}
+        // }).then((response) => {
+        //     getUserInfo();
+        // }).catch((error) => {
+        // })
     }
 
     const uploadProduct = (params) => {

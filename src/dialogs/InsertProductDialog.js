@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import {Col, Row} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
 import axios from "axios";
-import GlobalContext from "./GlobalContext";
+import GlobalContext from "../GlobalContext";
 
 export default function InsertProductDialog(props) {
     const [picture, setPicure] = useState(null)

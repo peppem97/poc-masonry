@@ -11,6 +11,7 @@ import GlobalContext from "./GlobalContext";
 
 export default function Home() {
     const [items, setItems] = useState([])
+    const [loading, setLoading] = useState(false)
     const appContext = useContext(GlobalContext);
 
     const generateHeight = () => {
@@ -18,6 +19,7 @@ export default function Home() {
     }
 
     const getInitialItems = () => {
+        setLoading(true)
         axios.get(appContext.hostProducts, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
@@ -29,6 +31,7 @@ export default function Home() {
                 picture: appContext.host + element.picture.url,
                 username: element.username}))
             setItems(items)
+            setLoading(false)
         }).catch((error) => {})
     }
 
@@ -56,7 +59,7 @@ export default function Home() {
             <br/>
             <br/>
             <Row>
-                <GridSystem items={items} columnWidth={appContext.columnWidth} isUser={false}/>
+                <GridSystem loading={loading} items={items} columnWidth={appContext.columnWidth} isUser={false}/>
             </Row>
         </Container>
     );

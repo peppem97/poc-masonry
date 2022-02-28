@@ -21,7 +21,7 @@ import { useBlogTextInfoContentStyles } from '@mui-treasury/styles/textInfoConte
 import { useOverShadowStyles } from '@mui-treasury/styles/shadow/over';
 import {useContext, useEffect, useState} from "react";
 import axios from "axios";
-import GlobalContext from "./GlobalContext";
+import GlobalContext from "../GlobalContext";
 //*******************//
 // const useBasicProfileStyles = makeStyles(({palette}) => ({
 //     overline: {

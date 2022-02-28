@@ -96,11 +96,11 @@ export const UserCard = React.memo(function News3Card(props) {
     const largeScreen = useMediaQuery(theme.breakpoints.down('lg'));
     const UserCarousel = React.lazy(() => import('./Carousel'));
 
-    var items = [
-        {image: image1},
-        {image: image2},
-        {image: image3}
-    ]
+    // var items = [
+    //     {image: image1},
+    //     {image: image2},
+    //     {image: image3}
+    // ]
 
     return (
         <Card className={styles.card}>
@@ -109,7 +109,7 @@ export const UserCard = React.memo(function News3Card(props) {
                 <CardMedia
                     classes={mediaStyles}
                     image={null}
-                    children={<Suspense fallback={<></>}><UserCarousel items={items}/></Suspense>}/>
+                    children={<Suspense fallback={<></>}><UserCarousel items={props.carousel}/></Suspense>}/>
                 <div className={styles.content}>
                     <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
                         {props.title}
