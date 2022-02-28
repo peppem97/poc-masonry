@@ -9,6 +9,8 @@ import GlobalContext from "./GlobalContext";
 import UserCard from "./UserCard";
 import InsertProductDialog from "./InsertProductDialog";
 import EditTitleDialog from "./EditTitleDialog";
+import Compressor from 'compressorjs';
+
 
 export default function User() {
     const [idShopStrapi, setIdShopStrapi] = useState(null)
@@ -68,15 +70,18 @@ export default function User() {
 
     const updateAvatar = (e) => {
         const formData = new FormData();
-        formData.append('files.avatar', e.target.files[0], 'avatar.jpg');
-        formData.append('data', JSON.stringify({}));
-        axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
-            headers: {
-                'Authorization': 'Bearer ' + appContext.token,
+        new Compressor(e.target.files[0], {
+            quality: 0.1, success(result) {
+                formData.append('files.avatar', result, 'avatar.jpg');
+                formData.append('data', JSON.stringify({}));
+                axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
+                    headers: {'Authorization': 'Bearer ' + appContext.token,}
+                }).then((response) => {
+                    getUserInfo();
+                }).catch((error) => {
+                })
+            }, error(err) {
             }
-        }).then((response) => {
-            getUserInfo();
-        }).catch((error) => {
         })
     }
 
@@ -101,11 +106,14 @@ export default function User() {
         };
         formData.append('files.picture', params.rawPicture, params.rawPicture.name);
         formData.append('data', JSON.stringify(data));
-        axios.post(appContext.hostProducts, formData, {headers: {
+        axios.post(appContext.hostProducts, formData, {
+            headers: {
                 'Authorization': 'Bearer ' + appContext.token,
-            }}).then((response) => {
-                getInitialItems();
-            }).catch((error) => {})
+            }
+        }).then((response) => {
+            getInitialItems();
+        }).catch((error) => {
+        })
     }
 
     const uploadTitle = (params) => {

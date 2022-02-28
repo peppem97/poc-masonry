@@ -30,7 +30,6 @@ export default function App() {
     const getNewToken = () => {
         let data = {identifier: 'prova@prova.it', password: 'provaprova'}
         axios.post(appSettings.hostSignin, data).then((response) => {
-            console.log(response)
             localStorage.setItem('token', response.data.jwt)
             setToken(response.data.jwt)
         }).catch((error) => {})
@@ -81,7 +80,8 @@ export default function App() {
         <GlobalContext.Provider value={appSettings}>
             <Router>
                 <TopToolbar increaseColumnsSize={increaseColumnsSize}
-                            decreaseColumnsSize={decreaseColumnsSize} getNewToken={getNewToken}/>
+                            decreaseColumnsSize={decreaseColumnsSize}
+                            getNewToken={getNewToken}/>
                 <Routes>
                     <Route exact path='/home' element={<Home/>}/>
                     <Route exact path='/user/:username' element={<User/>}/>

@@ -1,5 +1,5 @@
 import {makeStyles} from "@material-ui/core/styles";
-import React from "react";
+import React, {Suspense} from "react";
 import Card from "@material-ui/core/Card";
 import Box from "@material-ui/core/Box";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -16,7 +16,7 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import PanoramaIcon from "@mui/icons-material/Panorama";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
-import { useArrowDarkButtonStyles } from '@mui-treasury/styles/button/arrowDark';
+import {useArrowDarkButtonStyles} from '@mui-treasury/styles/button/arrowDark';
 import cx from "clsx";
 import {KeyboardArrowLeft, KeyboardArrowRight} from "@material-ui/icons";
 import DotIndicator from '@mui-treasury/components/indicator/dot';
@@ -24,7 +24,6 @@ import ParallaxSlide from '@mui-treasury/components/slide/parallax';
 import image1 from './assets/example1.png';
 import image2 from './assets/example2.jpg';
 import image3 from './assets/example3.jpg';
-import Example from "./Carousel";
 
 
 const useStyles1 = makeStyles(() => ({
@@ -92,19 +91,25 @@ export const UserCard = React.memo(function News3Card(props) {
     const styles = useStyles1();
     const mediaStyles = useCoverCardMediaStyles();
     const theme = useTheme();
-    const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
     const largeScreen = useMediaQuery(theme.breakpoints.down('lg'));
+    const UserCarousel = React.lazy(() => import('./Carousel'));
 
-
-
+    var items = [
+        {image: image1},
+        {image: image2},
+        {image: image3}
+    ]
 
     return (
         <Card className={styles.card}>
-            <Box className={styles.main} minHeight={smallScreen ? 200 : largeScreen ? 400 : 500} position={'relative'}>
+            <Box className={styles.main} minHeight={smallScreen ? 200 : mediumScreen ? 300 : largeScreen ? 400 : 500}
+                 position={'relative'}>
                 <CardMedia
                     classes={mediaStyles}
                     image={null}
-                    children={<Example/>}/>
+                    children={<Suspense fallback={<></>}><UserCarousel items={items}/></Suspense>}/>
                 <div className={styles.content}>
                     <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
                         {props.title}
@@ -113,9 +118,7 @@ export const UserCard = React.memo(function News3Card(props) {
                         </IconButton>
                     </Typography>
                 </div>
-
             </Box>
-
             <Row
                 className={styles.author}
                 m={0}
@@ -154,7 +157,8 @@ export const UserCard = React.memo(function News3Card(props) {
                 gap={2}
                 bgcolor={'common.white'}>
                 <Col className='text-center'>
-                    <Button variant="contained" endIcon={<AddShoppingCartIcon/>} style={{backgroundColor: 'darkred'}} onClick={props.openNewProductDialog}>
+                    <Button variant="contained" endIcon={<AddShoppingCartIcon/>} style={{backgroundColor: 'darkred'}}
+                            onClick={props.openNewProductDialog}>
                         Nuovo prodotto
                     </Button>
                 </Col>

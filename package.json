@@ -18,6 +18,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.26.0",
     "bootstrap": "^5.1.3",
+    "compressorjs": "^1.1.1",
     "react": "^17.0.2",
     "react-bootstrap": "^2.1.2",
     "react-dom": "^17.0.2",
@@ -42,7 +43,8 @@
     "routing": "npm install react-router-dom",
     "axios": "npm install axios --save",
     "react-swipeable-views": "npm install react-swipeable-views",
-    "carousel-material": "npm install react-material-ui-carousel --save"
+    "carousel-material": "npm install react-material-ui-carousel --save",
+    "compressor": "npm install compressorjs"
   },
   "eslintConfig": {
     "extends": [
