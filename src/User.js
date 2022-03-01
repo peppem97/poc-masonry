@@ -89,6 +89,8 @@ export default function User() {
     const updateCarousel = (e) => {
         //todo
 
+        console.log(e)
+
         // const formData = new FormData();
         // formData.append('files.carousel', e.target.files[0], 'example.jpg');
         // formData.append('data', JSON.stringify({}));
@@ -233,11 +235,20 @@ export default function User() {
                     </Typography>
                 </Row>
             </Container>
-            <UploadProductDialog open={uploadProductDialog} onClose={closeNewProductDialog} uploadProduct={uploadProduct}/>
-            <UpdateTitleDialog open={updateTitleDialog} onClose={closeUpdateTitleDialog} updateTitle={updateTitle}/>
-            <UpdateCarouselDialog open={updateCarouselDialog} onClose={closeUpdateCarouselDialog} updateCarousel={updateCarousel}
-                                  carousel={carousel}/>
-
+            <UploadProductDialog
+                open={uploadProductDialog}
+                onClose={closeNewProductDialog}
+                uploadProduct={uploadProduct}/>
+            <UpdateTitleDialog
+                open={updateTitleDialog}
+                onClose={closeUpdateTitleDialog}
+                updateTitle={updateTitle}
+                title={title}/>
+            <UpdateCarouselDialog
+                open={updateCarouselDialog}
+                onClose={closeUpdateCarouselDialog}
+                updateCarousel={updateCarousel}
+                carousel={carousel}/>
             <Container fluid>
                 <GridSystem items={items} columnWidth={appContext.columnWidth} isUser={true}/>
             </Container>

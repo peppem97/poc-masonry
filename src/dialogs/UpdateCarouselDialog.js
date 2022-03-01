@@ -44,10 +44,9 @@ export default function UpdateCarouselDialog(props) {
             if (picture.index == i) {
                 tmpPictures.push({index: picture.index, image: URL.createObjectURL(e.target.files[0]), add: false})
             } else {
-                tmpPictures.push({index: picture.index, image: picture.image, add: picture.add})
+                tmpPictures.push(picture)
             }
         }
-
         setPictures(tmpPictures)
     }
 
@@ -58,23 +57,15 @@ export default function UpdateCarouselDialog(props) {
             if (picture.index == i) {
                 tmpPictures.push({index: picture.index, image: null, add: true})
             } else {
-                tmpPictures.push({index: picture.index, image: picture.image, add: picture.add})
+                tmpPictures.push(picture)
             }
         }
-
-        // let onlyOneBlank = false
-        // let newTmpPictures = []
-        // for (let picture of tmpPictures) {
-        //     if (picture.add && !onlyOneBlank) {
-        //         newTmpPictures.push({index: picture.index, image: null, add: true})
-        //         onlyOneBlank = true;
-        //     } else {
-        //         newTmpPictures.push({index: picture.index, image: picture.image, add: picture.add})
-        //     }
-        // }
-
-        // console.log(newTmpPictures)
         setPictures(tmpPictures)
+    }
+
+    const updateCarousel = () => {
+        props.updateCarousel(pictures)
+        props.onClose()
     }
 
     useEffect(() => {
@@ -134,8 +125,7 @@ export default function UpdateCarouselDialog(props) {
                     </ImageList>
                     <br/>
                     <Row>
-                        <Button onClick={() => {
-                        }} variant="contained" component="span" style={{backgroundColor: 'darkred'}}>
+                        <Button onClick={updateCarousel} variant="contained" component="span" style={{backgroundColor: 'darkred'}}>
                             Aggiorna immagini
                         </Button>
                     </Row>

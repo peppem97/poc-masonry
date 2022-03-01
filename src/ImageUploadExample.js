@@ -18,28 +18,51 @@ function ImageUploadExample() {
         let tmpRawPicture = e.target.files[0]
         setPicture(tmpPicture);
         setRawPicture(tmpRawPicture);
-
         let tmpList = listPictures;
         tmpList.push(tmpRawPicture)
         setListPictures(tmpList)
-
     };
 
     const uploadImage = () => {
-        const formData = new FormData();
-        const data = {
-            email: 'ok6@ok6.it',
-        };
-        formData.append('files.image', rawPicture, 'kurisu.jpg');
-        formData.append('files.carousel', listPictures[0]);
-        formData.append('files.carousel', listPictures[1]);
-        formData.append('data', JSON.stringify(data));
-        axios.post(appContext.hostExample, formData, {headers: {
-                'Authorization': 'Bearer ' + appContext.token,
-            }})
+        axios.get(appContext.hostExample, {headers: {'Authorization': 'Bearer ' + appContext.token,}})
             .then((response) => {
-                getImages();
+                console.log(response)
+                let id = response.data[0].id
+                const formData = new FormData();
+                const data = {
+                };
+                formData.append('files.carousel',[]);
+                // formData.append('files.carousel', listPictures[1]);
+                formData.append('data', JSON.stringify(data));
+
+                axios.post(appContext.hostExample + "/" + id, formData, {headers: {
+                        'Authorization': 'Bearer ' + appContext.token,
+                    }})
+                    .then((response) => {
+                        getImages();
+                    }).catch((error) => {})
+
             }).catch((error) => {})
+
+
+
+
+
+        //*************************//
+        // const formData = new FormData();
+        // const data = {
+        //     email: 'ok6@ok6.it',
+        // };
+        // formData.append('files.image', rawPicture, 'kurisu.jpg');
+        // formData.append('files.carousel', listPictures[0]);
+        // formData.append('files.carousel', listPictures[1]);
+        // formData.append('data', JSON.stringify(data));
+        // axios.post(appContext.hostExample, formData, {headers: {
+        //         'Authorization': 'Bearer ' + appContext.token,
+        //     }})
+        //     .then((response) => {
+        //         getImages();
+        //     }).catch((error) => {})
     };
 
     const getImages = () => {
