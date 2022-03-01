@@ -24,17 +24,36 @@ import AddIcon from '@mui/icons-material/Add';
 
 export default function UpdateCarouselDialog(props) {
     const [pictures, setPictures] = useState([])
+    const [initPictures, setInitPictures] = useState([])
 
-    const closeDialog = () => {
-        props.onClose();
-    };
-
-    useEffect(() => {
-        let tmpPictures = props.carousel
+    const addBlankPictures = (pictures) => {
+        let tmpPictures = pictures.slice()
         if (tmpPictures.length <= 2) {
             tmpPictures.push({image: null, add: true})
         }
-        setPictures(tmpPictures)
+        return tmpPictures.slice()
+    }
+
+    const closeDialog = () => {
+        setPictures(addBlankPictures(initPictures.slice()))
+        props.onClose();
+    };
+
+    const addPicture = (e) => {
+        let tmpPictures = pictures.slice()
+        for (let picture of tmpPictures) {
+            if (picture.image == null) {
+                picture.image = URL.createObjectURL(e.target.files[0]);
+                picture.add = false;
+                break
+            }
+        }
+        setPictures(tmpPictures.slice())
+    }
+
+    useEffect(() => {
+        setInitPictures(props.carousel.slice())
+        setPictures(addBlankPictures(props.carousel.slice()))
     }, [props.carousel])
 
     return (
@@ -46,7 +65,7 @@ export default function UpdateCarouselDialog(props) {
                 </DialogContentText>
                 <br/>
                 <Container>
-                    <ImageList sx={{width: 500, height: 200}}
+                    <ImageList sx={{width: 500, height: 250}}
                                gap={5} cols={30}>
                         {pictures.map((item, i) => {
                             if (item.add) {
@@ -59,7 +78,7 @@ export default function UpdateCarouselDialog(props) {
                                         actionIcon={
                                             [
                                                 <label htmlFor="icon-button-file">
-                                                    <Input accept="image/*" id="icon-button-file" type="file" hidden/>
+                                                    <Input accept="image/*" id="icon-button-file" type="file" hidden onChange={addPicture}/>
                                                     <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} aria-label="upload picture" component="span">
                                                         <PhotoCamera />
                                                     </IconButton>
