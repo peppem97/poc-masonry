@@ -23,11 +23,11 @@ export default function User() {
     const [website, setWebsite] = useState(null)
     const [telephone, setTelephone] = useState(null)
     const [items, setItems] = useState([])
-    const [newProductDialog, setNewProductDialog] = useState(false)
-    const [editTitleDialog, setEditTitleDialog] = useState(false)
-    const [editCarouselDialog, setEditCarouselDialog] = useState(false)
-    const [editDescriptionDialog, setEditDescriptionDialog] = useState(false)
-    const [editTelephoneDialog, setEditTelephoneDialog] = useState(false)
+    const [uploadProductDialog, setUploadProductDialog] = useState(false)
+    const [updateTitleDialog, setUpdateTitleDialog] = useState(false)
+    const [updateCarouselDialog, setUpdateCarouselDialog] = useState(false)
+    const [updateDescriptionDialog, setUpdateDescriptionDialog] = useState(false)
+    const [updateTelephoneDialog, setUpdateTelephoneDialog] = useState(false)
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
 
@@ -138,46 +138,44 @@ export default function User() {
         })
     }
 
-
-
     const openNewProductDialog = () => {
-        setNewProductDialog(true)
+        setUploadProductDialog(true)
     }
 
     const closeNewProductDialog = () => {
-        setNewProductDialog(false)
+        setUploadProductDialog(false)
     }
 
-    const openEditTitleDialog = () => {
-        setEditTitleDialog(true)
+    const openUpdateTitleDialog = () => {
+        setUpdateTitleDialog(true)
     }
 
-    const closeEditTitleDialog = () => {
-        setEditTitleDialog(false)
+    const closeUpdateTitleDialog = () => {
+        setUpdateTitleDialog(false)
     }
 
-    const openEditCarouselDialog = () => {
-        setEditTitleDialog(true)
+    const openUpdateCarouselDialog = () => {
+        setUpdateCarouselDialog(true)
     }
 
-    const closeEditCarouselDialog = () => {
-        setEditTitleDialog(false)
+    const closeUpdateCarouselDialog = () => {
+        setUpdateCarouselDialog(false)
     }
 
-    const openEditDescriptionDialog = () => {
-        setEditTitleDialog(true)
+    const openUpdateDescriptionDialog = () => {
+        setUpdateTitleDialog(true)
     }
 
-    const closeEditDescriptionDialog = () => {
-        setEditTitleDialog(false)
+    const closeUpdateDescriptionDialog = () => {
+        setUpdateTitleDialog(false)
     }
 
-    const openEditTelephoneDialog = () => {
-        setEditTelephoneDialog(true)
+    const openUpdateTelephoneDialog = () => {
+        setUpdateTelephoneDialog(true)
     }
 
-    const closeEditTelephoneDialog = () => {
-        setEditTelephoneDialog(false)
+    const closeUpdateTelephoneDialog = () => {
+        setUpdateTelephoneDialog(false)
     }
 
     // const getMultipleItems = () => {
@@ -219,10 +217,11 @@ export default function User() {
                     carousel={carousel}
                     website={website}
                     telephone={telephone}
-                    openEditTitleDialog={openEditTitleDialog}
-                    openEditDescriptionDialog={openEditDescriptionDialog}
-                    openEditTelephoneDialog={openEditTelephoneDialog}
-                    openNewProductDialog={openNewProductDialog}
+                    openUpdateTitleDialog={openUpdateTitleDialog}
+                    openUpdateDescriptionDialog={openUpdateDescriptionDialog}
+                    openUpdateCarouselDialog={openUpdateCarouselDialog}
+                    openUpdateTelephoneDialog={openUpdateTelephoneDialog}
+                    openUploadProductDialog={openNewProductDialog}
                     updateAvatar={updateAvatar}/>
                 <br/>
                 <br/>
@@ -234,9 +233,10 @@ export default function User() {
                     </Typography>
                 </Row>
             </Container>
-            <UploadProductDialog open={newProductDialog} onClose={closeNewProductDialog} uploadProduct={uploadProduct}/>
-            <UpdateTitleDialog open={editTitleDialog} onClose={closeEditTitleDialog} updateTitle={updateTitle}/>
-            <UpdateCarouselDialog open={editCarouselDialog} onClose={closeEditCarouselDialog} updateCarousel={updateCarousel}/>
+            <UploadProductDialog open={uploadProductDialog} onClose={closeNewProductDialog} uploadProduct={uploadProduct}/>
+            <UpdateTitleDialog open={updateTitleDialog} onClose={closeUpdateTitleDialog} updateTitle={updateTitle}/>
+            <UpdateCarouselDialog open={updateCarouselDialog} onClose={closeUpdateCarouselDialog} updateCarousel={updateCarousel}
+                                  carousel={carousel}/>
 
             <Container fluid>
                 <GridSystem items={items} columnWidth={appContext.columnWidth} isUser={true}/>

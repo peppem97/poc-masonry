@@ -96,12 +96,6 @@ export const UserCard = React.memo(function News3Card(props) {
     const largeScreen = useMediaQuery(theme.breakpoints.down('lg'));
     const UserCarousel = React.lazy(() => import('./Carousel'));
 
-    // var items = [
-    //     {image: image1},
-    //     {image: image2},
-    //     {image: image3}
-    // ]
-
     return (
         <Card className={styles.card}>
             <Box className={styles.main} minHeight={smallScreen ? 200 : mediumScreen ? 300 : largeScreen ? 400 : 500}
@@ -113,7 +107,7 @@ export const UserCard = React.memo(function News3Card(props) {
                 <div className={styles.content}>
                     <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
                         {props.title}
-                        <IconButton color="inherit" size="large" onClick={props.openEditTitleDialog}>
+                        <IconButton color="inherit" size="large" onClick={props.openUpdateTitleDialog}>
                             <EditIcon fontSize="inherit"/>
                         </IconButton>
                     </Typography>
@@ -158,16 +152,16 @@ export const UserCard = React.memo(function News3Card(props) {
                 bgcolor={'common.white'}>
                 <Col className='text-center'>
                     <Button variant="contained" endIcon={<AddShoppingCartIcon/>} style={{backgroundColor: 'darkred'}}
-                            onClick={props.openNewProductDialog}>
+                            onClick={props.openUploadProductDialog}>
                         Nuovo prodotto
                     </Button>
                 </Col>
                 <Col className='text-center'>
                     <label htmlFor="carousel-uploader" className='text-center'>
-                        <Input accept="image/*" id="carousel-uploader" type="file" hidden
-                               onChange={props.updateCarousel}/>
+                        {/*<Input accept="image/*" id="carousel-uploader" type="file" hidden*/}
+                        {/*       onChange={props.updateCarousel}/>*/}
                         <Button variant="contained" component="span" endIcon={<PanoramaIcon/>}
-                                style={{backgroundColor: 'darkred'}}>
+                                style={{backgroundColor: 'darkred'}} onClick={props.openUpdateCarouselDialog}>
                             Cambia Copertina
                         </Button>
                     </label>

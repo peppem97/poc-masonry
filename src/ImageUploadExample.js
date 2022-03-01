@@ -22,7 +22,6 @@ function ImageUploadExample() {
         let tmpList = listPictures;
         tmpList.push(tmpRawPicture)
         setListPictures(tmpList)
-        console.log(tmpList)
 
     };
 
