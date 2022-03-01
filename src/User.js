@@ -45,7 +45,7 @@ export default function User() {
                 setTitle(response.data[0].title)
                 setDescription(response.data[0].description)
                 setAvatar(appContext.host + response.data[0].avatar.url)
-                setCarousel(response.data[0].carousel.map((element) => ({image: appContext.host + element.url, add: false})))
+                setCarousel(response.data[0].carousel.map((element, index) => ({index: index, image: appContext.host + element.url, add: false})))
                 setTelephone(response.data[0].telephone)
                 setWebsite(response.data[0].website)
             }).catch((error) => {

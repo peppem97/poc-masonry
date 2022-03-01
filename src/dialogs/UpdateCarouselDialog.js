@@ -19,7 +19,6 @@ import InfoIcon from '@mui/icons-material/Info';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import image from '../assets/example1.png'
 import AddIcon from '@mui/icons-material/Add';
 
 export default function UpdateCarouselDialog(props) {
@@ -27,33 +26,60 @@ export default function UpdateCarouselDialog(props) {
     const [initPictures, setInitPictures] = useState([])
 
     const addBlankPictures = (pictures) => {
-        let tmpPictures = pictures.slice()
+        let tmpPictures = pictures
         if (tmpPictures.length <= 2) {
             tmpPictures.push({image: null, add: true})
         }
-        return tmpPictures.slice()
+        return Object.assign([], tmpPictures)
     }
 
     const closeDialog = () => {
-        setPictures(addBlankPictures(initPictures.slice()))
+        setPictures(initPictures)
         props.onClose();
     };
 
-    const addPicture = (e) => {
-        let tmpPictures = pictures.slice()
-        for (let picture of tmpPictures) {
-            if (picture.image == null) {
-                picture.image = URL.createObjectURL(e.target.files[0]);
-                picture.add = false;
-                break
+    const addPicture = (e, i) => {
+        let tmpPictures = []
+        for (let picture of pictures) {
+            if (picture.index == i) {
+                tmpPictures.push({index: picture.index, image: URL.createObjectURL(e.target.files[0]), add: false})
+            } else {
+                tmpPictures.push({index: picture.index, image: picture.image, add: picture.add})
             }
         }
-        setPictures(tmpPictures.slice())
+
+        setPictures(tmpPictures)
+    }
+
+    const removePicture = (i) => {
+        let tmpPictures = []
+
+        for (let picture of pictures) {
+            if (picture.index == i) {
+                tmpPictures.push({index: picture.index, image: null, add: true})
+            } else {
+                tmpPictures.push({index: picture.index, image: picture.image, add: picture.add})
+            }
+        }
+
+        // let onlyOneBlank = false
+        // let newTmpPictures = []
+        // for (let picture of tmpPictures) {
+        //     if (picture.add && !onlyOneBlank) {
+        //         newTmpPictures.push({index: picture.index, image: null, add: true})
+        //         onlyOneBlank = true;
+        //     } else {
+        //         newTmpPictures.push({index: picture.index, image: picture.image, add: picture.add})
+        //     }
+        // }
+
+        // console.log(newTmpPictures)
+        setPictures(tmpPictures)
     }
 
     useEffect(() => {
-        setInitPictures(props.carousel.slice())
-        setPictures(addBlankPictures(props.carousel.slice()))
+        setInitPictures(props.carousel)
+        setPictures(addBlankPictures(props.carousel))
     }, [props.carousel])
 
     return (
@@ -78,7 +104,7 @@ export default function UpdateCarouselDialog(props) {
                                         actionIcon={
                                             [
                                                 <label htmlFor="icon-button-file">
-                                                    <Input accept="image/*" id="icon-button-file" type="file" hidden onChange={addPicture}/>
+                                                    <Input accept="image/*" id="icon-button-file" type="file" hidden onChange={(e) => {addPicture(e, item.index)}}/>
                                                     <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} aria-label="upload picture" component="span">
                                                         <PhotoCamera />
                                                     </IconButton>
@@ -96,7 +122,7 @@ export default function UpdateCarouselDialog(props) {
                                                 <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}>
                                                     <OpenInFullIcon/>
                                                 </IconButton>,
-                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}>
+                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} onClick={() => {removePicture(item.index)}}>
                                                     <DeleteForeverIcon/>
                                                 </IconButton>
                                             ]}
