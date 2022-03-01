@@ -18,24 +18,23 @@ import GlobalContext from "../GlobalContext";
 import InfoIcon from '@mui/icons-material/Info';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import image from '../assets/example1.png'
+import AddIcon from '@mui/icons-material/Add';
 
 export default function UpdateCarouselDialog(props) {
-    // const [title, setTitle] = useState(null)
-
-    // const onChangeTitle = (e) => {
-    //     setTitle(e.target.value)
-    // }
+    const [pictures, setPictures] = useState([])
 
     const closeDialog = () => {
         props.onClose();
     };
 
-    // const uploadTitle = () => {
-    //     props.uploadTitle(title)
-    // }
-
     useEffect(() => {
-        console.log(props.carousel)
+        let tmpPictures = props.carousel
+        if (tmpPictures.length <= 2) {
+            tmpPictures.push({image: null, add: true})
+        }
+        setPictures(tmpPictures)
     }, [props.carousel])
 
     return (
@@ -49,40 +48,45 @@ export default function UpdateCarouselDialog(props) {
                 <Container>
                     <ImageList sx={{width: 500, height: 200}}
                                gap={5} cols={30}>
-                        {props.carousel.map((item, i) => (
-                            <ImageListItem key={i} cols={10} rows={1}>
-                                <img src={item.image}
-                                     alt=""
-                                     loading="lazy"/>
-                                <ImageListItemBar
-                                    actionIcon={
-                                        [
-                                            <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}>
-                                                <OpenInFullIcon/>
-                                            </IconButton>,
-                                            <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}>
-                                                <DeleteForeverIcon/>
-                                            </IconButton>
-                                        ]}
-                                />
-                            </ImageListItem>
-                        ))}
+                        {pictures.map((item, i) => {
+                            if (item.add) {
+                                return (<ImageListItem key={i} cols={10} rows={1}>
+                                    {/*<img src={null}*/}
+                                    {/*     alt=""*/}
+                                    {/*     loading="lazy"/>*/}
+
+                                    <ImageListItemBar
+                                        actionIcon={
+                                            [
+                                                <label htmlFor="icon-button-file">
+                                                    <Input accept="image/*" id="icon-button-file" type="file" hidden/>
+                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} aria-label="upload picture" component="span">
+                                                        <PhotoCamera />
+                                                    </IconButton>
+                                                </label>]}
+                                    />
+                                </ImageListItem>)
+                            } else {
+                                return (<ImageListItem key={i} cols={10} rows={1}>
+                                    <img src={item.image}
+                                         alt=""
+                                         loading="lazy"/>
+                                    <ImageListItemBar
+                                        actionIcon={
+                                            [
+                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}>
+                                                    <OpenInFullIcon/>
+                                                </IconButton>,
+                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}>
+                                                    <DeleteForeverIcon/>
+                                                </IconButton>
+                                            ]}
+                                    />
+                                </ImageListItem>)
+
+                            }
+                        })}
                     </ImageList>
-
-
-                    {/*<Row>*/}
-                    {/*    {props.carousel.map(*/}
-                    {/*        (item, i) => (<img key={i} src={item.image} alt=""*/}
-                    {/*                           style={{width: '50%', height: '50%', padding: '10px'}}/>))*/}
-                    {/*        // (<Card key={i}>*/}
-                    {/*        //     <CardMedia component="img" image={item.image} style={{width: '50%', height: 'auto'}}>*/}
-                    {/*        //*/}
-                    {/*        //     </CardMedia>*/}
-                    {/*        // </Card>))*/}
-
-
-                    {/*    }*/}
-                    {/*</Row>*/}
                     <br/>
                     <Row>
                         <Button onClick={() => {
