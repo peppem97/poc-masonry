@@ -9,10 +9,9 @@ export default function ShowPreviewDialog(props) {
     };
 
     return(
-        <Dialog open={props.open} >
+        <Dialog open={props.open} fullScreen={true}>
             <div style={{position: 'relative', display: 'block'}}>
                 <img src={props.image} alt="" style={{display: 'block', width: '100%', height: 'auto'}}/>
-                {/*<h1 >GG</h1>*/}
                 <IconButton style={{position: 'absolute', top: 0, left: 0, color: 'darkred'}} onClick={closeDialog}>
                     <CloseIcon />
                 </IconButton>

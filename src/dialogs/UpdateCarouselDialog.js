@@ -145,7 +145,6 @@ export default function UpdateCarouselDialog(props) {
                                             ]}
                                     />
                                 </ImageListItem>)
-
                             }
                         })}
                     </ImageList>

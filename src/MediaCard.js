@@ -63,14 +63,6 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
         navigate("/user/" + props.item.username);
     }
 
-    const openShowProductDialog = () => {
-        setOpenDialog(true);
-    };
-
-    const closeShowProductDialog = (value) => {
-        setOpenDialog(false);
-        // setSelectedValue(value);
-    };
 
     useEffect(() => {
         setLoading(true)
@@ -86,7 +78,7 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
 
     return (
         <>
-            <Card className={styles.card} style={{height: props.item.height}} raised onClick={openShowProductDialog}>
+            <Card className={styles.card} style={{height: props.item.height}} raised onClick={() => {setOpenDialog(true)}}>
                 <CardMedia classes={mediaStyles} image={props.item.picture}/>
                 <Box py={3} px={2} className={styles.contentHeader}>
                     {props.showAvatar && (
@@ -118,7 +110,7 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
                     console.log(e)
                 }}
                 open={openDialog}
-                onClose={closeShowProductDialog}
+                onClose={() => {setOpenDialog(false)}}
                 avatar={avatar}
                 showAvatar={props.showAvatar}
                 title={props.item.title}
