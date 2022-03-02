@@ -76,8 +76,8 @@ export default function TopToolbar(props) {
                             fontSize="inherit"/>&nbsp;Masonry</Button>
                     </Typography>
                     <Box sx={{flexGrow: 1}}/>
-                    <IconButton size="large" style={{color: 'darkred', fontWeight: 'bold'}}>
-                        <VpnKeyIcon onClick={props.getNewToken}/>
+                    <IconButton size="large" style={{color: 'darkred', fontWeight: 'bold'}} onClick={props.getNewToken}>
+                        <VpnKeyIcon />
                     </IconButton>
                     <IconButton size="large" style={{color: appContext.disableIncrease ? 'gray' : 'darkred', fontWeight: 'bold'}}
                                 onClick={props.increaseColumnsSize}>

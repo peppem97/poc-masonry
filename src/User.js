@@ -35,17 +35,24 @@ export default function User() {
         return Math.floor((Math.random() * (380)) + 80);
     }
 
+    const getCarouselList = (...carousels) => {
+        return carousels.map((element, index) => ({index: index, image: appContext.host + element.url, rawImage: null, add: false}))
+
+    }
+
     const getUserInfo = () => {
         axios.get(appContext.hostShops + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         })
             .then((response) => {
+                console.log(response)
                 setIdShopStrapi(response.data[0].id)
                 setEmail(response.data[0].email)
                 setTitle(response.data[0].title)
                 setDescription(response.data[0].description)
                 setAvatar(appContext.host + response.data[0].avatar.url)
-                setCarousel(response.data[0].carousel.map((element, index) => ({index: index, image: appContext.host + element.url, add: false})))
+                setCarousel(getCarouselList(response.data[0].carousel0, response.data[0].carousel1, response.data[0].carousel2))
+                // setCarousel(response.data[0].carousel.map((element, index) => ({index: index, image: appContext.host + element.url, rawImage: null, add: false})))
                 setTelephone(response.data[0].telephone)
                 setWebsite(response.data[0].website)
             }).catch((error) => {
@@ -87,9 +94,34 @@ export default function User() {
     }
 
     const updateCarousel = (e) => {
-        //todo
+        for (let picture of e) {
+            new Compressor(picture.rawImage, {
+                quality: 0.2, success(result) {
+                    const formData = new FormData();
 
-        console.log(e)
+                    formData.append('files.carousel' + picture.index, result, 'example.jpg');
+                    formData.append('data', JSON.stringify({}));
+                    axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
+                        headers: {'Authorization': 'Bearer ' + appContext.token,}
+                    }).then((response) => {
+                        getUserInfo();
+                    }).catch((error) => {
+                    })
+                }, error(err) {
+                    console.log('eeee')
+                    const formData = new FormData();
+
+                    formData.append('files.carousel' + picture.index, null);
+                    formData.append('data', JSON.stringify({}));
+                    axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
+                        headers: {'Authorization': 'Bearer ' + appContext.token,}
+                    }).then((response) => {
+                        getUserInfo();
+                    }).catch((error) => {
+                    })
+                }
+            })
+        }
 
         // const formData = new FormData();
         // formData.append('files.carousel', e.target.files[0], 'example.jpg');

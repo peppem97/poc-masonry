@@ -22,16 +22,17 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import AddIcon from '@mui/icons-material/Add';
 
 export default function UpdateCarouselDialog(props) {
+    const MAX_PICTURES = 3;
     const [pictures, setPictures] = useState([])
     const [initPictures, setInitPictures] = useState([])
 
-    const addBlankPictures = (pictures) => {
-        let tmpPictures = pictures
-        if (tmpPictures.length <= 2) {
-            tmpPictures.push({image: null, add: true})
-        }
-        return Object.assign([], tmpPictures)
-    }
+    // const addBlankPictures = (pictures) => {
+    //     let tmpPictures = pictures
+    //     while (tmpPictures.length <= 2) {
+    //         tmpPictures.push({image: null, add: true})
+    //     }
+    //     return Object.assign([], tmpPictures)
+    // }
 
     const closeDialog = () => {
         setPictures(initPictures)
@@ -40,13 +41,15 @@ export default function UpdateCarouselDialog(props) {
 
     const addPicture = (e, i) => {
         let tmpPictures = []
+        console.log(pictures)
         for (let picture of pictures) {
             if (picture.index == i) {
-                tmpPictures.push({index: picture.index, image: URL.createObjectURL(e.target.files[0]), add: false})
+                tmpPictures.push({index: picture.index, image: URL.createObjectURL(e.target.files[0]), rawImage: e.target.files[0], add: false})
             } else {
                 tmpPictures.push(picture)
             }
         }
+
         setPictures(tmpPictures)
     }
 
@@ -55,7 +58,7 @@ export default function UpdateCarouselDialog(props) {
 
         for (let picture of pictures) {
             if (picture.index == i) {
-                tmpPictures.push({index: picture.index, image: null, add: true})
+                tmpPictures.push({index: picture.index, image: null, rawImage: null, add: true})
             } else {
                 tmpPictures.push(picture)
             }
@@ -69,8 +72,17 @@ export default function UpdateCarouselDialog(props) {
     }
 
     useEffect(() => {
-        setInitPictures(props.carousel)
-        setPictures(addBlankPictures(props.carousel))
+        let initPictures = []
+        for (let i = 0; i < MAX_PICTURES; i++) {
+            if (props.carousel[i] != undefined) {
+                initPictures.push({index: i, image: props.carousel[i].image, rawImage: props.carousel[i].rawImage, add: false})
+            } else {
+                initPictures.push({index: i, image: null, rawImage: null, add: true})
+            }
+        }
+
+        setInitPictures(initPictures)
+        setPictures(initPictures)
     }, [props.carousel])
 
     return (
@@ -84,9 +96,9 @@ export default function UpdateCarouselDialog(props) {
                 <Container>
                     <ImageList sx={{width: 500, height: 250}}
                                gap={5} cols={30}>
-                        {pictures.map((item, i) => {
+                        {pictures.map((item) => {
                             if (item.add) {
-                                return (<ImageListItem key={i} cols={10} rows={1}>
+                                return (<ImageListItem key={item.index} cols={10} rows={1}>
                                     {/*<img src={null}*/}
                                     {/*     alt=""*/}
                                     {/*     loading="lazy"/>*/}
@@ -94,7 +106,7 @@ export default function UpdateCarouselDialog(props) {
                                     <ImageListItemBar
                                         actionIcon={
                                             [
-                                                <label htmlFor="icon-button-file">
+                                                <label htmlFor="icon-button-file" key={0}>
                                                     <Input accept="image/*" id="icon-button-file" type="file" hidden onChange={(e) => {addPicture(e, item.index)}}/>
                                                     <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} aria-label="upload picture" component="span">
                                                         <PhotoCamera />
@@ -103,17 +115,17 @@ export default function UpdateCarouselDialog(props) {
                                     />
                                 </ImageListItem>)
                             } else {
-                                return (<ImageListItem key={i} cols={10} rows={1}>
+                                return (<ImageListItem key={item.index} cols={10} rows={1}>
                                     <img src={item.image}
                                          alt=""
                                          loading="lazy"/>
                                     <ImageListItemBar
                                         actionIcon={
                                             [
-                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}>
+                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0}>
                                                     <OpenInFullIcon/>
                                                 </IconButton>,
-                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} onClick={() => {removePicture(item.index)}}>
+                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} onClick={() => {removePicture(item.index)}} key={1}>
                                                     <DeleteForeverIcon/>
                                                 </IconButton>
                                             ]}
