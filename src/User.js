@@ -51,7 +51,6 @@ export default function User() {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         })
             .then((response) => {
-                console.log(response)
                 setIdShopStrapi(response.data[0].id)
                 setEmail(response.data[0].email)
                 setTitle(response.data[0].title)
@@ -114,7 +113,8 @@ export default function User() {
                             getUserInfo();
                         }).catch((error) => {
                         })
-                    }, error(err) {}
+                    }, error(err) {
+                    }
                 })
             } else {
                 let data = {}
@@ -123,7 +123,8 @@ export default function User() {
                     headers: {'Authorization': 'Bearer ' + appContext.token,}
                 }).then((response) => {
                     getUserInfo();
-                }).catch((error) => {})
+                }).catch((error) => {
+                })
             }
         }
     }

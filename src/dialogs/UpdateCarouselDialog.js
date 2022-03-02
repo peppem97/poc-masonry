@@ -26,14 +26,6 @@ export default function UpdateCarouselDialog(props) {
     const [pictures, setPictures] = useState([])
     const [initPictures, setInitPictures] = useState([])
 
-    // const addBlankPictures = (pictures) => {
-    //     let tmpPictures = pictures
-    //     while (tmpPictures.length <= 2) {
-    //         tmpPictures.push({image: null, add: true})
-    //     }
-    //     return Object.assign([], tmpPictures)
-    // }
-
     const closeDialog = () => {
         setPictures(initPictures)
         props.onClose();
@@ -41,7 +33,6 @@ export default function UpdateCarouselDialog(props) {
 
     const addPicture = (e, i) => {
         let tmpPictures = []
-        console.log(pictures)
         for (let picture of pictures) {
             if (picture.index == i) {
                 tmpPictures.push({index: picture.index, image: URL.createObjectURL(e.target.files[0]), rawImage: e.target.files[0], add: false})
@@ -80,7 +71,6 @@ export default function UpdateCarouselDialog(props) {
                 initPictures.push({index: i, image: null, rawImage: null, add: true})
             }
         }
-
         setInitPictures(initPictures)
         setPictures(initPictures)
     }, [props.carousel])
