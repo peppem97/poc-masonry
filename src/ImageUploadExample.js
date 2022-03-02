@@ -26,16 +26,20 @@ function ImageUploadExample() {
     const uploadImage = () => {
         axios.get(appContext.hostExample, {headers: {'Authorization': 'Bearer ' + appContext.token,}})
             .then((response) => {
-                console.log(response)
-                let id = response.data[0].id
+                let id = response.data[2].id
                 const formData = new FormData();
                 const data = {
-                };
-                formData.append('files.carousel',[]);
-                // formData.append('files.carousel', listPictures[1]);
-                formData.append('data', JSON.stringify(data));
 
-                axios.post(appContext.hostExample + "/" + id, formData, {headers: {
+                };
+                // formData.append('files.carousel',[]);
+                formData.append('files.carousel', listPictures[0]);
+                // formData.append('files.carousel', listPictures[1]);
+
+                formData.append('data', JSON.stringify({}));
+
+                data['files.carousel[1]'] = null
+
+                axios.put(appContext.hostExample + '/' + id, data, {headers: {
                         'Authorization': 'Bearer ' + appContext.token,
                     }})
                     .then((response) => {
@@ -76,7 +80,7 @@ function ImageUploadExample() {
     };
 
     useEffect(() => {
-        getImages()
+        getImages();
     }, [])
 
     return (

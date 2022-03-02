@@ -36,8 +36,14 @@ export default function User() {
     }
 
     const getCarouselList = (...carousels) => {
-        return carousels.map((element, index) => ({index: index, image: appContext.host + element.url, rawImage: null, add: false}))
+        let returnList = []
 
+        for (let i = 0; i < carousels.length; i++) {
+            if (carousels[i] != null) {
+                returnList.push({index: i, image: appContext.host + carousels[i].url, rawImage: null, add: false})
+            }
+        }
+        return returnList
     }
 
     const getUserInfo = () => {
@@ -95,43 +101,31 @@ export default function User() {
 
     const updateCarousel = (e) => {
         for (let picture of e) {
-            new Compressor(picture.rawImage, {
-                quality: 0.2, success(result) {
-                    const formData = new FormData();
+            if (picture.image != null) {
+                new Compressor(picture.rawImage, {
+                    quality: 0.2, success(result) {
+                        const formData = new FormData();
 
-                    formData.append('files.carousel' + picture.index, result, 'example.jpg');
-                    formData.append('data', JSON.stringify({}));
-                    axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
-                        headers: {'Authorization': 'Bearer ' + appContext.token,}
-                    }).then((response) => {
-                        getUserInfo();
-                    }).catch((error) => {
-                    })
-                }, error(err) {
-                    console.log('eeee')
-                    const formData = new FormData();
-
-                    formData.append('files.carousel' + picture.index, null);
-                    formData.append('data', JSON.stringify({}));
-                    axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
-                        headers: {'Authorization': 'Bearer ' + appContext.token,}
-                    }).then((response) => {
-                        getUserInfo();
-                    }).catch((error) => {
-                    })
-                }
-            })
+                        formData.append('files.carousel' + picture.index, result, 'example.jpg');
+                        formData.append('data', JSON.stringify({}));
+                        axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
+                            headers: {'Authorization': 'Bearer ' + appContext.token,}
+                        }).then((response) => {
+                            getUserInfo();
+                        }).catch((error) => {
+                        })
+                    }, error(err) {}
+                })
+            } else {
+                let data = {}
+                data['carousel' + picture.index] = null
+                axios.put(appContext.hostShops + "/" + idShopStrapi, data, {
+                    headers: {'Authorization': 'Bearer ' + appContext.token,}
+                }).then((response) => {
+                    getUserInfo();
+                }).catch((error) => {})
+            }
         }
-
-        // const formData = new FormData();
-        // formData.append('files.carousel', e.target.files[0], 'example.jpg');
-        // formData.append('data', JSON.stringify({}));
-        // axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
-        //     headers: {'Authorization': 'Bearer ' + appContext.token,}
-        // }).then((response) => {
-        //     getUserInfo();
-        // }).catch((error) => {
-        // })
     }
 
     const updateTitle = (params) => {
