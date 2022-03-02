@@ -11,6 +11,7 @@ import UploadProductDialog from "./dialogs/UploadProductDialog";
 import UpdateTitleDialog from "./dialogs/UpdateTitleDialog";
 import Compressor from 'compressorjs';
 import UpdateCarouselDialog from "./dialogs/UpdateCarouselDialog";
+import UpdateDescriptionDialog from "./dialogs/UpdateDescriptionDialog";
 
 
 export default function User() {
@@ -37,7 +38,6 @@ export default function User() {
 
     const getCarouselList = (...carousels) => {
         let returnList = []
-
         for (let i = 0; i < carousels.length; i++) {
             if (carousels[i] != null) {
                 returnList.push({index: i, image: appContext.host + carousels[i].url, rawImage: null, add: false})
@@ -49,18 +49,17 @@ export default function User() {
     const getUserInfo = () => {
         axios.get(appContext.hostShops + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
-        })
-            .then((response) => {
-                setIdShopStrapi(response.data[0].id)
-                setEmail(response.data[0].email)
-                setTitle(response.data[0].title)
-                setDescription(response.data[0].description)
-                setAvatar(appContext.host + response.data[0].avatar.url)
-                setCarousel(getCarouselList(response.data[0].carousel0, response.data[0].carousel1, response.data[0].carousel2))
-                // setCarousel(response.data[0].carousel.map((element, index) => ({index: index, image: appContext.host + element.url, rawImage: null, add: false})))
-                setTelephone(response.data[0].telephone)
-                setWebsite(response.data[0].website)
-            }).catch((error) => {
+        }).then((response) => {
+            setIdShopStrapi(response.data[0].id)
+            setEmail(response.data[0].email)
+            setTitle(response.data[0].title)
+            setDescription(response.data[0].description)
+            setAvatar(appContext.host + response.data[0].avatar.url)
+            setCarousel(getCarouselList(response.data[0].carousel0, response.data[0].carousel1, response.data[0].carousel2))
+            // setCarousel(response.data[0].carousel.map((element, index) => ({index: index, image: appContext.host + element.url, rawImage: null, add: false})))
+            setTelephone(response.data[0].telephone)
+            setWebsite(response.data[0].website)
+        }).catch((error) => {
         })
     }
 
@@ -104,7 +103,6 @@ export default function User() {
                 new Compressor(picture.rawImage, {
                     quality: 0.2, success(result) {
                         const formData = new FormData();
-
                         formData.append('files.carousel' + picture.index, result, 'example.jpg');
                         formData.append('data', JSON.stringify({}));
                         axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
@@ -132,7 +130,7 @@ export default function User() {
     const updateTitle = (params) => {
         //TODO
 
-        // console.log(params)
+        console.log(params)
         // const formData = new FormData();
         // const data = {
         //     title: params.title,
@@ -146,6 +144,10 @@ export default function User() {
         //     }}).then((response) => {
         //     getInitialItems();
         // }).catch((error) => {})
+    }
+
+    const updateDescription = (params) => {
+        console.log(params)
     }
 
     const uploadProduct = (params) => {
@@ -165,46 +167,6 @@ export default function User() {
             getInitialItems();
         }).catch((error) => {
         })
-    }
-
-    const openNewProductDialog = () => {
-        setUploadProductDialog(true)
-    }
-
-    const closeNewProductDialog = () => {
-        setUploadProductDialog(false)
-    }
-
-    const openUpdateTitleDialog = () => {
-        setUpdateTitleDialog(true)
-    }
-
-    const closeUpdateTitleDialog = () => {
-        setUpdateTitleDialog(false)
-    }
-
-    const openUpdateCarouselDialog = () => {
-        setUpdateCarouselDialog(true)
-    }
-
-    const closeUpdateCarouselDialog = () => {
-        setUpdateCarouselDialog(false)
-    }
-
-    const openUpdateDescriptionDialog = () => {
-        setUpdateTitleDialog(true)
-    }
-
-    const closeUpdateDescriptionDialog = () => {
-        setUpdateTitleDialog(false)
-    }
-
-    const openUpdateTelephoneDialog = () => {
-        setUpdateTelephoneDialog(true)
-    }
-
-    const closeUpdateTelephoneDialog = () => {
-        setUpdateTelephoneDialog(false)
     }
 
     // const getMultipleItems = () => {
@@ -246,11 +208,11 @@ export default function User() {
                     carousel={carousel}
                     website={website}
                     telephone={telephone}
-                    openUpdateTitleDialog={openUpdateTitleDialog}
-                    openUpdateDescriptionDialog={openUpdateDescriptionDialog}
-                    openUpdateCarouselDialog={openUpdateCarouselDialog}
-                    openUpdateTelephoneDialog={openUpdateTelephoneDialog}
-                    openUploadProductDialog={openNewProductDialog}
+                    openUpdateTitleDialog={() => {setUpdateTitleDialog(true)}}
+                    openUpdateDescriptionDialog={() => {setUpdateDescriptionDialog(true)}}
+                    openUpdateCarouselDialog={() => {setUpdateCarouselDialog(true)}}
+                    openUpdateTelephoneDialog={() => {setUpdateTelephoneDialog(true)}}
+                    openUploadProductDialog={() => {setUploadProductDialog(true)}}
                     updateAvatar={updateAvatar}/>
                 <br/>
                 <br/>
@@ -264,16 +226,21 @@ export default function User() {
             </Container>
             <UploadProductDialog
                 open={uploadProductDialog}
-                onClose={closeNewProductDialog}
+                onClose={() => {setUploadProductDialog(false)}}
                 uploadProduct={uploadProduct}/>
             <UpdateTitleDialog
                 open={updateTitleDialog}
-                onClose={closeUpdateTitleDialog}
+                onClose={() => {setUpdateTitleDialog(false)}}
                 updateTitle={updateTitle}
                 title={title}/>
+            <UpdateDescriptionDialog
+                open={updateDescriptionDialog}
+                onClose={() => {setUpdateDescriptionDialog(false)}}
+                updateDescription={updateDescription}
+                description={description}/>
             <UpdateCarouselDialog
                 open={updateCarouselDialog}
-                onClose={closeUpdateCarouselDialog}
+                onClose={() => {setUpdateCarouselDialog(false)}}
                 updateCarousel={updateCarousel}
                 carousel={carousel}/>
             <Container fluid>

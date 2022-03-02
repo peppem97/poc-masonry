@@ -139,7 +139,7 @@ export const UserCard = React.memo(function News3Card(props) {
                  gap={2}
                  bgcolor={'common.white'}>
                 <Typography variant='subtitle1' className="text-center">
-                    {props.description} <IconButton color="inherit" size="small"><EditIcon
+                    {props.description} <IconButton color="inherit" size="small" onClick={props.openUpdateDescriptionDialog}><EditIcon
                     fontSize="inherit"/></IconButton>
                 </Typography>
             </Row>
@@ -150,28 +150,30 @@ export const UserCard = React.memo(function News3Card(props) {
                 pt={2}
                 gap={2}
                 bgcolor={'common.white'}>
-                <Col className='text-center'>
+                <Col className='text-center' xl={4} >
                     <Button variant="contained" endIcon={<AddShoppingCartIcon/>} style={{backgroundColor: 'darkred'}}
                             onClick={props.openUploadProductDialog}>
-                        Nuovo prodotto
+                        Prodotto
                     </Button>
                 </Col>
-                <Col className='text-center'>
+                &nbsp;
+                <Col className='text-center' xl={4}>
                     <label htmlFor="carousel-uploader" className='text-center'>
                         {/*<Input accept="image/*" id="carousel-uploader" type="file" hidden*/}
                         {/*       onChange={props.updateCarousel}/>*/}
                         <Button variant="contained" component="span" endIcon={<PanoramaIcon/>}
                                 style={{backgroundColor: 'darkred'}} onClick={props.openUpdateCarouselDialog}>
-                            Cambia Copertina
+                            Copertina
                         </Button>
                     </label>
                 </Col>
-                <Col className='text-center'>
+                &nbsp;
+                <Col className='text-center' xl={4}>
                     <label htmlFor="avatar-uploader" className='text-center'>
                         <Input accept="image/*" id="avatar-uploader" type="file" hidden onChange={props.updateAvatar}/>
                         <Button variant="contained" component="span" endIcon={<AccountCircleIcon/>}
                                 style={{backgroundColor: 'darkred'}}>
-                            Cambia immagine profilo
+                            Avatar
                         </Button>
                     </label>
                 </Col>

@@ -27,6 +27,7 @@ export default function UpdateTitleDialog(props) {
 
     const uploadTitle = () => {
         props.updateTitle(title)
+        props.onClose()
     }
 
     return(
@@ -42,6 +43,7 @@ export default function UpdateTitleDialog(props) {
                         <TextField
                             onChange={onChangeTitle}
                             autoFocus
+                            defaultValue={props.title}
                             color='secondary'
                             margin="dense"
                             label="Titolo negozio"
