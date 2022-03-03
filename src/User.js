@@ -55,11 +55,12 @@ export default function User() {
         axios.get(appContext.hostShops + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
+            console.log(response)
             setIdShopStrapi(response.data[0].id)
             setEmail(response.data[0].email)
             setTitle(response.data[0].title)
             setDescription(response.data[0].description)
-            setAvatar(appContext.host + response.data[0].avatar.url)
+            setAvatar(appContext.host + response.data[0].avatar?.url)
             setCarousel(getCarouselList(response.data[0].carousel0, response.data[0].carousel1, response.data[0].carousel2))
             // setCarousel(response.data[0].carousel.map((element, index) => ({index: index, image: appContext.host + element.url, rawImage: null, add: false})))
             setTelephone(response.data[0].telephone)
@@ -79,7 +80,7 @@ export default function User() {
                 token: appContext.token,
                 description: element.description,
                 username: username,
-                picture: appContext.host + element.picture.url
+                picture: appContext.host + element.cover.url
             }))
             setItems(items)
         }).catch((error) => {
@@ -89,7 +90,7 @@ export default function User() {
     const updateAvatar = (e) => {
         const formData = new FormData();
         new Compressor(e.target.files[0], {
-            quality: 0.1, success(result) {
+            quality: appContext.qualityPictures, success(result) {
                 formData.append('files.avatar', result, 'avatar.jpg');
                 formData.append('data', JSON.stringify({}));
                 axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
@@ -107,7 +108,7 @@ export default function User() {
         for (let picture of e) {
             if (picture.image != null) {
                 new Compressor(picture.rawImage, {
-                    quality: 0.2, success(result) {
+                    quality: appContext.qualityPictures, success(result) {
                         const formData = new FormData();
                         formData.append('files.carousel' + picture.index, result, 'example.jpg');
                         formData.append('data', JSON.stringify({}));
@@ -147,22 +148,36 @@ export default function User() {
     }
 
     const uploadProduct = (params) => {
-        const formData = new FormData();
-        const data = {
-            title: params.title,
-            description: params.description,
-            username: username
-        };
-        formData.append('files.picture', params.rawPicture, params.rawPicture.name);
-        formData.append('data', JSON.stringify(data));
-        axios.post(appContext.hostProducts, formData, {
-            headers: {
-                'Authorization': 'Bearer ' + appContext.token,
+        new Compressor(params.rawPicture, {
+            quality: appContext.qualityPictures, success(result) {
+
+                const formData = new FormData();
+                const data = {
+                    title: params.title,
+                    description: params.description,
+                    username: username
+                };
+                formData.append('files.cover', result, params.rawPicture.name);
+                formData.append('data', JSON.stringify(data));
+                axios.post(appContext.hostProducts, formData, {
+                    headers: {
+                        'Authorization': 'Bearer ' + appContext.token,
+                    }
+                }).then((response) => {
+                    getInitialItems();
+                }).catch((error) => {
+                })
+
+
+            }, error(err) {
             }
-        }).then((response) => {
-            getInitialItems();
-        }).catch((error) => {
         })
+
+
+
+
+
+
     }
 
     const openInfoDialog = (info) => {

@@ -22,6 +22,7 @@ export default function App() {
         disabledIncrease: disabledIncrease,
         disabledDecrease: disabledDecrease,
         columnWidth: columnWidth,
+        qualityPictures: 0.1,
         host: "http://zion.datafactor.it:40505",
         hostShops: "http://zion.datafactor.it:40505/shops",
         hostProducts: "http://zion.datafactor.it:40505/products",

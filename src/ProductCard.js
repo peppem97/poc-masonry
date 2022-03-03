@@ -49,7 +49,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export const MediaCard = React.memo(function GalaxyCard(props) {
+export const ProductCard = React.memo(function GalaxyCard(props) {
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const styles = useStyles();
     const [openDialog, setOpenDialog] = useState(false);
@@ -58,12 +58,9 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
     const appContext = useContext(GlobalContext);
     let navigate = useNavigate();
 
-
-
     const goToUser = () => {
         navigate("/user/" + props.item.username);
     }
-
 
     useEffect(() => {
         setLoading(true)
@@ -122,4 +119,4 @@ export const MediaCard = React.memo(function GalaxyCard(props) {
         </>
     );
 });
-export default MediaCard;
+export default ProductCard;

@@ -28,7 +28,7 @@ export default function Home() {
                 title: element.title,
                 token: appContext.token,
                 description: element.description,
-                picture: appContext.host + element.picture.url,
+                picture: appContext.host + element.cover.url,
                 username: element.username}))
             setItems(items)
             setLoading(false)

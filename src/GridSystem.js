@@ -1,6 +1,6 @@
 import StackGrid, {easings, transitions} from "react-stack-grid";
 import React from "react";
-import MediaCard from "./MediaCard";
+import ProductCard from "./ProductCard";
 import {CircularProgress} from "@mui/material";
 import Box from "@mui/material/Box";
 
@@ -9,7 +9,7 @@ export default function GridSystem(props) {
 
     const generateCards = () => {
         return props.items.map((item, index) =>
-            (<MediaCard key={index} item={item} showAvatar={!(props.isUser)}/>)
+            (<ProductCard key={index} item={item} showAvatar={!(props.isUser)}/>)
         )
     }
 
