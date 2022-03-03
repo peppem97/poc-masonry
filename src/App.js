@@ -6,6 +6,8 @@ import Home from "./Home";
 import GlobalContext from "./GlobalContext";
 import ImageUploadExample from "./ImageUploadExample";
 import axios from "axios";
+import Error404 from "./Error404";
+import ErrorNoUser from "./ErrorNoUser";
 
 export default function App() {
     const [token, setToken] = useState(localStorage.getItem('token'))
@@ -86,6 +88,8 @@ export default function App() {
                     <Route exact path='/home' element={<Home/>}/>
                     <Route exact path='/user/:username' element={<User/>}/>
                     <Route exact path='/example' element={<ImageUploadExample/>}/>
+                    <Route exact path='/no-user' element={<ErrorNoUser/>}/>
+                    <Route exact path='*' element={<Error404/>}/>
                 </Routes>
             </Router>
         </GlobalContext.Provider>

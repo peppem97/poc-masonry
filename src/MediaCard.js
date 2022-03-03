@@ -52,11 +52,12 @@ const useStyles = makeStyles(() => ({
 export const MediaCard = React.memo(function GalaxyCard(props) {
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const styles = useStyles();
-    let navigate = useNavigate();
     const [openDialog, setOpenDialog] = useState(false);
     const [avatar, setAvatar] = useState(null)
     const [loading, setLoading] = useState(false);
     const appContext = useContext(GlobalContext);
+    let navigate = useNavigate();
+
 
 
     const goToUser = () => {

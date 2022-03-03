@@ -4,7 +4,7 @@ import {Row} from '@mui-treasury/components/flex';
 import {Container} from "react-bootstrap";
 import GridSystem from "./GridSystem";
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import GlobalContext from "./GlobalContext";
 import UserCard from "./UserCard";
 import UploadProductDialog from "./dialogs/UploadProductDialog";
@@ -33,6 +33,9 @@ export default function User() {
 
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
+    let navigate = useNavigate();
+
+
 
     const generateHeight = () => {
         return Math.floor((Math.random() * (380)) + 80);
@@ -62,6 +65,7 @@ export default function User() {
             setTelephone(response.data[0].telephone)
             setWebsite(response.data[0].website)
         }).catch((error) => {
+            navigate('/no-user')
         })
     }
 
