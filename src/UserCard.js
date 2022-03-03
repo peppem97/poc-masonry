@@ -107,7 +107,7 @@ export const UserCard = React.memo(function News3Card(props) {
                 <div className={styles.content}>
                     <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
                         {props.title}
-                        <IconButton color="inherit" size="large" onClick={props.openUpdateTitleDialog}>
+                        <IconButton color="inherit" size="large" onClick={() => {props.openUpdateInfoDialog('title')}}>
                             <EditIcon fontSize="inherit"/>
                         </IconButton>
                     </Typography>
@@ -127,11 +127,11 @@ export const UserCard = React.memo(function News3Card(props) {
                     />
                 </Item>
                 <Info position={'middle'} useStyles={useNewsInfoStyles}>
-                    <InfoTitle style={{fontWeight: 'bold'}}>{props.website}<IconButton color="inherit" size="small" onClick={props.openUpdateWebsiteDialog}><EditIcon
+                    <InfoTitle style={{fontWeight: 'bold'}}>{props.website}<IconButton color="inherit" size="small" onClick={() => {props.openUpdateInfoDialog('website')}}><EditIcon
                         fontSize="inherit"/></IconButton></InfoTitle>
-                    <InfoTitle style={{fontWeight: 'bold'}}>{props.email}<IconButton color="inherit" size="small" onClick={props.openUpdateEmailDialog}><EditIcon
+                    <InfoTitle style={{fontWeight: 'bold'}}>{props.email}<IconButton color="inherit" size="small" onClick={() => {props.openUpdateInfoDialog('email')}}><EditIcon
                         fontSize="inherit"/></IconButton></InfoTitle>
-                    <InfoSubtitle>{props.telephone}<IconButton color="inherit" size="small"><EditIcon
+                    <InfoSubtitle>{props.telephone}<IconButton color="inherit" size="small" onClick={() => {props.openUpdateInfoDialog('telephone')}}><EditIcon
                         fontSize="inherit"/></IconButton></InfoSubtitle>
                 </Info>
             </Row>
@@ -142,7 +142,7 @@ export const UserCard = React.memo(function News3Card(props) {
                  gap={2}
                  bgcolor={'common.white'}>
                 <Typography variant='subtitle1' className="text-center">
-                    {props.description} <IconButton color="inherit" size="small" onClick={props.openUpdateDescriptionDialog}><EditIcon
+                    {props.description} <IconButton color="inherit" size="small" onClick={() => {props.openUpdateInfoDialog('description')}}><EditIcon
                     fontSize="inherit"/></IconButton>
                 </Typography>
             </Row>

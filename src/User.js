@@ -8,10 +8,9 @@ import {useParams} from "react-router-dom";
 import GlobalContext from "./GlobalContext";
 import UserCard from "./UserCard";
 import UploadProductDialog from "./dialogs/UploadProductDialog";
-import UpdateTitleDialog from "./dialogs/UpdateTitleDialog";
+import UpdateInfoDialog from "./dialogs/UpdateInfoDialog";
 import Compressor from 'compressorjs';
 import UpdateCarouselDialog from "./dialogs/UpdateCarouselDialog";
-import UpdateDescriptionDialog from "./dialogs/UpdateDescriptionDialog";
 
 
 export default function User() {
@@ -27,10 +26,11 @@ export default function User() {
 
     const [items, setItems] = useState([])
     const [uploadProductDialog, setUploadProductDialog] = useState(false)
-    const [updateTitleDialog, setUpdateTitleDialog] = useState(false)
     const [updateCarouselDialog, setUpdateCarouselDialog] = useState(false)
-    const [updateDescriptionDialog, setUpdateDescriptionDialog] = useState(false)
-    const [updateTelephoneDialog, setUpdateTelephoneDialog] = useState(false)
+    const [updateInfoDialog, setUpdateInfoDialog] = useState(false)
+    const [info, setInfo] = useState(null)
+    const [infoToEdit, setInfoToEdit] = useState(null)
+
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
 
@@ -161,6 +161,28 @@ export default function User() {
         })
     }
 
+    const openInfoDialog = (info) => {
+        switch (info) {
+            case 'title':
+                setInfo(title)
+                break;
+            case 'website':
+                setInfo(website)
+                break;
+            case 'email':
+                setInfo(email)
+                break;
+            case 'telephone':
+                setInfo(telephone)
+                break;
+            case 'description':
+                setInfo(description)
+                break;
+        }
+        setInfoToEdit(info)
+        setUpdateInfoDialog(true);
+    }
+
     // const getMultipleItems = () => {
     //     props.setLoading(true)
     //     const newItems = [];
@@ -200,11 +222,9 @@ export default function User() {
                     carousel={carousel}
                     website={website}
                     telephone={telephone}
-                    openUpdateTitleDialog={() => {setUpdateTitleDialog(true)}}
-                    openUpdateDescriptionDialog={() => {setUpdateDescriptionDialog(true)}}
                     openUpdateCarouselDialog={() => {setUpdateCarouselDialog(true)}}
-                    openUpdateTelephoneDialog={() => {setUpdateTelephoneDialog(true)}}
                     openUploadProductDialog={() => {setUploadProductDialog(true)}}
+                    openUpdateInfoDialog={openInfoDialog}
                     updateAvatar={updateAvatar}/>
                 <br/>
                 <br/>
@@ -220,16 +240,17 @@ export default function User() {
                 open={uploadProductDialog}
                 onClose={() => {setUploadProductDialog(false)}}
                 uploadProduct={uploadProduct}/>
-            <UpdateTitleDialog
-                open={updateTitleDialog}
-                onClose={() => {setUpdateTitleDialog(false)}}
-                updateTitle={(e) => {updateInfo('title', e)}}
-                title={title}/>
-            <UpdateDescriptionDialog
-                open={updateDescriptionDialog}
-                onClose={() => {setUpdateDescriptionDialog(false)}}
-                updateDescription={(e) => {updateInfo('description', e)}}
-                description={description}/>
+            <UpdateInfoDialog
+                open={updateInfoDialog}
+                infoToEdit={infoToEdit}
+                onClose={() => {setUpdateInfoDialog(false)}}
+                updateInfo={(e) => {updateInfo(infoToEdit, e)}}
+                info={info}/>
+            {/*<UpdateDescriptionDialog*/}
+            {/*    open={updateDescriptionDialog}*/}
+            {/*    onClose={() => {setUpdateDescriptionDialog(false)}}*/}
+            {/*    updateDescription={(e) => {updateInfo('description', e)}}*/}
+            {/*    description={description}/>*/}
             <UpdateCarouselDialog
                 open={updateCarouselDialog}
                 onClose={() => {setUpdateCarouselDialog(false)}}

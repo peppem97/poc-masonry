@@ -14,45 +14,46 @@ import {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import GlobalContext from "../GlobalContext";
 
-export default function UpdateTitleDialog(props) {
-    const [title, setTitle] = useState(null)
+export default function UpdateInfoDialog(props) {
+    const [info, setInfo] = useState(null)
 
-    const onChangeTitle = (e) => {
-        setTitle(e.target.value)
+    const onChangeInfo = (e) => {
+        setInfo(e.target.value)
     }
 
     const closeDialog = () => {
         props.onClose();
     };
 
-    const uploadTitle = () => {
-        props.updateTitle(title)
+    const uploadInfo = () => {
+        props.updateInfo(info)
         props.onClose()
     }
 
     return(
         <Dialog open={props.open} onClose={closeDialog}>
-            <DialogTitle>Inserisci un nuovo titolo per il negozio</DialogTitle>
+            <DialogTitle>Modifica informazioni</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Riempi i campi per inserire un nuovo prodotto all'interno della tua pagina.
+                    Riempi il campo sottostante per aggiornare l'informazione del negozio.
                 </DialogContentText>
                 <br/>
                 <Container>
                     <Row>
                         <TextField
-                            onChange={onChangeTitle}
+                            onChange={onChangeInfo}
                             autoFocus
-                            defaultValue={props.title}
+                            defaultValue={props.info}
                             color='secondary'
+                            multiline={props.infoToEdit == 'description'}
                             margin="dense"
-                            label="Titolo negozio"
+                            label="Informazione"
                             variant="outlined"/>
                     </Row>
                     <br/>
                     <Row>
-                        <Button onClick={uploadTitle} variant="contained" component="span" style={{backgroundColor: 'darkred'}}>
-                            Aggiorna titolo
+                        <Button onClick={uploadInfo} variant="contained" component="span" style={{backgroundColor: 'darkred'}}>
+                            Aggiorna informazione
                         </Button>
                     </Row>
                 </Container>
