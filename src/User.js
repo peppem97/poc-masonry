@@ -11,6 +11,7 @@ import UploadProductDialog from "./dialogs/UploadProductDialog";
 import UpdateInfoDialog from "./dialogs/UpdateInfoDialog";
 import Compressor from 'compressorjs';
 import UpdateCarouselDialog from "./dialogs/UpdateCarouselDialog";
+import {Backdrop, CircularProgress} from "@mui/material";
 
 
 export default function User() {
@@ -30,6 +31,8 @@ export default function User() {
     const [updateInfoDialog, setUpdateInfoDialog] = useState(false)
     const [info, setInfo] = useState(null)
     const [infoToEdit, setInfoToEdit] = useState(null)
+
+    const [loading, setLoading] = useState(null)
 
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
@@ -88,6 +91,8 @@ export default function User() {
     }
 
     const updateAvatar = (e) => {
+        setLoading(true)
+
         const formData = new FormData();
         new Compressor(e.target.files[0], {
             quality: appContext.qualityPictures, success(result) {
@@ -97,6 +102,8 @@ export default function User() {
                     headers: {'Authorization': 'Bearer ' + appContext.token,}
                 }).then((response) => {
                     getUserInfo();
+                    setLoading(false)
+
                 }).catch((error) => {
                 })
             }, error(err) {
@@ -112,10 +119,13 @@ export default function User() {
                         const formData = new FormData();
                         formData.append('files.carousel' + picture.index, result, 'example.jpg');
                         formData.append('data', JSON.stringify({}));
+                        setLoading(true)
                         axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
                             headers: {'Authorization': 'Bearer ' + appContext.token,}
                         }).then((response) => {
                             getUserInfo();
+                            setLoading(false)
+
                         }).catch((error) => {
                         })
                     }, error(err) {
@@ -124,10 +134,14 @@ export default function User() {
             } else {
                 let data = {}
                 data['carousel' + picture.index] = null
+                setLoading(true)
+
                 axios.put(appContext.hostShops + "/" + idShopStrapi, data, {
                     headers: {'Authorization': 'Bearer ' + appContext.token,}
                 }).then((response) => {
                     getUserInfo();
+                    setLoading(false)
+
                 }).catch((error) => {
                 })
             }
@@ -135,6 +149,8 @@ export default function User() {
     }
 
     const updateInfo = (type, value) => {
+        setLoading(true)
+
         const data = {};
         data[type] = value;
         const formData = new FormData();
@@ -143,14 +159,16 @@ export default function User() {
                 'Authorization': 'Bearer ' + appContext.token,
             }}).then((response) => {
             getUserInfo();
+            setLoading(false)
+
         }).catch((error) => {})
 
     }
 
     const uploadProduct = (params) => {
+        setLoading(true)
         new Compressor(params.rawPicture, {
             quality: appContext.qualityPictures, success(result) {
-
                 const formData = new FormData();
                 const data = {
                     title: params.title,
@@ -165,6 +183,7 @@ export default function User() {
                     }
                 }).then((response) => {
                     getInitialItems();
+                    setLoading(false)
                 }).catch((error) => {
                 })
 
@@ -278,6 +297,11 @@ export default function User() {
             <Container fluid>
                 <GridSystem items={items} columnWidth={appContext.columnWidth} isUser={true}/>
             </Container>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={loading}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </>
     )
 }

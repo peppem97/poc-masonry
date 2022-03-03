@@ -2,7 +2,7 @@ import * as React from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from "@mui/material/Typography";
-import {CardContent, DialogContent, IconButton, useMediaQuery, useTheme} from "@mui/material";
+import {CardContent, DialogContent, IconButton, Skeleton, useMediaQuery, useTheme} from "@mui/material";
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar';
@@ -22,6 +22,7 @@ import { useOverShadowStyles } from '@mui-treasury/styles/shadow/over';
 import {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import GlobalContext from "../GlobalContext";
+import {useNavigate} from "react-router-dom";
 //*******************//
 // const useBasicProfileStyles = makeStyles(({palette}) => ({
 //     overline: {
@@ -113,7 +114,7 @@ const useStyles = makeStyles(() => ({
         width: 50,
         height: 50,
         border: '2px solid #fff',
-        margin: '-56px 32px 0 auto',
+        margin: '-76px 32px 0 auto',
         '& > img': {
             margin: 0,
         },
@@ -126,10 +127,16 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
     const textCardContentStyles = useN01TextInfoContentStyles();
     const [shop, setShop] = useState(null)
     const appContext = useContext(GlobalContext);
+    let navigate = useNavigate();
+
 
     const closeDialog = (value) => {
         props.onClose(value);
     };
+
+    const goToUser = () => {
+        navigate("/user/" + props.username);
+    }
 
     useEffect(() => {
         axios.get(appContext.hostShops + "?username=" + props.username, {
@@ -143,7 +150,22 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
         <Dialog open={props.open} onClose={closeDialog} fullWidth={true} >
             <Card className={cx(cardStyles.root)} style={{width: '100%'}}>
                 <CardMedia classes={mediaStyles} image={props.picture}/>
-                {props.showAvatar && <Avatar className={cardStyles.avatar} src={props.avatar}/>}
+                {props.showAvatar &&
+
+
+                    // <Avatar className={cardStyles.avatar} src={props.avatar}/>
+
+                    <div className={cardStyles.avatar}>
+                        <IconButton onClick={goToUser} >
+                            <Avatar src={props.avatar} />
+                        </IconButton>
+                    </div>
+
+
+
+
+
+                }
                 <CardContent className={cardStyles.content}>
                     <TextInfoContent
                         classes={textCardContentStyles}

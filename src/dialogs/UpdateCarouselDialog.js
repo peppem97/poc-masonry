@@ -71,7 +71,7 @@ export default function UpdateCarouselDialog(props) {
         props.onClose()
     }
 
-    useEffect(() => {
+    const initImageList = () => {
         let initPictures = []
         for (let i = 0; i < MAX_PICTURES; i++) {
             if (props.carousel[i] != undefined) {
@@ -87,6 +87,10 @@ export default function UpdateCarouselDialog(props) {
         }
         setInitPictures(initPictures)
         setPictures(initPictures)
+    }
+
+    useEffect(() => {
+        initImageList();
     }, [props.carousel])
 
     return (
