@@ -127,7 +127,10 @@ export const UserCard = React.memo(function News3Card(props) {
                     />
                 </Item>
                 <Info position={'middle'} useStyles={useNewsInfoStyles}>
-                    <InfoTitle style={{fontWeight: 'bold'}}>{props.website}</InfoTitle>
+                    <InfoTitle style={{fontWeight: 'bold'}}>{props.website}<IconButton color="inherit" size="small" onClick={props.openUpdateWebsiteDialog}><EditIcon
+                        fontSize="inherit"/></IconButton></InfoTitle>
+                    <InfoTitle style={{fontWeight: 'bold'}}>{props.email}<IconButton color="inherit" size="small" onClick={props.openUpdateEmailDialog}><EditIcon
+                        fontSize="inherit"/></IconButton></InfoTitle>
                     <InfoSubtitle>{props.telephone}<IconButton color="inherit" size="small"><EditIcon
                         fontSize="inherit"/></IconButton></InfoSubtitle>
                 </Info>

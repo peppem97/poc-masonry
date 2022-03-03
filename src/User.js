@@ -16,13 +16,15 @@ import UpdateDescriptionDialog from "./dialogs/UpdateDescriptionDialog";
 
 export default function User() {
     const [idShopStrapi, setIdShopStrapi] = useState(null)
+
     const [email, setEmail] = useState(null)
     const [title, setTitle] = useState(null)
     const [description, setDescription] = useState(null)
-    const [avatar, setAvatar] = useState(null)
-    const [carousel, setCarousel] = useState([])
     const [website, setWebsite] = useState(null)
     const [telephone, setTelephone] = useState(null)
+    const [avatar, setAvatar] = useState(null)
+    const [carousel, setCarousel] = useState([])
+
     const [items, setItems] = useState([])
     const [uploadProductDialog, setUploadProductDialog] = useState(false)
     const [updateTitleDialog, setUpdateTitleDialog] = useState(false)
@@ -127,27 +129,17 @@ export default function User() {
         }
     }
 
-    const updateTitle = (params) => {
-        //TODO
+    const updateInfo = (type, value) => {
+        const data = {};
+        data[type] = value;
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(data));
+        axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {headers: {
+                'Authorization': 'Bearer ' + appContext.token,
+            }}).then((response) => {
+            getUserInfo();
+        }).catch((error) => {})
 
-        console.log(params)
-        // const formData = new FormData();
-        // const data = {
-        //     title: params.title,
-        //     description: params.description,
-        //     username: username
-        // };
-        // formData.append('files.picture', params.rawPicture, params.rawPicture.name);
-        // formData.append('data', JSON.stringify(data));
-        // axios.post(appContext.hostProducts, formData, {headers: {
-        //         'Authorization': 'Bearer ' + appContext.token,
-        //     }}).then((response) => {
-        //     getInitialItems();
-        // }).catch((error) => {})
-    }
-
-    const updateDescription = (params) => {
-        console.log(params)
     }
 
     const uploadProduct = (params) => {
@@ -231,12 +223,12 @@ export default function User() {
             <UpdateTitleDialog
                 open={updateTitleDialog}
                 onClose={() => {setUpdateTitleDialog(false)}}
-                updateTitle={updateTitle}
+                updateTitle={(e) => {updateInfo('title', e)}}
                 title={title}/>
             <UpdateDescriptionDialog
                 open={updateDescriptionDialog}
                 onClose={() => {setUpdateDescriptionDialog(false)}}
-                updateDescription={updateDescription}
+                updateDescription={(e) => {updateInfo('description', e)}}
                 description={description}/>
             <UpdateCarouselDialog
                 open={updateCarouselDialog}
