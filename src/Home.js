@@ -27,6 +27,7 @@ export default function Home() {
                 height: generateHeight(),
                 title: element.title,
                 token: appContext.token,
+                id: element.id,
                 description: element.description,
                 picture: appContext.host + element.cover.url,
                 username: element.username}))

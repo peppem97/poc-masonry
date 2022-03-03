@@ -54,6 +54,8 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     const styles = useStyles();
     const [openDialog, setOpenDialog] = useState(false);
     const [avatar, setAvatar] = useState(null)
+    const [shop, setShop] = useState(null)
+
     const [loading, setLoading] = useState(false);
     const appContext = useContext(GlobalContext);
     let navigate = useNavigate();
@@ -68,6 +70,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
             setAvatar(appContext.host + response.data[0].avatar.url)
+            setShop(response.data[0].title)
             setLoading(false)
         }).catch((error) => {
         })
@@ -115,6 +118,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 description={props.item.description}
                 picture={props.item.picture}
                 username={props.item.username}
+                shop={shop}
             />
         </>
     );

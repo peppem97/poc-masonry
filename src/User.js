@@ -81,6 +81,7 @@ export default function User() {
                 height: generateHeight(),
                 title: element.title,
                 token: appContext.token,
+                id: element.id,
                 description: element.description,
                 username: username,
                 picture: appContext.host + element.cover.url

@@ -2,7 +2,16 @@ import * as React from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from "@mui/material/Typography";
-import {CardContent, DialogContent, IconButton, Skeleton, useMediaQuery, useTheme} from "@mui/material";
+import {
+    CardActions,
+    CardContent,
+    CardHeader,
+    DialogContent,
+    IconButton, ImageList, ImageListItem,
+    Skeleton,
+    useMediaQuery,
+    useTheme
+} from "@mui/material";
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar';
@@ -12,17 +21,23 @@ import Card from "@material-ui/core/Card";
 import cx from "clsx";
 import FavoriteBorderRounded from '@material-ui/icons/FavoriteBorderRounded';
 import Share from '@material-ui/icons/Share';
-import { useSoftRiseShadowStyles } from '@mui-treasury/styles/shadow/softRise';
-import { useSlopeCardMediaStyles } from '@mui-treasury/styles/cardMedia/slope';
-import { useN01TextInfoContentStyles } from '@mui-treasury/styles/textInfoContent/n01';
+import {useSoftRiseShadowStyles} from '@mui-treasury/styles/shadow/softRise';
+import {useSlopeCardMediaStyles} from '@mui-treasury/styles/cardMedia/slope';
+import {useN01TextInfoContentStyles} from '@mui-treasury/styles/textInfoContent/n01';
 import TextInfoContent from '@mui-treasury/components/content/textInfo';
 import Button from "@mui/material/Button";
-import { useBlogTextInfoContentStyles } from '@mui-treasury/styles/textInfoContent/blog';
-import { useOverShadowStyles } from '@mui-treasury/styles/shadow/over';
+import {useBlogTextInfoContentStyles} from '@mui-treasury/styles/textInfoContent/blog';
+import {useOverShadowStyles} from '@mui-treasury/styles/shadow/over';
 import {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import GlobalContext from "../GlobalContext";
 import {useNavigate} from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
+import {red} from "@mui/material/colors";
+import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
+
+import UserCarousel from "../Carousel";
+import {Container} from "react-bootstrap";
 //*******************//
 // const useBasicProfileStyles = makeStyles(({palette}) => ({
 //     overline: {
@@ -122,12 +137,10 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const ShowProductDialog = React.memo(function PostCard(props) {
-    const cardStyles = useStyles();
-    const mediaStyles = useSlopeCardMediaStyles();
-    const textCardContentStyles = useN01TextInfoContentStyles();
-    const [shop, setShop] = useState(null)
-    const appContext = useContext(GlobalContext);
     let navigate = useNavigate();
+    const [fullScreen, setFullScreen] = useState(false)
+    const appContext = useContext(GlobalContext);
+
 
 
     const closeDialog = (value) => {
@@ -138,147 +151,89 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
         navigate("/user/" + props.username);
     }
 
-    useEffect(() => {
-        axios.get(appContext.hostShops + "?username=" + props.username, {
-            headers: {'Authorization': 'Bearer ' + appContext.token}
-        }).then((response) => {
-            setShop(appContext.host + response.data[0].title)
-        }).catch((error) => {})
-    }, [])
+
+    // useEffect(() => {
+    //     axios.get(appContext.hostShops + "?username=" + props.username, {
+    //         headers: {'Authorization': 'Bearer ' + appContext.token}
+    //     }).then((response) => {
+    //     }).catch((error) => {
+    //     })
+    // }, [props.username])
 
     return (
-        <Dialog open={props.open} onClose={closeDialog} fullWidth={true} >
-            <Card className={cx(cardStyles.root)} style={{width: '100%'}}>
-                <CardMedia classes={mediaStyles} image={props.picture}/>
+        <Dialog open={props.open} onClose={closeDialog} fullWidth={true} fullScreen={fullScreen}>
+            <Card sx={{maxWidth: 500}}>
                 {props.showAvatar &&
-
-
-                    // <Avatar className={cardStyles.avatar} src={props.avatar}/>
-
-                    <div className={cardStyles.avatar}>
-                        <IconButton onClick={goToUser} >
-                            <Avatar src={props.avatar} />
+                    <CardHeader
+                    avatar={
+                        <IconButton onClick={goToUser}>
+                            <Avatar src={props.avatar}/>
                         </IconButton>
-                    </div>
+                    }
+                    sx={{maxHeight: '60px'}}
+                    title={<Typography variant="h6">{props.shop}</Typography>}
+                />}
+                <CardMedia
+                    height="350"
+                    component="img"
+                    image={props.picture}
+                />
+                <CardContent>
+                    <Typography gutterBottom variant="h5" component="div" className="text-center">
+                        {props.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" className="text-center">
+                        {props.description}
+                    </Typography>
+                    <br/>
+                    <Container>
+                        <ImageList sx={{width: 500, height: 250}} gap={5} cols={50} rowHeight={100}>
+                            <ImageListItem cols={10} rows={1}>
+                                <img
+                                    src={props.picture}
+                                    alt=""
+                                    loading="lazy"
+                                />
+                            </ImageListItem>
+                            <ImageListItem cols={10} rows={1}>
+                                <img
+                                    src={props.picture}
+                                    alt=""
+                                    loading="lazy"
+                                />
+                            </ImageListItem>
+                            <ImageListItem cols={10} rows={1}>
+                                <img
+                                    src={props.picture}
+                                    alt=""
+                                    loading="lazy"
+                                />
+                            </ImageListItem>
+                            <ImageListItem cols={10} rows={1}>
+                                <img
+                                    src={props.picture}
+                                    alt=""
+                                    loading="lazy"
+                                />
+                            </ImageListItem>
+                        </ImageList>
+
+                    </Container>
 
 
 
 
 
-                }
-                <CardContent className={cardStyles.content}>
-                    <TextInfoContent
-                        classes={textCardContentStyles}
-                        heading={props.title}
-                        body={props.description}
-                    />
+
+
                 </CardContent>
-                <Box px={2} pb={2} mt={-1}>
-                    <IconButton>
-                        <Share />
-                    </IconButton>
-                    <IconButton>
-                        <FavoriteBorderRounded />
-                    </IconButton>
-                </Box>
+                <CardActions>
+                    <Button size="small" onClick={() => {setFullScreen(!fullScreen)}}>Share</Button>
+                    <Button size="small">Learn More</Button>
+                </CardActions>
             </Card>
         </Dialog>
     );
 });
-//*******************//
-
-// const useStyles = makeStyles(({ breakpoints, spacing }) => ({
-//     root: {
-//         margin: 'auto',
-//         borderRadius: spacing(2), // 16px
-//         transition: '0.3s',
-//         boxShadow: '0px 14px 80px rgba(34, 35, 58, 0.2)',
-//         position: 'relative',
-//         maxWidth: 500,
-//         marginLeft: 'auto',
-//         overflow: 'initial',
-//         background: '#ffffff',
-//         display: 'flex',
-//         flexDirection: 'column',
-//         alignItems: 'center',
-//         paddingBottom: spacing(2),
-//         [breakpoints.up('md')]: {
-//             flexDirection: 'row',
-//             paddingTop: spacing(2),
-//         },
-//     },
-//     media: {
-//         width: '100%',
-//         marginLeft: 'auto',
-//         marginRight: 'auto',
-//         marginTop: spacing(-3),
-//         height: 0,
-//         paddingBottom: '48%',
-//         borderRadius: spacing(2),
-//         backgroundColor: '#fff',
-//         position: 'relative',
-//         [breakpoints.up('md')]: {
-//             width: '100%',
-//             marginLeft: spacing(-3),
-//             marginTop: 0,
-//             transform: 'translateX(-8px)',
-//         },
-//         '&:after': {
-//             content: '" "',
-//             position: 'absolute',
-//             top: 0,
-//             left: 0,
-//             width: '100%',
-//             height: '100%',
-//             // backgroundImage: 'linear-gradient(147deg, #fe8a39 0%, #fd3838 74%)',
-//             borderRadius: spacing(2), // 16
-//             opacity: 0.5,
-//         },
-//     },
-//     content: {
-//         padding: 24,
-//     },
-//     cta: {
-//         marginTop: 24,
-//         textTransform: 'initial',
-//     },
-// }));
-//
-// export const MediaCard = React.memo(function BlogCard(props) {
-//     const styles = useStyles();
-//     const {
-//         button: buttonStyles,
-//         ...contentStyles
-//     } = useBlogTextInfoContentStyles();
-//
-//     const closeDialog = (value) => {
-//         props.onClose(value);
-//     };
-//
-//     return (
-//         <Dialog open={props.open} onClose={closeDialog} >
-//             <Card className={cx(styles.root)}>
-//                 <CardMedia
-//                     className={styles.media}
-//                     image={
-//                         props.picture
-//                     }
-//                 />
-//                 <CardContent>
-//                     <TextInfoContent
-//                         classes={contentStyles}
-//                         overline={'28 MAR 2019'}
-//                         heading={'What is Git ?'}
-//                         body={
-//                             'Git is a distributed version control system. Every dev has a working copy of the code and...'
-//                         }
-//                     />
-//                     <Button className={buttonStyles}>Read more</Button>
-//                 </CardContent>
-//             </Card>
-//
-//         </Dialog>
-//     );
-// });
 
 export default ShowProductDialog;
