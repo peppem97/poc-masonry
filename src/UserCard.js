@@ -14,16 +14,7 @@ import {Col} from "react-bootstrap";
 import Button from "@mui/material/Button";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import PanoramaIcon from "@mui/icons-material/Panorama";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
-import {useArrowDarkButtonStyles} from '@mui-treasury/styles/button/arrowDark';
-import cx from "clsx";
-import {KeyboardArrowLeft, KeyboardArrowRight} from "@material-ui/icons";
-import DotIndicator from '@mui-treasury/components/indicator/dot';
-import ParallaxSlide from '@mui-treasury/components/slide/parallax';
-import image1 from './assets/example1.png';
-import image2 from './assets/example2.jpg';
-import image3 from './assets/example3.jpg';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 

@@ -107,9 +107,6 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 </Box>
             </Card>
             <ShowProductDialog
-                selectedValue={(e) => {
-                    console.log(e)
-                }}
                 open={openDialog}
                 onClose={() => {setOpenDialog(false)}}
                 avatar={avatar}
@@ -118,6 +115,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 description={props.item.description}
                 picture={props.item.picture}
                 username={props.item.username}
+                id={props.item.id}
                 shop={shop}
             />
         </>

@@ -139,8 +139,8 @@ const useStyles = makeStyles(() => ({
 export const ShowProductDialog = React.memo(function PostCard(props) {
     let navigate = useNavigate();
     const [fullScreen, setFullScreen] = useState(false)
+    const [carousel, setCarousel] = useState([])
     const appContext = useContext(GlobalContext);
-
 
 
     const closeDialog = (value) => {
@@ -151,87 +151,86 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
         navigate("/user/" + props.username);
     }
 
+    const getCarouselList = (...carousels) => {
+        let returnList = []
+        for (let i = 0; i < carousels.length; i++) {
+            if (carousels[i] != null) {
+                returnList.push({index: i, image: appContext.host + carousels[i].url, rawImage: null, add: false})
+            }
+        }
+        return returnList
+    }
 
-    // useEffect(() => {
-    //     axios.get(appContext.hostShops + "?username=" + props.username, {
-    //         headers: {'Authorization': 'Bearer ' + appContext.token}
-    //     }).then((response) => {
-    //     }).catch((error) => {
-    //     })
-    // }, [props.username])
+
+    useEffect(() => {
+        if (props.open) {
+            axios.get(appContext.hostProducts + "?id=" + props.id, {
+                headers: {'Authorization': 'Bearer ' + appContext.token}
+            }).then((response) => {
+                console.log(response)
+                setCarousel(getCarouselList(
+                    response.data[0].picture0,
+                    response.data[0].picture1,
+                    response.data[0].picture2,
+                    response.data[0].picture3,
+                    response.data[0].picture4))
+
+            }).catch((error) => {
+            })
+        }
+    }, [props.open])
 
     return (
         <Dialog open={props.open} onClose={closeDialog} fullWidth={true} fullScreen={fullScreen}>
-            <Card sx={{maxWidth: 500}}>
+            <DialogTitle>
                 {props.showAvatar &&
                     <CardHeader
-                    avatar={
-                        <IconButton onClick={goToUser}>
-                            <Avatar src={props.avatar}/>
-                        </IconButton>
-                    }
-                    sx={{maxHeight: '60px'}}
-                    title={<Typography variant="h6">{props.shop}</Typography>}
-                />}
+                        avatar={
+                            <IconButton onClick={goToUser}>
+                                <Avatar src={props.avatar}/>
+                            </IconButton>
+                        }
+                        sx={{maxHeight: '60px'}}
+                        title={<Typography variant="h6">{props.shop}</Typography>}
+                    />}
+            </DialogTitle>
+            <DialogContent>
                 <CardMedia
                     height="350"
                     component="img"
                     image={props.picture}
                 />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="div" className="text-center">
-                        {props.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" className="text-center">
-                        {props.description}
-                    </Typography>
-                    <br/>
-                    <Container>
-                        <ImageList sx={{width: 500, height: 250}} gap={5} cols={50} rowHeight={100}>
+                <Typography gutterBottom variant="h5" component="div" className="text-center">
+                    {props.title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" className="text-center">
+                    {props.description}
+                </Typography>
+                <br/>
+                <Container>
+                    <ImageList sx={{width: 550, height: 200}} gap={5} cols={50}>
+                        {carousel.map((element) =>
                             <ImageListItem cols={10} rows={1}>
                                 <img
-                                    src={props.picture}
+                                    src={element.image}
                                     alt=""
                                     loading="lazy"
                                 />
-                            </ImageListItem>
+                            </ImageListItem>)}
+                        {carousel.map((element) =>
                             <ImageListItem cols={10} rows={1}>
                                 <img
-                                    src={props.picture}
+                                    src={element.image}
                                     alt=""
                                     loading="lazy"
                                 />
-                            </ImageListItem>
-                            <ImageListItem cols={10} rows={1}>
-                                <img
-                                    src={props.picture}
-                                    alt=""
-                                    loading="lazy"
-                                />
-                            </ImageListItem>
-                            <ImageListItem cols={10} rows={1}>
-                                <img
-                                    src={props.picture}
-                                    alt=""
-                                    loading="lazy"
-                                />
-                            </ImageListItem>
-                        </ImageList>
+                            </ImageListItem>)}
 
-                    </Container>
+                    </ImageList>
 
+                </Container>
 
-
-
-
-
-
-                </CardContent>
-                <CardActions>
-                    <Button size="small" onClick={() => {setFullScreen(!fullScreen)}}>Share</Button>
-                    <Button size="small">Learn More</Button>
-                </CardActions>
-            </Card>
+            </DialogContent>
         </Dialog>
     );
 });
