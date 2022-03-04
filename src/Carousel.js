@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import Carousel from 'react-material-ui-carousel'
-import {Skeleton} from "@mui/material";
 
 function UserCarousel(props) {
     const [items, setItems] = useState([]);
@@ -8,7 +7,8 @@ function UserCarousel(props) {
         setItems(props.items.map(
             (item, i) =>
                 <img key={i} src={item.image} alt="" style={{width: '100%', height: '100%'}} loading="lazy"/>
-        ))};
+        ))
+    };
 
     useEffect(() => {
         initCarousel();
@@ -20,7 +20,6 @@ function UserCarousel(props) {
                 {items}
             </Carousel>
         </>
-
     )
 }
 

@@ -89,98 +89,101 @@ export const UserCard = React.memo(function News3Card(props) {
     const [editAvatar, setEditAvatar] = useState(false);
 
     return (
-        <Card className={styles.card}>
-            <Box className={styles.main} minHeight={smallScreen ? 200 : mediumScreen ? 300 : largeScreen ? 400 : 500}
-                 position={'relative'}>
-                <CardMedia
-                    classes={mediaStyles}
-                    image={null}
-                    children={<Suspense fallback={<></>}><UserCarousel items={props.carousel}/></Suspense>}/>
-                <div className={styles.content}>
-                    <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
-                        {props.title}
-                        <IconButton color="inherit" size="medium" onClick={() => {
-                            props.openUpdateInfoDialog('title')
-                        }}>
-                            <EditIcon fontSize="inherit"/>
-                        </IconButton>
-                        <IconButton color="inherit" size="medium" onClick={props.openUpdateCarouselDialog}>
-                            <PanoramaIcon fontSize="inherit"/>
-                        </IconButton>
-                    </Typography>
-                </div>
-            </Box>
-            <Row
-                className={styles.author}
-                m={0}
-                p={3}
-                pt={2}
-                gap={2}
-                bgcolor={'common.white'}>
-                <Item>
-                    <label htmlFor="avatar-uploader" className='text-center'>
-                        <Input accept="image/*" id="avatar-uploader" type="file" hidden onChange={props.updateAvatar}/>
-                        <Avatar onMouseOver={() => {
-                            setEditAvatar(true)
-                        }} onMouseLeave={() => {
-                            setEditAvatar(false)
-                        }}
-                                className={styles.avatar}
-                                style={{cursor: editAvatar ? 'pointer' : null}}
-                                src={!editAvatar && props.avatar}>
-                            {editAvatar && <AddPhotoAlternateIcon/>}
-                        </Avatar>
-                    </label>
-                </Item>
-                <Info position={'middle'} useStyles={useNewsInfoStyles}>
-                    <InfoTitle style={{fontWeight: 'bold'}}>{props.website}
-                        <IconButton color="inherit" size="small"
-                                    onClick={() => {
-                                        props.openUpdateInfoDialog('website')
-                                    }}><EditIcon
-                            fontSize="inherit"/>
-                        </IconButton></InfoTitle>
-                    <InfoTitle style={{fontWeight: 'bold'}}>{props.email}
-                        <IconButton color="inherit" size="small"
-                                    onClick={() => {
-                                        props.openUpdateInfoDialog('email')
-                                    }}><EditIcon
-                            fontSize="inherit"/></IconButton></InfoTitle>
-                    <InfoSubtitle>{props.telephone}<IconButton color="inherit" size="small" onClick={() => {
-                        props.openUpdateInfoDialog('telephone')
+        <>
+            <Card className={styles.card}>
+                <Box className={styles.main} minHeight={smallScreen ? 200 : mediumScreen ? 300 : largeScreen ? 400 : 500}
+                     position={'relative'}>
+                    <CardMedia
+                        classes={mediaStyles}
+                        image={null}
+                        children={<Suspense fallback={<></>}><UserCarousel items={props.carousel}/></Suspense>}/>
+                    <div className={styles.content}>
+                        <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
+                            {props.title}
+                            <IconButton color="inherit" size="medium" onClick={() => {
+                                props.openUpdateInfoDialog('title')
+                            }}>
+                                <EditIcon fontSize="inherit"/>
+                            </IconButton>
+                            <IconButton color="inherit" size="medium" onClick={props.openUpdateCarouselDialog}>
+                                <PanoramaIcon fontSize="inherit"/>
+                            </IconButton>
+                        </Typography>
+                    </div>
+                </Box>
+                <Row
+                    className={styles.author}
+                    m={0}
+                    p={3}
+                    pt={2}
+                    gap={2}
+                    bgcolor={'common.white'}>
+                    <Item>
+                        <label htmlFor="avatar-uploader" className='text-center'>
+                            <Input accept="image/*" id="avatar-uploader" type="file" hidden onChange={props.updateAvatar}/>
+                            <Avatar onMouseOver={() => {
+                                setEditAvatar(true)
+                            }} onMouseLeave={() => {
+                                setEditAvatar(false)
+                            }}
+                                    className={styles.avatar}
+                                    style={{cursor: editAvatar ? 'pointer' : null}}
+                                    src={!editAvatar && props.avatar}>
+                                {editAvatar && <AddPhotoAlternateIcon/>}
+                            </Avatar>
+                        </label>
+                    </Item>
+                    <Info position={'middle'} useStyles={useNewsInfoStyles}>
+                        <InfoTitle style={{fontWeight: 'bold'}}>{props.website}
+                            <IconButton color="inherit" size="small"
+                                        onClick={() => {
+                                            props.openUpdateInfoDialog('website')
+                                        }}><EditIcon
+                                fontSize="inherit"/>
+                            </IconButton></InfoTitle>
+                        <InfoTitle style={{fontWeight: 'bold'}}>{props.email}
+                            <IconButton color="inherit" size="small"
+                                        onClick={() => {
+                                            props.openUpdateInfoDialog('email')
+                                        }}><EditIcon
+                                fontSize="inherit"/></IconButton></InfoTitle>
+                        <InfoSubtitle>{props.telephone}<IconButton color="inherit" size="small" onClick={() => {
+                            props.openUpdateInfoDialog('telephone')
+                        }}><EditIcon
+                            fontSize="inherit"/></IconButton></InfoSubtitle>
+                    </Info>
+                </Row>
+                <Row className={styles.author}
+                     m={0}
+                     p={3}
+                     pt={2}
+                     gap={2}
+                     bgcolor={'common.white'}>
+                    <Typography variant='subtitle1' className="text-center">
+                        {props.description} <IconButton color="inherit" size="small" onClick={() => {
+                        props.openUpdateInfoDialog('description')
                     }}><EditIcon
-                        fontSize="inherit"/></IconButton></InfoSubtitle>
-                </Info>
-            </Row>
-            <Row className={styles.author}
-                 m={0}
-                 p={3}
-                 pt={2}
-                 gap={2}
-                 bgcolor={'common.white'}>
-                <Typography variant='subtitle1' className="text-center">
-                    {props.description} <IconButton color="inherit" size="small" onClick={() => {
-                    props.openUpdateInfoDialog('description')
-                }}><EditIcon
-                    fontSize="inherit"/></IconButton>
-                </Typography>
-            </Row>
-            <Row className={styles.author}
-                 m={0}
-                 p={3}
-                 pt={2}
-                 gap={2}
-                 bgcolor={'common.white'}>
-                <Col className='text-center' xl={4}>
-                    <Button variant="contained" endIcon={<AddShoppingCartIcon/>} style={{backgroundColor: 'darkred'}}
-                            onClick={props.openUploadProductDialog}>
-                        Inserisci un nuovo prodotto
-                    </Button>
-                </Col>
-            </Row>
-            <div className={styles.shadow}/>
-            <div className={`${styles.shadow} ${styles.shadow2}`}/>
-        </Card>);
+                        fontSize="inherit"/></IconButton>
+                    </Typography>
+                </Row>
+                <Row className={styles.author}
+                     m={0}
+                     p={3}
+                     pt={2}
+                     gap={2}
+                     bgcolor={'common.white'}>
+                    <Col className='text-center' xl={4}>
+                        <Button variant="contained" endIcon={<AddShoppingCartIcon/>} style={{backgroundColor: 'darkred'}}
+                                onClick={props.openUploadProductDialog}>
+                            Inserisci un nuovo prodotto
+                        </Button>
+                    </Col>
+                </Row>
+                <div className={styles.shadow}/>
+                <div className={`${styles.shadow} ${styles.shadow2}`}/>
+            </Card>
+        </>
+    );
 });
 
 export default UserCard;

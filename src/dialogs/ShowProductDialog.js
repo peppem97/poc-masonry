@@ -144,101 +144,68 @@ const useStyles = makeStyles(() => ({
 
 export const ShowProductDialog = React.memo(function PostCard(props) {
     let navigate = useNavigate();
-    const [fullScreen, setFullScreen] = useState(false)
-    const [pictures, setPictures] = useState([])
-    const [initPictures, setInitPictures] = useState([])
-    const [carousel, setCarousel] = useState([])
+    const [fullScreen, setFullScreen] = useState(false);
+    const [pictures, setPictures] = useState([]);
     const appContext = useContext(GlobalContext);
-    const MAX_PICTURES = 10
+    const MAX_PICTURES = 10;
 
-    const addPicture = (e, i) => {
-        let tmpPictures = []
-        for (let picture of carousel) {
-            if (picture.index == i) {
-                tmpPictures.push({
+    const addPicture = (e, index) => {
+        let picturesList = [];
+        for (let picture of pictures) {
+            if (picture.index === index) {
+                picturesList.push({
                     index: picture.index,
                     image: URL.createObjectURL(e.target.files[0]),
                     rawImage: e.target.files[0],
                     add: false
-                })
+                });
             } else {
-                tmpPictures.push(picture)
+                picturesList.push(picture);
             }
         }
 
-        setCarousel(tmpPictures)
-    }
+        setPictures(picturesList);
+    };
 
-    const removePicture = (i) => {
-        let tmpPictures = []
-
-        for (let picture of carousel) {
-            if (picture.index == i) {
-                tmpPictures.push({index: picture.index, image: null, rawImage: null, add: true})
+    const removePicture = (index) => {
+        let tmpPictures = [];
+        for (let picture of pictures) {
+            if (picture.index === index) {
+                tmpPictures.push({index: picture.index, image: null, rawImage: null, add: true});
             } else {
-                tmpPictures.push(picture)
+                tmpPictures.push(picture);
             }
         }
-        setCarousel(tmpPictures)
-    }
+        setPictures(tmpPictures);
+    };
 
     const updateProduct = () => {
-        for (let picture of carousel) {
+        for (let picture of pictures) {
             if (picture.image != null) {
                 new Compressor(picture.rawImage, {
                     quality: appContext.qualityPictures, success(result) {
                         const formData = new FormData();
                         formData.append('files.picture' + picture.index, result, 'example.jpg');
                         formData.append('data', JSON.stringify({}));
-                        // setLoading(true)
                         axios.put(appContext.hostProducts + "/" + props.id, formData, {
                             headers: {'Authorization': 'Bearer ' + appContext.token,}
                         }).then((response) => {
-                            // getUserInfo();
-                            // setLoading(false)
-
                         }).catch((error) => {
                         })
                     }, error(err) {
                     }
                 })
             } else {
-                let data = {}
-                data['picture' + picture.index] = null
-                // setLoading(true)
-
+                let data = {};
+                data['picture' + picture.index] = null;
                 axios.put(appContext.hostProducts + "/" + props.id, data, {
                     headers: {'Authorization': 'Bearer ' + appContext.token,}
                 }).then((response) => {
-                    // getUserInfo();
-                    // setLoading(false)
-
                 }).catch((error) => {
                 })
             }
         }
-    }
-
-
-    // const initImageList = () => {
-    //     let initPictures = []
-    //     for (let i = 0; i < MAX_PICTURES; i++) {
-    //         if (carousel[i] != undefined) {
-    //             initPictures.push({
-    //                 index: i,
-    //                 image: props.carousel[i].image,
-    //                 rawImage: props.carousel[i].rawImage,
-    //                 add: false
-    //             })
-    //         } else {
-    //             initPictures.push({index: i, image: null, rawImage: null, add: true})
-    //         }
-    //     }
-    //     setInitPictures(initPictures)
-    //     setPictures(initPictures)
-    // }
-
-
+    };
 
     const closeDialog = (value) => {
         props.onClose(value);
@@ -246,25 +213,24 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
 
     const goToUser = () => {
         navigate("/user/" + props.username);
-    }
+    };
 
-    const getCarouselList = (...carousels) => {
-        let returnList = []
-        for (let i = 0; i < carousels.length; i++) {
-            if (carousels[i] != null) {
-                returnList.push({index: i, image: appContext.host + carousels[i].url, rawImage: null, add: false})
+    const setPicturesList = (...pictures) => {
+        let pictureList = []
+        for (let i = 0; i < pictures.length; i++) {
+            if (pictures[i] != null) {
+                pictureList.push({index: i, image: appContext.host + pictures[i].url, rawImage: null, add: false})
             }
         }
-        return returnList
-    }
+        return pictureList;
+    };
 
-
-    useEffect(() => {
+    const getProductPictures = () => {
         if (props.open) {
             axios.get(appContext.hostProducts + "?id=" + props.id, {
                 headers: {'Authorization': 'Bearer ' + appContext.token}
             }).then((response) => {
-                setCarousel(getCarouselList(
+                setPictures(setPicturesList(
                     response.data[0].picture0,
                     response.data[0].picture1,
                     response.data[0].picture2,
@@ -273,7 +239,11 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
             }).catch((error) => {
             })
         }
-    }, [props.open])
+    };
+
+    useEffect(() => {
+        getProductPictures();
+    }, [props.open]);
 
     return (
         <Dialog open={props.open} onClose={closeDialog} fullWidth={true} fullScreen={fullScreen} maxWidth={"lg"}>
@@ -309,7 +279,7 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
                 <br/>
                 {props.showAvatar && <Container>
                     <ImageList gap={50} cols={10}>
-                        {carousel.map((element) =>
+                        {pictures.map((element) =>
                             <ImageListItem cols={1} rows={1}>
                                 <PictureCard picture={element.image}/>
                                 {/*<img*/}
@@ -325,7 +295,7 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
                 </Container>}
                 {!props.showAvatar && <Container>
                     <ImageList gap={10} cols={10} rows={1} sx={{height: 220}}>
-                        {carousel.map((element) => {
+                        {pictures.map((element) => {
                             if (element.add) {
                                 return (<ImageListItem key={element.index} cols={1} rows={1}>
                                     {/*<img src={null}*/}

@@ -143,7 +143,7 @@ export default function User() {
     };
 
     const uploadProduct = (params) => {
-        setLoading(true)
+        setLoading(true);
         new Compressor(params.rawPicture, {
             quality: appContext.qualityPictures, success(result) {
                 const formData = new FormData();
@@ -160,20 +160,12 @@ export default function User() {
                     }
                 }).then((response) => {
                     getProducts();
-                    setLoading(false)
+                    setLoading(false);
                 }).catch((error) => {
                 })
-
-
             }, error(err) {
             }
         })
-
-
-
-
-
-
     };
 
     const openInfoDialog = (info) => {

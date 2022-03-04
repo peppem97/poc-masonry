@@ -32,7 +32,8 @@ export default function App() {
         axios.post(appSettings.hostSignin, data).then((response) => {
             localStorage.setItem('token', response.data.jwt);
             setToken(response.data.jwt);
-        }).catch((error) => {})
+        }).catch((error) => {
+        })
     };
 
     const checkIncreaseDecrease = () => {
@@ -72,19 +73,21 @@ export default function App() {
     };
 
     return (
-        <GlobalContext.Provider value={appSettings}>
-            <Router>
-                <TopToolbar increaseColumnsSize={increaseColumnsSize}
-                            decreaseColumnsSize={decreaseColumnsSize}
-                            getNewToken={getNewToken}/>
-                <Routes>
-                    <Route exact path='/home' element={<Home/>}/>
-                    <Route exact path='/user/:username' element={<User/>}/>
-                    <Route exact path='/example' element={<ImageUploadExample/>}/>
-                    <Route exact path='/no-user' element={<ErrorNoUser/>}/>
-                    <Route exact path='*' element={<Error404/>}/>
-                </Routes>
-            </Router>
-        </GlobalContext.Provider>
+        <>
+            <GlobalContext.Provider value={appSettings}>
+                <Router>
+                    <TopToolbar increaseColumnsSize={increaseColumnsSize}
+                                decreaseColumnsSize={decreaseColumnsSize}
+                                getNewToken={getNewToken}/>
+                    <Routes>
+                        <Route exact path='/home' element={<Home/>}/>
+                        <Route exact path='/user/:username' element={<User/>}/>
+                        <Route exact path='/example' element={<ImageUploadExample/>}/>
+                        <Route exact path='/no-user' element={<ErrorNoUser/>}/>
+                        <Route exact path='*' element={<Error404/>}/>
+                    </Routes>
+                </Router>
+            </GlobalContext.Provider>
+        </>
     );
 }

@@ -37,27 +37,29 @@ export default function Home() {
     }, []);
 
     return (
-        <Container fluid>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <Row>
-                <Typography variant="h1" gutterBottom className="text-center" style={{color: 'black', fontWeight: 'bold'}}>
-                    Masonry
-                </Typography>
-                <Typography variant="h3" gutterBottom className="text-center" style={{color: 'darkred'}}>
-                    Descrizione Masonry
-                </Typography>
-            </Row>
-            <br/>
-            <br/>
-            <br/>
-            <Row>
-                <GridSystem loading={loading} products={products} columnWidth={appContext.columnWidth} isUser={false}/>
-            </Row>
-        </Container>
+        <>
+            <Container fluid>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <Row>
+                    <Typography variant="h1" gutterBottom className="text-center" style={{color: 'black', fontWeight: 'bold'}}>
+                        Masonry
+                    </Typography>
+                    <Typography variant="h3" gutterBottom className="text-center" style={{color: 'darkred'}}>
+                        Descrizione Masonry
+                    </Typography>
+                </Row>
+                <br/>
+                <br/>
+                <br/>
+                <Row>
+                    <GridSystem loading={loading} products={products} columnWidth={appContext.columnWidth} isUser={false}/>
+                </Row>
+            </Container>
+        </>
     );
 }

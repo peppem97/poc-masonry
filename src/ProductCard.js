@@ -50,31 +50,34 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const ProductCard = React.memo(function GalaxyCard(props) {
-    const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
-    const styles = useStyles();
     const [openDialog, setOpenDialog] = useState(false);
     const [avatar, setAvatar] = useState(null)
     const [shop, setShop] = useState(null)
-
     const [loading, setLoading] = useState(false);
+    const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
+    const styles = useStyles();
     const appContext = useContext(GlobalContext);
     let navigate = useNavigate();
 
     const goToUser = () => {
         navigate("/user/" + props.product.username);
-    }
+    };
 
-    useEffect(() => {
-        setLoading(true)
+    const getUserInfo = () => {
+        setLoading(true);
         axios.get(appContext.hostShops + "?username=" + props.product.username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
-            setAvatar(appContext.host + response.data[0].avatar.url)
-            setShop(response.data[0].title)
-            setLoading(false)
+            setAvatar(appContext.host + response.data[0].avatar.url);
+            setShop(response.data[0].title);
+            setLoading(false);
         }).catch((error) => {
         })
-    }, [])
+    };
+
+    useEffect(() => {
+        getUserInfo();
+    }, []);
 
 
     return (
