@@ -43,6 +43,7 @@ import PictureCard from "../PictureCard";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import Compressor from "compressorjs";
 //*******************//
 // const useBasicProfileStyles = makeStyles(({palette}) => ({
 //     overline: {
@@ -181,6 +182,44 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
         setCarousel(tmpPictures)
     }
 
+    const updateProduct = () => {
+        for (let picture of carousel) {
+            if (picture.image != null) {
+                new Compressor(picture.rawImage, {
+                    quality: appContext.qualityPictures, success(result) {
+                        const formData = new FormData();
+                        formData.append('files.picture' + picture.index, result, 'example.jpg');
+                        formData.append('data', JSON.stringify({}));
+                        // setLoading(true)
+                        axios.put(appContext.hostProducts + "/" + props.id, formData, {
+                            headers: {'Authorization': 'Bearer ' + appContext.token,}
+                        }).then((response) => {
+                            // getUserInfo();
+                            // setLoading(false)
+
+                        }).catch((error) => {
+                        })
+                    }, error(err) {
+                    }
+                })
+            } else {
+                let data = {}
+                data['picture' + picture.index] = null
+                // setLoading(true)
+
+                axios.put(appContext.hostProducts + "/" + props.id, data, {
+                    headers: {'Authorization': 'Bearer ' + appContext.token,}
+                }).then((response) => {
+                    // getUserInfo();
+                    // setLoading(false)
+
+                }).catch((error) => {
+                })
+            }
+        }
+    }
+
+
     // const initImageList = () => {
     //     let initPictures = []
     //     for (let i = 0; i < MAX_PICTURES; i++) {
@@ -280,17 +319,6 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
                                 {/*    loading="lazy"*/}
                                 {/*/>*/}
                             </ImageListItem>)}
-                        {carousel.map((element) =>
-                            <ImageListItem cols={1} rows={1}>
-                                <PictureCard picture={element.image}/>
-                                {/*<img*/}
-                                {/*    style={{objectFit: 'cover', height: '150px', width: '150px', borderRadius: '1rem', padding: '10px'}}*/}
-
-                                {/*    src={element.image}*/}
-                                {/*    alt=""*/}
-                                {/*    loading="lazy"*/}
-                                {/*/>*/}
-                            </ImageListItem>)}
 
                     </ImageList>
 
@@ -350,6 +378,11 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
                             )}
 
                     </ImageList>
+                    <br/>
+                    <Button onClick={updateProduct} variant="contained" component="span"
+                            style={{backgroundColor: 'darkred'}}>
+                        Aggiorna prodotto
+                    </Button>
 
                 </Container>}
 

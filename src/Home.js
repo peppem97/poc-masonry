@@ -8,37 +8,33 @@ import Typography from "@mui/material/Typography";
 import GridSystem from "./GridSystem";
 import axios from "axios";
 import GlobalContext from "./GlobalContext";
+import {generateHeight} from "./Utility";
 
 export default function Home() {
-    const [items, setItems] = useState([])
-    const [loading, setLoading] = useState(false)
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(false);
     const appContext = useContext(GlobalContext);
 
-    const generateHeight = () => {
-        return Math.floor((Math.random() * (380)) + 80);
-    }
-
-    const getInitialItems = () => {
+    const getProducts = () => {
         setLoading(true)
         axios.get(appContext.hostProducts, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
-            let items = response.data.map((element) => ({
+            let tmpProducts = response.data.map((element) => ({
                 height: generateHeight(),
                 title: element.title,
-                token: appContext.token,
                 id: element.id,
                 description: element.description,
                 picture: appContext.host + element.cover.url,
                 username: element.username}))
-            setItems(items)
+            setProducts(tmpProducts)
             setLoading(false)
         }).catch((error) => {})
-    }
+    };
 
     useEffect(() => {
-        getInitialItems();
-    }, [])
+        getProducts();
+    }, []);
 
     return (
         <Container fluid>
@@ -60,7 +56,7 @@ export default function Home() {
             <br/>
             <br/>
             <Row>
-                <GridSystem loading={loading} items={items} columnWidth={appContext.columnWidth} isUser={false}/>
+                <GridSystem loading={loading} products={products} columnWidth={appContext.columnWidth} isUser={false}/>
             </Row>
         </Container>
     );

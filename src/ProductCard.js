@@ -61,12 +61,12 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     let navigate = useNavigate();
 
     const goToUser = () => {
-        navigate("/user/" + props.item.username);
+        navigate("/user/" + props.product.username);
     }
 
     useEffect(() => {
         setLoading(true)
-        axios.get(appContext.hostShops + "?username=" + props.item.username, {
+        axios.get(appContext.hostShops + "?username=" + props.product.username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
             setAvatar(appContext.host + response.data[0].avatar.url)
@@ -79,8 +79,8 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
 
     return (
         <>
-            <Card className={styles.card} style={{height: props.item.height}} raised onClick={() => {setOpenDialog(true)}}>
-                <CardMedia classes={mediaStyles} image={props.item.picture}/>
+            <Card className={styles.card} style={{height: props.product.height}} raised onClick={() => {setOpenDialog(true)}}>
+                <CardMedia classes={mediaStyles} image={props.product.picture}/>
                 <Box py={3} px={2} className={styles.contentHeader}>
                     {props.showAvatar && (
                         <IconButton onClick={goToUser}>
@@ -91,7 +91,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 </Box>
                 <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles}>
-                        <InfoTitle>{props.item.title}</InfoTitle>
+                        <InfoTitle>{props.product.title}</InfoTitle>
                         <CardActions className="justify-content-between">
                             <IconButton style={{color: 'white', fontWeight: 'bold'}}>
                                 <OpenInNewIcon/>
@@ -111,11 +111,11 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 onClose={() => {setOpenDialog(false)}}
                 avatar={avatar}
                 showAvatar={props.showAvatar}
-                title={props.item.title}
-                description={props.item.description}
-                picture={props.item.picture}
-                username={props.item.username}
-                id={props.item.id}
+                title={props.product.title}
+                description={props.product.description}
+                picture={props.product.picture}
+                username={props.product.username}
+                id={props.product.id}
                 shop={shop}
             />
         </>

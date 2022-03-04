@@ -6,7 +6,6 @@ import {useNavigate} from "react-router-dom";
 export default function Error404() {
     let navigate = useNavigate();
 
-
     return (
         <Container>
             <br/>

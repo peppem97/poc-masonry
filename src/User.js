@@ -12,68 +12,47 @@ import UpdateInfoDialog from "./dialogs/UpdateInfoDialog";
 import Compressor from 'compressorjs';
 import UpdateCarouselDialog from "./dialogs/UpdateCarouselDialog";
 import {Backdrop, CircularProgress} from "@mui/material";
+import {generateHeight} from "./Utility";
 
 
 export default function User() {
-    const [idShopStrapi, setIdShopStrapi] = useState(null)
-
-    const [email, setEmail] = useState(null)
-    const [title, setTitle] = useState(null)
-    const [description, setDescription] = useState(null)
-    const [website, setWebsite] = useState(null)
-    const [telephone, setTelephone] = useState(null)
-    const [avatar, setAvatar] = useState(null)
-    const [carousel, setCarousel] = useState([])
-
-    const [items, setItems] = useState([])
-    const [uploadProductDialog, setUploadProductDialog] = useState(false)
-    const [updateCarouselDialog, setUpdateCarouselDialog] = useState(false)
-    const [updateInfoDialog, setUpdateInfoDialog] = useState(false)
-    const [info, setInfo] = useState(null)
-    const [infoToEdit, setInfoToEdit] = useState(null)
-
-    const [loading, setLoading] = useState(null)
-
+    const [id, setId] = useState(null);
+    const [email, setEmail] = useState(null);
+    const [title, setTitle] = useState(null);
+    const [description, setDescription] = useState(null);
+    const [website, setWebsite] = useState(null);
+    const [telephone, setTelephone] = useState(null);
+    const [avatar, setAvatar] = useState(null);
+    const [carousel, setCarousel] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [uploadProductDialog, setUploadProductDialog] = useState(false);
+    const [updateCarouselDialog, setUpdateCarouselDialog] = useState(false);
+    const [updateInfoDialog, setUpdateInfoDialog] = useState(false);
+    const [info, setInfo] = useState(null);
+    const [infoToEdit, setInfoToEdit] = useState(null);
+    const [loading, setLoading] = useState(null);
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
     let navigate = useNavigate();
-
-
-
-    const generateHeight = () => {
-        return Math.floor((Math.random() * (380)) + 80);
-    }
-
-    const getCarouselList = (...carousels) => {
-        let returnList = []
-        for (let i = 0; i < carousels.length; i++) {
-            if (carousels[i] != null) {
-                returnList.push({index: i, image: appContext.host + carousels[i].url, rawImage: null, add: false})
-            }
-        }
-        return returnList
-    }
 
     const getUserInfo = () => {
         axios.get(appContext.hostShops + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
-            console.log(response)
-            setIdShopStrapi(response.data[0].id)
-            setEmail(response.data[0].email)
-            setTitle(response.data[0].title)
-            setDescription(response.data[0].description)
-            setAvatar(appContext.host + response.data[0].avatar?.url)
-            setCarousel(getCarouselList(response.data[0].carousel0, response.data[0].carousel1, response.data[0].carousel2))
-            // setCarousel(response.data[0].carousel.map((element, index) => ({index: index, image: appContext.host + element.url, rawImage: null, add: false})))
-            setTelephone(response.data[0].telephone)
-            setWebsite(response.data[0].website)
+            setId(response.data[0].id);
+            setEmail(response.data[0].email);
+            setTitle(response.data[0].title);
+            setDescription(response.data[0].description);
+            setAvatar(appContext.host + response.data[0].avatar?.url);
+            setCarousel(getCarousel(response.data[0].carousel0, response.data[0].carousel1, response.data[0].carousel2));
+            setTelephone(response.data[0].telephone);
+            setWebsite(response.data[0].website);
         }).catch((error) => {
-            navigate('/no-user')
+            navigate('/no-user');
         })
-    }
+    };
 
-    const getInitialItems = () => {
+    const getProducts = () => {
         axios.get(appContext.hostProducts + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
@@ -85,86 +64,83 @@ export default function User() {
                 description: element.description,
                 username: username,
                 picture: appContext.host + element.cover.url
-            }))
-            setItems(items)
+            }));
+            setProducts(items);
         }).catch((error) => {
         })
-    }
+    };
+
+    const getCarousel = (...pictures) => {
+        let returnList = [];
+        for (let i = 0; i < pictures.length; i++) {
+            if (pictures[i] != null) {
+                returnList.push({index: i, image: appContext.host + pictures[i].url, rawImage: null, add: false});
+            }
+        }
+        return returnList;
+    };
 
     const updateAvatar = (e) => {
-        setLoading(true)
-
+        setLoading(true);
         const formData = new FormData();
         new Compressor(e.target.files[0], {
             quality: appContext.qualityPictures, success(result) {
                 formData.append('files.avatar', result, 'avatar.jpg');
                 formData.append('data', JSON.stringify({}));
-                axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
+                axios.put(appContext.hostShops + "/" + id, formData, {
                     headers: {'Authorization': 'Bearer ' + appContext.token,}
                 }).then((response) => {
                     getUserInfo();
-                    setLoading(false)
-
-                }).catch((error) => {
-                })
-            }, error(err) {
-            }
+                    setLoading(false);
+                }).catch((error) => {})
+            }, error(err) {}
         })
-    }
+    };
 
-    const updateCarousel = (e) => {
-        for (let picture of e) {
+    const updateCarousel = (pictures) => {
+        for (let picture of pictures) {
             if (picture.image != null) {
                 new Compressor(picture.rawImage, {
                     quality: appContext.qualityPictures, success(result) {
+                        setLoading(true);
                         const formData = new FormData();
                         formData.append('files.carousel' + picture.index, result, 'example.jpg');
                         formData.append('data', JSON.stringify({}));
-                        setLoading(true)
-                        axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {
+                        axios.put(appContext.hostShops + "/" + id, formData, {
                             headers: {'Authorization': 'Bearer ' + appContext.token,}
                         }).then((response) => {
                             getUserInfo();
                             setLoading(false)
-
-                        }).catch((error) => {
-                        })
-                    }, error(err) {
-                    }
+                        }).catch((error) => {})
+                    }, error(err) {}
                 })
             } else {
-                let data = {}
-                data['carousel' + picture.index] = null
-                setLoading(true)
-
-                axios.put(appContext.hostShops + "/" + idShopStrapi, data, {
+                setLoading(true);
+                let data = {};
+                data['carousel' + picture.index] = null;
+                axios.put(appContext.hostShops + "/" + id, data, {
                     headers: {'Authorization': 'Bearer ' + appContext.token,}
                 }).then((response) => {
                     getUserInfo();
-                    setLoading(false)
-
-                }).catch((error) => {
-                })
+                    setLoading(false);
+                }).catch((error) => {})
             }
         }
-    }
+    };
 
     const updateInfo = (type, value) => {
         setLoading(true)
-
         const data = {};
         data[type] = value;
         const formData = new FormData();
         formData.append('data', JSON.stringify(data));
-        axios.put(appContext.hostShops + "/" + idShopStrapi, formData, {headers: {
+        axios.put(appContext.hostShops + "/" + id, formData, {headers: {
                 'Authorization': 'Bearer ' + appContext.token,
             }}).then((response) => {
             getUserInfo();
-            setLoading(false)
-
+            setLoading(false);
         }).catch((error) => {})
-
-    }
+    };
 
     const uploadProduct = (params) => {
         setLoading(true)
@@ -183,7 +159,7 @@ export default function User() {
                         'Authorization': 'Bearer ' + appContext.token,
                     }
                 }).then((response) => {
-                    getInitialItems();
+                    getProducts();
                     setLoading(false)
                 }).catch((error) => {
                 })
@@ -198,53 +174,36 @@ export default function User() {
 
 
 
-    }
+    };
 
     const openInfoDialog = (info) => {
         switch (info) {
             case 'title':
-                setInfo(title)
+                setInfo(title);
                 break;
             case 'website':
-                setInfo(website)
+                setInfo(website);
                 break;
             case 'email':
-                setInfo(email)
+                setInfo(email);
                 break;
             case 'telephone':
-                setInfo(telephone)
+                setInfo(telephone);
                 break;
             case 'description':
-                setInfo(description)
+                setInfo(description);
+                break;
+            default:
                 break;
         }
         setInfoToEdit(info)
         setUpdateInfoDialog(true);
-    }
-
-    // const getMultipleItems = () => {
-    //     props.setLoading(true)
-    //     const newItems = [];
-    //     for (let i = 0; i < 5; i++) {
-    //         newItems.push({
-    //             height: generateHeight(),
-    //             imageCard: image,
-    //             imageAvatar: 'https://i.pravatar.cc/300',
-    //             user: 'Utente... ',
-    //             title: 'Titolo...',
-    //             description: 'Descrizione...'
-    //         });
-    //     }
-    //     setItems([...items, ...newItems]);
-    //     setTimeout(() => {
-    //         props.setLoading(false)
-    //     }, 500)
-    // }
+    };
 
     useEffect(() => {
         getUserInfo();
-        getInitialItems();
-    }, [])
+        getProducts();
+    }, []);
 
     return (
         <>
@@ -285,18 +244,13 @@ export default function User() {
                 onClose={() => {setUpdateInfoDialog(false)}}
                 updateInfo={(e) => {updateInfo(infoToEdit, e)}}
                 info={info}/>
-            {/*<UpdateDescriptionDialog*/}
-            {/*    open={updateDescriptionDialog}*/}
-            {/*    onClose={() => {setUpdateDescriptionDialog(false)}}*/}
-            {/*    updateDescription={(e) => {updateInfo('description', e)}}*/}
-            {/*    description={description}/>*/}
             <UpdateCarouselDialog
                 open={updateCarouselDialog}
                 onClose={() => {setUpdateCarouselDialog(false)}}
                 updateCarousel={updateCarousel}
                 carousel={carousel}/>
             <Container fluid>
-                <GridSystem items={items} columnWidth={appContext.columnWidth} isUser={true}/>
+                <GridSystem products={products} columnWidth={appContext.columnWidth} isUser={true}/>
             </Container>
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

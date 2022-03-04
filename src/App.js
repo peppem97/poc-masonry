@@ -10,15 +10,12 @@ import Error404 from "./Error404";
 import ErrorNoUser from "./ErrorNoUser";
 
 export default function App() {
-    const [token, setToken] = useState(localStorage.getItem('token'))
-    const [loading, setLoading] = useState(null)
-    const [disabledIncrease, setDisabledIncrease] = useState(false)
-    const [disabledDecrease, setDisabledDecrease] = useState(false)
-    const [columnWidth, setColumnWidth] = useState(200)
+    const [token, setToken] = useState(localStorage.getItem('token'));
+    const [disabledIncrease, setDisabledIncrease] = useState(false);
+    const [disabledDecrease, setDisabledDecrease] = useState(false);
+    const [columnWidth, setColumnWidth] = useState(200);
     const appSettings = {
-        //Posso includere anche delle funzioni...
         token: token,
-        loading: loading,
         disabledIncrease: disabledIncrease,
         disabledDecrease: disabledDecrease,
         columnWidth: columnWidth,
@@ -31,13 +28,12 @@ export default function App() {
     };
 
     const getNewToken = () => {
-        let data = {identifier: 'prova@prova.it', password: 'provaprova'}
+        let data = {identifier: 'prova@prova.it', password: 'provaprova'};
         axios.post(appSettings.hostSignin, data).then((response) => {
-            localStorage.setItem('token', response.data.jwt)
-            setToken(response.data.jwt)
+            localStorage.setItem('token', response.data.jwt);
+            setToken(response.data.jwt);
         }).catch((error) => {})
-
-    }
+    };
 
     const checkIncreaseDecrease = () => {
         if (columnWidth >= 500) {
@@ -53,7 +49,7 @@ export default function App() {
         }
         setDisabledIncrease(false);
         setDisabledDecrease(false);
-    }
+    };
 
     const increaseColumnsSize = () => {
         checkIncreaseDecrease();
@@ -63,7 +59,7 @@ export default function App() {
         } else {
             setColumnWidth(columnWidth + 50);
         }
-    }
+    };
 
     const decreaseColumnsSize = () => {
         checkIncreaseDecrease();
@@ -73,11 +69,7 @@ export default function App() {
         } else {
             setColumnWidth(columnWidth - 50);
         }
-    }
-
-    const setLoadingState = (loadingState) => {
-        setLoading(loadingState);
-    }
+    };
 
     return (
         <GlobalContext.Provider value={appSettings}>

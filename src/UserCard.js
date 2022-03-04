@@ -17,8 +17,7 @@ import PanoramaIcon from "@mui/icons-material/Panorama";
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
-
-const useStyles1 = makeStyles(() => ({
+const useStyles = makeStyles(() => ({
     card: {
         minWidth: 320,
         position: 'relative',
@@ -80,14 +79,14 @@ const useStyles1 = makeStyles(() => ({
 }));
 
 export const UserCard = React.memo(function News3Card(props) {
-    const styles = useStyles1();
+    const styles = useStyles();
     const mediaStyles = useCoverCardMediaStyles();
     const theme = useTheme();
     const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
     const largeScreen = useMediaQuery(theme.breakpoints.down('lg'));
     const UserCarousel = React.lazy(() => import('./Carousel'));
-    const [editAvatar, setEditAvatar] = useState(false)
+    const [editAvatar, setEditAvatar] = useState(false);
 
     return (
         <Card className={styles.card}>

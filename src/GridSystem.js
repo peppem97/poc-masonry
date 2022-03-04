@@ -7,12 +7,6 @@ import Box from "@mui/material/Box";
 export default function GridSystem(props) {
     const myTransition = 'fadeDown';
 
-    const generateCards = () => {
-        return props.items.map((item, index) =>
-            (<ProductCard key={index} item={item} showAvatar={!(props.isUser)}/>)
-        )
-    }
-
     return (
         <>
             <StackGrid duration={500}
@@ -25,12 +19,16 @@ export default function GridSystem(props) {
                        enter={transitions[myTransition].enter}
                        entered={transitions[myTransition].entered}
                        leaved={transitions[myTransition].leaved}
-                       rtl={false}>{generateCards()}
+                       rtl={false}>
+                {
+                    props.products.map((product, index) =>
+                        (<ProductCard key={index} product={product} showAvatar={!(props.isUser)}/>))
+                }
             </StackGrid>
             {props.loading &&
-                <Box sx={{ display: 'flex' }} className={'justify-content-center'} style={{color: 'darkred'}}>
-                <CircularProgress size={100} color='inherit'/>
-            </Box>}
+                <Box sx={{display: 'flex'}} className={'justify-content-center'} style={{color: 'darkred'}}>
+                    <CircularProgress size={100} color='inherit'/>
+                </Box>}
         </>
     )
 }

@@ -3,18 +3,16 @@ import Carousel from 'react-material-ui-carousel'
 import {Skeleton} from "@mui/material";
 
 function UserCarousel(props) {
-    const [items, setItems] = useState([])
-
+    const [items, setItems] = useState([]);
     const initCarousel = () => {
         setItems(props.items.map(
             (item, i) =>
                 <img key={i} src={item.image} alt="" style={{width: '100%', height: '100%'}} loading="lazy"/>
-        ))}
+        ))};
 
     useEffect(() => {
-
         initCarousel();
-    }, [props.items])
+    }, [props.items]);
 
     return (
         <>
