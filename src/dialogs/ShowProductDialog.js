@@ -216,10 +216,10 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
     };
 
     const setPicturesList = (...pictures) => {
-        let pictureList = []
+        let pictureList = [];
         for (let i = 0; i < pictures.length; i++) {
             if (pictures[i] != null) {
-                pictureList.push({index: i, image: appContext.host + pictures[i].url, rawImage: null, add: false})
+                pictureList.push({index: i, image: appContext.host + pictures[i].url, rawImage: null, add: false});
             }
         }
         return pictureList;
@@ -235,7 +235,7 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
                     response.data[0].picture1,
                     response.data[0].picture2,
                     response.data[0].picture3,
-                    response.data[0].picture4))
+                    response.data[0].picture4));
             }).catch((error) => {
             })
         }

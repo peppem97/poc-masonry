@@ -1,25 +1,17 @@
 import {
-    Card,
-    CardMedia,
     Container,
     Dialog,
-    DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle, IconButton, ImageList, ImageListItem, ImageListItemBar,
     Input,
-    TextField
 } from "@mui/material";
 import Button from "@mui/material/Button";
-import {Col, Row} from "react-bootstrap";
-import React, {useContext, useEffect, useState} from "react";
-import axios from "axios";
-import GlobalContext from "../GlobalContext";
-import InfoIcon from '@mui/icons-material/Info';
+import {Row} from "react-bootstrap";
+import React, {useEffect, useState} from "react";
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import AddIcon from '@mui/icons-material/Add';
 import ShowPreviewDialog from "./ShowPreviewDialog";
 
 export default function UpdateCarouselDialog(props) {

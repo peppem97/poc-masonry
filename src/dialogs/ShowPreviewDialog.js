@@ -9,14 +9,16 @@ export default function ShowPreviewDialog(props) {
     };
 
     return(
-        <Dialog open={props.open} fullScreen={true}>
-            <div style={{position: 'relative', display: 'block'}}>
-                <img src={props.image} alt="" style={{display: 'block', width: '100%', height: 'auto'}}/>
-                <IconButton style={{position: 'absolute', top: 0, left: 0, color: 'darkred'}} onClick={closeDialog}>
-                    <CloseIcon />
-                </IconButton>
+        <>
+            <Dialog open={props.open} fullScreen={true}>
+                <div style={{position: 'relative', display: 'block'}}>
+                    <img src={props.image} alt="" style={{display: 'block', width: '100%', height: 'auto'}}/>
+                    <IconButton style={{position: 'absolute', top: 0, left: 0, color: 'darkred'}} onClick={closeDialog}>
+                        <CloseIcon />
+                    </IconButton>
 
-            </div>
-        </Dialog>
+                </div>
+            </Dialog>
+        </>
     )
 }
