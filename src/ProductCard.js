@@ -50,7 +50,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const ProductCard = React.memo(function GalaxyCard(props) {
-    const [openDialog, setOpenDialog] = useState(false);
+    const [dialogOpened, setDialogOpened] = useState(false);
     const [avatar, setAvatar] = useState(null)
     const [shop, setShop] = useState(null)
     // const [loading, setLoading] = useState(false);
@@ -82,7 +82,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
 
     return (
         <>
-            <Card className={styles.card} style={{height: props.product.height}} raised onClick={() => {setOpenDialog(true)}}>
+            <Card className={styles.card} style={{height: props.product.height}} raised onClick={() => {setDialogOpened(true)}}>
                 <CardMedia classes={mediaStyles} image={props.product.picture}/>
                 <Box py={3} px={2} className={styles.contentHeader}>
                     {props.showAvatar && (
@@ -110,8 +110,8 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 </Box>
             </Card>
             <ShowProductDialog
-                open={openDialog}
-                onClose={() => {setOpenDialog(false)}}
+                open={dialogOpened}
+                onClose={() => {setDialogOpened(false)}}
                 avatar={avatar}
                 showAvatar={props.showAvatar}
                 title={props.product.title}

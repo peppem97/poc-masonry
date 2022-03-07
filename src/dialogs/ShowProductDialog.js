@@ -300,9 +300,19 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
                     <br/>
                     <Typography gutterBottom variant="h5" component="div" className="text-center">
                         {props.title}
+                        {
+                            !props.showAvatar && <IconButton color="inherit" size="small">
+                                <EditIcon fontSize="inherit"/>
+                            </IconButton>
+                        }
                     </Typography>
                     <Typography variant="body2" color="text.secondary" className="text-center">
                         {props.description}
+                        {
+                            !props.showAvatar && <IconButton color="inherit" size="small">
+                                <EditIcon fontSize="inherit"/>
+                            </IconButton>
+                        }
                     </Typography>
                     <br/>
                     {props.showAvatar && <Container>
@@ -384,10 +394,12 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
 
                         </ImageList>
                         <br/>
-                        <Button onClick={updateProduct} variant="contained" component="span"
-                                style={{backgroundColor: 'darkred'}}>
-                            Aggiorna prodotto
-                        </Button>
+                        <Row className="justify-content-center">
+                            <Button onClick={updateProduct} variant="contained" component="span"
+                                    style={{backgroundColor: 'darkred'}}>
+                                Aggiorna prodotto
+                            </Button>
+                        </Row>
 
                     </Container>}
 

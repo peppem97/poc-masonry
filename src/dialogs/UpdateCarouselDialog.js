@@ -123,6 +123,9 @@ export default function UpdateCarouselDialog(props) {
                                     <img src={item.image}
                                          alt=""
                                          loading="lazy"/>
+                                    {/*<LazyLoadImage*/}
+                                    {/*    alt=""*/}
+                                    {/*    src={item.image}/>*/}
                                     <ImageListItemBar
                                         actionIcon={
                                             [

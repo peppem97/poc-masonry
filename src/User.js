@@ -24,9 +24,9 @@ export default function User() {
     const [avatar, setAvatar] = useState(null);
     const [carousel, setCarousel] = useState([]);
     const [products, setProducts] = useState([]);
-    const [uploadProductDialog, setUploadProductDialog] = useState(false);
-    const [updateCarouselDialog, setUpdateCarouselDialog] = useState(false);
-    const [updateInfoDialog, setUpdateInfoDialog] = useState(false);
+    const [uploadProductDialogOpened, setUploadProductDialogOpened] = useState(false);
+    const [updateCarouselDialogOpened, setUpdateCarouselDialogOpened] = useState(false);
+    const [updateInfoDialogOpened, setUpdateInfoDialogOpened] = useState(false);
     const [info, setInfo] = useState(null);
     const [infoToEdit, setInfoToEdit] = useState(null);
     // const [loading, setLoading] = useState(null);
@@ -70,7 +70,6 @@ export default function User() {
             }));
             setProducts(items);
             setLoadingProducts(false);
-
         }).catch((error) => {
         })
     };
@@ -194,7 +193,7 @@ export default function User() {
                 break;
         }
         setInfoToEdit(info);
-        setUpdateInfoDialog(true);
+        setUpdateInfoDialogOpened(true);
     };
 
     useEffect(() => {
@@ -217,8 +216,8 @@ export default function User() {
                     carousel={carousel}
                     website={website}
                     telephone={telephone}
-                    openUpdateCarouselDialog={() => {setUpdateCarouselDialog(true)}}
-                    openUploadProductDialog={() => {setUploadProductDialog(true)}}
+                    openUpdateCarouselDialog={() => {setUpdateCarouselDialogOpened(true)}}
+                    openUploadProductDialog={() => {setUploadProductDialogOpened(true)}}
                     openUpdateInfoDialog={openInfoDialog}
                     updateAvatar={updateAvatar}/>
                 <br/>
@@ -232,18 +231,18 @@ export default function User() {
                 </Row>
             </Container>
             <UploadProductDialog
-                open={uploadProductDialog}
-                onClose={() => {setUploadProductDialog(false)}}
+                open={uploadProductDialogOpened}
+                onClose={() => {setUploadProductDialogOpened(false)}}
                 uploadProduct={uploadProduct}/>
             <UpdateInfoDialog
-                open={updateInfoDialog}
+                open={updateInfoDialogOpened}
                 infoToEdit={infoToEdit}
-                onClose={() => {setUpdateInfoDialog(false)}}
+                onClose={() => {setUpdateInfoDialogOpened(false)}}
                 updateInfo={(e) => {updateInfo(infoToEdit, e)}}
                 info={info}/>
             <UpdateCarouselDialog
-                open={updateCarouselDialog}
-                onClose={() => {setUpdateCarouselDialog(false)}}
+                open={updateCarouselDialogOpened}
+                onClose={() => {setUpdateCarouselDialogOpened(false)}}
                 updateCarousel={updateCarousel}
                 carousel={carousel}/>
             <Container fluid>

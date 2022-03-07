@@ -23,11 +23,13 @@
     "react-bootstrap": "^2.1.2",
     "react-dom": "^17.0.2",
     "react-google-font-loader": "^1.1.0",
+    "react-lazyload": "^3.2.0",
     "react-material-ui-carousel": "^3.2.0",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
     "react-stack-grid": "^0.7.1",
     "react-swipeable-views": "^0.14.0",
+    "styled-components": "^5.3.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -44,7 +46,8 @@
     "axios": "npm install axios --save",
     "react-swipeable-views": "npm install react-swipeable-views",
     "carousel-material": "npm install react-material-ui-carousel --save",
-    "compressor": "npm install compressorjs"
+    "compressor": "npm install compressorjs",
+    "lazyimage": "npm install --save react-lazyload styled-components"
   },
   "eslintConfig": {
     "extends": [

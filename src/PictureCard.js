@@ -48,7 +48,7 @@ const useStyles = makeStyles(() => ({
 
 export const PictureCard = React.memo(function GalaxyCard(props) {
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
-    const [previewOpened, setPreviewOpened] = useState(false)
+    const [dialogOpened, setDialogOpened] = useState(false)
 
     const styles = useStyles();
 
@@ -69,7 +69,7 @@ export const PictureCard = React.memo(function GalaxyCard(props) {
                         {/*<InfoTitle>{props.item.title}</InfoTitle>*/}
                         <CardActions className="justify-content-between">
                             <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {
-                                setPreviewOpened(true)
+                                setDialogOpened(true)
                             }}>
                                 <OpenInFullIcon />
                             </IconButton>
@@ -78,10 +78,10 @@ export const PictureCard = React.memo(function GalaxyCard(props) {
                 </Box>
             </Card>
             <br/>
-            <ShowPreviewDialog open={previewOpened}
+            <ShowPreviewDialog open={dialogOpened}
                                image={props.picture}
                                onClose={() => {
-                                   setPreviewOpened(false)
+                                   setDialogOpened(false)
                                }}/>
         </>
     );
