@@ -230,16 +230,38 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
             axios.get(appContext.hostProducts + "?id=" + props.id, {
                 headers: {'Authorization': 'Bearer ' + appContext.token}
             }).then((response) => {
-                setPictures(setPicturesList(
+                let tmpPictures = setPicturesList(
                     response.data[0].picture0,
                     response.data[0].picture1,
                     response.data[0].picture2,
                     response.data[0].picture3,
-                    response.data[0].picture4));
+                    response.data[0].picture4)
+                initImageList(tmpPictures)
+
+
             }).catch((error) => {
             })
         }
     };
+
+    const initImageList = (tmpPictures) => {
+        let initPictures = []
+        for (let i = 0; i < MAX_PICTURES; i++) {
+            if (tmpPictures[i] != undefined) {
+                initPictures.push({
+                    index: i,
+                    image: tmpPictures[i].image,
+                    rawImage: tmpPictures[i].rawImage,
+                    add: false
+                })
+            } else {
+                initPictures.push({index: i, image: null, rawImage: null, add: true})
+            }
+        }
+        // setInitPictures(initPictures)
+        setPictures(initPictures)
+    }
+
 
     useEffect(() => {
         getProductPictures();
