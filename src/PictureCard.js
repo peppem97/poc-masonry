@@ -67,7 +67,7 @@ export const PictureCard = React.memo(function GalaxyCard(props) {
                 <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles}>
                         {/*<InfoTitle>{props.item.title}</InfoTitle>*/}
-                        <CardActions className="justify-content-between">
+                        <CardActions style={{position: 'absolute', bottom: 0, left: 0}}>
                             <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {
                                 setDialogOpened(true)
                             }}>

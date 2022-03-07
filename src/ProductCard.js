@@ -95,7 +95,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles}>
                         <InfoTitle>{props.product.title}</InfoTitle>
-                        <CardActions className="justify-content-between">
+                        <CardActions className="justify-content-center">
                             <IconButton style={{color: 'white', fontWeight: 'bold'}}>
                                 <OpenInNewIcon/>
                             </IconButton>

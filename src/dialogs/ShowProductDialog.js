@@ -267,7 +267,6 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
         setPictures(initPictures)
     }
 
-
     useEffect(() => {
         getProductPictures();
     }, [props.open]);
@@ -316,7 +315,7 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
                     </Typography>
                     <br/>
                     {props.showAvatar && <Container>
-                        <ImageList gap={50} cols={10}>
+                        <ImageList gap={50} cols={10} sx={{overflowX: 'auto', padding: '20px'}}>
                             {pictures.map((element) => {
                                     if (!element.add) {
                                         return <ImageListItem cols={1} rows={1}>
