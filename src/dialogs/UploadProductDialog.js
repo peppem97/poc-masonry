@@ -56,47 +56,39 @@ export default function UploadProductDialog(props) {
                 </DialogContentText>
                 <br/>
                 <Container>
+                    <Row className='justify-content-center'>
+                        <TextField
+                            fullWidth
+                            onChange={onChangeTitle}
+                            autoFocus
+                            color='secondary'
+                            margin="dense"
+                            label="Titolo prodotto"
+                            variant="outlined"/>
+                    </Row>
+                    <br/>
+                    <Row className='justify-content-center'>
+                        <TextField
+                            onChange={onChangeDescription}
+                            label="Descrizione prodotto"
+                            multiline
+                            color='secondary'
+                            rows={4}
+                        />
+                    </Row>
+                    <br/>
+                    {/*<Row>*/}
+                    {/*    <label htmlFor="contained-button-file">*/}
+                    {/*        <Input accept="image/*" id="contained-button-file" multiple type="file" hidden onChange={onChangePicture}/>*/}
+                    {/*        <Button variant="contained" component="span" style={{backgroundColor: 'darkred'}}>*/}
+                    {/*            Carica immagine*/}
+                    {/*        </Button>*/}
+                    {/*    </label>*/}
+                    {/*</Row>*/}
                     <Row>
-                        <Col>
-                            <Row>
-                                <TextField
-                                    onChange={onChangeTitle}
-                                    autoFocus
-                                    color='secondary'
-                                    margin="dense"
-                                    label="Titolo prodotto"
-                                    variant="outlined"/>
-                            </Row>
-                            <br/>
-                            <Row>
-                                <TextField
-                                    onChange={onChangeDescription}
-                                    label="Descrizione prodotto"
-                                    multiline
-                                    color='secondary'
-                                    rows={4}
-                                />
-                            </Row>
-                            <br/>
-                            <Row>
-                                <label htmlFor="contained-button-file">
-                                    <Input accept="image/*" id="contained-button-file" multiple type="file" hidden onChange={onChangePicture}/>
-                                    <Button variant="contained" component="span" style={{backgroundColor: 'darkred'}}>
-                                        Carica immagine
-                                    </Button>
-                                </label>
-                            </Row>
-                            <br/>
-                            <Row>
-                                <Button onClick={uploadProduct} variant={picture ? "contained": null} component="span" style={{backgroundColor: picture ? 'darkred' : 'grey'}}>
-                                    Inserisci prodotto
-                                </Button>
-                            </Row>
-                        </Col >
-                        <Col >
-
-                            <img src={picture} alt="" style={{width: '100%', height: 'auto', borderRadius: '1rem', filter: 'drop-shadow(5px 5px 4px #000000)'}}/>
-                        </Col>
+                        <Button variant={picture ? "contained": null} component="span" style={{backgroundColor: picture ? 'darkred' : 'grey'}}>
+                            Inserisci prodotto
+                        </Button>
                     </Row>
                 </Container>
             </DialogContent>
