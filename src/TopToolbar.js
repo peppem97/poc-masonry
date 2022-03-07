@@ -107,9 +107,9 @@ export default function TopToolbar(props) {
                         <Button variant="contained" style={{backgroundColor: 'white', color: 'black'}}>REGISTRATI</Button>
                     </Toolbar>
                 </AppBar>
-                {appContext.loading ? <Box sx={{width: '100%'}}>
-                    <LinearProgress color={"secondary"}/>
-                </Box> : null}
+                {/*{appContext.loading ? <Box sx={{width: '100%'}}>*/}
+                {/*    <LinearProgress color={"secondary"}/>*/}
+                {/*</Box> : null}*/}
             </Box>
         </>
     );

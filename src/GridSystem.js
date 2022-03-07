@@ -1,11 +1,14 @@
 import StackGrid, {easings, transitions} from "react-stack-grid";
-import React from "react";
+import React, {useContext} from "react";
 import ProductCard from "./ProductCard";
 import {CircularProgress} from "@mui/material";
 import Box from "@mui/material/Box";
+import GlobalContext from "./GlobalContext";
 
 export default function GridSystem(props) {
     const myTransition = 'fadeDown';
+    const appContext = useContext(GlobalContext);
+
 
     return (
         <>
@@ -25,7 +28,7 @@ export default function GridSystem(props) {
                         (<ProductCard key={index} product={product} showAvatar={!(props.isUser)}/>))
                 }
             </StackGrid>
-            {props.loading &&
+            {props.loadingProducts &&
                 <Box sx={{display: 'flex'}} className={'justify-content-center'} style={{color: 'darkred'}}>
                     <CircularProgress size={100} color='inherit'/>
                 </Box>}

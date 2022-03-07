@@ -1,18 +1,14 @@
 import {
     Container,
     Dialog,
-    DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Input,
     TextField
 } from "@mui/material";
 import Button from "@mui/material/Button";
-import {Col, Row} from "react-bootstrap";
-import {useContext, useEffect, useState} from "react";
-import axios from "axios";
-import GlobalContext from "../GlobalContext";
+import {Row} from "react-bootstrap";
+import {useState} from "react";
 
 export default function UpdateInfoDialog(props) {
     const [info, setInfo] = useState(null)

@@ -8,17 +8,22 @@ import ImageUploadExample from "./ImageUploadExample";
 import axios from "axios";
 import Error404 from "./Error404";
 import ErrorNoUser from "./ErrorNoUser";
+import {Backdrop, CircularProgress} from "@mui/material";
 
 export default function App() {
     const [token, setToken] = useState(localStorage.getItem('token'));
     const [disabledIncrease, setDisabledIncrease] = useState(false);
     const [disabledDecrease, setDisabledDecrease] = useState(false);
     const [columnWidth, setColumnWidth] = useState(200);
-    const appSettings = {
+    const [loading, setLoading] = useState(false);
+    const appContext = {
         token: token,
         disabledIncrease: disabledIncrease,
         disabledDecrease: disabledDecrease,
         columnWidth: columnWidth,
+        loading: loading,
+        setLoadingTrue: () => {setLoading(true)},
+        setLoadingFalse: () => {setLoading(false)},
         qualityPictures: 0.1,
         host: "http://zion.datafactor.it:40505",
         hostShops: "http://zion.datafactor.it:40505/shops",
@@ -28,10 +33,12 @@ export default function App() {
     };
 
     const getNewToken = () => {
+        appContext.setLoadingTrue();
         let data = {identifier: 'prova@prova.it', password: 'provaprova'};
-        axios.post(appSettings.hostSignin, data).then((response) => {
+        axios.post(appContext.hostSignin, data).then((response) => {
             localStorage.setItem('token', response.data.jwt);
             setToken(response.data.jwt);
+            appContext.setLoadingFalse();
         }).catch((error) => {
         })
     };
@@ -74,7 +81,7 @@ export default function App() {
 
     return (
         <>
-            <GlobalContext.Provider value={appSettings}>
+            <GlobalContext.Provider value={appContext}>
                 <Router>
                     <TopToolbar increaseColumnsSize={increaseColumnsSize}
                                 decreaseColumnsSize={decreaseColumnsSize}
@@ -87,6 +94,11 @@ export default function App() {
                         <Route exact path='*' element={<Error404/>}/>
                     </Routes>
                 </Router>
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: '100' }}
+                    open={loading}>
+                    <CircularProgress color="inherit" />
+                </Backdrop>
             </GlobalContext.Provider>
         </>
     );

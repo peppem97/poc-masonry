@@ -12,11 +12,12 @@ import {generateHeight} from "./Utility";
 
 export default function Home() {
     const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loadingProduct, setLoadingProduct] = useState(false);
     const appContext = useContext(GlobalContext);
 
     const getProducts = () => {
-        setLoading(true)
+        // appContext.setLoadingTrue();
+        setLoadingProduct(true);
         axios.get(appContext.hostProducts, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
@@ -27,8 +28,9 @@ export default function Home() {
                 description: element.description,
                 picture: appContext.host + element.cover.url,
                 username: element.username}))
-            setProducts(tmpProducts)
-            setLoading(false)
+            setProducts(tmpProducts);
+            // appContext.setLoadingFalse();
+            setLoadingProduct(false);
         }).catch((error) => {})
     };
 
@@ -57,7 +59,7 @@ export default function Home() {
                 <br/>
                 <br/>
                 <Row>
-                    <GridSystem loading={loading} products={products} columnWidth={appContext.columnWidth} isUser={false}/>
+                    <GridSystem loadingProducts={loadingProduct} products={products} columnWidth={appContext.columnWidth} isUser={false}/>
                 </Row>
             </Container>
         </>

@@ -3,9 +3,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from "@mui/material/Typography";
 import {
+    Backdrop,
     CardActions,
     CardContent,
-    CardHeader,
+    CardHeader, CircularProgress,
     DialogContent,
     IconButton, ImageList, ImageListItem, ImageListItemBar, Input,
     Skeleton,
@@ -123,29 +124,29 @@ import Compressor from "compressorjs";
 //     );
 // }
 //*******************//
-const useStyles = makeStyles(() => ({
-    root: {
-        maxWidth: 1000,
-        margin: 'auto',
-    },
-    content: {
-        padding: 24,
-    },
-    avatar: {
-        width: 50,
-        height: 50,
-        border: '2px solid #fff',
-        margin: '-76px 32px 0 auto',
-        '& > img': {
-            margin: 0,
-        },
-    },
-}));
+// const useStyles = makeStyles(() => ({
+//     root: {
+//         maxWidth: 1000,
+//         margin: 'auto',
+//     },
+//     content: {
+//         padding: 24,
+//     },
+//     avatar: {
+//         width: 50,
+//         height: 50,
+//         border: '2px solid #fff',
+//         margin: '-76px 32px 0 auto',
+//         '& > img': {
+//             margin: 0,
+//         },
+//     },
+// }));
 
 export const ShowProductDialog = React.memo(function PostCard(props) {
     let navigate = useNavigate();
-    const [fullScreen, setFullScreen] = useState(false);
     const [pictures, setPictures] = useState([]);
+    // const [loading, setLoading] = useState(false);
     const appContext = useContext(GlobalContext);
     const MAX_PICTURES = 10;
 
@@ -181,6 +182,7 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
 
     const updateProduct = () => {
         for (let picture of pictures) {
+            appContext.setLoadingTrue();
             if (picture.image != null) {
                 new Compressor(picture.rawImage, {
                     quality: appContext.qualityPictures, success(result) {
@@ -190,17 +192,20 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
                         axios.put(appContext.hostProducts + "/" + props.id, formData, {
                             headers: {'Authorization': 'Bearer ' + appContext.token,}
                         }).then((response) => {
+                            appContext.setLoadingFalse();
                         }).catch((error) => {
                         })
                     }, error(err) {
                     }
                 })
             } else {
+                appContext.setLoadingTrue();
                 let data = {};
                 data['picture' + picture.index] = null;
                 axios.put(appContext.hostProducts + "/" + props.id, data, {
                     headers: {'Authorization': 'Bearer ' + appContext.token,}
                 }).then((response) => {
+                    appContext.setLoadingFalse();
                 }).catch((error) => {
                 })
             }
@@ -227,6 +232,7 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
 
     const getProductPictures = () => {
         if (props.open) {
+            appContext.setLoadingTrue();
             axios.get(appContext.hostProducts + "?id=" + props.id, {
                 headers: {'Authorization': 'Bearer ' + appContext.token}
             }).then((response) => {
@@ -236,9 +242,8 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
                     response.data[0].picture2,
                     response.data[0].picture3,
                     response.data[0].picture4)
-                initImageList(tmpPictures)
-
-
+                initImageList(tmpPictures);
+                appContext.setLoadingFalse();
             }).catch((error) => {
             })
         }
@@ -268,118 +273,127 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
     }, [props.open]);
 
     return (
-        <Dialog open={props.open} onClose={closeDialog} fullWidth={true} fullScreen={fullScreen} maxWidth={"lg"}>
-            <DialogTitle>
-                {props.showAvatar &&
-                    <CardHeader
-                        avatar={
-                            <IconButton onClick={goToUser}>
-                                <Avatar src={props.avatar}/>
-                            </IconButton>
-                        }
-                        sx={{maxHeight: '60px'}}
-                        title={<Typography variant="h6">{props.shop}</Typography>}
-                    />}
-                {!props.showAvatar &&
-                    <CardHeader
-                        title={<Typography variant="h6">Modifica prodotto</Typography>}
-                    />}
-            </DialogTitle>
-            <DialogContent>
-                <CardMedia
-                    height="350"
-                    component="img"
-                    image={props.picture}
-                />
-                <br/>
-                <Typography gutterBottom variant="h5" component="div" className="text-center">
-                    {props.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" className="text-center">
-                    {props.description}
-                </Typography>
-                <br/>
-                {props.showAvatar && <Container>
-                    <ImageList gap={50} cols={10}>
-                        {pictures.map((element) =>
-                            <ImageListItem cols={1} rows={1}>
-                                <PictureCard picture={element.image}/>
-                                {/*<img*/}
-                                {/*    src={element.image}*/}
-                                {/*    style={{objectFit: 'cover', height: '150px', width: '150px', borderRadius: '1rem', padding: '10px'}}*/}
-                                {/*    alt=""*/}
-                                {/*    loading="lazy"*/}
-                                {/*/>*/}
-                            </ImageListItem>)}
-
-                    </ImageList>
-
-                </Container>}
-                {!props.showAvatar && <Container>
-                    <ImageList gap={10} cols={10} rows={1} sx={{height: 220}}>
-                        {pictures.map((element) => {
-                            if (element.add) {
-                                return (<ImageListItem key={element.index} cols={1} rows={1}>
-                                    {/*<img src={null}*/}
-                                    {/*     alt=""*/}
-                                    {/*     loading="lazy"/>*/}
-
-                                    <ImageListItemBar
-                                        actionIcon={
-                                            [
-                                                <label htmlFor="icon-button-file" key={0}>
-                                                    <Input accept="image/*" id="icon-button-file" type="file" hidden
-                                                           onChange={(e) => {
-                                                               addPicture(e, element.index)
-                                                           }}/>
-                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                                aria-label="upload picture" component="span">
-                                                        <PhotoCamera/>
-                                                    </IconButton>
-                                                </label>]}
-                                    />
-                                </ImageListItem>)
-                            } else {
-                                return (<ImageListItem cols={1} rows={1}>
-                                    {/*<PictureCard picture={element.image}/>*/}
-                                    {/*<img*/}
-                                    {/*    src={element.image}*/}
-                                    {/*    style={{objectFit: 'cover', height: '150px', width: '150px', borderRadius: '1rem', padding: '10px'}}*/}
-                                    {/*    alt=""*/}
-                                    {/*    loading="lazy"*/}
-                                    {/*/>*/}
-                                    <img src={element.image}
-                                         alt=""
-                                         loading="lazy"/>
-                                    <ImageListItemBar
-                                        actionIcon={
-                                            [
-                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0}>
-                                                    <OpenInFullIcon/>
-                                                </IconButton>,
-                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} onClick={() => {
-                                                    removePicture(element.index)
-                                                }} key={1}>
-                                                    <DeleteForeverIcon/>
-                                                </IconButton>
-                                            ]}
-                                    />
-                                </ImageListItem>)
+        <>
+            <Dialog open={props.open} onClose={closeDialog} fullWidth={true} maxWidth={"lg"}>
+                <DialogTitle>
+                    {props.showAvatar &&
+                        <CardHeader
+                            avatar={
+                                <IconButton onClick={goToUser}>
+                                    <Avatar src={props.avatar}/>
+                                </IconButton>
                             }
-                            }
+                            sx={{maxHeight: '60px'}}
+                            title={<Typography variant="h6">{props.shop}</Typography>}
+                        />}
+                    {!props.showAvatar &&
+                        <CardHeader
+                            title={<Typography variant="h6">Modifica prodotto</Typography>}
+                        />}
+                </DialogTitle>
+                <DialogContent>
+                    <CardMedia
+                        height="350"
+                        component="img"
+                        image={props.picture}
+                    />
+                    <br/>
+                    <Typography gutterBottom variant="h5" component="div" className="text-center">
+                        {props.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" className="text-center">
+                        {props.description}
+                    </Typography>
+                    <br/>
+                    {props.showAvatar && <Container>
+                        <ImageList gap={50} cols={10}>
+                            {pictures.map((element) => {
+                                    if (!element.add) {
+                                        return <ImageListItem cols={1} rows={1}>
+                                            <PictureCard picture={element.image}/>
+                                            {/*<img*/}
+                                            {/*    src={element.image}*/}
+                                            {/*    style={{objectFit: 'cover', height: '150px', width: '150px', borderRadius: '1rem', padding: '10px'}}*/}
+                                            {/*    alt=""*/}
+                                            {/*    loading="lazy"*/}
+                                            {/*/>*/}
+                                        </ImageListItem>
+                                    } else {
+                                        return null;
+                                    }
+                                }
                             )}
 
-                    </ImageList>
-                    <br/>
-                    <Button onClick={updateProduct} variant="contained" component="span"
-                            style={{backgroundColor: 'darkred'}}>
-                        Aggiorna prodotto
-                    </Button>
+                        </ImageList>
 
-                </Container>}
+                    </Container>}
+                    {!props.showAvatar && <Container>
+                        <ImageList gap={10} cols={10} rows={1} sx={{height: 220}}>
+                            {pictures.map((element) => {
+                                    if (element.add) {
+                                        return (<ImageListItem key={element.index} cols={1} rows={1}>
+                                            {/*<img src={null}*/}
+                                            {/*     alt=""*/}
+                                            {/*     loading="lazy"/>*/}
 
-            </DialogContent>
-        </Dialog>
+                                            <ImageListItemBar
+                                                actionIcon={
+                                                    [
+                                                        <label htmlFor="icon-button-file" key={0}>
+                                                            <Input accept="image/*" id="icon-button-file" type="file" hidden
+                                                                   onChange={(e) => {
+                                                                       addPicture(e, element.index)
+                                                                   }}/>
+                                                            <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                                        aria-label="upload picture" component="span">
+                                                                <PhotoCamera/>
+                                                            </IconButton>
+                                                        </label>]}
+                                            />
+                                        </ImageListItem>)
+                                    } else {
+                                        return (<ImageListItem cols={1} rows={1}>
+                                            {/*<PictureCard picture={element.image}/>*/}
+                                            {/*<img*/}
+                                            {/*    src={element.image}*/}
+                                            {/*    style={{objectFit: 'cover', height: '150px', width: '150px', borderRadius: '1rem', padding: '10px'}}*/}
+                                            {/*    alt=""*/}
+                                            {/*    loading="lazy"*/}
+                                            {/*/>*/}
+                                            <img src={element.image}
+                                                 alt=""
+                                                 loading="lazy"/>
+                                            <ImageListItemBar
+                                                actionIcon={
+                                                    [
+                                                        <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0}>
+                                                            <OpenInFullIcon/>
+                                                        </IconButton>,
+                                                        <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                                    onClick={() => {
+                                                                        removePicture(element.index)
+                                                                    }} key={1}>
+                                                            <DeleteForeverIcon/>
+                                                        </IconButton>
+                                                    ]}
+                                            />
+                                        </ImageListItem>)
+                                    }
+                                }
+                            )}
+
+                        </ImageList>
+                        <br/>
+                        <Button onClick={updateProduct} variant="contained" component="span"
+                                style={{backgroundColor: 'darkred'}}>
+                            Aggiorna prodotto
+                        </Button>
+
+                    </Container>}
+
+                </DialogContent>
+            </Dialog>
+        </>
     );
 });
 

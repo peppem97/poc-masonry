@@ -53,7 +53,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     const [openDialog, setOpenDialog] = useState(false);
     const [avatar, setAvatar] = useState(null)
     const [shop, setShop] = useState(null)
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const styles = useStyles();
     const appContext = useContext(GlobalContext);
@@ -64,13 +64,13 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     };
 
     const getUserInfo = () => {
-        setLoading(true);
+        appContext.setLoadingTrue();
         axios.get(appContext.hostShops + "?username=" + props.product.username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
             setAvatar(appContext.host + response.data[0].avatar.url);
             setShop(response.data[0].title);
-            setLoading(false);
+            appContext.setLoadingFalse();
         }).catch((error) => {
         })
     };
@@ -87,7 +87,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 <Box py={3} px={2} className={styles.contentHeader}>
                     {props.showAvatar && (
                         <IconButton onClick={goToUser}>
-                            {loading ? <Skeleton variant="circular">
+                            {appContext.loading ? <Skeleton variant="circular">
                                 <Avatar src={avatar}/>
                             </Skeleton> : <Avatar src={avatar}/>}
                         </IconButton>)}

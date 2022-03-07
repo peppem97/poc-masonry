@@ -11,7 +11,6 @@ import UploadProductDialog from "./dialogs/UploadProductDialog";
 import UpdateInfoDialog from "./dialogs/UpdateInfoDialog";
 import Compressor from 'compressorjs';
 import UpdateCarouselDialog from "./dialogs/UpdateCarouselDialog";
-import {Backdrop, CircularProgress} from "@mui/material";
 import {generateHeight} from "./Utility";
 
 
@@ -30,12 +29,14 @@ export default function User() {
     const [updateInfoDialog, setUpdateInfoDialog] = useState(false);
     const [info, setInfo] = useState(null);
     const [infoToEdit, setInfoToEdit] = useState(null);
-    const [loading, setLoading] = useState(null);
+    // const [loading, setLoading] = useState(null);
+    const [loadingProducts, setLoadingProducts] = useState(false);
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
     let navigate = useNavigate();
 
     const getUserInfo = () => {
+        appContext.setLoadingTrue();
         axios.get(appContext.hostShops + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
@@ -47,12 +48,14 @@ export default function User() {
             setCarousel(getCarousel(response.data[0].carousel0, response.data[0].carousel1, response.data[0].carousel2));
             setTelephone(response.data[0].telephone);
             setWebsite(response.data[0].website);
+            appContext.setLoadingFalse();
         }).catch((error) => {
             navigate('/no-user');
         })
     };
 
     const getProducts = () => {
+        setLoadingProducts(true);
         axios.get(appContext.hostProducts + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
@@ -66,6 +69,8 @@ export default function User() {
                 picture: appContext.host + element.cover.url
             }));
             setProducts(items);
+            setLoadingProducts(false);
+
         }).catch((error) => {
         })
     };
@@ -81,7 +86,7 @@ export default function User() {
     };
 
     const updateAvatar = (e) => {
-        setLoading(true);
+        appContext.setLoadingTrue();
         const formData = new FormData();
         new Compressor(e.target.files[0], {
             quality: appContext.qualityPictures, success(result) {
@@ -91,7 +96,7 @@ export default function User() {
                     headers: {'Authorization': 'Bearer ' + appContext.token,}
                 }).then((response) => {
                     getUserInfo();
-                    setLoading(false);
+                    appContext.setLoadingFalse();
                 }).catch((error) => {})
             }, error(err) {}
         })
@@ -102,7 +107,7 @@ export default function User() {
             if (picture.image != null) {
                 new Compressor(picture.rawImage, {
                     quality: appContext.qualityPictures, success(result) {
-                        setLoading(true);
+                        appContext.setLoadingTrue();
                         const formData = new FormData();
                         formData.append('files.carousel' + picture.index, result, 'example.jpg');
                         formData.append('data', JSON.stringify({}));
@@ -110,26 +115,26 @@ export default function User() {
                             headers: {'Authorization': 'Bearer ' + appContext.token,}
                         }).then((response) => {
                             getUserInfo();
-                            setLoading(false)
+                            appContext.setLoadingFalse();
                         }).catch((error) => {})
                     }, error(err) {}
                 })
             } else {
-                setLoading(true);
+                appContext.setLoadingTrue();
                 let data = {};
                 data['carousel' + picture.index] = null;
                 axios.put(appContext.hostShops + "/" + id, data, {
                     headers: {'Authorization': 'Bearer ' + appContext.token,}
                 }).then((response) => {
                     getUserInfo();
-                    setLoading(false);
+                    appContext.setLoadingFalse();
                 }).catch((error) => {})
             }
         }
     };
 
     const updateInfo = (type, value) => {
-        setLoading(true)
+        appContext.setLoadingTrue();
         const data = {};
         data[type] = value;
         const formData = new FormData();
@@ -138,12 +143,12 @@ export default function User() {
                 'Authorization': 'Bearer ' + appContext.token,
             }}).then((response) => {
             getUserInfo();
-            setLoading(false);
+            appContext.setLoadingFalse();
         }).catch((error) => {})
     };
 
     const uploadProduct = (params) => {
-        setLoading(true);
+        appContext.setLoadingTrue();
         new Compressor(params.rawPicture, {
             quality: appContext.qualityPictures, success(result) {
                 const formData = new FormData();
@@ -160,7 +165,7 @@ export default function User() {
                     }
                 }).then((response) => {
                     getProducts();
-                    setLoading(false);
+                    appContext.setLoadingFalse();
                 }).catch((error) => {
                 })
             }, error(err) {
@@ -188,7 +193,7 @@ export default function User() {
             default:
                 break;
         }
-        setInfoToEdit(info)
+        setInfoToEdit(info);
         setUpdateInfoDialog(true);
     };
 
@@ -242,13 +247,8 @@ export default function User() {
                 updateCarousel={updateCarousel}
                 carousel={carousel}/>
             <Container fluid>
-                <GridSystem products={products} columnWidth={appContext.columnWidth} isUser={true}/>
+                <GridSystem loadingProducts={loadingProducts} products={products} columnWidth={appContext.columnWidth} isUser={true}/>
             </Container>
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={loading}>
-                <CircularProgress color="inherit" />
-            </Backdrop>
         </>
     )
 }
