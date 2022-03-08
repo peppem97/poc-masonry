@@ -90,8 +90,8 @@ export default function App() {
                     <Routes>
                         <Route exact path='/home' element={<Home/>}/>
                         <Route exact path='/user/:username' element={<User/>}/>
-                        <Route exact path='/product/:code' element={<Product/>}/>
-                        <Route exact path='/example' element={<ImageUploadExample/>}/>
+                        <Route exact path='/product/:id' element={<Product/>}/>
+                        {/*<Route exact path='/example' element={<ImageUploadExample/>}/>*/}
                         <Route exact path='/no-user' element={<ErrorNoUser/>}/>
                         <Route exact path='*' element={<Error404/>}/>
                     </Routes>

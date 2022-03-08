@@ -65,7 +65,9 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
         navigate("/user/" + props.product.username);
     };
 
-    const goToProduct = () => {};
+    const goToProduct = () => {
+        navigate("/product/" + props.product.id);
+    };
 
     const getUserInfo = () => {
         appContext.setLoadingTrue();
@@ -134,7 +136,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
 
     return (
         <>
-            <Card className={styles.card} style={{height: props.product.height}} raised onClick={() => {setDialogOpened(true)}}>
+            <Card className={styles.card} style={{height: props.product.height}} raised onClick={goToProduct}>
                 <CardMedia classes={mediaStyles} image={props.product.picture}/>
                 <Box py={3} px={2} className={styles.contentHeader}>
                     {props.showAvatar && (

@@ -31,7 +31,6 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
     };
 
     const setPicturesList = (...pictures) => {
-        console.log(pictures)
         let pictureList = [];
         for (let i = 0; i < pictures.length; i++) {
             if (pictures[i] != null) {
