@@ -23,7 +23,6 @@
     "react-bootstrap": "^2.1.2",
     "react-dom": "^17.0.2",
     "react-google-font-loader": "^1.1.0",
-    "react-lazy-blur-image": "^0.1.2",
     "react-material-ui-carousel": "^3.2.0",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
@@ -46,7 +45,7 @@
     "react-swipeable-views": "npm install react-swipeable-views",
     "carousel-material": "npm install react-material-ui-carousel --save",
     "compressor": "npm install compressorjs",
-    "lazyimage": "npm i react-lazy-blur-image",
+    "lazyimage": "npm uninstall react-lazy-blur-image",
     "version": "npm --version"
   },
   "eslintConfig": {

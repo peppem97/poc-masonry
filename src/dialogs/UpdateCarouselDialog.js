@@ -13,6 +13,7 @@ import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import ShowPreviewDialog from "./ShowPreviewDialog";
+import ProgressiveImg from "../ProgessiveImage";
 
 export default function UpdateCarouselDialog(props) {
     const MAX_PICTURES = 3;
@@ -99,9 +100,6 @@ export default function UpdateCarouselDialog(props) {
                         {pictures.map((item) => {
                             if (item.add) {
                                 return (<ImageListItem key={item.index} cols={10} rows={1}>
-                                    {/*<img src={null}*/}
-                                    {/*     alt=""*/}
-                                    {/*     loading="lazy"/>*/}
 
                                     <ImageListItemBar
                                         actionIcon={
@@ -120,12 +118,7 @@ export default function UpdateCarouselDialog(props) {
                                 </ImageListItem>)
                             } else {
                                 return (<ImageListItem key={item.index} cols={10} rows={1}>
-                                    <img src={item.image}
-                                         alt=""
-                                         loading="lazy"/>
-                                    {/*<LazyLoadImage*/}
-                                    {/*    alt=""*/}
-                                    {/*    src={item.image}/>*/}
+                                    <ProgressiveImg image={item.image} />
                                     <ImageListItemBar
                                         actionIcon={
                                             [

@@ -20,6 +20,8 @@ import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Compressor from "compressorjs";
+import ProgressiveImg from "../ProgessiveImage";
+import spinner from "../assets/load.gif"
 
 export const UpdateProductDialog = React.memo(function PostCard(props) {
     const [pictures, setPictures] = useState([]);
@@ -58,6 +60,7 @@ export const UpdateProductDialog = React.memo(function PostCard(props) {
 
     const updateProduct = () => {
         for (let picture of pictures) {
+            console.log(picture)
             appContext.setLoadingTrue();
             if (picture.image != null) {
                 new Compressor(picture.rawImage, {
@@ -193,10 +196,14 @@ export const UpdateProductDialog = React.memo(function PostCard(props) {
                                         </ImageListItem>)
                                     } else {
                                         return (<ImageListItem key={element.index} cols={1} rows={1}>
+                                            <ProgressiveImg image={element.image} />
+                                            {/*<img src={element.image}*/}
+                                            {/*     style={{filter: 'blur(5px)'}}*/}
+                                            {/*     alt=""*/}
+                                            {/*     loading="lazy"  onLoad={() => {console.log('ok')}}/>*/}
 
-                                            <img src={element.image}
-                                                 alt=""
-                                                 loading="lazy"/>
+
+
                                             <ImageListItemBar
                                                 actionIcon={
                                                     [
