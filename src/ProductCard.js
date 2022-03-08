@@ -15,6 +15,7 @@ import {useNavigate} from "react-router-dom";
 import ShowProductDialog from "./dialogs/ShowProductDialog";
 import axios from "axios";
 import GlobalContext from "./GlobalContext";
+import UpdateProductDialog from "./dialogs/UpdateProductDialog";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -109,18 +110,29 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                     </Info>
                 </Box>
             </Card>
-            <ShowProductDialog
+            {props.showAvatar && <ShowProductDialog
                 open={dialogOpened}
-                onClose={() => {setDialogOpened(false)}}
+                onClose={() => {
+                    setDialogOpened(false)
+                }}
                 avatar={avatar}
-                showAvatar={props.showAvatar}
                 title={props.product.title}
                 description={props.product.description}
                 picture={props.product.picture}
                 username={props.product.username}
                 id={props.product.id}
                 shop={shop}
-            />
+            />}
+            {!props.showAvatar && <UpdateProductDialog
+                open={dialogOpened}
+                onClose={() => {
+                    setDialogOpened(false)
+                }}
+                title={props.product.title}
+                description={props.product.description}
+                picture={props.product.picture}
+                id={props.product.id}
+            />}
         </>
     );
 });

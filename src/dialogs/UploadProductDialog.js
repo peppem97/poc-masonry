@@ -64,7 +64,7 @@ export default function UploadProductDialog(props) {
     }, [props.open]);
 
     return(
-        <Dialog open={props.open} onClose={closeDialog} fullWidth>
+        <Dialog open={props.open} onClose={closeDialog} fullWidth maxWidth={"lg"}>
             <DialogTitle>Inserisci un nuovo prodotto</DialogTitle>
             <DialogContent>
                 <DialogContentText>
@@ -103,8 +103,8 @@ export default function UploadProductDialog(props) {
                     {/*</Row>*/}
 
                     <Row className='justify-content-center'>
-                        <ImageList sx={{width: 500, height: 250}}
-                                   gap={5} cols={30}>
+                        <ImageList sx={{width: 1000, height: 250}}
+                                   gap={5} cols={50}>
                             {pictures.map((item) => {
                                 if (item.add) {
                                     return (<ImageListItem key={item.index} cols={10} rows={1}>
