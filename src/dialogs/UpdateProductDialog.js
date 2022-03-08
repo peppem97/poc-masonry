@@ -3,7 +3,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from "@mui/material/Typography";
 import {
-    CardHeader,
+    Backdrop,
+    CardHeader, CircularProgress,
     DialogContent,
     IconButton, ImageList, ImageListItem, ImageListItemBar, Input
 } from "@mui/material";
@@ -25,6 +26,7 @@ import spinner from "../assets/load.gif"
 
 export const UpdateProductDialog = React.memo(function PostCard(props) {
     const [pictures, setPictures] = useState([]);
+    const [loading, setLoading] = useState(false);
     const appContext = useContext(GlobalContext);
     const MAX_PICTURES = 10;
 
@@ -59,36 +61,8 @@ export const UpdateProductDialog = React.memo(function PostCard(props) {
     };
 
     const updateProduct = () => {
-        for (let picture of pictures) {
-            console.log(picture)
-            appContext.setLoadingTrue();
-            if (picture.image != null) {
-                new Compressor(picture.rawImage, {
-                    quality: appContext.qualityPictures, success(result) {
-                        const formData = new FormData();
-                        formData.append('files.picture' + picture.index, result, 'example.jpg');
-                        formData.append('data', JSON.stringify({}));
-                        axios.put(appContext.hostProducts + "/" + props.id, formData, {
-                            headers: {'Authorization': 'Bearer ' + appContext.token,}
-                        }).then((response) => {
-                            appContext.setLoadingFalse();
-                        }).catch((error) => {
-                        })
-                    }, error(err) {
-                    }
-                })
-            } else {
-                appContext.setLoadingTrue();
-                let data = {};
-                data['picture' + picture.index] = null;
-                axios.put(appContext.hostProducts + "/" + props.id, data, {
-                    headers: {'Authorization': 'Bearer ' + appContext.token,}
-                }).then((response) => {
-                    appContext.setLoadingFalse();
-                }).catch((error) => {
-                })
-            }
-        }
+        props.updateProduct(pictures);
+        props.onClose();
     };
 
     const closeDialog = (value) => {
@@ -107,7 +81,8 @@ export const UpdateProductDialog = React.memo(function PostCard(props) {
 
     const getProductPictures = () => {
         if (props.open) {
-            appContext.setLoadingTrue();
+            // appContext.setLoadingTrue();
+            // setLoading(true);
             axios.get(appContext.hostProducts + "?id=" + props.id, {
                 headers: {'Authorization': 'Bearer ' + appContext.token}
             }).then((response) => {
@@ -116,9 +91,15 @@ export const UpdateProductDialog = React.memo(function PostCard(props) {
                     response.data[0].picture1,
                     response.data[0].picture2,
                     response.data[0].picture3,
-                    response.data[0].picture4)
+                    response.data[0].picture4,
+                    response.data[0].picture5,
+                    response.data[0].picture6,
+                    response.data[0].picture7,
+                    response.data[0].picture8,
+                    response.data[0].picture9);
                 initImageList(tmpPictures);
-                appContext.setLoadingFalse();
+                // appContext.setLoadingFalse();
+                // setLoading(false);
             }).catch((error) => {
             })
         }

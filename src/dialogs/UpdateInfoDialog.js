@@ -14,7 +14,7 @@ export default function UpdateInfoDialog(props) {
     const [info, setInfo] = useState(null)
 
     const onChangeInfo = (e) => {
-        setInfo(e.target.value)
+        setInfo(e.target.value);
     }
 
     const closeDialog = () => {
@@ -22,8 +22,8 @@ export default function UpdateInfoDialog(props) {
     };
 
     const uploadInfo = () => {
-        props.updateInfo(info)
-        props.onClose()
+        props.updateInfo(info);
+        props.onClose();
     }
 
     return(

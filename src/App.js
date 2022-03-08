@@ -9,6 +9,7 @@ import axios from "axios";
 import Error404 from "./Error404";
 import ErrorNoUser from "./ErrorNoUser";
 import {Backdrop, CircularProgress} from "@mui/material";
+import Product from "./Product";
 
 export default function App() {
     const [token, setToken] = useState(localStorage.getItem('token'));
@@ -89,13 +90,14 @@ export default function App() {
                     <Routes>
                         <Route exact path='/home' element={<Home/>}/>
                         <Route exact path='/user/:username' element={<User/>}/>
+                        <Route exact path='/product/:code' element={<Product/>}/>
                         <Route exact path='/example' element={<ImageUploadExample/>}/>
                         <Route exact path='/no-user' element={<ErrorNoUser/>}/>
                         <Route exact path='*' element={<Error404/>}/>
                     </Routes>
                 </Router>
                 <Backdrop
-                    sx={{ color: '#fff', zIndex: '100' }}
+                    sx={{ color: '#fff', zIndex: '999' }}
                     open={loading}>
                     <CircularProgress color="inherit" />
                 </Backdrop>

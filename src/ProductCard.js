@@ -16,6 +16,7 @@ import ShowProductDialog from "./dialogs/ShowProductDialog";
 import axios from "axios";
 import GlobalContext from "./GlobalContext";
 import UpdateProductDialog from "./dialogs/UpdateProductDialog";
+import Compressor from "compressorjs";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -64,6 +65,8 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
         navigate("/user/" + props.product.username);
     };
 
+    const goToProduct = () => {};
+
     const getUserInfo = () => {
         appContext.setLoadingTrue();
         axios.get(appContext.hostShops + "?username=" + props.product.username, {
@@ -75,6 +78,54 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
         }).catch((error) => {
         })
     };
+
+    const updateProduct = (pictures) => {
+        console.log(pictures)
+        for (let picture of pictures) {
+            console.log(picture)
+            appContext.setLoadingTrue();
+            // setLoading(true);
+            if (picture.image != null) {
+                if (picture.rawImage != null) {
+                    new Compressor(picture.rawImage, {
+                        quality: appContext.qualityPictures, success(result) {
+                            const formData = new FormData();
+                            formData.append('files.picture' + picture.index, result, 'example.jpg');
+                            formData.append('data', JSON.stringify({}));
+                            axios.put(appContext.hostProducts + "/" + props.product.id, formData, {
+                                headers: {'Authorization': 'Bearer ' + appContext.token,}
+                            }).then((response) => {
+                                // appContext.setLoadingFalse();
+                                if (picture.index == 9) {
+                                    appContext.setLoadingFalse();
+                                    // setLoading(false);
+                                    // closeDialog();
+                                }
+                            }).catch((error) => {
+                            })
+                        }, error(err) {
+                        }
+                    })
+                }
+            } else {
+                appContext.setLoadingTrue();
+                // setLoading(true);
+                let data = {};
+                data['picture' + picture.index] = null;
+                axios.put(appContext.hostProducts + "/" + props.product.id, data, {
+                    headers: {'Authorization': 'Bearer ' + appContext.token,}
+                }).then((response) => {
+                    if (picture.index == 9) {
+                        appContext.setLoadingFalse();
+                        // setLoading(false);
+                        // closeDialog();
+                    }
+                }).catch((error) => {
+                })
+            }
+        }
+    };
+
 
     useEffect(() => {
         getUserInfo();
@@ -128,6 +179,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 onClose={() => {
                     setDialogOpened(false)
                 }}
+                updateProduct={updateProduct}
                 title={props.product.title}
                 description={props.product.description}
                 picture={props.product.picture}

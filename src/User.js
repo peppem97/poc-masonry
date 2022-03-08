@@ -103,6 +103,7 @@ export default function User() {
 
     const updateCarousel = (pictures) => {
         for (let picture of pictures) {
+            console.log(picture)
             if (picture.image != null) {
                 new Compressor(picture.rawImage, {
                     quality: appContext.qualityPictures, success(result) {

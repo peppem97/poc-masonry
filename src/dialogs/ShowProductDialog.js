@@ -31,6 +31,7 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
     };
 
     const setPicturesList = (...pictures) => {
+        console.log(pictures)
         let pictureList = [];
         for (let i = 0; i < pictures.length; i++) {
             if (pictures[i] != null) {
@@ -42,6 +43,7 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
 
     const getProductPictures = () => {
         if (props.open) {
+
             appContext.setLoadingTrue();
             axios.get(appContext.hostProducts + "?id=" + props.id, {
                 headers: {'Authorization': 'Bearer ' + appContext.token}
@@ -51,7 +53,12 @@ export const ShowProductDialog = React.memo(function PostCard(props) {
                     response.data[0].picture1,
                     response.data[0].picture2,
                     response.data[0].picture3,
-                    response.data[0].picture4)
+                    response.data[0].picture4,
+                    response.data[0].picture5,
+                    response.data[0].picture6,
+                    response.data[0].picture7,
+                    response.data[0].picture8,
+                    response.data[0].picture9);
                 initImageList(tmpPictures);
                 appContext.setLoadingFalse();
             }).catch((error) => {
