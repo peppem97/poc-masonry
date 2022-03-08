@@ -17,6 +17,7 @@ import axios from "axios";
 import GlobalContext from "./GlobalContext";
 import UpdateProductDialog from "./dialogs/UpdateProductDialog";
 import Compressor from "compressorjs";
+import EditIcon from '@mui/icons-material/Edit';
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -136,8 +137,8 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
 
     return (
         <>
-            <Card className={styles.card} style={{height: props.product.height}} raised onClick={goToProduct}>
-                <CardMedia classes={mediaStyles} image={props.product.picture}/>
+            <Card className={styles.card} style={{height: props.product.height}} raised>
+                <CardMedia classes={mediaStyles} image={props.product.picture} />
                 <Box py={3} px={2} className={styles.contentHeader}>
                     {props.showAvatar && (
                         <IconButton onClick={goToUser}>
@@ -146,12 +147,12 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                             </Skeleton> : <Avatar src={avatar}/>}
                         </IconButton>)}
                 </Box>
-                <Box py={3} px={2} className={styles.contentDescription}>
+                <Box py={3} px={2} className={styles.contentDescription} >
                     <Info useStyles={useGalaxyInfoStyles}>
                         <InfoTitle>{props.product.title}</InfoTitle>
                         <CardActions className="justify-content-center">
-                            <IconButton style={{color: 'white', fontWeight: 'bold'}}>
-                                <OpenInNewIcon/>
+                            <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={goToProduct}>
+                                {props.showAvatar ? <OpenInNewIcon/> : <EditIcon/>}
                             </IconButton>
                             <IconButton style={{color: 'white', fontWeight: 'bold'}}>
                                 <FavoriteIcon/>
@@ -163,30 +164,17 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                     </Info>
                 </Box>
             </Card>
-            {props.showAvatar && <ShowProductDialog
-                open={dialogOpened}
-                onClose={() => {
-                    setDialogOpened(false)
-                }}
-                avatar={avatar}
-                title={props.product.title}
-                description={props.product.description}
-                picture={props.product.picture}
-                username={props.product.username}
-                id={props.product.id}
-                shop={shop}
-            />}
-            {!props.showAvatar && <UpdateProductDialog
-                open={dialogOpened}
-                onClose={() => {
-                    setDialogOpened(false)
-                }}
-                updateProduct={updateProduct}
-                title={props.product.title}
-                description={props.product.description}
-                picture={props.product.picture}
-                id={props.product.id}
-            />}
+            {/*{!props.showAvatar && <UpdateProductDialog*/}
+            {/*    open={dialogOpened}*/}
+            {/*    onClose={() => {*/}
+            {/*        setDialogOpened(false)*/}
+            {/*    }}*/}
+            {/*    updateProduct={updateProduct}*/}
+            {/*    title={props.product.title}*/}
+            {/*    description={props.product.description}*/}
+            {/*    picture={props.product.picture}*/}
+            {/*    id={props.product.id}*/}
+            {/*/>}*/}
         </>
     );
 });

@@ -49,7 +49,6 @@ const useStyles = makeStyles(() => ({
 export const PictureCard = React.memo(function GalaxyCard(props) {
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const [dialogOpened, setDialogOpened] = useState(false)
-
     const styles = useStyles();
 
     return (
