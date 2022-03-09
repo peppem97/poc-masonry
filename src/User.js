@@ -247,7 +247,7 @@ export default function User() {
                 updateCarousel={updateCarousel}
                 carousel={carousel}/>
             <Container fluid>
-                <GridSystem loadingProducts={loadingProducts} products={products} columnWidth={appContext.columnWidth} isUser={true}/>
+                <GridSystem loadingProducts={loadingProducts} isProducts={true} products={products} columnWidth={appContext.columnWidth} isUser={true}/>
             </Container>
         </>
     )

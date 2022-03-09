@@ -59,7 +59,7 @@ export default function Home() {
                 <br/>
                 <br/>
                 <Row>
-                    <GridSystem loadingProducts={loadingProduct} products={products} columnWidth={appContext.columnWidth} isUser={false}/>
+                    <GridSystem loadingProducts={loadingProduct} isProducts={true} products={products} columnWidth={appContext.columnWidth} isUser={false}/>
                 </Row>
             </Container>
         </>

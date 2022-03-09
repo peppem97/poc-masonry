@@ -18,8 +18,8 @@ const useStyles = makeStyles(() => ({
         borderRadius: '1rem',
         // boxShadow: 1,
         position: 'relative',
-        minWidth: 200,
-        minHeight: 200,
+        // minWidth: 200,
+        // minHeight: 200,
         '&:after': {
             content: '""',
             display: 'block',
@@ -35,15 +35,15 @@ const useStyles = makeStyles(() => ({
         position: 'absolute',
         zIndex: 2,
         bottom: 0,
+        left: 0,
         width: '100%',
     },
-
-    contentHeader: {
-        position: 'absolute',
-        zIndex: 2,
-        top: 0,
-        width: '100%',
-    },
+    // contentHeader: {
+    //     position: 'absolute',
+    //     zIndex: 2,
+    //     top: 0,
+    //     width: '100%',
+    // },
 }));
 
 export const PictureCard = React.memo(function GalaxyCard(props) {
@@ -53,20 +53,13 @@ export const PictureCard = React.memo(function GalaxyCard(props) {
 
     return (
         <>
-            <Card className={styles.card} style={{height: props.height}} raised>
+            <Card className={styles.card} style={{height: props.height, width: props.width}} raised>
                 <CardMedia classes={mediaStyles} image={props.picture}/>
-                <Box py={3} px={2} className={styles.contentHeader}>
-                    {/*{props.showAvatar && (*/}
-                    {/*    <IconButton onClick={goToUser}>*/}
-                    {/*        {loading ? <Skeleton variant="circular">*/}
-                    {/*            <Avatar src={avatar}/>*/}
-                    {/*        </Skeleton> : <Avatar src={avatar}/>}*/}
-                    {/*    </IconButton>)}*/}
-                </Box>
+                {/*<Box py={3} px={2} className={styles.contentHeader}>*/}
+                {/*</Box>*/}
                 <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles}>
-                        {/*<InfoTitle>{props.item.title}</InfoTitle>*/}
-                        <CardActions style={{position: 'absolute', bottom: 0, left: 0}}>
+                        <CardActions className={styles.contentDescription}>
                             <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {
                                 setDialogOpened(true)
                             }}>
