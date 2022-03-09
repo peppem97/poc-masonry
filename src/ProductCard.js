@@ -18,6 +18,8 @@ import GlobalContext from "./GlobalContext";
 import UpdateProductDialog from "./dialogs/UpdateProductDialog";
 import Compressor from "compressorjs";
 import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -53,10 +55,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const ProductCard = React.memo(function GalaxyCard(props) {
-    const [dialogOpened, setDialogOpened] = useState(false);
     const [avatar, setAvatar] = useState(null)
     const [shop, setShop] = useState(null)
-    // const [loading, setLoading] = useState(false);
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const styles = useStyles();
     const appContext = useContext(GlobalContext);
@@ -82,6 +82,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
         })
     };
 
+    //TODO: da mettere nel componente product
     const updateProduct = (pictures) => {
         console.log(pictures)
         for (let picture of pictures) {
@@ -129,7 +130,6 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
         }
     };
 
-
     useEffect(() => {
         getUserInfo();
     }, []);
@@ -138,7 +138,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     return (
         <>
             <Card className={styles.card} style={{height: props.product.height}} raised>
-                <CardMedia classes={mediaStyles} image={props.product.picture} />
+                <CardMedia classes={mediaStyles} image={props.product.picture}/>
                 <Box py={3} px={2} className={styles.contentHeader}>
                     {props.showAvatar && (
                         <IconButton onClick={goToUser}>
@@ -147,19 +147,35 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                             </Skeleton> : <Avatar src={avatar}/>}
                         </IconButton>)}
                 </Box>
-                <Box py={3} px={2} className={styles.contentDescription} >
+                <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles}>
                         <InfoTitle>{props.product.title}</InfoTitle>
                         <CardActions className="justify-content-center">
-                            <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={goToProduct}>
-                                {props.showAvatar ? <OpenInNewIcon/> : <EditIcon/>}
-                            </IconButton>
-                            <IconButton style={{color: 'white', fontWeight: 'bold'}}>
-                                <FavoriteIcon/>
-                            </IconButton>
-                            <IconButton style={{color: 'white', fontWeight: 'bold'}}>
-                                <ShareIcon/>
-                            </IconButton>
+
+                            {props.showAvatar ?
+                                <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={goToProduct}>
+                                    <OpenInNewIcon/>
+                                </IconButton> :
+                                <IconButton style={{color: 'white', fontWeight: 'bold'}}>
+                                    <EditIcon/>
+                                </IconButton>}
+
+                            {props.showAvatar ?
+                                <IconButton style={{color: 'white', fontWeight: 'bold'}}>
+                                    <FavoriteIcon/>
+                                </IconButton> :
+                                <IconButton style={{color: 'white', fontWeight: 'bold'}}>
+                                    <VisibilityIcon/>
+                                </IconButton>}
+
+
+                            {props.showAvatar ?
+                                <IconButton style={{color: 'white', fontWeight: 'bold'}}>
+                                    <ShareIcon/>
+                                </IconButton> :
+                                <IconButton style={{color: 'white', fontWeight: 'bold'}}>
+                                    <DeleteForeverIcon/>
+                                </IconButton>}
                         </CardActions>
                     </Info>
                 </Box>

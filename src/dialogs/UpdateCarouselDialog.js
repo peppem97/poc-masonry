@@ -12,19 +12,15 @@ import React, {useEffect, useState} from "react";
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import ShowPreviewDialog from "./ShowPreviewDialog";
 import ProgressiveImg from "../ProgessiveImage";
 
 export default function UpdateCarouselDialog(props) {
     const MAX_PICTURES = 3;
     const [pictures, setPictures] = useState([])
     const [initPictures, setInitPictures] = useState([])
-    const [previewOpened, setPreviewOpened] = useState(false)
-    const [preview, setPreview] = useState(null)
 
     const closeDialog = () => {
         setPictures(initPictures)
-        setPreviewOpened(false)
         props.onClose();
     };
 
@@ -148,11 +144,6 @@ export default function UpdateCarouselDialog(props) {
                     </Row>
                 </Container>
             </DialogContent>
-            <ShowPreviewDialog open={previewOpened}
-                               image={preview}
-                               onClose={() => {
-                                   setPreviewOpened(false)
-                               }}/>
         </Dialog>
     )
 }

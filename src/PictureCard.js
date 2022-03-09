@@ -11,7 +11,6 @@ import {useGalaxyInfoStyles} from '@mui-treasury/styles/info/galaxy';
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
 import {CardActions, IconButton, Skeleton} from "@mui/material";
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
-import ShowPreviewDialog from "./dialogs/ShowPreviewDialog";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -48,7 +47,6 @@ const useStyles = makeStyles(() => ({
 
 export const PictureCard = React.memo(function GalaxyCard(props) {
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
-    // const [dialogOpened, setDialogOpened] = useState(false)
     const styles = useStyles();
 
     const openInNewTab = (url) => {
