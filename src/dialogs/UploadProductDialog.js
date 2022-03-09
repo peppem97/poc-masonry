@@ -15,17 +15,40 @@ import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 export default function UploadProductDialog(props) {
-    // const [picture, setPicure] = useState(null)
-    // const [rawPicture, setRawPicure] = useState(null)
     const [pictures, setPictures] = useState([]);
     const [title, setTitle] = useState(null);
     const [description, setDescription] = useState(null);
     const MAX_PICTURES = 9;
 
-    // const onChangePicture = (e) => {
-    //     setPicure(URL.createObjectURL(e.target.files[0]));
-    //     setRawPicure(e.target.files[0])
-    // };
+    const addPicture = (e, index) => {
+        let picturesList = [];
+        for (let picture of pictures) {
+            if (picture.index === index) {
+                picturesList.push({
+                    index: picture.index,
+                    image: URL.createObjectURL(e.target.files[0]),
+                    rawImage: e.target.files[0],
+                    add: false
+                });
+            } else {
+                picturesList.push(picture);
+            }
+        }
+
+        setPictures(picturesList);
+    };
+
+    const removePicture = (index) => {
+        let tmpPictures = [];
+        for (let picture of pictures) {
+            if (picture.index === index) {
+                tmpPictures.push({index: picture.index, image: null, rawImage: null, add: true});
+            } else {
+                tmpPictures.push(picture);
+            }
+        }
+        setPictures(tmpPictures);
+    };
 
     const onChangeTitle = (e) => {
         setTitle(e.target.value)
@@ -40,11 +63,11 @@ export default function UploadProductDialog(props) {
     };
 
     const uploadProduct = () => {
-        // props.uploadProduct({
-        //     rawPicture: rawPicture,
-        //     title: title,
-        //     description: description
-        // });
+        props.uploadProduct({
+            pictures: pictures,
+            title: title,
+            description: description
+        });
         props.onClose();
     }
 
@@ -60,7 +83,6 @@ export default function UploadProductDialog(props) {
 
     useEffect(() => {
         initImageList();
-        // setPicure(null)
     }, [props.open]);
 
     return(
@@ -116,7 +138,9 @@ export default function UploadProductDialog(props) {
                                             actionIcon={
                                                 [
                                                     <label htmlFor="icon-button-file" key={0}>
-                                                        <Input accept="image/*" id="icon-button-file" type="file" hidden/>
+                                                        <Input accept="image/*" id="icon-button-file" type="file" hidden onChange={(e) => {
+                                                            addPicture(e, item.index)
+                                                        }}/>
                                                         <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
                                                                     aria-label="upload picture" component="span">
                                                             <PhotoCamera/>
@@ -135,10 +159,14 @@ export default function UploadProductDialog(props) {
                                         <ImageListItemBar
                                             actionIcon={
                                                 [
-                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0}>
+                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0} onClick={() => {
+                                                        console.log('cancello')
+                                                    }}>
                                                         <OpenInFullIcon/>
                                                     </IconButton>,
-                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={1}>
+                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={1} onClick={() => {
+                                                        removePicture(item.index)
+                                                    }}>
                                                         <DeleteForeverIcon/>
                                                     </IconButton>
                                                 ]}
@@ -149,7 +177,7 @@ export default function UploadProductDialog(props) {
                         </ImageList>
                     </Row>
                     <Row>
-                        <Button variant={"contained"} component="span" style={{backgroundColor: 'darkred' }}>
+                        <Button variant={"contained"} component="span" style={{backgroundColor: 'darkred' }} onClick={() => {uploadProduct()}}>
                             Inserisci prodotto
                         </Button>
                     </Row>

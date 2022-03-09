@@ -1,19 +1,10 @@
-import DialogTitle from "@mui/material/DialogTitle";
 import {
     Card,
-    CardContent,
-    CardHeader,
-    DialogContent,
-    IconButton,
-    ImageList,
-    ImageListItem,
-    useTheme
+    CardContent, CardHeader, IconButton, Skeleton
 } from "@mui/material";
-import Avatar from "@material-ui/core/Avatar";
 import Typography from "@mui/material/Typography";
 import CardMedia from "@material-ui/core/CardMedia";
 import {Col, Container, Row} from "react-bootstrap";
-import PictureCard from "./PictureCard";
 import * as React from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
@@ -22,6 +13,7 @@ import axios from "axios";
 import {makeStyles} from "@material-ui/core/styles";
 import cx from 'clsx';
 import GridSystem from "./GridSystem";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles(({breakpoints, spacing}) => ({
     root: {
@@ -117,11 +109,9 @@ export default function Product(props) {
                 response.data[0].picture9);
             setUsername(response.data[0].username);
             setPictures(initImageList(tmpPictures));
-            setCover(appContext.host + response.data[0].cover.url);
+            setCover(appContext.host + response.data[0].cover?.url);
             setTitle(response.data[0].title);
             setDescription(response.data[0].description);
-            getUserInfo();
-            console.log(pictures)
             appContext.setLoadingFalse();
         }).catch((error) => {
         })
@@ -134,7 +124,6 @@ export default function Product(props) {
         }).then((response) => {
             setAvatar(appContext.host + response.data[0].avatar.url);
             setShop(response.data[0].title);
-
             appContext.setLoadingFalse();
         }).catch((error) => {
         })
@@ -172,6 +161,10 @@ export default function Product(props) {
         getProductInfo();
     }, [])
 
+    useEffect(() => {
+        getUserInfo();
+    }, [username])
+
     return (
         <Container>
             <br/>
@@ -185,38 +178,54 @@ export default function Product(props) {
                         image={cover}
                     />
                     <CardContent>
-                        <Container>
+                        <Container fluid>
+                            {/*<Row>*/}
+                            {/*    <Col>*/}
+                            {/*        /!*<IconButton onClick={goToUser}>*!/*/}
+                            {/*        /!*    {appContext.loading ? <Skeleton variant="circular">*!/*/}
+                            {/*        /!*        <Avatar src={avatar}/>*!/*/}
+                            {/*        /!*    </Skeleton> : <Avatar src={avatar}/>}*!/*/}
+                            {/*        /!*</IconButton>*!/*/}
+                            {/*    </Col>*/}
+                            {/*    <Col>*/}
+                            {/*        <Typography variant="subtitle1">{shop}</Typography>*/}
+
+                            {/*    </Col>*/}
+
+                            {/*    /!*<CardHeader*!/*/}
+                            {/*    /!*    avatar={*!/*/}
+                            {/*    /!*        <IconButton onClick={goToUser}>*!/*/}
+                            {/*    /!*            <Avatar src={avatar}/>*!/*/}
+                            {/*    /!*        </IconButton>*!/*/}
+                            {/*    /!*    }*!/*/}
+                            {/*    /!*    sx={{maxHeight: '60px'}}*!/*/}
+                            {/*    /!*    title={<Typography variant="h6">{shop}</Typography>}*!/*/}
+                            {/*    /!*//*/}
+                            {/*</Row>*/}
                             <Row>
-                                <Typography gutterBottom variant="h5">
+                                <Typography gutterBottom variant="h3">
                                     {title}
                                 </Typography>
+                                <Typography variant='subtitle2'>Pubblicato da:  {shop}</Typography>
                             </Row>
+                            <br/>
+
                             <Row>
                                 <Typography variant="body2" color="text.secondary">
                                     {description}
-                                    Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt
-                                    ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum
-                                    exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
-                                    consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu
-                                    fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa
-                                    qui officia deserunt mollit anim id est laborum.
-                                    Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt
-                                    ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum
-                                    exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
-                                    consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu
-                                    fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa
-                                    qui officia deserunt mollit anim id est laborum.
+
                                 </Typography>
                             </Row>
                             <br/>
                             <Row>
-                                <Col>
+                                <Col style={{width: '100%'}}>
                                     <GridSystem isProducts={false} pictures={pictures}/>
                                 </Col>
                             </Row>
                         </Container>
                     </CardContent>
                 </Card>
+
             </Row>
         </Container>
     )

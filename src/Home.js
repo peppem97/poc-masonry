@@ -26,7 +26,7 @@ export default function Home() {
                 title: element.title,
                 id: element.id,
                 description: element.description,
-                picture: appContext.host + element.cover.url,
+                picture: appContext.host + element.cover?.url,
                 username: element.username}))
             setProducts(tmpProducts);
             // appContext.setLoadingFalse();
