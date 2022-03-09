@@ -19,14 +19,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
 import GlobalContext from "./GlobalContext";
 import axios from "axios";
-import Box from "@mui/material/Box";
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
 import {makeStyles} from "@material-ui/core/styles";
-import {useBlogTextInfoContentStyles} from '@mui-treasury/styles/textInfoContent/blog';
-import Button from "@mui/material/Button";
-import TextInfoContent from '@mui-treasury/components/content/textInfo';
 import cx from 'clsx';
 import GridSystem from "./GridSystem";
 
@@ -89,7 +82,6 @@ const useStyles = makeStyles(({breakpoints, spacing}) => ({
 }));
 
 export default function Product(props) {
-    let navigate = useNavigate();
     const [pictures, setPictures] = useState([]);
     const [cover, setCover] = useState(null);
     const [title, setTitle] = useState(null);
@@ -99,23 +91,14 @@ export default function Product(props) {
     const [shop, setShop] = useState(null);
     const appContext = useContext(GlobalContext);
     const {id} = useParams();
-    const theme = useTheme();
     const MAX_PICTURES = 10;
-
-    //////
+    let navigate = useNavigate();
     const styles = useStyles();
-    // const {
-    //     button: buttonStyles,
-    //     ...contentStyles
-    // } = useBlogTextInfoContentStyles();
-    /////
 
-    //OK
     const goToUser = () => {
         navigate("/user/" + username);
     };
 
-    //OK
     const getProductInfo = () => {
         appContext.setLoadingTrue();
         axios.get(appContext.hostProducts + "?id=" + id, {
@@ -144,7 +127,6 @@ export default function Product(props) {
         })
     };
 
-    //TODO
     const getUserInfo = () => {
         appContext.setLoadingTrue();
         axios.get(appContext.hostShops + "?username=" + username, {
@@ -158,7 +140,6 @@ export default function Product(props) {
         })
     }
 
-    //OK
     const initImageList = (tmpPictures) => {
         let initPictures = []
         for (let i = 0; i < MAX_PICTURES; i++) {
@@ -177,7 +158,6 @@ export default function Product(props) {
 
     }
 
-    //OK
     const setPicturesList = (...pictures) => {
         let pictureList = [];
         for (let i = 0; i < pictures.length; i++) {
@@ -193,13 +173,6 @@ export default function Product(props) {
     }, [])
 
     return (
-        // <>
-        //     <br/>
-        //     <br/>
-        //     <br/>
-        //     <br/>
-        //     <Typography variant='h1'>PRODOTTO ID: {id}</Typography>
-        // </>
         <Container>
             <br/>
             <br/>
@@ -239,112 +212,11 @@ export default function Product(props) {
                             <Row>
                                 <Col>
                                     <GridSystem isProducts={false} pictures={pictures}/>
-
-                                    {/*<ImageList gap={50} cols={3} sx={{overflowX: 'auto', padding: '20px',  width: 610, height: 380 }}>*/}
-                                    {/*    {pictures.map((element) => {*/}
-                                    {/*            if (!element.add) {*/}
-                                    {/*                return <ImageListItem key={element.index} cols={1} rows={1}>*/}
-                                    {/*                    <PictureCard picture={element.image} height={'150px'} width={'150px'}/>*/}
-                                    {/*                </ImageListItem>*/}
-                                    {/*            } else {*/}
-                                    {/*                return null;*/}
-                                    {/*            }*/}
-                                    {/*        }*/}
-                                    {/*    )}*/}
-                                    {/*</ImageList>*/}
                                 </Col>
                             </Row>
-
-
-
                         </Container>
-                        {/*<TextInfoContent*/}
-                        {/*    overline={'28 MAR 2019'}*/}
-                        {/*    heading={'What is Git ?'}*/}
-                        {/*    body={*/}
-                        {/*        'Git is a distributed version control system. Every dev has a working copy of the code and...'*/}
-                        {/*    }*/}
-                        {/*/>*/}
-                        {/*<Button className={buttonStyles}>Read more</Button>*/}
                     </CardContent>
                 </Card>
-
-            </Row>
-            <Row>
-                {/*<Card sx={{ display: 'flex' }}>*/}
-                {/*    <CardMedia*/}
-                {/*        component="img"*/}
-                {/*        sx={{ width: '100%', height: 'auto'}}*/}
-                {/*        image={cover}*/}
-                {/*        alt=""*/}
-                {/*    />*/}
-                {/*    <Box sx={{ display: 'flex', flexDirection: 'column' }}>*/}
-                {/*        <CardContent sx={{ flex: '1 0 auto' }}>*/}
-                {/*            <Typography component="div" variant="h5">*/}
-                {/*                Live From Space*/}
-                {/*            </Typography>*/}
-                {/*            <Typography variant="subtitle1" color="text.secondary" component="div">*/}
-                {/*                Mac Miller*/}
-                {/*            </Typography>*/}
-                {/*        </CardContent>*/}
-                {/*        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>*/}
-                {/*            <IconButton aria-label="previous">*/}
-                {/*                {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}*/}
-                {/*            </IconButton>*/}
-                {/*            <IconButton aria-label="play/pause">*/}
-                {/*                <PlayArrowIcon sx={{ height: 38, width: 38 }} />*/}
-                {/*            </IconButton>*/}
-                {/*            <IconButton aria-label="next">*/}
-                {/*                {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}*/}
-                {/*            </IconButton>*/}
-                {/*        </Box>*/}
-                {/*    </Box>*/}
-
-                {/*</Card>*/}
-            </Row>
-            <Row>
-                {/*<Card>*/}
-                {/*    <CardHeader*/}
-                {/*        avatar={*/}
-                {/*            <IconButton onClick={goToUser}>*/}
-                {/*                <Avatar src={avatar}/>*/}
-                {/*            </IconButton>*/}
-                {/*        }*/}
-                {/*        sx={{maxHeight: '60px'}}*/}
-                {/*        title={<Typography variant="h6">{shop}</Typography>}*/}
-                {/*    />*/}
-                {/*    <CardContent>*/}
-                {/*        <CardMedia*/}
-                {/*            height="350"*/}
-                {/*            component="img"*/}
-                {/*            image={cover}*/}
-                {/*        />*/}
-                {/*        <br/>*/}
-                {/*        <Typography gutterBottom variant="h5" component="div" className="text-center">*/}
-                {/*            {title}*/}
-                {/*        </Typography>*/}
-                {/*        <Typography variant="body2" color="text.secondary" className="text-center">*/}
-                {/*            {description}*/}
-                {/*        </Typography>*/}
-                {/*        <br/>*/}
-                {/*        <Container>*/}
-                {/*            <ImageList gap={50} cols={10} sx={{overflowX: 'auto', padding: '20px'}}>*/}
-                {/*                {pictures.map((element) => {*/}
-                {/*                        if (!element.add) {*/}
-                {/*                            return <ImageListItem key={element.index} cols={1} rows={1}>*/}
-                {/*                                <PictureCard picture={element.image}/>*/}
-                {/*                            </ImageListItem>*/}
-                {/*                        } else {*/}
-                {/*                            return null;*/}
-                {/*                        }*/}
-                {/*                    }*/}
-                {/*                )}*/}
-
-                {/*            </ImageList>*/}
-
-                {/*        </Container>*/}
-                {/*    </CardContent>*/}
-                {/*</Card>*/}
             </Row>
         </Container>
     )
