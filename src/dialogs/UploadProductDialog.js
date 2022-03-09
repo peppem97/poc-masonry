@@ -94,25 +94,32 @@ export default function UploadProductDialog(props) {
                 </DialogContentText>
                 <br/>
                 <Container>
-                    <Row className='justify-content-center'>
-                        <TextField
-                            fullWidth
-                            onChange={onChangeTitle}
-                            autoFocus
-                            color='secondary'
-                            margin="dense"
-                            label="Titolo prodotto"
-                            variant="outlined"/>
-                    </Row>
-                    <br/>
-                    <Row className='justify-content-center'>
-                        <TextField
-                            onChange={onChangeDescription}
-                            label="Descrizione prodotto"
-                            multiline
-                            color='secondary'
-                            rows={4}
-                        />
+                    <Row>
+                        <Col>
+                            <Row className='justify-content-center'>
+                                <TextField
+                                    fullWidth
+                                    onChange={onChangeTitle}
+                                    autoFocus
+                                    color='secondary'
+                                    margin="dense"
+                                    label="Titolo prodotto"
+                                    variant="outlined"/>
+                            </Row>
+                            <br/>
+                            <Row className='justify-content-center'>
+                                <TextField
+                                    onChange={onChangeDescription}
+                                    label="Descrizione prodotto"
+                                    multiline
+                                    color='secondary'
+                                    rows={4}
+                                />
+                            </Row>
+                        </Col>
+                        <Col>
+
+                        </Col>
                     </Row>
                     <br/>
                     {/*<Row>*/}
@@ -126,7 +133,7 @@ export default function UploadProductDialog(props) {
 
                     <Row className='justify-content-center'>
                         <ImageList sx={{width: 1000, height: 250}}
-                                   gap={5} cols={50}>
+                                   gap={5} cols={90}>
                             {pictures.map((item) => {
                                 if (item.add) {
                                     return (<ImageListItem key={item.index} cols={10} rows={1}>
