@@ -48,8 +48,12 @@ const useStyles = makeStyles(() => ({
 
 export const PictureCard = React.memo(function GalaxyCard(props) {
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
-    const [dialogOpened, setDialogOpened] = useState(false)
+    // const [dialogOpened, setDialogOpened] = useState(false)
     const styles = useStyles();
+
+    const openInNewTab = (url) => {
+
+    }
 
     return (
         <>
@@ -61,20 +65,20 @@ export const PictureCard = React.memo(function GalaxyCard(props) {
                     <Info useStyles={useGalaxyInfoStyles}>
                         <CardActions className={styles.contentDescription}>
                             <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {
-                                setDialogOpened(true)
+                                window.open(props.picture, '_blank', 'noopener,noreferrer')
                             }}>
-                                <OpenInFullIcon />
+                                <OpenInFullIcon/>
                             </IconButton>
                         </CardActions>
                     </Info>
                 </Box>
             </Card>
             <br/>
-            <ShowPreviewDialog open={dialogOpened}
-                               image={props.picture}
-                               onClose={() => {
-                                   setDialogOpened(false)
-                               }}/>
+            {/*<ShowPreviewDialog open={dialogOpened}*/}
+            {/*                   image={props.picture}*/}
+            {/*                   onClose={() => {*/}
+            {/*                       setDialogOpened(false)*/}
+            {/*                   }}/>*/}
         </>
     );
 });

@@ -124,8 +124,7 @@ export default function UpdateCarouselDialog(props) {
                                             [
                                                 <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0}
                                                             onClick={() => {
-                                                                setPreview(item.image)
-                                                                setPreviewOpened(true)
+                                                                window.open(item.image, '_blank', 'noopener,noreferrer')
                                                             }}>
                                                     <OpenInFullIcon/>
                                                 </IconButton>,

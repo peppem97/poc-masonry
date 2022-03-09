@@ -238,6 +238,7 @@ export default function Product(props) {
                             <br/>
                             <Row>
                                 <Col>
+                                    <GridSystem isProducts={false} pictures={pictures}/>
 
                                     {/*<ImageList gap={50} cols={3} sx={{overflowX: 'auto', padding: '20px',  width: 610, height: 380 }}>*/}
                                     {/*    {pictures.map((element) => {*/}
