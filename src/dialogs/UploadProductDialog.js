@@ -27,7 +27,7 @@ export default function UploadProductDialog(props) {
                 picturesList.push({
                     index: picture.index,
                     image: URL.createObjectURL(e.target.files[0]),
-                    rawImage: e.target.files[0],
+                    rawPicture: e.target.files[0],
                     add: false
                 });
             } else {
@@ -42,7 +42,7 @@ export default function UploadProductDialog(props) {
         let tmpPictures = [];
         for (let picture of pictures) {
             if (picture.index === index) {
-                tmpPictures.push({index: picture.index, image: null, rawImage: null, add: true});
+                tmpPictures.push({index: picture.index, image: null, rawPicture: null, add: true});
             } else {
                 tmpPictures.push(picture);
             }
@@ -74,7 +74,7 @@ export default function UploadProductDialog(props) {
     const initImageList = () => {
         let initPictures = []
         for (let i = 0; i < MAX_PICTURES; i++) {
-            initPictures.push({index: i, image: null, rawImage: null, add: true})
+            initPictures.push({index: i, image: null, rawPicture: null, add: true})
         }
         // setInitPictures(initPictures)
         setPictures(initPictures)

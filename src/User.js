@@ -62,7 +62,6 @@ export default function User() {
             let items = response.data.map((element) => ({
                 height: generateHeight(),
                 title: element.title,
-                token: appContext.token,
                 id: element.id,
                 description: element.description,
                 username: username,
@@ -71,6 +70,7 @@ export default function User() {
             setProducts(items);
             setLoadingProducts(false);
         }).catch((error) => {
+            console.log(error)
             setLoadingProducts(false);
         })
     };
@@ -104,7 +104,6 @@ export default function User() {
 
     const updateCarousel = (pictures) => {
         for (let picture of pictures) {
-            console.log(picture)
             if (picture.image != null) {
                 new Compressor(picture.rawImage, {
                     quality: appContext.qualityPictures, success(result) {
@@ -115,6 +114,7 @@ export default function User() {
                         axios.put(appContext.hostShops + "/" + id, formData, {
                             headers: {'Authorization': 'Bearer ' + appContext.token,}
                         }).then((response) => {
+                            //TODO aggiungere controllo del 9
                             getUserInfo();
                             appContext.setLoadingFalse();
                         }).catch((error) => {})
@@ -196,7 +196,6 @@ export default function User() {
     // };
 
     const uploadProduct = (params) => {
-        console.log(params)
         appContext.setLoadingTrue();
 
         const formData = new FormData();
@@ -212,34 +211,71 @@ export default function User() {
                 'Authorization': 'Bearer ' + appContext.token,
             }
         }).then((response) => {
-            getProducts();
-            appContext.setLoadingFalse();
+            console.log(response)
+            console.log(params)
+
+            // getProducts();
+            for (let picture of params.pictures) {
+                if (picture.image != null) {
+                    new Compressor(picture.rawPicture, {
+                        quality: appContext.qualityPictures, success(result) {
+                            const formData = new FormData();
+                            // const data = {
+                            //     title: params.title,
+                            //     description: params.description,
+                            //     username: username
+                            // };
+                            formData.append('files.picture' + picture.index, result, picture.rawPicture.name);
+                            formData.append('data', JSON.stringify({}));
+                            axios.put(appContext.hostProducts + "/" + response.data.id, formData, {
+                                headers: {
+                                    'Authorization': 'Bearer ' + appContext.token,
+                                }
+                            }).then((response) => {
+                                if (picture.index == 9) {
+                                    getProducts();
+                                    appContext.setLoadingFalse();
+                                }
+                            }).catch((error) => {
+                                console.log(error)
+                                appContext.setLoadingFalse();
+
+
+                            })
+                        }, error(err) {
+                            console.log(err)
+                            appContext.setLoadingFalse();
+
+                        }
+                    })
+
+                } else {
+
+                    appContext.setLoadingTrue();
+                    let data = {};
+                    data['picture' + picture.index] = null;
+                    axios.put(appContext.hostProducts + "/" + response.data.id, data, {
+                        headers: {'Authorization': 'Bearer ' + appContext.token}
+                    }).then((response) => {
+                        if (picture.index == 9) {
+                            getProducts();
+                            appContext.setLoadingFalse();
+                        }
+                    }).catch((error) => {
+                        console.log(error)
+                        appContext.setLoadingFalse();
+
+                    })
+                }
+            }
         }).catch((error) => {
+            console.log(error)
+            appContext.setLoadingFalse();
+
         })
 
 
-        // new Compressor(params.rawPicture, {
-        //     quality: appContext.qualityPictures, success(result) {
-        //         const formData = new FormData();
-        //         const data = {
-        //             title: params.title,
-        //             description: params.description,
-        //             username: username
-        //         };
-        //         formData.append('files.cover', result, params.rawPicture.name);
-        //         formData.append('data', JSON.stringify(data));
-        //         axios.post(appContext.hostProducts, formData, {
-        //             headers: {
-        //                 'Authorization': 'Bearer ' + appContext.token,
-        //             }
-        //         }).then((response) => {
-        //             getProducts();
-        //             appContext.setLoadingFalse();
-        //         }).catch((error) => {
-        //         })
-        //     }, error(err) {
-        //     }
-        // })
+
     };
 
     const openInfoDialog = (info) => {
