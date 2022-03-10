@@ -111,8 +111,8 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                                 // </IconButton>
                                 null
                                 :
-                                <IconButton style={{color: 'white', fontWeight: 'bold'}}>
-                                    <VisibilityIcon onClick={goToProduct}/>
+                                <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={goToProduct}>
+                                    <OpenInNewIcon />
                                 </IconButton>}
                             {props.showAvatar ?
                                 // <IconButton style={{color: 'white', fontWeight: 'bold'}}>
@@ -120,7 +120,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                                 // </IconButton>
                                 null
                                 :
-                                <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {props.deleteProduct()}}>
+                                <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {props.deleteProduct(props.product.id)}}>
                                     <DeleteForeverIcon/>
                                 </IconButton>}
                         </CardActions>

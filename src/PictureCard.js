@@ -8,6 +8,7 @@ import {useGalaxyInfoStyles} from '@mui-treasury/styles/info/galaxy';
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
 import {CardActions, IconButton} from "@mui/material";
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -50,7 +51,7 @@ export const PictureCard = React.memo(function GalaxyCard(props) {
                             <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {
                                 window.open(props.picture, '_blank', 'noopener,noreferrer')
                             }}>
-                                <OpenInFullIcon/>
+                                <VisibilityIcon/>
                             </IconButton>
                         </CardActions>
                     </Info>

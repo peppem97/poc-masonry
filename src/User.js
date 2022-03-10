@@ -30,6 +30,7 @@ export default function User() {
     const [deleteProductDialogOpened, setDeleteProductDialogOpened] = useState(false);
     const [info, setInfo] = useState(null);
     const [infoToEdit, setInfoToEdit] = useState(null);
+    const [productToDelete, setProductToDelete] = useState(null);
     const [loadingProducts, setLoadingProducts] = useState(false);
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
@@ -219,6 +220,12 @@ export default function User() {
         })
     };
 
+    const deleteProduct = (consens) => {
+        if (consens === true) {
+            //TODO cancellazione prodotto
+        }
+    }
+
     const openInfoDialog = (info) => {
         switch (info) {
             case 'title':
@@ -243,7 +250,6 @@ export default function User() {
         setUpdateInfoDialogOpened(true);
     };
 
-    const openDeleteProductDialog = () => {};
 
     useEffect(() => {
         getUserInfo();
@@ -296,6 +302,7 @@ export default function User() {
                 carousel={carousel}/>
             <DeleteProductDialog
                 open={deleteProductDialogOpened}
+                deleteProduct={deleteProduct}
                 onClose={() => {setDeleteProductDialogOpened(false)}}>
             </DeleteProductDialog>
             <Container fluid>
@@ -304,7 +311,10 @@ export default function User() {
                     isProducts={true}
                     products={products}
                     columnWidth={appContext.columnWidth}
-                    isUser={true} deleteProduct={() => {setDeleteProductDialogOpened(true)}}/>
+                    isUser={true} deleteProduct={(id) =>  {
+                        setProductToDelete(id);
+                        setDeleteProductDialogOpened(true);
+                    }}/>
             </Container>
             <br/>
             <br/>
