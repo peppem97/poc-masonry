@@ -52,8 +52,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const ProductCard = React.memo(function GalaxyCard(props) {
-    const [avatar, setAvatar] = useState(null)
-    const [shop, setShop] = useState(null)
+    const [avatar, setAvatar] = useState(null);
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const styles = useStyles();
     const appContext = useContext(GlobalContext);
@@ -73,16 +72,15 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
             setAvatar(appContext.host + response.data[0].avatar.url);
-            setShop(response.data[0].title);
             appContext.setLoadingFalse();
         }).catch((error) => {
+            appContext.setLoadingFalse();
         })
     };
 
     useEffect(() => {
         getUserInfo();
     }, []);
-
 
     return (
         <>
@@ -114,7 +112,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                                     <FavoriteIcon/>
                                 </IconButton> :
                                 <IconButton style={{color: 'white', fontWeight: 'bold'}}>
-                                    <VisibilityIcon/>
+                                    <VisibilityIcon onClick={goToProduct}/>
                                 </IconButton>}
 
 

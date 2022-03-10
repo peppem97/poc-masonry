@@ -13,7 +13,7 @@ function UserCarousel(props) {
 
     useEffect(() => {
         initCarousel();
-    }, [props.items]);
+    }, [props.pictures]);
 
     return (
         <>

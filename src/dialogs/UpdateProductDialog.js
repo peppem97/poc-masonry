@@ -8,13 +8,13 @@ import {
     TextField
 } from "@mui/material";
 import Button from "@mui/material/Button";
-import {Col, Row} from "react-bootstrap";
+import {Row} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-export default function UploadProductDialog(props) {
+export default function UpdateProductDialog(props) {
     const [pictures, setPictures] = useState([]);
     const [cover, setCover] = useState({image: null, rawPicture: null});
     const [title, setTitle] = useState(null);

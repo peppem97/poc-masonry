@@ -1,6 +1,6 @@
 import {
     Card,
-    CardContent, CardHeader, IconButton, Skeleton
+    CardContent, IconButton
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -73,7 +73,7 @@ const useStyles = makeStyles(({breakpoints, spacing}) => ({
     },
 }));
 
-export default function Product(props) {
+export default function Product() {
     const [pictures, setPictures] = useState([]);
     const [cover, setCover] = useState(null);
     const [title, setTitle] = useState(null);
@@ -134,7 +134,7 @@ export default function Product(props) {
     const initImageList = (tmpPictures) => {
         let initPictures = []
         for (let i = 0; i < MAX_PICTURES; i++) {
-            if (tmpPictures[i] != undefined) {
+            if (tmpPictures[i] !== undefined) {
                 initPictures.push({
                     index: i,
                     image: tmpPictures[i].image,

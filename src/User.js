@@ -7,12 +7,12 @@ import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 import GlobalContext from "./GlobalContext";
 import UserCard from "./UserCard";
-import UploadProductDialog from "./dialogs/UploadProductDialog";
+import UpdateProductDialog from "./dialogs/UpdateProductDialog";
 import UpdateInfoDialog from "./dialogs/UpdateInfoDialog";
 import Compressor from 'compressorjs';
 import UpdateCarouselDialog from "./dialogs/UpdateCarouselDialog";
 import {generateHeight} from "./Utility";
-
+import DeleteProductDialog from "./dialogs/DeleteProductDialog";
 
 export default function User() {
     const [id, setId] = useState(null);
@@ -29,7 +29,6 @@ export default function User() {
     const [updateInfoDialogOpened, setUpdateInfoDialogOpened] = useState(false);
     const [info, setInfo] = useState(null);
     const [infoToEdit, setInfoToEdit] = useState(null);
-    // const [loading, setLoading] = useState(null);
     const [loadingProducts, setLoadingProducts] = useState(false);
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
@@ -50,6 +49,7 @@ export default function User() {
             setWebsite(response.data[0].website);
             appContext.setLoadingFalse();
         }).catch((error) => {
+            appContext.setLoadingFalse();
             navigate('/no-user');
         })
     };
@@ -70,7 +70,6 @@ export default function User() {
             setProducts(items);
             setLoadingProducts(false);
         }).catch((error) => {
-            console.log(error)
             setLoadingProducts(false);
         })
     };
@@ -97,8 +96,12 @@ export default function User() {
                 }).then((response) => {
                     getUserInfo();
                     appContext.setLoadingFalse();
-                }).catch((error) => {})
-            }, error(err) {}
+                }).catch((error) => {
+                    appContext.setLoadingFalse();
+                })
+            }, error(err) {
+                appContext.setLoadingFalse();
+            }
         })
     };
 
@@ -117,8 +120,12 @@ export default function User() {
                             //TODO aggiungere controllo del 9
                             getUserInfo();
                             appContext.setLoadingFalse();
-                        }).catch((error) => {})
-                    }, error(err) {}
+                        }).catch((error) => {
+                            appContext.setLoadingFalse();
+                        })
+                    }, error(err) {
+                        appContext.setLoadingFalse();
+                    }
                 })
             } else {
                 appContext.setLoadingTrue();
@@ -129,7 +136,9 @@ export default function User() {
                 }).then((response) => {
                     getUserInfo();
                     appContext.setLoadingFalse();
-                }).catch((error) => {})
+                }).catch((error) => {
+                    appContext.setLoadingFalse();
+                })
             }
         }
     };
@@ -145,78 +154,26 @@ export default function User() {
             }}).then((response) => {
             getUserInfo();
             appContext.setLoadingFalse();
-        }).catch((error) => {})
+        }).catch((error) => {
+            appContext.setLoadingFalse();
+        })
     };
-
-    // const updateProduct = (pictures) => {
-    //     console.log(pictures)
-    //     for (let picture of pictures) {
-    //         console.log(picture)
-    //         appContext.setLoadingTrue();
-    //         // setLoading(true);
-    //         if (picture.image != null) {
-    //             if (picture.rawImage != null) {
-    //                 new Compressor(picture.rawImage, {
-    //                     quality: appContext.qualityPictures, success(result) {
-    //                         const formData = new FormData();
-    //                         formData.append('files.picture' + picture.index, result, 'example.jpg');
-    //                         formData.append('data', JSON.stringify({}));
-    //                         axios.put(appContext.hostProducts + "/" + null, formData, {
-    //                             headers: {'Authorization': 'Bearer ' + appContext.token,}
-    //                         }).then((response) => {
-    //                             // appContext.setLoadingFalse();
-    //                             if (picture.index == 9) {
-    //                                 appContext.setLoadingFalse();
-    //                                 // setLoading(false);
-    //                                 // closeDialog();
-    //                             }
-    //                         }).catch((error) => {
-    //                         })
-    //                     }, error(err) {
-    //                     }
-    //                 })
-    //             }
-    //         } else {
-    //             appContext.setLoadingTrue();
-    //             // setLoading(true);
-    //             let data = {};
-    //             data['picture' + picture.index] = null;
-    //             axios.put(appContext.hostProducts + "/" + null, data, {
-    //                 headers: {'Authorization': 'Bearer ' + appContext.token,}
-    //             }).then((response) => {
-    //                 if (picture.index == 9) {
-    //                     appContext.setLoadingFalse();
-    //                     // setLoading(false);
-    //                     // closeDialog();
-    //                 }
-    //             }).catch((error) => {
-    //             })
-    //         }
-    //     }
-    // };
 
     const uploadProduct = (params) => {
         appContext.setLoadingTrue();
-
         const formData = new FormData();
         const data = {
             title: params.title,
             description: params.description,
             username: username
         };
-        // formData.append('files.cover', result, params.rawPicture.name);
         formData.append('data', JSON.stringify(data));
         formData.append('files.cover', params.cover.rawPicture, params.cover.rawPicture.name);
-
         axios.post(appContext.hostProducts, formData, {
             headers: {
                 'Authorization': 'Bearer ' + appContext.token,
             }
         }).then((response) => {
-            console.log(response)
-            console.log(params)
-
-            // getProducts();
             for (let picture of params.pictures) {
                 if (picture.image != null) {
                     new Compressor(picture.rawPicture, {
@@ -234,20 +191,13 @@ export default function User() {
                                     appContext.setLoadingFalse();
                                 }
                             }).catch((error) => {
-                                console.log(error)
                                 appContext.setLoadingFalse();
-
-
                             })
                         }, error(err) {
-                            console.log(err)
                             appContext.setLoadingFalse();
-
                         }
                     })
-
                 } else {
-
                     appContext.setLoadingTrue();
                     let data = {};
                     data['picture' + picture.index] = null;
@@ -259,20 +209,13 @@ export default function User() {
                             appContext.setLoadingFalse();
                         }
                     }).catch((error) => {
-                        console.log(error)
                         appContext.setLoadingFalse();
-
                     })
                 }
             }
         }).catch((error) => {
-            console.log(error)
             appContext.setLoadingFalse();
-
         })
-
-
-
     };
 
     const openInfoDialog = (info) => {
@@ -333,7 +276,7 @@ export default function User() {
                     </Typography>
                 </Row>
             </Container>
-            <UploadProductDialog
+            <UpdateProductDialog
                 open={uploadProductDialogOpened}
                 onClose={() => {setUploadProductDialogOpened(false)}}
                 uploadProduct={uploadProduct}/>
@@ -351,6 +294,11 @@ export default function User() {
             <Container fluid>
                 <GridSystem loadingProducts={loadingProducts} isProducts={true} products={products} columnWidth={appContext.columnWidth} isUser={true}/>
             </Container>
+            <br/>
+            <br/>
+            <DeleteProductDialog>
+
+            </DeleteProductDialog>
         </>
     )
 }
