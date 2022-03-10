@@ -144,7 +144,9 @@ export default function UploadProductDialog(props) {
                                         <ImageListItemBar
                                             actionIcon={
                                                 [
-                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0}>
+                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0} onClick={() => {
+                                                        window.open(cover.image, '_blank', 'noopener,noreferrer')
+                                                    }}>
                                                         <OpenInFullIcon/>
                                                     </IconButton>,
                                                     <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
@@ -212,7 +214,7 @@ export default function UploadProductDialog(props) {
                                                 [
                                                     <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0}
                                                                 onClick={() => {
-                                                                    console.log('cancello')
+                                                                    window.open(item.image, '_blank', 'noopener,noreferrer')
                                                                 }}>
                                                         <OpenInFullIcon/>
                                                     </IconButton>,
