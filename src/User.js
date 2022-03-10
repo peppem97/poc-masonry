@@ -206,6 +206,8 @@ export default function User() {
         };
         // formData.append('files.cover', result, params.rawPicture.name);
         formData.append('data', JSON.stringify(data));
+        formData.append('files.cover', params.cover.rawPicture, params.cover.rawPicture.name);
+
         axios.post(appContext.hostProducts, formData, {
             headers: {
                 'Authorization': 'Bearer ' + appContext.token,
@@ -220,11 +222,6 @@ export default function User() {
                     new Compressor(picture.rawPicture, {
                         quality: appContext.qualityPictures, success(result) {
                             const formData = new FormData();
-                            // const data = {
-                            //     title: params.title,
-                            //     description: params.description,
-                            //     username: username
-                            // };
                             formData.append('files.picture' + picture.index, result, picture.rawPicture.name);
                             formData.append('data', JSON.stringify({}));
                             axios.put(appContext.hostProducts + "/" + response.data.id, formData, {

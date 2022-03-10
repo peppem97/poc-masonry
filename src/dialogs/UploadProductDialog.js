@@ -16,9 +16,26 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 export default function UploadProductDialog(props) {
     const [pictures, setPictures] = useState([]);
+    const [cover, setCover] = useState({image: null, rawPicture: null});
     const [title, setTitle] = useState(null);
     const [description, setDescription] = useState(null);
     const MAX_PICTURES = 9;
+
+    const addCover = (e) => {
+        let tmpCover = {
+            image: URL.createObjectURL(e.target.files[0]),
+            rawPicture: e.target.files[0]
+        }
+        setCover(tmpCover);
+    };
+
+    const removeCover = () => {
+        let tmpCover = {
+            image: null,
+            rawPicture: null
+        }
+        setCover(tmpCover);
+    };
 
     const addPicture = (e, index) => {
         let picturesList = [];
@@ -66,26 +83,27 @@ export default function UploadProductDialog(props) {
         props.uploadProduct({
             pictures: pictures,
             title: title,
-            description: description
+            description: description,
+            cover: cover
         });
         props.onClose();
     }
 
     const initImageList = () => {
-        let initPictures = []
+        let initPictures = [];
         for (let i = 0; i < MAX_PICTURES; i++) {
-            initPictures.push({index: i, image: null, rawPicture: null, add: true})
+            initPictures.push({index: i, image: null, rawPicture: null, add: true});
         }
         // setInitPictures(initPictures)
-        setPictures(initPictures)
+        setCover({image: null, rawPicture: null});
+        setPictures(initPictures);
     }
-
 
     useEffect(() => {
         initImageList();
     }, [props.open]);
 
-    return(
+    return (
         <Dialog open={props.open} onClose={closeDialog} fullWidth maxWidth={"lg"}>
             <DialogTitle>Inserisci un nuovo prodotto</DialogTitle>
             <DialogContent>
@@ -94,67 +112,93 @@ export default function UploadProductDialog(props) {
                 </DialogContentText>
                 <br/>
                 <Container>
-                    <Row>
-                        <Col>
-                            <Row className='justify-content-center'>
-                                <TextField
-                                    fullWidth
-                                    onChange={onChangeTitle}
-                                    autoFocus
-                                    color='secondary'
-                                    margin="dense"
-                                    label="Titolo prodotto"
-                                    variant="outlined"/>
-                            </Row>
-                            <br/>
-                            <Row className='justify-content-center'>
-                                <TextField
-                                    onChange={onChangeDescription}
-                                    label="Descrizione prodotto"
-                                    multiline
-                                    color='secondary'
-                                    rows={4}
-                                />
-                            </Row>
-                        </Col>
-                        <Col>
-
-                        </Col>
+                    <Row className='justify-content-center'>
+                        <TextField
+                            fullWidth
+                            onChange={onChangeTitle}
+                            autoFocus
+                            color='secondary'
+                            margin="dense"
+                            label="Titolo prodotto"
+                            variant="outlined"/>
                     </Row>
                     <br/>
-                    {/*<Row>*/}
-                    {/*    <label htmlFor="contained-button-file">*/}
-                    {/*        <Input accept="image/*" id="contained-button-file" multiple type="file" hidden onChange={onChangePicture}/>*/}
-                    {/*        <Button variant="contained" component="span" style={{backgroundColor: 'darkred'}}>*/}
-                    {/*            Carica immagine*/}
-                    {/*        </Button>*/}
-                    {/*    </label>*/}
-                    {/*</Row>*/}
-
                     <Row className='justify-content-center'>
-                        <ImageList sx={{width: 1000, height: 250}}
-                                   gap={5} cols={90}>
-                            {pictures.map((item) => {
-                                if (item.add) {
-                                    return (<ImageListItem key={item.index} cols={10} rows={1}>
-                                        {/*<img src={null}*/}
-                                        {/*     alt=""*/}
-                                        {/*     loading="lazy"/>*/}
-
+                        <TextField
+                            onChange={onChangeDescription}
+                            label="Descrizione prodotto"
+                            multiline
+                            color='secondary'
+                            rows={4}
+                        />
+                    </Row>
+                    <br/>
+                    <Row className='justify-content-center'>
+                        <ImageList rows={1} sx={{height: 220, width: 1200}}
+                                   gap={5} cols={110}>
+                            {
+                                cover.image ? <ImageListItem cols={10} rows={1}>
+                                        <img src={cover.image}
+                                             alt=""
+                                             loading="lazy"/>
                                         <ImageListItemBar
                                             actionIcon={
                                                 [
-                                                    <label htmlFor="icon-button-file" key={0}>
-                                                        <Input accept="image/*" id="icon-button-file" type="file" hidden onChange={(e) => {
-                                                            addPicture(e, item.index)
-                                                        }}/>
+                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0}>
+                                                        <OpenInFullIcon/>
+                                                    </IconButton>,
+                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                                onClick={() => {
+                                                                    removeCover()
+                                                                }} key={1}>
+                                                        <DeleteForeverIcon/>
+                                                    </IconButton>]}
+                                        />
+                                    </ImageListItem> :
+                                    <ImageListItem cols={10} rows={1}>
+                                        {/*<img src={item.image}*/}
+                                        {/*     alt=""*/}
+                                        {/*     loading="lazy"/>*/}
+                                        <ImageListItemBar
+                                            actionIcon={
+                                                [
+                                                    <label htmlFor="icon-button-file">
+                                                        <Input accept="image/*" id="icon-button-file" type="file" hidden
+                                                               onChange={(e) => {
+                                                                   addCover(e)
+                                                               }}/>
                                                         <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
                                                                     aria-label="upload picture" component="span">
                                                             <PhotoCamera/>
                                                         </IconButton>
                                                     </label>]}
                                         />
-                                    </ImageListItem>)
+                                    </ImageListItem>
+                            }
+                            <div className="vr" style={{fontWeight: 'bold'}}/>
+                            {pictures.map((item) => {
+                                if (item.add) {
+                                    return (
+                                        <ImageListItem key={item.index} cols={10} rows={1}>
+                                            {/*<img src={null}*/}
+                                            {/*     alt=""*/}
+                                            {/*     loading="lazy"/>*/}
+
+                                            <ImageListItemBar
+                                                actionIcon={
+                                                    [
+                                                        <label htmlFor="icon-button-file" key={0}>
+                                                            <Input accept="image/*" id="icon-button-file" type="file"
+                                                                   hidden onChange={(e) => {
+                                                                addPicture(e, item.index)
+                                                            }}/>
+                                                            <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                                        aria-label="upload picture" component="span">
+                                                                <PhotoCamera/>
+                                                            </IconButton>
+                                                        </label>]}
+                                            />
+                                        </ImageListItem>)
                                 } else {
                                     return (<ImageListItem key={item.index} cols={10} rows={1}>
                                         <img src={item.image}
@@ -166,14 +210,16 @@ export default function UploadProductDialog(props) {
                                         <ImageListItemBar
                                             actionIcon={
                                                 [
-                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0} onClick={() => {
-                                                        console.log('cancello')
-                                                    }}>
+                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0}
+                                                                onClick={() => {
+                                                                    console.log('cancello')
+                                                                }}>
                                                         <OpenInFullIcon/>
                                                     </IconButton>,
-                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={1} onClick={() => {
-                                                        removePicture(item.index)
-                                                    }}>
+                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={1}
+                                                                onClick={() => {
+                                                                    removePicture(item.index)
+                                                                }}>
                                                         <DeleteForeverIcon/>
                                                     </IconButton>
                                                 ]}
@@ -184,16 +230,15 @@ export default function UploadProductDialog(props) {
                         </ImageList>
                     </Row>
                     <Row>
-                        <Button variant={"contained"} component="span" style={{backgroundColor: 'darkred' }} onClick={() => {uploadProduct()}}>
+                        <Button variant={"contained"} component="span" style={{backgroundColor: 'darkred'}}
+                                onClick={() => {
+                                    uploadProduct()
+                                }}>
                             Inserisci prodotto
                         </Button>
                     </Row>
                 </Container>
             </DialogContent>
-            {/*<DialogActions>*/}
-            {/*    <Button onClick={closeDialog}>Cancel</Button>*/}
-            {/*    <Button onClick={closeDialog}>Subscribe</Button>*/}
-            {/*</DialogActions>*/}
         </Dialog>
     )
 }
