@@ -44,6 +44,7 @@ const useStyles = makeStyles(({breakpoints, spacing}) => ({
         paddingBottom: '60%',
         borderRadius: spacing(2),
         backgroundColor: '#fff',
+        boxShadow: '0px 14px 30px rgba(34, 35, 58, 0.8)',
         position: 'relative',
         [breakpoints.up('md')]: {
             width: '100%',
@@ -54,12 +55,12 @@ const useStyles = makeStyles(({breakpoints, spacing}) => ({
         '&:after': {
             content: '" "',
             position: 'absolute',
-            top: 0,
-            left: 0,
+            // top: 0,
+            // left: 0,
+            bottom: 0,
             width: '100%',
-            height: '100%',
-            // backgroundImage: 'linear-gradient(147deg, #fe8a39 0%, #fd3838 74%)',
-            boxShadow: '0px 14px 50px rgba(34, 35, 58, 0.8)',
+            height: '20%',
+            background: 'linear-gradient(to top, #000, rgba(0,0,0,0))',
             borderRadius: spacing(2), // 16
             // opacity: 0.5,
         },
@@ -72,6 +73,7 @@ const useStyles = makeStyles(({breakpoints, spacing}) => ({
         textTransform: 'initial',
     },
 }));
+
 
 export default function Product() {
     const [pictures, setPictures] = useState([]);
@@ -129,7 +131,7 @@ export default function Product() {
         }).catch((error) => {
             appContext.setLoadingTrue();
         })
-    }
+    };
 
     const initImageList = (tmpPictures) => {
         let initPictures = []
@@ -147,7 +149,7 @@ export default function Product() {
         }
         return initPictures
 
-    }
+    };
 
     const setPicturesList = (...pictures) => {
         let pictureList = [];
@@ -221,8 +223,10 @@ export default function Product() {
                         </Container>
                     </CardContent>
                 </Card>
-
             </Row>
+            <br/>
+            <br/>
         </Container>
+
     )
 }

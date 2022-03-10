@@ -95,10 +95,9 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                         </IconButton>)}
                 </Box>
                 <Box py={3} px={2} className={styles.contentDescription}>
-                    <Info useStyles={useGalaxyInfoStyles}>
+                    <Info useStyles={useGalaxyInfoStyles} style={{position: 'absolute', bottom: 0}}>
                         <InfoTitle>{props.product.title}</InfoTitle>
-                        <CardActions className="justify-content-center">
-
+                        <CardActions className="justify-content-left">
                             {props.showAvatar ?
                                 <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={goToProduct}>
                                     <OpenInNewIcon/>
@@ -106,38 +105,28 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                                 <IconButton style={{color: 'white', fontWeight: 'bold'}}>
                                     <EditIcon/>
                                 </IconButton>}
-
                             {props.showAvatar ?
-                                <IconButton style={{color: 'white', fontWeight: 'bold'}}>
-                                    <FavoriteIcon/>
-                                </IconButton> :
+                                // <IconButton style={{color: 'white', fontWeight: 'bold'}}>
+                                //     <FavoriteIcon/>
+                                // </IconButton>
+                                null
+                                :
                                 <IconButton style={{color: 'white', fontWeight: 'bold'}}>
                                     <VisibilityIcon onClick={goToProduct}/>
                                 </IconButton>}
-
-
                             {props.showAvatar ?
-                                <IconButton style={{color: 'white', fontWeight: 'bold'}}>
-                                    <ShareIcon/>
-                                </IconButton> :
-                                <IconButton style={{color: 'white', fontWeight: 'bold'}}>
+                                // <IconButton style={{color: 'white', fontWeight: 'bold'}}>
+                                //     <ShareIcon/>
+                                // </IconButton>
+                                null
+                                :
+                                <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {props.deleteProduct()}}>
                                     <DeleteForeverIcon/>
                                 </IconButton>}
                         </CardActions>
                     </Info>
                 </Box>
             </Card>
-            {/*{!props.showAvatar && <UpdateProductDialog*/}
-            {/*    open={dialogOpened}*/}
-            {/*    onClose={() => {*/}
-            {/*        setDialogOpened(false)*/}
-            {/*    }}*/}
-            {/*    updateProduct={updateProduct}*/}
-            {/*    title={props.product.title}*/}
-            {/*    description={props.product.description}*/}
-            {/*    picture={props.product.picture}*/}
-            {/*    id={props.product.id}*/}
-            {/*/>}*/}
         </>
     );
 });

@@ -22,7 +22,7 @@ export default function GridSystem(props) {
                        rtl={false}>
                 {props.isProducts &&
                     props.products.map((product, index) =>
-                        (<ProductCard key={index} product={product} showAvatar={!(props.isUser)}/>))
+                        (<ProductCard key={index} product={product} showAvatar={!(props.isUser)} deleteProduct={props.deleteProduct}/>))
                 }
                 {!props.isProducts &&
                     props.pictures.map((picture) => {

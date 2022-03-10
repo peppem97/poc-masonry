@@ -27,6 +27,7 @@ export default function User() {
     const [uploadProductDialogOpened, setUploadProductDialogOpened] = useState(false);
     const [updateCarouselDialogOpened, setUpdateCarouselDialogOpened] = useState(false);
     const [updateInfoDialogOpened, setUpdateInfoDialogOpened] = useState(false);
+    const [deleteProductDialogOpened, setDeleteProductDialogOpened] = useState(false);
     const [info, setInfo] = useState(null);
     const [infoToEdit, setInfoToEdit] = useState(null);
     const [loadingProducts, setLoadingProducts] = useState(false);
@@ -242,6 +243,8 @@ export default function User() {
         setUpdateInfoDialogOpened(true);
     };
 
+    const openDeleteProductDialog = () => {};
+
     useEffect(() => {
         getUserInfo();
         getProducts();
@@ -291,14 +294,21 @@ export default function User() {
                 onClose={() => {setUpdateCarouselDialogOpened(false)}}
                 updateCarousel={updateCarousel}
                 carousel={carousel}/>
+            <DeleteProductDialog
+                open={deleteProductDialogOpened}
+                onClose={() => {setDeleteProductDialogOpened(false)}}>
+            </DeleteProductDialog>
             <Container fluid>
-                <GridSystem loadingProducts={loadingProducts} isProducts={true} products={products} columnWidth={appContext.columnWidth} isUser={true}/>
+                <GridSystem
+                    loadingProducts={loadingProducts}
+                    isProducts={true}
+                    products={products}
+                    columnWidth={appContext.columnWidth}
+                    isUser={true} deleteProduct={() => {setDeleteProductDialogOpened(true)}}/>
             </Container>
             <br/>
             <br/>
-            <DeleteProductDialog>
 
-            </DeleteProductDialog>
         </>
     )
 }
