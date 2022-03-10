@@ -114,6 +114,7 @@ export default function Product(props) {
             setDescription(response.data[0].description);
             appContext.setLoadingFalse();
         }).catch((error) => {
+            appContext.setLoadingTrue();
         })
     };
 
@@ -126,6 +127,7 @@ export default function Product(props) {
             setShop(response.data[0].title);
             appContext.setLoadingFalse();
         }).catch((error) => {
+            appContext.setLoadingTrue();
         })
     }
 
@@ -178,38 +180,27 @@ export default function Product(props) {
                         image={cover}
                     />
                     <CardContent>
-                        <Container fluid>
-                            {/*<Row>*/}
-                            {/*    <Col>*/}
-                            {/*        /!*<IconButton onClick={goToUser}>*!/*/}
-                            {/*        /!*    {appContext.loading ? <Skeleton variant="circular">*!/*/}
-                            {/*        /!*        <Avatar src={avatar}/>*!/*/}
-                            {/*        /!*    </Skeleton> : <Avatar src={avatar}/>}*!/*/}
-                            {/*        /!*</IconButton>*!/*/}
-                            {/*    </Col>*/}
-                            {/*    <Col>*/}
-                            {/*        <Typography variant="subtitle1">{shop}</Typography>*/}
-
-                            {/*    </Col>*/}
-
-                            {/*    /!*<CardHeader*!/*/}
-                            {/*    /!*    avatar={*!/*/}
-                            {/*    /!*        <IconButton onClick={goToUser}>*!/*/}
-                            {/*    /!*            <Avatar src={avatar}/>*!/*/}
-                            {/*    /!*        </IconButton>*!/*/}
-                            {/*    /!*    }*!/*/}
-                            {/*    /!*    sx={{maxHeight: '60px'}}*!/*/}
-                            {/*    /!*    title={<Typography variant="h6">{shop}</Typography>}*!/*/}
-                            {/*    /!*//*/}
-                            {/*</Row>*/}
+                        <Container>
+                            <Row className='row-cols-auto '>
+                                <Col>
+                                    <IconButton onClick={goToUser}>
+                                        <Avatar src={avatar}/>
+                                    </IconButton>
+                                </Col>
+                                <Col>
+                                    <Row>
+                                        <Typography variant='subtitle2' color="text.secondary">Pubblicato
+                                            da: <Typography variant='subtitle2'
+                                                            color={'text.primary'}>{shop}</Typography></Typography>
+                                    </Row>
+                                </Col>
+                            </Row>
+                            <br/>
                             <Row>
                                 <Typography gutterBottom variant="h3">
                                     {title}
                                 </Typography>
-                                <Typography variant='subtitle2'>Pubblicato da:  {shop}</Typography>
                             </Row>
-                            <br/>
-
                             <Row>
                                 <Typography variant="body2" color="text.secondary">
                                     {description}
@@ -219,7 +210,6 @@ export default function Product(props) {
                                     consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu
                                     fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa
                                     qui officia deserunt mollit anim id est laborum.
-
                                 </Typography>
                             </Row>
                             <br/>

@@ -24,5 +24,5 @@ export default function ErrorNoUser() {
                 </Row>
             </Container>
         </>
-    )
+    );
 }

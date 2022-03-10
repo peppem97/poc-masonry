@@ -25,5 +25,5 @@ export default function Error404() {
                 </Row>
             </Container>
         </>
-    )
+    );
 }

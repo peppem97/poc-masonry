@@ -1,10 +1,9 @@
 import React, {useState} from "react";
-import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 import User from "./User";
 import TopToolbar from "./TopToolbar";
 import Home from "./Home";
 import GlobalContext from "./GlobalContext";
-import ImageUploadExample from "./ImageUploadExample";
 import axios from "axios";
 import Error404 from "./Error404";
 import ErrorNoUser from "./ErrorNoUser";
@@ -88,10 +87,10 @@ export default function App() {
                                 decreaseColumnsSize={decreaseColumnsSize}
                                 getNewToken={getNewToken}/>
                     <Routes>
+                        <Route exact path="/" element={<Navigate to="/home" />}/>
                         <Route exact path='/home' element={<Home/>}/>
                         <Route exact path='/user/:username' element={<User/>}/>
                         <Route exact path='/product/:id' element={<Product/>}/>
-                        {/*<Route exact path='/example' element={<ImageUploadExample/>}/>*/}
                         <Route exact path='/no-user' element={<ErrorNoUser/>}/>
                         <Route exact path='*' element={<Error404/>}/>
                     </Routes>

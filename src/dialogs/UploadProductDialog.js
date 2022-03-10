@@ -69,11 +69,11 @@ export default function UploadProductDialog(props) {
 
     const onChangeTitle = (e) => {
         setTitle(e.target.value)
-    }
+    };
 
     const onChangeDescription = (e) => {
         setDescription(e.target.value)
-    }
+    };
 
     const closeDialog = () => {
         props.onClose();
@@ -87,7 +87,7 @@ export default function UploadProductDialog(props) {
             cover: cover
         });
         props.onClose();
-    }
+    };
 
     const initImageList = () => {
         let initPictures = [];
@@ -97,7 +97,7 @@ export default function UploadProductDialog(props) {
         // setInitPictures(initPictures)
         setCover({image: null, rawPicture: null});
         setPictures(initPictures);
-    }
+    };
 
     useEffect(() => {
         initImageList();

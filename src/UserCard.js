@@ -96,7 +96,7 @@ export const UserCard = React.memo(function News3Card(props) {
                     <CardMedia
                         classes={mediaStyles}
                         image={null}
-                        children={<Suspense fallback={<></>}><UserCarousel items={props.carousel}/></Suspense>}/>
+                        children={<Suspense fallback={<></>}><UserCarousel pictures={props.carousel}/></Suspense>}/>
                     <div className={styles.content}>
                         <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
                             {props.title}

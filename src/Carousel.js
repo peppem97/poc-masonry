@@ -3,11 +3,12 @@ import Carousel from 'react-material-ui-carousel'
 
 function UserCarousel(props) {
     const [items, setItems] = useState([]);
+
     const initCarousel = () => {
-        setItems(props.items.map(
-            (item, i) =>
-                <img key={i} src={item.image} alt="" style={{width: '100%', height: '100%'}} loading="lazy"/>
-        ))
+        setItems(props.pictures.map(
+            (picture, index) =>
+                <img key={index} src={picture.image} alt="" style={{width: '100%', height: '100%'}} loading="lazy"/>
+        ));
     };
 
     useEffect(() => {
@@ -20,7 +21,7 @@ function UserCarousel(props) {
                 {items}
             </Carousel>
         </>
-    )
+    );
 }
 
 export default UserCarousel;

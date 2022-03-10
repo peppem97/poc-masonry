@@ -16,7 +16,6 @@ export default function Home() {
     const appContext = useContext(GlobalContext);
 
     const getProducts = () => {
-        // appContext.setLoadingTrue();
         setLoadingProduct(true);
         axios.get(appContext.hostProducts, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
@@ -29,9 +28,11 @@ export default function Home() {
                 picture: appContext.host + element.cover?.url,
                 username: element.username}))
             setProducts(tmpProducts);
-            // appContext.setLoadingFalse();
             setLoadingProduct(false);
-        }).catch((error) => {})
+        }).catch((error) => {
+            //TODO: aggiungere controllo errore
+            setLoadingProduct(false);
+        })
     };
 
     useEffect(() => {

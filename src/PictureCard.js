@@ -1,7 +1,4 @@
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import React, {useContext, useEffect, useState} from 'react';
+import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
@@ -9,7 +6,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import {Info} from '@mui-treasury/components/info';
 import {useGalaxyInfoStyles} from '@mui-treasury/styles/info/galaxy';
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
-import {CardActions, IconButton, Skeleton} from "@mui/material";
+import {CardActions, IconButton} from "@mui/material";
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 
 const useStyles = makeStyles(() => ({
@@ -36,29 +33,17 @@ const useStyles = makeStyles(() => ({
         bottom: 0,
         left: 0,
         width: '100%',
-    },
-    // contentHeader: {
-    //     position: 'absolute',
-    //     zIndex: 2,
-    //     top: 0,
-    //     width: '100%',
-    // },
+    }
 }));
 
 export const PictureCard = React.memo(function GalaxyCard(props) {
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const styles = useStyles();
 
-    const openInNewTab = (url) => {
-
-    }
-
     return (
         <>
             <Card className={styles.card} style={{height: props.height, width: props.width}} raised>
                 <CardMedia classes={mediaStyles} image={props.picture}/>
-                {/*<Box py={3} px={2} className={styles.contentHeader}>*/}
-                {/*</Box>*/}
                 <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles}>
                         <CardActions className={styles.contentDescription}>
@@ -72,11 +57,6 @@ export const PictureCard = React.memo(function GalaxyCard(props) {
                 </Box>
             </Card>
             <br/>
-            {/*<ShowPreviewDialog open={dialogOpened}*/}
-            {/*                   image={props.picture}*/}
-            {/*                   onClose={() => {*/}
-            {/*                       setDialogOpened(false)*/}
-            {/*                   }}/>*/}
         </>
     );
 });
