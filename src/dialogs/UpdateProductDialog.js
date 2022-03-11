@@ -9,10 +9,12 @@ import {
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import {Row} from "react-bootstrap";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import axios from "axios";
+import GlobalContext from "../GlobalContext";
 
 export default function UpdateProductDialog(props) {
     const [pictures, setPictures] = useState([]);
@@ -20,6 +22,8 @@ export default function UpdateProductDialog(props) {
     const [title, setTitle] = useState(null);
     const [description, setDescription] = useState(null);
     const MAX_PICTURES = 9;
+    const appContext = useContext(GlobalContext);
+
 
     const addCover = (e) => {
         let tmpCover = {
@@ -94,14 +98,48 @@ export default function UpdateProductDialog(props) {
         for (let i = 0; i < MAX_PICTURES; i++) {
             initPictures.push({index: i, image: null, rawPicture: null, add: true});
         }
-        // setInitPictures(initPictures)
-        setCover({image: null, rawPicture: null});
-        setPictures(initPictures);
+        return initPictures;
     };
 
+    const getProductInfo = () => {
+        // appContext.setLoadingTrue();
+        axios.get(appContext.hostProducts + "?id=" + props.productToUpdate, {
+            headers: {'Authorization': 'Bearer ' + appContext.token}
+        }).then((response) => {
+            console.log(response)
+            // let tmpPictures = setPicturesList(
+            //     response.data[0].picture0,
+            //     response.data[0].picture1,
+            //     response.data[0].picture2,
+            //     response.data[0].picture3,
+            //     response.data[0].picture4,
+            //     response.data[0].picture5,
+            //     response.data[0].picture6,
+            //     response.data[0].picture7,
+            //     response.data[0].picture8,
+            //     response.data[0].picture9);
+            // setUsername(response.data[0].username);
+            // setPictures(initImageList(tmpPictures));
+            // setCover(appContext.host + response.data[0].cover?.url);
+            // setTitle(response.data[0].title);
+            // setDescription(response.data[0].description);
+            // appContext.setLoadingFalse();
+        }).catch((error) => {
+            // appContext.setLoadingTrue();
+        })
+    }
+
     useEffect(() => {
-        initImageList();
+        setCover({image: null, rawPicture: null});
+        setPictures(initImageList());
     }, [props.open]);
+
+    useEffect(() => {
+        if (props.productToUpdate) {
+            console.log(props.productToUpdate);
+            getProductInfo();
+        }
+    }, [props.productToUpdate])
 
     return (
         <Dialog open={props.open} onClose={closeDialog} fullWidth maxWidth={"lg"}>
@@ -144,7 +182,10 @@ export default function UpdateProductDialog(props) {
                                         <ImageListItemBar
                                             actionIcon={
                                                 [
-                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0} onClick={() => {
+                                                    <IconButton
+                                                        sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                        key={0}
+                                                        onClick={() => {
                                                         window.open(cover.image, '_blank', 'noopener,noreferrer')
                                                     }}>
                                                         <OpenInFullIcon/>
@@ -152,7 +193,8 @@ export default function UpdateProductDialog(props) {
                                                     <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
                                                                 onClick={() => {
                                                                     removeCover()
-                                                                }} key={1}>
+                                                                }}
+                                                                key={1}>
                                                         <DeleteForeverIcon/>
                                                     </IconButton>]}
                                         />
@@ -164,7 +206,7 @@ export default function UpdateProductDialog(props) {
                                         <ImageListItemBar
                                             actionIcon={
                                                 [
-                                                    <label htmlFor="icon-button-file">
+                                                    <label htmlFor="icon-button-file" key={0}>
                                                         <Input accept="image/*" id="icon-button-file" type="file" hidden
                                                                onChange={(e) => {
                                                                    addCover(e)
@@ -194,7 +236,7 @@ export default function UpdateProductDialog(props) {
                                                                    hidden onChange={(e) => {
                                                                 addPicture(e, item.index)
                                                             }}/>
-                                                            <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                            <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={1}
                                                                         aria-label="upload picture" component="span">
                                                                 <PhotoCamera/>
                                                             </IconButton>

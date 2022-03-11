@@ -226,8 +226,8 @@ export default function User() {
     };
 
     const updateProduct = (params) => {
-        console.log(params)
-    }
+
+    };
 
     const deleteProduct = (consens) => {
         if (consens === true) {
@@ -304,13 +304,33 @@ export default function User() {
                     </Typography>
                 </Row>
             </Container>
+            <Container fluid>
+                <GridSystem
+                    loadingProducts={loadingProducts}
+                    isProducts={true}
+                    products={products}
+                    columnWidth={appContext.columnWidth}
+                    isUser={true}
+                    updateProduct={(id) => {
+                        setProductToUpdate(id);
+                        setUpdateProductDialogOpened(true);
+                    }}
+                    deleteProduct={(id) =>  {
+                        setProductToDelete(id);
+                        setDeleteProductDialogOpened(true);
+                    }}/>
+            </Container>
+            <br/>
+            <br/>
             <UpdateProductDialog
                 open={uploadProductDialogOpened || updateProductDialogOpened}
                 onClose={() => {
                     setUploadProductDialogOpened(false);
-                    setUpdateProductDialogOpened(false);}}
+                    setUpdateProductDialogOpened(false);
+                }}
                 isUpdate={updateProductDialogOpened}
                 isUpload={uploadProductDialogOpened}
+                productToUpdate={productToUpdate}
                 uploadProduct={uploadProduct}/>
             <UpdateInfoDialog
                 open={updateInfoDialogOpened}
@@ -328,26 +348,6 @@ export default function User() {
                 deleteProduct={deleteProduct}
                 onClose={() => {setDeleteProductDialogOpened(false)}}>
             </DeleteProductDialog>
-
-
-            <Container fluid>
-                <GridSystem
-                    loadingProducts={loadingProducts}
-                    isProducts={true}
-                    products={products}
-                    columnWidth={appContext.columnWidth}
-                    isUser={true}
-                    updateProduct={(params) => {
-                        setUpdateProductDialogOpened(true);
-                        updateProduct(params);
-                    }}
-                    deleteProduct={(id) =>  {
-                        setProductToDelete(id);
-                        setDeleteProductDialogOpened(true);
-                    }}/>
-            </Container>
-            <br/>
-            <br/>
 
         </>
     )
