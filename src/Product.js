@@ -192,8 +192,9 @@ export default function Product() {
                                 <Col>
                                     <Row>
                                         <Typography variant='subtitle2' color="text.secondary">Pubblicato
-                                            da: <Typography variant='subtitle2'
-                                                            color={'text.primary'}>{shop}</Typography></Typography>
+                                            da: </Typography>
+                                        <Typography variant='subtitle2'
+                                                    color={'text.primary'}>{shop}</Typography>
                                     </Row>
                                 </Col>
                             </Row>

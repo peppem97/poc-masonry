@@ -102,7 +102,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                                 <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={goToProduct}>
                                     <OpenInNewIcon/>
                                 </IconButton> :
-                                <IconButton style={{color: 'white', fontWeight: 'bold'}}>
+                                <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {props.updateProduct(props.product.id)}}>
                                     <EditIcon/>
                                 </IconButton>}
                             {props.showAvatar ?

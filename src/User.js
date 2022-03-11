@@ -28,9 +28,14 @@ export default function User() {
     const [updateCarouselDialogOpened, setUpdateCarouselDialogOpened] = useState(false);
     const [updateInfoDialogOpened, setUpdateInfoDialogOpened] = useState(false);
     const [deleteProductDialogOpened, setDeleteProductDialogOpened] = useState(false);
+    const [updateProductDialogOpened, setUpdateProductDialogOpened] = useState(false);
+
     const [info, setInfo] = useState(null);
     const [infoToEdit, setInfoToEdit] = useState(null);
     const [productToDelete, setProductToDelete] = useState(null);
+    const [productToUpdate, setProductToUpdate] = useState(null);
+
+
     const [loadingProducts, setLoadingProducts] = useState(false);
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
@@ -220,9 +225,24 @@ export default function User() {
         })
     };
 
+    const updateProduct = (params) => {
+        console.log(params)
+    }
+
     const deleteProduct = (consens) => {
         if (consens === true) {
-            //TODO cancellazione prodotto
+            const formData = new FormData();
+            formData.append('data', JSON.stringify({}));
+            axios.delete(appContext.hostProducts + "/" + productToDelete, {
+                headers: {
+                    'Authorization': 'Bearer ' + appContext.token,
+                }
+            }).then((response) => {
+                getProducts();
+                appContext.setLoadingFalse();
+            }).catch((error) => {
+                appContext.setLoadingFalse();
+            })
         }
     }
 
@@ -249,7 +269,6 @@ export default function User() {
         setInfoToEdit(info);
         setUpdateInfoDialogOpened(true);
     };
-
 
     useEffect(() => {
         getUserInfo();
@@ -286,8 +305,12 @@ export default function User() {
                 </Row>
             </Container>
             <UpdateProductDialog
-                open={uploadProductDialogOpened}
-                onClose={() => {setUploadProductDialogOpened(false)}}
+                open={uploadProductDialogOpened || updateProductDialogOpened}
+                onClose={() => {
+                    setUploadProductDialogOpened(false);
+                    setUpdateProductDialogOpened(false);}}
+                isUpdate={updateProductDialogOpened}
+                isUpload={uploadProductDialogOpened}
                 uploadProduct={uploadProduct}/>
             <UpdateInfoDialog
                 open={updateInfoDialogOpened}
@@ -305,13 +328,20 @@ export default function User() {
                 deleteProduct={deleteProduct}
                 onClose={() => {setDeleteProductDialogOpened(false)}}>
             </DeleteProductDialog>
+
+
             <Container fluid>
                 <GridSystem
                     loadingProducts={loadingProducts}
                     isProducts={true}
                     products={products}
                     columnWidth={appContext.columnWidth}
-                    isUser={true} deleteProduct={(id) =>  {
+                    isUser={true}
+                    updateProduct={(params) => {
+                        setUpdateProductDialogOpened(true);
+                        updateProduct(params);
+                    }}
+                    deleteProduct={(id) =>  {
                         setProductToDelete(id);
                         setDeleteProductDialogOpened(true);
                     }}/>
