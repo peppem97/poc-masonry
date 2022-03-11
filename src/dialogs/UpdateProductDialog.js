@@ -80,6 +80,9 @@ export default function UpdateProductDialog(props) {
     };
 
     const closeDialog = () => {
+        console.log('chiudo')
+        setTitle(null);
+        setDescription(null);
         props.onClose();
     };
 
@@ -121,8 +124,8 @@ export default function UpdateProductDialog(props) {
             // setUsername(response.data[0].username);
             // setPictures(initImageList(tmpPictures));
             // setCover(appContext.host + response.data[0].cover?.url);
-            // setTitle(response.data[0].title);
-            // setDescription(response.data[0].description);
+            setTitle(response.data[0].title);
+            setDescription(response.data[0].description);
             // appContext.setLoadingFalse();
         }).catch((error) => {
             // appContext.setLoadingTrue();
@@ -130,16 +133,16 @@ export default function UpdateProductDialog(props) {
     }
 
     useEffect(() => {
-        setCover({image: null, rawPicture: null});
-        setPictures(initImageList());
-    }, [props.open]);
-
-    useEffect(() => {
-        if (props.productToUpdate) {
-            console.log(props.productToUpdate);
-            getProductInfo();
+        if (props.open) {
+            setCover({image: null, rawPicture: null});
+            setPictures(initImageList());
+            if (props.isUpdate) {
+                console.log(props.productToUpdate);
+                getProductInfo();
+            }
         }
-    }, [props.productToUpdate])
+
+    }, [props.open]);
 
     return (
         <Dialog open={props.open} onClose={closeDialog} fullWidth maxWidth={"lg"}>
@@ -153,6 +156,7 @@ export default function UpdateProductDialog(props) {
                     <Row className='justify-content-center'>
                         <TextField
                             fullWidth
+                            value={title}
                             onChange={onChangeTitle}
                             autoFocus
                             color='secondary'
@@ -163,6 +167,7 @@ export default function UpdateProductDialog(props) {
                     <br/>
                     <Row className='justify-content-center'>
                         <TextField
+                            value={description}
                             onChange={onChangeDescription}
                             label="Descrizione prodotto"
                             multiline
