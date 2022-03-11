@@ -68,9 +68,9 @@ export default function User() {
         }).then((response) => {
             let items = response.data.map((element) => ({
                 height: generateHeight(),
-                title: element.title,
-                id: element.id,
-                description: element.description,
+                title: element?.title,
+                id: element?.id,
+                description: element?.description,
                 username: username,
                 picture: appContext.host + element.cover?.url
             }));

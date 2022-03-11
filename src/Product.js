@@ -109,14 +109,14 @@ export default function Product() {
                 response.data[0].picture7,
                 response.data[0].picture8,
                 response.data[0].picture9);
-            setUsername(response.data[0].username);
+            setUsername(response.data[0]?.username);
             setPictures(initImageList(tmpPictures));
-            setCover(appContext.host + response.data[0].cover?.url);
-            setTitle(response.data[0].title);
-            setDescription(response.data[0].description);
+            setCover(appContext.host + response.data[0]?.cover?.url);
+            setTitle(response.data[0]?.title);
+            setDescription(response.data[0]?.description);
             appContext.setLoadingFalse();
         }).catch((error) => {
-            appContext.setLoadingTrue();
+            appContext.setLoadingFalse();
         })
     };
 
@@ -125,11 +125,11 @@ export default function Product() {
         axios.get(appContext.hostShops + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
-            setAvatar(appContext.host + response.data[0].avatar.url);
-            setShop(response.data[0].title);
+            setAvatar(appContext.host + response.data[0]?.avatar?.url);
+            setShop(response.data[0]?.title);
             appContext.setLoadingFalse();
         }).catch((error) => {
-            appContext.setLoadingTrue();
+            appContext.setLoadingFalse();
         })
     };
 

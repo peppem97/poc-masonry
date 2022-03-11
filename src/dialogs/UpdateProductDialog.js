@@ -24,7 +24,6 @@ export default function UpdateProductDialog(props) {
     const MAX_PICTURES = 9;
     const appContext = useContext(GlobalContext);
 
-
     const addCover = (e) => {
         let tmpCover = {
             image: URL.createObjectURL(e.target.files[0]),
@@ -80,7 +79,6 @@ export default function UpdateProductDialog(props) {
     };
 
     const closeDialog = () => {
-        console.log('chiudo')
         setTitle(null);
         setDescription(null);
         props.onClose();
@@ -96,12 +94,39 @@ export default function UpdateProductDialog(props) {
         props.onClose();
     };
 
-    const initImageList = () => {
-        let initPictures = [];
+    // const initImageList = () => {
+    //     let initPictures = [];
+    //     for (let i = 0; i < MAX_PICTURES; i++) {
+    //         initPictures.push({index: i, image: null, rawPicture: null, add: true});
+    //     }
+    //     return initPictures;
+    // };
+    const initImageList = (tmpPictures) => {
+        let initPictures = []
         for (let i = 0; i < MAX_PICTURES; i++) {
-            initPictures.push({index: i, image: null, rawPicture: null, add: true});
+            if (tmpPictures[i] !== undefined) {
+                initPictures.push({
+                    index: i,
+                    image: tmpPictures[i].image,
+                    rawImage: tmpPictures[i].rawImage,
+                    add: false
+                })
+            } else {
+                initPictures.push({index: i, image: null, rawImage: null, add: true})
+            }
         }
-        return initPictures;
+        return initPictures
+
+    };
+
+    const setPicturesList = (...pictures) => {
+        let pictureList = [];
+        for (let i = 0; i < pictures.length; i++) {
+            if (pictures[i] != null) {
+                pictureList.push({index: i, image: appContext.host + pictures[i].url, rawImage: null, add: false});
+            }
+        }
+        return pictureList;
     };
 
     const getProductInfo = () => {
@@ -110,20 +135,20 @@ export default function UpdateProductDialog(props) {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
             console.log(response)
-            // let tmpPictures = setPicturesList(
-            //     response.data[0].picture0,
-            //     response.data[0].picture1,
-            //     response.data[0].picture2,
-            //     response.data[0].picture3,
-            //     response.data[0].picture4,
-            //     response.data[0].picture5,
-            //     response.data[0].picture6,
-            //     response.data[0].picture7,
-            //     response.data[0].picture8,
-            //     response.data[0].picture9);
-            // setUsername(response.data[0].username);
-            // setPictures(initImageList(tmpPictures));
-            // setCover(appContext.host + response.data[0].cover?.url);
+            let tmpPictures = setPicturesList(
+                response.data[0].picture0,
+                response.data[0].picture1,
+                response.data[0].picture2,
+                response.data[0].picture3,
+                response.data[0].picture4,
+                response.data[0].picture5,
+                response.data[0].picture6,
+                response.data[0].picture7,
+                response.data[0].picture8,
+                response.data[0].picture9);
+            console.log(tmpPictures)
+            setPictures(initImageList(tmpPictures));
+            setCover({image: appContext.host + response.data[0].cover?.url, rawPicture: null});
             setTitle(response.data[0].title);
             setDescription(response.data[0].description);
             // appContext.setLoadingFalse();
@@ -135,9 +160,9 @@ export default function UpdateProductDialog(props) {
     useEffect(() => {
         if (props.open) {
             setCover({image: null, rawPicture: null});
-            setPictures(initImageList());
+            setPictures(initImageList([]));
+
             if (props.isUpdate) {
-                console.log(props.productToUpdate);
                 getProductInfo();
             }
         }
@@ -154,7 +179,7 @@ export default function UpdateProductDialog(props) {
                 <br/>
                 <Container>
                     <Row className='justify-content-center'>
-                        <TextField
+                        {(title != null || props.isUpload) && <TextField
                             fullWidth
                             value={title}
                             onChange={onChangeTitle}
@@ -162,18 +187,18 @@ export default function UpdateProductDialog(props) {
                             color='secondary'
                             margin="dense"
                             label="Titolo prodotto"
-                            variant="outlined"/>
+                            variant="outlined"/>}
                     </Row>
                     <br/>
                     <Row className='justify-content-center'>
-                        <TextField
+                        {(description != null || props.isUpload) && <TextField
                             value={description}
                             onChange={onChangeDescription}
                             label="Descrizione prodotto"
                             multiline
                             color='secondary'
                             rows={4}
-                        />
+                        />}
                     </Row>
                     <br/>
                     <Row className='justify-content-center'>
@@ -191,8 +216,8 @@ export default function UpdateProductDialog(props) {
                                                         sx={{color: 'rgba(255, 255, 255, 0.54)'}}
                                                         key={0}
                                                         onClick={() => {
-                                                        window.open(cover.image, '_blank', 'noopener,noreferrer')
-                                                    }}>
+                                                            window.open(cover.image, '_blank', 'noopener,noreferrer')
+                                                        }}>
                                                         <OpenInFullIcon/>
                                                     </IconButton>,
                                                     <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
@@ -241,7 +266,8 @@ export default function UpdateProductDialog(props) {
                                                                    hidden onChange={(e) => {
                                                                 addPicture(e, item.index)
                                                             }}/>
-                                                            <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={1}
+                                                            <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                                        key={1}
                                                                         aria-label="upload picture" component="span">
                                                                 <PhotoCamera/>
                                                             </IconButton>
