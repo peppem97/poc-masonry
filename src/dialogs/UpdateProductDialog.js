@@ -23,10 +23,10 @@ import ProgressiveImg from "../ProgessiveImage";
 export default function UpdateProductDialog(props) {
     const [pictures, setPictures] = useState([]);
     const [cover, setCover] = useState({image: null, rawPicture: null});
-    const [title, setTitle] = useState(null);
-    const [price, setPrice] = useState(null);
-    const [pieces, setPieces] = useState(null);
-    const [description, setDescription] = useState(null);
+    const [title, setTitle] = useState('');
+    const [price, setPrice] = useState('');
+    const [pieces, setPieces] = useState('');
+    const [description, setDescription] = useState('');
     const MAX_PICTURES = 9;
     const appContext = useContext(GlobalContext);
 
@@ -85,7 +85,6 @@ export default function UpdateProductDialog(props) {
     };
 
     const onChangePrice = (e) => {
-        console.log(e.target.value.replace(/[^0-9]/g, ''))
         setPrice(e.target.value.replace(/[^0-9]/g, ''));
     };
 
@@ -94,10 +93,10 @@ export default function UpdateProductDialog(props) {
     };
 
     const closeDialog = () => {
-        setTitle(null);
-        setDescription(null);
-        setPrice(null);
-        setPieces(null);
+        setTitle('');
+        setDescription('');
+        setPrice('');
+        setPieces('');
         props.onClose();
     };
 
@@ -245,7 +244,6 @@ export default function UpdateProductDialog(props) {
                             {<TextField
                                 fullWidth
                                 value={pieces}
-
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start"><AutoAwesomeMotionIcon/></InputAdornment>,
                                 }}

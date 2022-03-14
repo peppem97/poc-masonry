@@ -100,7 +100,6 @@ export default function Product() {
         axios.get(appContext.hostProducts + "?id=" + id, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
-            console.log(response)
             let tmpPictures = setPicturesList(
                 response.data[0].picture0,
                 response.data[0].picture1,
@@ -224,13 +223,13 @@ export default function Product() {
                             <br/>
                             <Row className='row-cols-auto'>
                                 <Col>
-                                    <Typography variant='subtitle2' color="text.secondary">Prezzo: </Typography>€
-                                    <Typography variant='h6' sx={{display: 'inline'}}>{price ?? ' N.D.'}</Typography>
+                                    <Typography variant='subtitle2' color="text.secondary">Prezzo: </Typography>
+                                    <Typography variant='h6' sx={{display: 'inline'}}>{'€ ' + price ?? ' N.D.'}</Typography>
 
                                 </Col>
                                 <Col>
                                     <Typography variant='subtitle2' color="text.secondary">Pezzi: </Typography>
-                                    <Typography variant='h6' sx={{display: 'inline'}}>{pieces ?? 'N.D.'}</Typography>
+                                    <Typography variant='h6' sx={{display: 'inline'}}>{pieces ?? ' N.D.'}</Typography>
 
 
                                 </Col>
