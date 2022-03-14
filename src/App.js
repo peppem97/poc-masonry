@@ -9,6 +9,7 @@ import Error404 from "./Error404";
 import ErrorNoUser from "./ErrorNoUser";
 import {Backdrop, CircularProgress} from "@mui/material";
 import Product from "./Product";
+import ErrorDialog from "./dialogs/ErrorDialog";
 
 export default function App() {
     const [token, setToken] = useState(localStorage.getItem('token'));
@@ -16,12 +17,16 @@ export default function App() {
     const [disabledDecrease, setDisabledDecrease] = useState(false);
     const [columnWidth, setColumnWidth] = useState(200);
     const [loading, setLoading] = useState(false);
+    const [errorDialog, setErrorDialog] = useState(false);
     const appContext = {
         token: token,
         disabledIncrease: disabledIncrease,
         disabledDecrease: disabledDecrease,
         columnWidth: columnWidth,
         loading: loading,
+        errorDialog: errorDialog,
+        setErrorDialogTrue: () => {setErrorDialog(true)},
+        setErrorDialogFalse: () => {setErrorDialog(false)},
         setLoadingTrue: () => {setLoading(true)},
         setLoadingFalse: () => {setLoading(false)},
         qualityPictures: 0.1,
@@ -100,6 +105,7 @@ export default function App() {
                     open={loading}>
                     <CircularProgress color="inherit" />
                 </Backdrop>
+                <ErrorDialog open={false}/>
             </GlobalContext.Provider>
         </>
     );
