@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Carousel from 'react-material-ui-carousel'
+import ProgressiveImg from "./ProgessiveImage";
 
 function UserCarousel(props) {
     const [items, setItems] = useState([]);
@@ -7,7 +8,8 @@ function UserCarousel(props) {
     const initCarousel = () => {
         setItems(props.pictures.map(
             (picture, index) =>
-                <img key={index} src={picture.image} alt="" style={{width: '100%', height: '100%'}} loading="lazy"/>
+                <ProgressiveImg  key={index} image={picture.image} />
+                // <img key={index} src={picture.image} alt="" style={{width: '100%', height: '100%'}} loading="lazy"/>
         ));
     };
 

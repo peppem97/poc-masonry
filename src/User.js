@@ -221,13 +221,13 @@ export default function User() {
                     })
                 }
             }
+            appContext.setLoadingFalse();
         }).catch((error) => {
             appContext.setLoadingFalse();
         })
     };
 
     const updateProduct = (params) => {
-        console.log(params)
 
         /*****************/
         appContext.setLoadingTrue();
