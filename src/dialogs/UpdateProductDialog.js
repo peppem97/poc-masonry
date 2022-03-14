@@ -4,11 +4,11 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle, IconButton, ImageList, ImageListItem, ImageListItemBar,
-    Input,
+    Input, InputAdornment,
     TextField
 } from "@mui/material";
 import Button from "@mui/material/Button";
-import {Row} from "react-bootstrap";
+import {Col, Row} from "react-bootstrap";
 import React, {useContext, useEffect, useState} from "react";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
@@ -20,6 +20,8 @@ export default function UpdateProductDialog(props) {
     const [pictures, setPictures] = useState([]);
     const [cover, setCover] = useState({image: null, rawPicture: null});
     const [title, setTitle] = useState(null);
+    const [price, setPrice] = useState(null);
+    const [pieces, setPieces] = useState(null);
     const [description, setDescription] = useState(null);
     const MAX_PICTURES = 9;
     const appContext = useContext(GlobalContext);
@@ -76,6 +78,14 @@ export default function UpdateProductDialog(props) {
 
     const onChangeDescription = (e) => {
         setDescription(e.target.value)
+    };
+
+    const onChangePrice = (e) => {
+        setPrice(e.target.value)
+    };
+
+    const onChangePieces = (e) => {
+        setPieces(e.target.value)
     };
 
     const closeDialog = () => {
@@ -178,27 +188,58 @@ export default function UpdateProductDialog(props) {
                 </DialogContentText>
                 <br/>
                 <Container>
-                    <Row className='justify-content-center'>
-                        {(title != null || props.isUpload) && <TextField
-                            fullWidth
-                            value={title}
-                            onChange={onChangeTitle}
-                            autoFocus
-                            color='secondary'
-                            margin="dense"
-                            label="Titolo prodotto"
-                            variant="outlined"/>}
-                    </Row>
-                    <br/>
-                    <Row className='justify-content-center'>
-                        {(description != null || props.isUpload) && <TextField
-                            value={description}
-                            onChange={onChangeDescription}
-                            label="Descrizione prodotto"
-                            multiline
-                            color='secondary'
-                            rows={4}
-                        />}
+                    <Row className='justify-content-between'>
+                        <Col sm={12} lg={6}>
+                            {(title != null || props.isUpload) && <TextField
+                                fullWidth
+                                value={title}
+                                onChange={onChangeTitle}
+                                autoFocus
+                                color='secondary'
+                                margin="dense"
+                                label="Titolo prodotto"
+                                variant="outlined"/>}
+                        </Col>
+                        <Col sm={12} lg={6}>
+                            {(price != null || props.isUpload) && <TextField
+                                fullWidth
+                                value={price}
+                                onChange={onChangePrice}
+                                autoFocus
+                                type='number'
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">€</InputAdornment>,
+                                }}
+                                color='secondary'
+                                margin="dense"
+                                label="Prezzo prodotto"
+                                variant="outlined"/>}
+                        </Col>
+                    </Row >
+                    <Row className='justify-content-between'>
+                        <Col sm={12} lg={6}>
+                            {(pieces != null || props.isUpload) && <TextField
+                                fullWidth
+                                value={pieces}
+                                onChange={onChangePieces}
+                                autoFocus
+                                type='number'
+                                color='secondary'
+                                margin="dense"
+                                label="Pezzi prodotto"
+                                variant="outlined"/>}
+                        </Col>
+                        <Col sm={12} lg={6}>
+                            {(description != null || props.isUpload) && <TextField
+                                style={{width: '100%'}}
+                                value={description}
+                                onChange={onChangeDescription}
+                                label="Descrizione prodotto"
+                                multiline
+                                color='secondary'
+                                rows={4}
+                            />}
+                        </Col>
                     </Row>
                     <br/>
                     <Row className='justify-content-center'>
