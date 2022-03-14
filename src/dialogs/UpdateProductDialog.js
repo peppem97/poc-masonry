@@ -18,13 +18,14 @@ import GlobalContext from "../GlobalContext";
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
 import EuroIcon from '@mui/icons-material/Euro';
+import ProgressiveImg from "../ProgessiveImage";
 
 export default function UpdateProductDialog(props) {
     const [pictures, setPictures] = useState([]);
     const [cover, setCover] = useState({image: null, rawPicture: null});
     const [title, setTitle] = useState(null);
-    const [price, setPrice] = useState(0);
-    const [pieces, setPieces] = useState(0);
+    const [price, setPrice] = useState(null);
+    const [pieces, setPieces] = useState(null);
     const [description, setDescription] = useState(null);
     const MAX_PICTURES = 9;
     const appContext = useContext(GlobalContext);
@@ -95,6 +96,8 @@ export default function UpdateProductDialog(props) {
     const closeDialog = () => {
         setTitle(null);
         setDescription(null);
+        setPrice(null);
+        setPieces(null);
         props.onClose();
     };
 
@@ -159,22 +162,22 @@ export default function UpdateProductDialog(props) {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
             let tmpPictures = setPicturesList(
-                response.data[0].picture0,
-                response.data[0].picture1,
-                response.data[0].picture2,
-                response.data[0].picture3,
-                response.data[0].picture4,
-                response.data[0].picture5,
-                response.data[0].picture6,
-                response.data[0].picture7,
-                response.data[0].picture8,
-                response.data[0].picture9);
+                response.data[0]?.picture0,
+                response.data[0]?.picture1,
+                response.data[0]?.picture2,
+                response.data[0]?.picture3,
+                response.data[0]?.picture4,
+                response.data[0]?.picture5,
+                response.data[0]?.picture6,
+                response.data[0]?.picture7,
+                response.data[0]?.picture8,
+                response.data[0]?.picture9);
             setPictures(initImageList(tmpPictures));
             setCover({image: appContext.host + response.data[0].cover?.url, rawPicture: null});
-            setTitle(response.data[0].title);
-            setDescription(response.data[0].description);
-            setPrice(response.data[0].price);
-            setPieces(response.data[0].pieces);
+            setTitle(response.data[0]?.title);
+            setDescription(response.data[0]?.description);
+            setPrice(response.data[0]?.price);
+            setPieces(response.data[0]?.pieces);
             // appContext.setLoadingFalse();
         }).catch((error) => {
             // appContext.setLoadingTrue();
@@ -195,16 +198,17 @@ export default function UpdateProductDialog(props) {
 
     return (
         <Dialog open={props.open} onClose={closeDialog} fullWidth maxWidth={"lg"}>
-            <DialogTitle>Inserisci un nuovo prodotto</DialogTitle>
+            <DialogTitle>{props.isUpload ? 'Inserisci un nuovo prodotto' : 'Modifica prodotto'}</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Riempi i campi per inserire un nuovo prodotto all'interno della tua pagina.
+                    {props.isUpload ? 'Riempi i campi per inserire un nuovo prodotto all\'interno della tua pagina.' :
+                        'Riempi i campi per modifica il prodotto.'}
                 </DialogContentText>
                 <br/>
                 <Container>
                     <Row className='justify-content-between'>
                         <Col sm={12} lg={6}>
-                            {(title != null || props.isUpload) && <TextField
+                            {<TextField
                                 fullWidth
                                 value={title}
                                 onChange={onChangeTitle}
@@ -216,11 +220,11 @@ export default function UpdateProductDialog(props) {
                                 }}
                                 color='secondary'
                                 margin="dense"
-                                label="Titolo prodotto"
+                                label="Titolo"
                                 variant="outlined"/>}
                         </Col>
                         <Col sm={12} lg={6}>
-                            {(price != null || props.isUpload) && <TextField
+                            { <TextField
                                 fullWidth
                                 value={price}
                                 onChange={onChangePrice}
@@ -231,14 +235,14 @@ export default function UpdateProductDialog(props) {
                                 }}
                                 color='secondary'
                                 margin="dense"
-                                label="Prezzo prodotto"
+                                label="Prezzo"
                                 variant="outlined"/>}
                         </Col>
                     </Row >
                     <br/>
                     <Row className='justify-content-between'>
                         <Col sm={12} lg={6}>
-                            {(pieces != null || props.isUpload) && <TextField
+                            {<TextField
                                 fullWidth
                                 value={pieces}
 
@@ -249,18 +253,18 @@ export default function UpdateProductDialog(props) {
                                 type='number'
                                 color='secondary'
                                 margin="dense"
-                                label="Pezzi prodotto"
+                                label="Pezzi"
                                 variant="outlined"/>}
                         </Col>
                         <Col sm={12} lg={6}>
-                            {(description != null || props.isUpload) && <TextField
+                            {<TextField
                                 fullWidth={true}
                                 value={description}
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start"><TextFieldsIcon/></InputAdornment>,
                                 }}
                                 onChange={onChangeDescription}
-                                label="Descrizione prodotto"
+                                label="Descrizione"
                                 inputProps={{ maxLength: 320 }}
 
                                 multiline
@@ -275,9 +279,8 @@ export default function UpdateProductDialog(props) {
                                    gap={5} cols={110}>
                             {
                                 cover.image ? <ImageListItem cols={10} rows={1}>
-                                        <img src={cover.image}
-                                             alt=""
-                                             loading="lazy"/>
+                                        <ProgressiveImg image={cover.image} />
+
                                         <ImageListItemBar
                                             actionIcon={
                                                 [
@@ -345,9 +348,8 @@ export default function UpdateProductDialog(props) {
                                         </ImageListItem>)
                                 } else {
                                     return (<ImageListItem key={item.index} cols={10} rows={1}>
-                                        <img src={item.image}
-                                             alt=""
-                                             loading="lazy"/>
+                                        <ProgressiveImg image={item.image} />
+
                                         {/*<LazyLoadImage*/}
                                         {/*    alt=""*/}
                                         {/*    src={item.image}/>*/}
@@ -382,7 +384,7 @@ export default function UpdateProductDialog(props) {
                                 onClick={() => {
                                     uploadUpdateProduct();
                                 }}>
-                            Inserisci prodotto
+                            {props.isUpload ? 'Inserisci' : 'Modifica'} prodotto
                         </Button>
                     </Row>
                 </Container>

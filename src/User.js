@@ -46,14 +46,14 @@ export default function User() {
         axios.get(appContext.hostShops + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
-            setId(response.data[0].id);
-            setEmail(response.data[0].email);
-            setTitle(response.data[0].title);
-            setDescription(response.data[0].description);
-            setAvatar(appContext.host + response.data[0].avatar?.url);
-            setCarousel(getCarousel(response.data[0].carousel0, response.data[0].carousel1, response.data[0].carousel2));
-            setTelephone(response.data[0].telephone);
-            setWebsite(response.data[0].website);
+            setId(response.data[0]?.id);
+            setEmail(response.data[0]?.email);
+            setTitle(response.data[0]?.title);
+            setDescription(response.data[0]?.description);
+            setAvatar(appContext.host + response.data[0]?.avatar?.url);
+            setCarousel(getCarousel(response.data[0]?.carousel0, response.data[0]?.carousel1, response.data[0]?.carousel2));
+            setTelephone(response.data[0]?.telephone);
+            setWebsite(response.data[0]?.website);
             appContext.setLoadingFalse();
         }).catch((error) => {
             appContext.setLoadingFalse();
@@ -71,12 +71,14 @@ export default function User() {
                 title: element?.title,
                 id: element?.id,
                 username: username,
-                picture: appContext.host + element.cover?.url
+                picture: appContext.host + element?.cover?.url
             }));
             setProducts(items);
             setLoadingProducts(false);
+            appContext.setLoadingFalse();
         }).catch((error) => {
             setLoadingProducts(false);
+            appContext.setLoadingFalse();
         })
     };
 
@@ -189,14 +191,13 @@ export default function User() {
                             const formData = new FormData();
                             formData.append('files.picture' + picture.index, result, picture.rawPicture.name);
                             formData.append('data', JSON.stringify({}));
-                            axios.put(appContext.hostProducts + "/" + response.data.id, formData, {
+                            axios.put(appContext.hostProducts + "/" + response?.data?.id, formData, {
                                 headers: {
                                     'Authorization': 'Bearer ' + appContext.token,
                                 }
                             }).then((response) => {
                                 if (picture.index == 9) {
                                     getProducts();
-                                    appContext.setLoadingFalse();
                                 }
                             }).catch((error) => {
                                 appContext.setLoadingFalse();
@@ -214,7 +215,6 @@ export default function User() {
                     }).then((response) => {
                         if (picture.index == 9) {
                             getProducts();
-                            appContext.setLoadingFalse();
                         }
                     }).catch((error) => {
                         appContext.setLoadingFalse();
@@ -230,7 +230,7 @@ export default function User() {
         console.log(params)
 
         /*****************/
-        // appContext.setLoadingTrue();
+        appContext.setLoadingTrue();
         const data = {
             'title': params.title,
             'description': params.description,
@@ -241,14 +241,51 @@ export default function User() {
         const formData = new FormData();
         if (params.cover.rawPicture != null) {
             formData.append('files.cover', params.cover.rawPicture, params.cover.rawPicture.name);
-
         }
         formData.append('data', JSON.stringify(data));
         axios.put(appContext.hostProducts + "/" + productToUpdate, formData, {headers: {
                 'Authorization': 'Bearer ' + appContext.token,
             }}).then((response) => {
-            getProducts();
-            appContext.setLoadingFalse();
+            // getProducts();
+            // appContext.setLoadingFalse();
+            for (let picture of params.pictures) {
+                if (picture.image != null) {
+                    new Compressor(picture.rawPicture, {
+                        quality: appContext.qualityPictures, success(result) {
+                            const formData = new FormData();
+                            formData.append('files.picture' + picture.index, result, 'example.jpg');
+                            formData.append('data', JSON.stringify({}));
+                            axios.put(appContext.hostProducts + "/" + productToUpdate, formData, {
+                                headers: {'Authorization': 'Bearer ' + appContext.token}
+                            }).then((response) => {
+                                if (picture.index == 9) {
+                                    getProducts();
+                                }
+                            }).catch((error) => {
+                                appContext.setLoadingFalse();
+                            })
+                        }, error(err) {
+                            appContext.setLoadingFalse();
+                        }
+                    })
+                } else {
+                    let data = {};
+                    data['picture' + picture.index] = null;
+                    axios.put(appContext.hostProducts + "/" + productToUpdate, data, {
+                        headers: {'Authorization': 'Bearer ' + appContext.token,}
+                    }).then((response) => {
+                        if (picture.index == 9) {
+                            getProducts();
+                        }
+                    }).catch((error) => {
+                        appContext.setLoadingFalse();
+                    })
+                }
+            }
+
+
+
+
         }).catch((error) => {
             appContext.setLoadingFalse();
         })
@@ -265,7 +302,6 @@ export default function User() {
                 }
             }).then((response) => {
                 getProducts();
-                appContext.setLoadingFalse();
             }).catch((error) => {
                 appContext.setLoadingFalse();
             })
