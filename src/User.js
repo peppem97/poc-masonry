@@ -70,7 +70,6 @@ export default function User() {
                 height: generateHeight(),
                 title: element?.title,
                 id: element?.id,
-                description: element?.description,
                 username: username,
                 picture: appContext.host + element.cover?.url
             }));
@@ -172,6 +171,8 @@ export default function User() {
         const data = {
             title: params.title,
             description: params.description,
+            price: params.price,
+            pieces: params.pieces,
             username: username
         };
         formData.append('data', JSON.stringify(data));

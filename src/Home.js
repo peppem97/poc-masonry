@@ -24,7 +24,6 @@ export default function Home() {
                 height: generateHeight(),
                 title: element.title,
                 id: element.id,
-                description: element.description,
                 picture: appContext.host + element.cover?.url,
                 username: element.username}))
             setProducts(tmpProducts);

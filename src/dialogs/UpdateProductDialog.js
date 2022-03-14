@@ -15,13 +15,16 @@ import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import axios from "axios";
 import GlobalContext from "../GlobalContext";
+import TextFieldsIcon from '@mui/icons-material/TextFields';
+import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
+import EuroIcon from '@mui/icons-material/Euro';
 
 export default function UpdateProductDialog(props) {
     const [pictures, setPictures] = useState([]);
     const [cover, setCover] = useState({image: null, rawPicture: null});
     const [title, setTitle] = useState(null);
-    const [price, setPrice] = useState(null);
-    const [pieces, setPieces] = useState(null);
+    const [price, setPrice] = useState(0);
+    const [pieces, setPieces] = useState(0);
     const [description, setDescription] = useState(null);
     const MAX_PICTURES = 9;
     const appContext = useContext(GlobalContext);
@@ -99,18 +102,18 @@ export default function UpdateProductDialog(props) {
             pictures: pictures,
             title: title,
             description: description,
-            cover: cover
+            cover: cover,
+            price: price,
+            pieces: pieces
         });
         props.onClose();
     };
 
-    // const initImageList = () => {
-    //     let initPictures = [];
-    //     for (let i = 0; i < MAX_PICTURES; i++) {
-    //         initPictures.push({index: i, image: null, rawPicture: null, add: true});
-    //     }
-    //     return initPictures;
-    // };
+    const canUpdate = () => {
+        return (title && description && price && pieces && (cover.image));
+    }
+
+
     const initImageList = (tmpPictures) => {
         let initPictures = []
         for (let i = 0; i < MAX_PICTURES; i++) {
@@ -144,7 +147,6 @@ export default function UpdateProductDialog(props) {
         axios.get(appContext.hostProducts + "?id=" + props.productToUpdate, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
-            console.log(response)
             let tmpPictures = setPicturesList(
                 response.data[0].picture0,
                 response.data[0].picture1,
@@ -194,7 +196,12 @@ export default function UpdateProductDialog(props) {
                                 fullWidth
                                 value={title}
                                 onChange={onChangeTitle}
+                                required={true}
+                                inputProps={{ maxLength: 12 }}
                                 autoFocus
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start"><TextFieldsIcon/></InputAdornment>,
+                                }}
                                 color='secondary'
                                 margin="dense"
                                 label="Titolo prodotto"
@@ -205,10 +212,9 @@ export default function UpdateProductDialog(props) {
                                 fullWidth
                                 value={price}
                                 onChange={onChangePrice}
-                                autoFocus
                                 type='number'
                                 InputProps={{
-                                    startAdornment: <InputAdornment position="start">€</InputAdornment>,
+                                    startAdornment: <InputAdornment position="start"><EuroIcon/></InputAdornment>,
                                 }}
                                 color='secondary'
                                 margin="dense"
@@ -221,8 +227,11 @@ export default function UpdateProductDialog(props) {
                             {(pieces != null || props.isUpload) && <TextField
                                 fullWidth
                                 value={pieces}
+
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start"><AutoAwesomeMotionIcon/></InputAdornment>,
+                                }}
                                 onChange={onChangePieces}
-                                autoFocus
                                 type='number'
                                 color='secondary'
                                 margin="dense"
@@ -231,10 +240,15 @@ export default function UpdateProductDialog(props) {
                         </Col>
                         <Col sm={12} lg={6}>
                             {(description != null || props.isUpload) && <TextField
-                                style={{width: '100%'}}
+                                fullWidth={true}
                                 value={description}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start"><TextFieldsIcon/></InputAdornment>,
+                                }}
                                 onChange={onChangeDescription}
                                 label="Descrizione prodotto"
+                                inputProps={{ maxLength: 320 }}
+
                                 multiline
                                 color='secondary'
                                 rows={4}
@@ -346,7 +360,11 @@ export default function UpdateProductDialog(props) {
                         </ImageList>
                     </Row>
                     <Row>
-                        <Button variant={"contained"} component="span" style={{backgroundColor: 'darkred'}}
+                        <Button
+                            variant={"contained"}
+                            disabled={!canUpdate()}
+                            component="span"
+                            style={{backgroundColor: canUpdate() ? 'darkred' : 'grey'}}
                                 onClick={() => {
                                     uploadProduct()
                                 }}>

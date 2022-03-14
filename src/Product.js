@@ -83,6 +83,8 @@ export default function Product() {
     const [username, setUsername] = useState(null);
     const [avatar, setAvatar] = useState(null);
     const [shop, setShop] = useState(null);
+    const [price, setPrice] = useState(null);
+    const [pieces, setPieces] = useState(null);
     const appContext = useContext(GlobalContext);
     const {id} = useParams();
     const MAX_PICTURES = 10;
@@ -98,6 +100,7 @@ export default function Product() {
         axios.get(appContext.hostProducts + "?id=" + id, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
+            console.log(response)
             let tmpPictures = setPicturesList(
                 response.data[0].picture0,
                 response.data[0].picture1,
@@ -113,6 +116,9 @@ export default function Product() {
             setPictures(initImageList(tmpPictures));
             setCover(appContext.host + response.data[0]?.cover?.url);
             setTitle(response.data[0]?.title);
+            setPrice(response.data[0]?.price);
+            setPieces(response.data[0]?.pieces);
+
             setDescription(response.data[0]?.description);
             appContext.setLoadingFalse();
         }).catch((error) => {
@@ -214,6 +220,20 @@ export default function Product() {
                                     fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa
                                     qui officia deserunt mollit anim id est laborum.
                                 </Typography>
+                            </Row>
+                            <br/>
+                            <Row className='row-cols-auto'>
+                                <Col>
+                                    <Typography variant='subtitle2' color="text.secondary">Prezzo: </Typography>€
+                                    <Typography variant='h6' sx={{display: 'inline'}}>{price ?? ' N.D.'}</Typography>
+
+                                </Col>
+                                <Col>
+                                    <Typography variant='subtitle2' color="text.secondary">Pezzi: </Typography>
+                                    <Typography variant='h6' sx={{display: 'inline'}}>{pieces ?? 'N.D.'}</Typography>
+
+
+                                </Col>
                             </Row>
                             <br/>
                             <Row>
