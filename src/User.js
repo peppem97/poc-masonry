@@ -227,7 +227,32 @@ export default function User() {
     };
 
     const updateProduct = (params) => {
+        console.log(params)
 
+        /*****************/
+        // appContext.setLoadingTrue();
+        const data = {
+            'title': params.title,
+            'description': params.description,
+            'price': params.price,
+            'pieces': params.pieces
+        };
+        // data[type] = value;
+        const formData = new FormData();
+        if (params.cover.rawPicture != null) {
+            formData.append('files.cover', params.cover.rawPicture, params.cover.rawPicture.name);
+
+        }
+        formData.append('data', JSON.stringify(data));
+        axios.put(appContext.hostProducts + "/" + productToUpdate, formData, {headers: {
+                'Authorization': 'Bearer ' + appContext.token,
+            }}).then((response) => {
+            getProducts();
+            appContext.setLoadingFalse();
+        }).catch((error) => {
+            appContext.setLoadingFalse();
+        })
+        /******************/
     };
 
     const deleteProduct = (consens) => {
@@ -332,6 +357,7 @@ export default function User() {
                 isUpdate={updateProductDialogOpened}
                 isUpload={uploadProductDialogOpened}
                 productToUpdate={productToUpdate}
+                updateProduct={updateProduct}
                 uploadProduct={uploadProduct}/>
             <UpdateInfoDialog
                 open={updateInfoDialogOpened}

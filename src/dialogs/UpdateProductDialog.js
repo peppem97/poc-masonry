@@ -84,7 +84,8 @@ export default function UpdateProductDialog(props) {
     };
 
     const onChangePrice = (e) => {
-        setPrice(e.target.value)
+        console.log(e.target.value.replace(/[^0-9]/g, ''))
+        setPrice(e.target.value.replace(/[^0-9]/g, ''));
     };
 
     const onChangePieces = (e) => {
@@ -97,22 +98,32 @@ export default function UpdateProductDialog(props) {
         props.onClose();
     };
 
-    const uploadProduct = () => {
-        props.uploadProduct({
-            pictures: pictures,
-            title: title,
-            description: description,
-            cover: cover,
-            price: price,
-            pieces: pieces
-        });
+    const uploadUpdateProduct = () => {
+        if (props.isUpload) {
+            props.uploadProduct({
+                pictures: pictures,
+                title: title,
+                description: description,
+                cover: cover,
+                price: price,
+                pieces: pieces
+            });
+        } else if (props.isUpdate) {
+            props.updateProduct({
+                pictures: pictures,
+                title: title,
+                description: description,
+                cover: cover,
+                price: price,
+                pieces: pieces
+            });
+        }
         props.onClose();
     };
 
     const canUpdate = () => {
         return (title && description && price && pieces && (cover.image));
     }
-
 
     const initImageList = (tmpPictures) => {
         let initPictures = []
@@ -158,11 +169,12 @@ export default function UpdateProductDialog(props) {
                 response.data[0].picture7,
                 response.data[0].picture8,
                 response.data[0].picture9);
-            console.log(tmpPictures)
             setPictures(initImageList(tmpPictures));
             setCover({image: appContext.host + response.data[0].cover?.url, rawPicture: null});
             setTitle(response.data[0].title);
             setDescription(response.data[0].description);
+            setPrice(response.data[0].price);
+            setPieces(response.data[0].pieces);
             // appContext.setLoadingFalse();
         }).catch((error) => {
             // appContext.setLoadingTrue();
@@ -212,6 +224,7 @@ export default function UpdateProductDialog(props) {
                                 fullWidth
                                 value={price}
                                 onChange={onChangePrice}
+                                pattern="[0-9]*"
                                 type='number'
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start"><EuroIcon/></InputAdornment>,
@@ -222,6 +235,7 @@ export default function UpdateProductDialog(props) {
                                 variant="outlined"/>}
                         </Col>
                     </Row >
+                    <br/>
                     <Row className='justify-content-between'>
                         <Col sm={12} lg={6}>
                             {(pieces != null || props.isUpload) && <TextField
@@ -366,7 +380,7 @@ export default function UpdateProductDialog(props) {
                             component="span"
                             style={{backgroundColor: canUpdate() ? 'darkred' : 'grey'}}
                                 onClick={() => {
-                                    uploadProduct()
+                                    uploadUpdateProduct();
                                 }}>
                             Inserisci prodotto
                         </Button>
