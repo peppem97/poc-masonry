@@ -65,12 +65,28 @@ export default function TopToolbar() {
     };
 
     const increaseColumnsSize = () => {
-        appContext.increaseColumnsSize();
-    }
+        if (appContext.columnWidth >= 500) {
+            appContext.setColumnWidth(appContext.columnWidth);
+        } else {
+            appContext.setColumnWidth(appContext.columnWidth + 50);
+        }
+    };
 
     const decreaseColumnsSize = () => {
-        appContext.decreaseColumnsSize();
-    }
+        if (appContext.columnWidth <= 250) {
+            appContext.setColumnWidth(appContext.columnWidth);
+        } else {
+            appContext.setColumnWidth(appContext.columnWidth - 50);
+        }
+    };
+
+    // const increaseColumnsSize = () => {
+    //     appContext.increaseColumnsSize();
+    // }
+    //
+    // const decreaseColumnsSize = () => {
+    //     appContext.decreaseColumnsSize();
+    // }
 
     const getNewToken = () => {
         appContext.getNewToken();
@@ -93,12 +109,12 @@ export default function TopToolbar() {
                             <VpnKeyIcon/>
                         </IconButton>
                         <IconButton size="large"
-                                    style={{color: appContext.disableIncrease ? 'gray' : 'darkred', fontWeight: 'bold'}}
+                                    style={{color: 'darkred', fontWeight: 'bold'}}
                                     onClick={increaseColumnsSize}>
                             <ZoomInIcon/>
                         </IconButton>
                         <IconButton size="large"
-                                    style={{color: appContext.disableDecrease ? 'gray' : 'darkred', fontWeight: 'bold'}}
+                                    style={{color: 'darkred', fontWeight: 'bold'}}
                                     onClick={decreaseColumnsSize}>
                             <ZoomOutIcon/>
                         </IconButton>

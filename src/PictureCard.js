@@ -7,7 +7,6 @@ import {Info} from '@mui-treasury/components/info';
 import {useGalaxyInfoStyles} from '@mui-treasury/styles/info/galaxy';
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
 import {CardActions, IconButton} from "@mui/material";
-import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const useStyles = makeStyles(() => ({
