@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 import User from "./User";
 import TopToolbar from "./TopToolbar";
@@ -10,6 +10,8 @@ import ErrorNoUser from "./ErrorNoUser";
 import {Backdrop, CircularProgress} from "@mui/material";
 import Product from "./Product";
 import ErrorDialog from "./dialogs/ErrorDialog";
+import About from "./About";
+import ProtectedRoute from "./ProtectedRoute";
 
 export default function App() {
     const [token, setToken] = useState(localStorage.getItem('token'));
@@ -68,6 +70,18 @@ export default function App() {
         }
     };
 
+    const JWTisExpired = () => {
+        // let decodedToken = jwt.decode(token, {complete: true});
+        // let dateNow = new Date();
+        // let isExpired;
+        //
+        // if (decodedToken.exp < dateNow.getTime())
+        //     isExpired = true;
+        //
+        // console.log(isExpired);
+
+    };
+
     const appContext = {
         token: token,
         disabledIncrease: disabledIncrease,
@@ -79,9 +93,16 @@ export default function App() {
         loading: loading,
         errorDialog: errorDialog,
         errorMessage: errorMessage,
-        setLoadingTrue: () => {setLoading(true)},
-        setLoadingFalse: () => {setLoading(false)},
-        setError: (message) => {setErrorMessage(message); setErrorDialog(true);},
+        setLoadingTrue: () => {
+            setLoading(true)
+        },
+        setLoadingFalse: () => {
+            setLoading(false)
+        },
+        setError: (message) => {
+            setErrorMessage(message);
+            setErrorDialog(true);
+        },
         MAX_PICTURES_CAROUSEL: 3,
         MAX_PICTURES_PRODUCT: 9,
         qualityPictures: 0.3,
@@ -92,29 +113,35 @@ export default function App() {
         hostSignin: "http://zion.datafactor.it:40505/auth/local"
     };
 
+    useEffect(() => {
+    }, [])
+
     return (
         <>
             <GlobalContext.Provider value={appContext}>
                 <Router>
                     <TopToolbar/>
                     <Routes>
-                        <Route exact path="/" element={<Navigate to="/home" />}/>
-                        <Route exact path='/home' element={<Home/>}/>
-                        <Route exact path='/user/:username' element={<User/>}/>
-                        <Route exact path='/product/:id' element={<Product/>}/>
-                        <Route exact path='/no-user' element={<ErrorNoUser/>}/>
+                        <Route exact path="/" element={<Navigate to="/about"/>}/>
+                        <Route exact path='/about' element={<About/>}/>
+                        <Route path="/home" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
+                        <Route path="/user/:username" element={<ProtectedRoute><User/></ProtectedRoute>}/>
+                        <Route path="/product/:id" element={<ProtectedRoute><Product/></ProtectedRoute>}/>
+                        <Route path="/no-user" element={<ProtectedRoute><ErrorNoUser/></ProtectedRoute>}/>
                         <Route exact path='*' element={<Error404/>}/>
                     </Routes>
                 </Router>
                 <Backdrop
-                    sx={{ color: '#fff', zIndex: '999' }}
+                    sx={{color: '#fff', zIndex: '999'}}
                     open={loading}>
-                    <CircularProgress color="inherit" />
+                    <CircularProgress color="inherit"/>
                 </Backdrop>
                 <ErrorDialog
                     open={errorDialog}
                     errorMessage={errorMessage}
-                    onClose={() => {setErrorDialog(false);}}/>
+                    onClose={() => {
+                        setErrorDialog(false);
+                    }}/>
             </GlobalContext.Provider>
         </>
     );

@@ -102,17 +102,17 @@ export default function TopToolbar() {
                                     onClick={decreaseColumnsSize}>
                             <ZoomOutIcon/>
                         </IconButton>
-                        <Button color="inherit" style={{color: 'darkred', fontWeight: 'bold'}}>Informazioni</Button>
-                        <Button color="inherit" style={{color: 'darkred', fontWeight: 'bold'}}>Negozi</Button>
-                        <Search>
-                            <SearchIconWrapper>
-                                <SearchIcon style={{color: 'darkred'}}/>
-                            </SearchIconWrapper>
-                            <StyledInputBase
-                                placeholder="Cerca..."
-                                inputProps={{'aria-label': 'Cerca qualcosa...'}}
-                            />
-                        </Search>
+                        {/*<Button color="inherit" style={{color: 'darkred', fontWeight: 'bold'}}>Informazioni</Button>*/}
+                        {/*<Button color="inherit" style={{color: 'darkred', fontWeight: 'bold'}}>Negozi</Button>*/}
+                        {/*<Search>*/}
+                        {/*    <SearchIconWrapper>*/}
+                        {/*        <SearchIcon style={{color: 'darkred'}}/>*/}
+                        {/*    </SearchIconWrapper>*/}
+                        {/*    <StyledInputBase*/}
+                        {/*        placeholder="Cerca..."*/}
+                        {/*        inputProps={{'aria-label': 'Cerca qualcosa...'}}*/}
+                        {/*    />*/}
+                        {/*</Search>*/}
                         &nbsp;
                         <Button variant="contained" style={{backgroundColor: 'darkred'}}>ACCEDI</Button>
                         &nbsp;&nbsp;
