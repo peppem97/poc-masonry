@@ -130,7 +130,7 @@ export default function User() {
                                 fetched++;
                                 if (pictures.length === fetched) {
                                     appContext.setLoadingFalse();
-                                    getProducts();
+                                    getUserInfo();
                                 }
                             }).catch((error) => {
                                 appContext.setLoadingFalse();
@@ -145,7 +145,7 @@ export default function User() {
                     fetched++;
                     if (pictures.length === fetched) {
                         appContext.setLoadingFalse();
-                        getProducts();
+                        getUserInfo();
                     }
                 }
             } else {
@@ -158,7 +158,7 @@ export default function User() {
                     fetched++;
                     if (pictures.length === fetched) {
                         appContext.setLoadingFalse();
-                        getProducts();
+                        getUserInfo();
                     }
                 }).catch((error) => {
                     appContext.setLoadingFalse();

@@ -18,10 +18,11 @@ import {initImageList} from "../Utility";
 export default function UpdateCarouselDialog(props) {
     const MAX_PICTURES = 3;
     const [pictures, setPictures] = useState([])
-    const [initPictures, setInitPictures] = useState([])
+    // const [initPictures, setInitPictures] = useState([])
 
     const closeDialog = () => {
-        setPictures(initPictures)
+        // setPictures(initPictures)
+        setPictures([]);
         props.onClose();
     };
 
@@ -58,14 +59,16 @@ export default function UpdateCarouselDialog(props) {
 
     const updateCarousel = () => {
         props.updateCarousel(pictures);
-        props.onClose();
+        closeDialog();
     };
 
     useEffect(() => {
-        let tmpList = initImageList(props.carousel, MAX_PICTURES);
-        setInitPictures(tmpList);
-        setPictures(tmpList);
-    }, [props.carousel]);
+        // let tmpList = ;
+        // setInitPictures(tmpList);
+        if (props.open) {
+            setPictures(initImageList(props.carousel, MAX_PICTURES));
+        }
+    }, [props.open]);
 
     return (
         <Dialog open={props.open} onClose={closeDialog}>
