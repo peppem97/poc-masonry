@@ -24,12 +24,12 @@ export default function App() {
     const [errorMessage, setErrorMessage] = useState(null);
 
     const getNewToken = () => {
-        appContext.setLoadingTrue();
+        appContext.setLoading(true);
         let data = {identifier: 'prova@prova.it', password: 'provaprova'};
         axios.post(appContext.hostSignin, data).then((response) => {
             localStorage.setItem('token', response.data.jwt);
             setToken(response.data.jwt);
-            appContext.setLoadingFalse();
+            appContext.setLoading(false);
         }).catch((error) => {
             appContext.setError('Errore di autenticazione. Riprovare.');
         })
@@ -41,19 +41,14 @@ export default function App() {
 
     const appContext = {
         token: token,
-        getNewToken: getNewToken,
-        setColumnWidth: (value) => {setColumnWidth(value)},
         columnWidth: columnWidth,
         loading: loading,
         errorDialog: errorDialog,
         errorMessage: errorMessage,
+        getNewToken: getNewToken,
+        setToken: (token) => {setToken(token)},
+        setColumnWidth: (value) => {setColumnWidth(value)},
         setLoading: (state) => {setLoading(state)},
-        setLoadingTrue: () => {
-            setLoading(true)
-        },
-        setLoadingFalse: () => {
-            setLoading(false)
-        },
         setError: (message) => {
             setErrorMessage(message);
             setErrorDialog(true);
@@ -67,9 +62,6 @@ export default function App() {
         hostExample: "http://zion.datafactor.it:40505/image-uploadeds",
         hostSignin: "http://zion.datafactor.it:40505/auth/local"
     };
-
-    useEffect(() => {
-    }, [])
 
     return (
         <>

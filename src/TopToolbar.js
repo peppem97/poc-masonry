@@ -80,14 +80,6 @@ export default function TopToolbar() {
         }
     };
 
-    // const increaseColumnsSize = () => {
-    //     appContext.increaseColumnsSize();
-    // }
-    //
-    // const decreaseColumnsSize = () => {
-    //     appContext.decreaseColumnsSize();
-    // }
-
     const getNewToken = () => {
         appContext.getNewToken();
     }

@@ -67,14 +67,14 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     };
 
     const getUserInfo = () => {
-        appContext.setLoadingTrue();
+        appContext.setLoading(true);
         axios.get(appContext.hostShops + "?username=" + props.product.username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
             setAvatar(appContext.host + response.data[0].avatar.url);
-            appContext.setLoadingFalse();
+            appContext.setLoading(false);
         }).catch((error) => {
-            appContext.setLoadingFalse();
+            appContext.setLoading(false);
         })
     };
 

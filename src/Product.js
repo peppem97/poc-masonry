@@ -95,7 +95,7 @@ export default function Product() {
     };
 
     const getProductInfo = () => {
-        appContext.setLoadingTrue();
+        appContext.setLoading(true);
         axios.get(appContext.hostProducts + "?id=" + id, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
@@ -117,23 +117,23 @@ export default function Product() {
             setPrice(response.data[0]?.price);
             setPieces(response.data[0]?.pieces);
             setDescription(response.data[0]?.description);
-            appContext.setLoadingFalse();
+            appContext.setLoading(false);
         }).catch((error) => {
-            appContext.setLoadingFalse();
+            appContext.setLoading(false);
             appContext.setError('Si è verificato un errore nella ricezione delle informazioni del prodotto. Riprovare ad aggiornare la pagina.');
         })
     };
 
     const getUserInfo = () => {
-        appContext.setLoadingTrue();
+        appContext.setLoading(true);
         axios.get(appContext.hostShops + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
             setAvatar(appContext.host + response.data[0]?.avatar?.url);
             setShop(response.data[0]?.title);
-            appContext.setLoadingFalse();
+            appContext.setLoading(false);
         }).catch((error) => {
-            appContext.setLoadingFalse();
+            appContext.setLoading(false);
             appContext.setError('Si è verificato un errore nella ricezione delle informazioni dell\'utente. Riprovare ad aggiornare la pagina.');
 
         })
