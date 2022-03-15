@@ -98,6 +98,8 @@ export default function UpdateProductDialog(props) {
         setDescription('');
         setPrice('');
         setPieces('');
+        setCover({image: null, rawPicture: null});
+        setPictures([]);
         props.onClose();
     };
 
@@ -121,7 +123,7 @@ export default function UpdateProductDialog(props) {
                 pieces: pieces
             });
         }
-        props.onClose();
+        closeDialog();
     };
 
     const canUpdate = () => {

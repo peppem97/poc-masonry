@@ -44,21 +44,21 @@ export default function UpdateCarouselDialog(props) {
     };
 
     const removePicture = (i) => {
-        let tmpPictures = []
+        let tmpPictures = [];
 
         for (let picture of pictures) {
             if (picture.index == i) {
-                tmpPictures.push({index: picture.index, image: null, rawImage: null, add: true})
+                tmpPictures.push({index: picture.index, image: null, rawImage: null, add: true});
             } else {
-                tmpPictures.push(picture)
+                tmpPictures.push(picture);
             }
         }
-        setPictures(tmpPictures)
+        setPictures(tmpPictures);
     };
 
     const updateCarousel = () => {
-        props.updateCarousel(pictures)
-        props.onClose()
+        props.updateCarousel(pictures);
+        props.onClose();
     };
 
     useEffect(() => {

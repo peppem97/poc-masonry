@@ -18,3 +18,4 @@ export const initImageList = (tmpPictures, MAX_PICTURES) => {
     }
     return initPictures;
 };
+
