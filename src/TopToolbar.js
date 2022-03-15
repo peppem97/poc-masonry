@@ -2,7 +2,7 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import {alpha, IconButton, InputBase, LinearProgress, styled} from "@mui/material";
+import {alpha, IconButton, InputBase, styled} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import Button from "@mui/material/Button";
 import ZoomInIcon from '@mui/icons-material/ZoomIn';

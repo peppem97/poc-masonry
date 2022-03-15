@@ -13,6 +13,7 @@ import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import ProgressiveImg from "../ProgessiveImage";
+import {initImageList} from "../Utility";
 
 export default function UpdateCarouselDialog(props) {
     const MAX_PICTURES = 3;
@@ -40,7 +41,7 @@ export default function UpdateCarouselDialog(props) {
         }
 
         setPictures(tmpPictures)
-    }
+    };
 
     const removePicture = (i) => {
         let tmpPictures = []
@@ -53,34 +54,18 @@ export default function UpdateCarouselDialog(props) {
             }
         }
         setPictures(tmpPictures)
-    }
+    };
 
     const updateCarousel = () => {
         props.updateCarousel(pictures)
         props.onClose()
-    }
-
-    const initImageList = () => {
-        let initPictures = []
-        for (let i = 0; i < MAX_PICTURES; i++) {
-            if (props.carousel[i] != undefined) {
-                initPictures.push({
-                    index: i,
-                    image: props.carousel[i].image,
-                    rawImage: props.carousel[i].rawImage,
-                    add: false
-                })
-            } else {
-                initPictures.push({index: i, image: null, rawImage: null, add: true})
-            }
-        }
-        setInitPictures(initPictures)
-        setPictures(initPictures)
-    }
+    };
 
     useEffect(() => {
-        initImageList();
-    }, [props.carousel])
+        let tmpList = initImageList(props.carousel, MAX_PICTURES);
+        setInitPictures(tmpList);
+        setPictures(tmpList);
+    }, [props.carousel]);
 
     return (
         <Dialog open={props.open} onClose={closeDialog}>

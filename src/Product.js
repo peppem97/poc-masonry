@@ -14,6 +14,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import cx from 'clsx';
 import GridSystem from "./GridSystem";
 import Avatar from "@material-ui/core/Avatar";
+import {initImageList} from "./Utility";
 
 const useStyles = makeStyles(({breakpoints, spacing}) => ({
     root: {
@@ -74,7 +75,6 @@ const useStyles = makeStyles(({breakpoints, spacing}) => ({
     },
 }));
 
-
 export default function Product() {
     const [pictures, setPictures] = useState([]);
     const [cover, setCover] = useState(null);
@@ -112,7 +112,7 @@ export default function Product() {
                 response.data[0].picture8,
                 response.data[0].picture9);
             setUsername(response.data[0]?.username);
-            setPictures(initImageList(tmpPictures));
+            setPictures(initImageList(tmpPictures, MAX_PICTURES));
             setCover(appContext.host + response.data[0]?.cover?.url);
             setTitle(response.data[0]?.title);
             setPrice(response.data[0]?.price);
@@ -140,24 +140,6 @@ export default function Product() {
         })
     };
 
-    const initImageList = (tmpPictures) => {
-        let initPictures = []
-        for (let i = 0; i < MAX_PICTURES; i++) {
-            if (tmpPictures[i] !== undefined) {
-                initPictures.push({
-                    index: i,
-                    image: tmpPictures[i].image,
-                    rawImage: tmpPictures[i].rawImage,
-                    add: false
-                })
-            } else {
-                initPictures.push({index: i, image: null, rawImage: null, add: true})
-            }
-        }
-        return initPictures
-
-    };
-
     const setPicturesList = (...pictures) => {
         let pictureList = [];
         for (let i = 0; i < pictures.length; i++) {
@@ -170,11 +152,11 @@ export default function Product() {
 
     useEffect(() => {
         getProductInfo();
-    }, [])
+    }, []);
 
     useEffect(() => {
         getUserInfo();
-    }, [username])
+    }, [username]);
 
     return (
         <Container>

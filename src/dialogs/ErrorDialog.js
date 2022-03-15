@@ -4,7 +4,6 @@ import DialogContentText from "@mui/material/DialogContentText";
 import * as React from "react";
 
 export default function ErrorDialog(props) {
-
     const onClose = () => {
         props.onClose();
     };

@@ -29,13 +29,10 @@ export default function User() {
     const [updateInfoDialogOpened, setUpdateInfoDialogOpened] = useState(false);
     const [deleteProductDialogOpened, setDeleteProductDialogOpened] = useState(false);
     const [updateProductDialogOpened, setUpdateProductDialogOpened] = useState(false);
-
     const [info, setInfo] = useState(null);
     const [infoToEdit, setInfoToEdit] = useState(null);
     const [productToDelete, setProductToDelete] = useState(null);
     const [productToUpdate, setProductToUpdate] = useState(null);
-
-
     const [loadingProducts, setLoadingProducts] = useState(false);
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
@@ -46,6 +43,7 @@ export default function User() {
         axios.get(appContext.hostShops + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
+            appContext.setLoadingFalse();
             setId(response.data[0]?.id);
             setEmail(response.data[0]?.email);
             setTitle(response.data[0]?.title);
@@ -54,7 +52,6 @@ export default function User() {
             setCarousel(getCarousel(response.data[0]?.carousel0, response.data[0]?.carousel1, response.data[0]?.carousel2));
             setTelephone(response.data[0]?.telephone);
             setWebsite(response.data[0]?.website);
-            appContext.setLoadingFalse();
         }).catch((error) => {
             appContext.setLoadingFalse();
             navigate('/no-user');
@@ -105,7 +102,6 @@ export default function User() {
                     headers: {'Authorization': 'Bearer ' + appContext.token,}
                 }).then((response) => {
                     getUserInfo();
-                    appContext.setLoadingFalse();
                 }).catch((error) => {
                     appContext.setLoadingFalse();
                     appContext.setError('Si è verificato un errore nell\'aggiornamento dell\'avatar. Riprovare.');
@@ -131,15 +127,14 @@ export default function User() {
                         }).then((response) => {
                             if (picture.index == 2) {
                                 getUserInfo();
-                                appContext.setLoadingFalse();
                             }
                         }).catch((error) => {
                             appContext.setLoadingFalse();
-                            appContext.setError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.');
+                            // appContext.setError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.');
                         })
                     }, error(err) {
                         appContext.setLoadingFalse();
-                        appContext.setError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.');
+                        // appContext.setError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.');
                     }
                 })
             } else {
@@ -149,11 +144,12 @@ export default function User() {
                 axios.put(appContext.hostShops + "/" + id, data, {
                     headers: {'Authorization': 'Bearer ' + appContext.token,}
                 }).then((response) => {
-                    getUserInfo();
-                    appContext.setLoadingFalse();
+                    if (picture.index == 2) {
+                        getUserInfo();
+                    }
                 }).catch((error) => {
                     appContext.setLoadingFalse();
-                    appContext.setError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.');
+                    // appContext.setError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.');
                 })
             }
         }
@@ -169,7 +165,6 @@ export default function User() {
                 'Authorization': 'Bearer ' + appContext.token,
             }}).then((response) => {
             getUserInfo();
-            appContext.setLoadingFalse();
         }).catch((error) => {
             appContext.setLoadingFalse();
             appContext.setError('Si è verificato un errore nell\'aggiornamento dell\'informazione. Riprovare.');

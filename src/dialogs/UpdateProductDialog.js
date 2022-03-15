@@ -19,6 +19,7 @@ import TextFieldsIcon from '@mui/icons-material/TextFields';
 import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
 import EuroIcon from '@mui/icons-material/Euro';
 import ProgressiveImg from "../ProgessiveImage";
+import {initImageList} from "../Utility";
 
 export default function UpdateProductDialog(props) {
     const [pictures, setPictures] = useState([]);
@@ -127,24 +128,6 @@ export default function UpdateProductDialog(props) {
         return (title && description && price && pieces && (cover.image));
     }
 
-    const initImageList = (tmpPictures) => {
-        let initPictures = []
-        for (let i = 0; i < MAX_PICTURES; i++) {
-            if (tmpPictures[i] !== undefined) {
-                initPictures.push({
-                    index: i,
-                    image: tmpPictures[i].image,
-                    rawImage: tmpPictures[i].rawImage,
-                    add: false
-                })
-            } else {
-                initPictures.push({index: i, image: null, rawImage: null, add: true})
-            }
-        }
-        return initPictures
-
-    };
-
     const setPicturesList = (...pictures) => {
         let pictureList = [];
         for (let i = 0; i < pictures.length; i++) {
@@ -170,7 +153,7 @@ export default function UpdateProductDialog(props) {
                 response.data[0]?.picture7,
                 response.data[0]?.picture8,
                 response.data[0]?.picture9);
-            setPictures(initImageList(tmpPictures));
+            setPictures(initImageList(tmpPictures, MAX_PICTURES));
             setCover({image: appContext.host + response.data[0].cover?.url, rawPicture: null});
             setTitle(response.data[0]?.title);
             setDescription(response.data[0]?.description);
@@ -184,7 +167,7 @@ export default function UpdateProductDialog(props) {
     useEffect(() => {
         if (props.open) {
             setCover({image: null, rawPicture: null});
-            setPictures(initImageList([]));
+            setPictures(initImageList([], MAX_PICTURES));
 
             if (props.isUpdate) {
                 getProductInfo();
