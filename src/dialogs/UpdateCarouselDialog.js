@@ -8,47 +8,45 @@ import {
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import {Row} from "react-bootstrap";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import ProgressiveImg from "../ProgessiveImage";
 import {initImageList} from "../Utility";
+import GlobalContext from "../GlobalContext";
 
 export default function UpdateCarouselDialog(props) {
-    const MAX_PICTURES = 3;
-    const [pictures, setPictures] = useState([])
-    // const [initPictures, setInitPictures] = useState([])
+    const [pictures, setPictures] = useState([]);
+    const appContext = useContext(GlobalContext);
 
     const closeDialog = () => {
-        // setPictures(initPictures)
         setPictures([]);
         props.onClose();
     };
 
     const addPicture = (e, i) => {
-        let tmpPictures = []
+        let tmpPictures = [];
         for (let picture of pictures) {
-            if (picture.index == i) {
+            if (picture.index === i) {
                 tmpPictures.push({
                     index: picture.index,
                     image: URL.createObjectURL(e.target.files[0]),
                     rawImage: e.target.files[0],
                     add: false
-                })
+                });
             } else {
-                tmpPictures.push(picture)
+                tmpPictures.push(picture);
             }
         }
-
-        setPictures(tmpPictures)
+        setPictures(tmpPictures);
     };
 
     const removePicture = (i) => {
         let tmpPictures = [];
 
         for (let picture of pictures) {
-            if (picture.index == i) {
+            if (picture.index === i) {
                 tmpPictures.push({index: picture.index, image: null, rawImage: null, add: true});
             } else {
                 tmpPictures.push(picture);
@@ -63,10 +61,8 @@ export default function UpdateCarouselDialog(props) {
     };
 
     useEffect(() => {
-        // let tmpList = ;
-        // setInitPictures(tmpList);
         if (props.open) {
-            setPictures(initImageList(props.carousel, MAX_PICTURES));
+            setPictures(initImageList(props.carousel, appContext.MAX_PICTURES_CAROUSEL));
         }
     }, [props.open]);
 

@@ -28,7 +28,6 @@ export default function UpdateProductDialog(props) {
     const [price, setPrice] = useState('');
     const [pieces, setPieces] = useState('');
     const [description, setDescription] = useState('');
-    const MAX_PICTURES = 9;
     const appContext = useContext(GlobalContext);
 
     const addCover = (e) => {
@@ -128,7 +127,7 @@ export default function UpdateProductDialog(props) {
 
     const canUpdate = () => {
         return (title && description && price && pieces && (cover.image));
-    }
+    };
 
     const setPicturesList = (...pictures) => {
         let pictureList = [];
@@ -155,7 +154,7 @@ export default function UpdateProductDialog(props) {
                 response.data[0]?.picture7,
                 response.data[0]?.picture8,
                 response.data[0]?.picture9);
-            setPictures(initImageList(tmpPictures, MAX_PICTURES));
+            setPictures(initImageList(tmpPictures, appContext.MAX_PICTURES_PRODUCT));
             setCover({image: appContext.host + response.data[0].cover?.url, rawPicture: null});
             setTitle(response.data[0]?.title);
             setDescription(response.data[0]?.description);
@@ -164,12 +163,12 @@ export default function UpdateProductDialog(props) {
         }).catch((error) => {
             appContext.setError('Si è verificato un errore nella ricezione delle informazioni del prodotto. Riprovare.');
         })
-    }
+    };
 
     useEffect(() => {
         if (props.open) {
             setCover({image: null, rawPicture: null});
-            setPictures(initImageList([], MAX_PICTURES));
+            setPictures(initImageList([], appContext.MAX_PICTURES_PRODUCT));
 
             if (props.isUpdate) {
                 getProductInfo();

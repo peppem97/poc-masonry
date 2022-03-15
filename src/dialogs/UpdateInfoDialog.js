@@ -11,11 +11,11 @@ import {Row} from "react-bootstrap";
 import {useState} from "react";
 
 export default function UpdateInfoDialog(props) {
-    const [info, setInfo] = useState(null)
+    const [info, setInfo] = useState(null);
 
     const onChangeInfo = (e) => {
         setInfo(e.target.value);
-    }
+    };
 
     const closeDialog = () => {
         props.onClose();
@@ -23,8 +23,8 @@ export default function UpdateInfoDialog(props) {
 
     const uploadInfo = () => {
         props.updateInfo(info);
-        props.onClose();
-    }
+        closeDialog();
+    };
 
     return(
         <Dialog open={props.open} onClose={closeDialog}>
@@ -41,7 +41,7 @@ export default function UpdateInfoDialog(props) {
                             autoFocus
                             defaultValue={props.info}
                             color='secondary'
-                            multiline={props.infoToEdit == 'description'}
+                            multiline={props.infoToEdit === 'description'}
                             margin="dense"
                             label="Informazione"
                             variant="outlined"/>

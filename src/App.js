@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 import User from "./User";
 import TopToolbar from "./TopToolbar";
@@ -19,24 +19,6 @@ export default function App() {
     const [loading, setLoading] = useState(false);
     const [errorDialog, setErrorDialog] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
-    const appContext = {
-        token: token,
-        disabledIncrease: disabledIncrease,
-        disabledDecrease: disabledDecrease,
-        columnWidth: columnWidth,
-        loading: loading,
-        errorDialog: errorDialog,
-        errorMessage: errorMessage,
-        setLoadingTrue: () => {setLoading(true)},
-        setLoadingFalse: () => {setLoading(false)},
-        setError: (message) => {setErrorMessage(message); setErrorDialog(true);},
-        qualityPictures: 0.3,
-        host: "http://zion.datafactor.it:40505",
-        hostShops: "http://zion.datafactor.it:40505/shops",
-        hostProducts: "http://zion.datafactor.it:40505/products",
-        hostExample: "http://zion.datafactor.it:40505/image-uploadeds",
-        hostSignin: "http://zion.datafactor.it:40505/auth/local"
-    };
 
     const getNewToken = () => {
         appContext.setLoadingTrue();
@@ -86,13 +68,35 @@ export default function App() {
         }
     };
 
+    const appContext = {
+        token: token,
+        disabledIncrease: disabledIncrease,
+        disabledDecrease: disabledDecrease,
+        increaseColumnsSize: increaseColumnsSize,
+        decreaseColumnsSize: decreaseColumnsSize,
+        getNewToken: getNewToken,
+        columnWidth: columnWidth,
+        loading: loading,
+        errorDialog: errorDialog,
+        errorMessage: errorMessage,
+        setLoadingTrue: () => {setLoading(true)},
+        setLoadingFalse: () => {setLoading(false)},
+        setError: (message) => {setErrorMessage(message); setErrorDialog(true);},
+        MAX_PICTURES_CAROUSEL: 3,
+        MAX_PICTURES_PRODUCT: 9,
+        qualityPictures: 0.3,
+        host: "http://zion.datafactor.it:40505",
+        hostShops: "http://zion.datafactor.it:40505/shops",
+        hostProducts: "http://zion.datafactor.it:40505/products",
+        hostExample: "http://zion.datafactor.it:40505/image-uploadeds",
+        hostSignin: "http://zion.datafactor.it:40505/auth/local"
+    };
+
     return (
         <>
             <GlobalContext.Provider value={appContext}>
                 <Router>
-                    <TopToolbar increaseColumnsSize={increaseColumnsSize}
-                                decreaseColumnsSize={decreaseColumnsSize}
-                                getNewToken={getNewToken}/>
+                    <TopToolbar/>
                     <Routes>
                         <Route exact path="/" element={<Navigate to="/home" />}/>
                         <Route exact path='/home' element={<Home/>}/>
@@ -107,7 +111,10 @@ export default function App() {
                     open={loading}>
                     <CircularProgress color="inherit" />
                 </Backdrop>
-                <ErrorDialog open={errorDialog} errorMessage={errorMessage} onClose={() => {setErrorDialog(false);}}/>
+                <ErrorDialog
+                    open={errorDialog}
+                    errorMessage={errorMessage}
+                    onClose={() => {setErrorDialog(false);}}/>
             </GlobalContext.Provider>
         </>
     );

@@ -4,7 +4,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import * as React from "react";
 
 export default function ErrorDialog(props) {
-    const onClose = () => {
+    const closeDialog = () => {
         props.onClose();
     };
 
@@ -12,7 +12,7 @@ export default function ErrorDialog(props) {
         <>
             <Dialog
                 open={props.open}
-                onClose={onClose}
+                onClose={closeDialog}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
@@ -25,7 +25,7 @@ export default function ErrorDialog(props) {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="contained" style={{backgroundColor: 'darkred'}} onClick={onClose}>
+                    <Button variant="contained" style={{backgroundColor: 'darkred'}} onClick={closeDialog}>
                         OK
                     </Button>
                 </DialogActions>

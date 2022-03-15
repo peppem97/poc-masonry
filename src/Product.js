@@ -87,7 +87,6 @@ export default function Product() {
     const [pieces, setPieces] = useState(null);
     const appContext = useContext(GlobalContext);
     const {id} = useParams();
-    const MAX_PICTURES = 10;
     let navigate = useNavigate();
     const styles = useStyles();
 
@@ -112,7 +111,7 @@ export default function Product() {
                 response.data[0].picture8,
                 response.data[0].picture9);
             setUsername(response.data[0]?.username);
-            setPictures(initImageList(tmpPictures, MAX_PICTURES));
+            setPictures(initImageList(tmpPictures, appContext.MAX_PICTURES_PRODUCT));
             setCover(appContext.host + response.data[0]?.cover?.url);
             setTitle(response.data[0]?.title);
             setPrice(response.data[0]?.price);

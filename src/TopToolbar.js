@@ -56,13 +56,25 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
     },
 }));
 
-export default function TopToolbar(props) {
+export default function TopToolbar() {
     let navigate = useNavigate();
     const appContext = useContext(GlobalContext);
 
     const goToHome = () => {
         navigate("/home");
     };
+
+    const increaseColumnsSize = () => {
+        appContext.increaseColumnsSize();
+    }
+
+    const decreaseColumnsSize = () => {
+        appContext.decreaseColumnsSize();
+    }
+
+    const getNewToken = () => {
+        appContext.getNewToken();
+    }
 
     return (
         <>
@@ -77,17 +89,17 @@ export default function TopToolbar(props) {
                                 fontSize="inherit"/>&nbsp;Masonry</Button>
                         </Typography>
                         <Box sx={{flexGrow: 1}}/>
-                        <IconButton size="large" style={{color: 'darkred', fontWeight: 'bold'}} onClick={props.getNewToken}>
+                        <IconButton size="large" style={{color: 'darkred', fontWeight: 'bold'}} onClick={getNewToken}>
                             <VpnKeyIcon/>
                         </IconButton>
                         <IconButton size="large"
                                     style={{color: appContext.disableIncrease ? 'gray' : 'darkred', fontWeight: 'bold'}}
-                                    onClick={props.increaseColumnsSize}>
+                                    onClick={increaseColumnsSize}>
                             <ZoomInIcon/>
                         </IconButton>
                         <IconButton size="large"
                                     style={{color: appContext.disableDecrease ? 'gray' : 'darkred', fontWeight: 'bold'}}
-                                    onClick={props.decreaseColumnsSize}>
+                                    onClick={decreaseColumnsSize}>
                             <ZoomOutIcon/>
                         </IconButton>
                         <Button color="inherit" style={{color: 'darkred', fontWeight: 'bold'}}>Informazioni</Button>
