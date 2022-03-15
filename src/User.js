@@ -79,6 +79,8 @@ export default function User() {
         }).catch((error) => {
             setLoadingProducts(false);
             appContext.setLoadingFalse();
+            appContext.setError('Si è verificato un errore nella ricezione dei prodotti. Riprovare ad aggiornare la pagina.');
+
         })
     };
 
@@ -106,9 +108,11 @@ export default function User() {
                     appContext.setLoadingFalse();
                 }).catch((error) => {
                     appContext.setLoadingFalse();
+                    appContext.setError('Si è verificato un errore nell\'aggiornamento dell\'avatar. Riprovare.');
                 })
             }, error(err) {
                 appContext.setLoadingFalse();
+                appContext.setError('Si è verificato un errore nell\'aggiornamento dell\'avatar. Riprovare.');
             }
         })
     };
@@ -125,14 +129,17 @@ export default function User() {
                         axios.put(appContext.hostShops + "/" + id, formData, {
                             headers: {'Authorization': 'Bearer ' + appContext.token,}
                         }).then((response) => {
-                            //TODO aggiungere controllo del 9
-                            getUserInfo();
-                            appContext.setLoadingFalse();
+                            if (picture.index == 2) {
+                                getUserInfo();
+                                appContext.setLoadingFalse();
+                            }
                         }).catch((error) => {
                             appContext.setLoadingFalse();
+                            appContext.setError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.');
                         })
                     }, error(err) {
                         appContext.setLoadingFalse();
+                        appContext.setError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.');
                     }
                 })
             } else {
@@ -146,6 +153,7 @@ export default function User() {
                     appContext.setLoadingFalse();
                 }).catch((error) => {
                     appContext.setLoadingFalse();
+                    appContext.setError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.');
                 })
             }
         }
@@ -164,6 +172,7 @@ export default function User() {
             appContext.setLoadingFalse();
         }).catch((error) => {
             appContext.setLoadingFalse();
+            appContext.setError('Si è verificato un errore nell\'aggiornamento dell\'informazione. Riprovare.');
         })
     };
 
@@ -201,9 +210,11 @@ export default function User() {
                                 }
                             }).catch((error) => {
                                 appContext.setLoadingFalse();
+                                appContext.setError('Si è verificato un errore nel caricamento del prodotto. Riprovare.');
                             })
                         }, error(err) {
                             appContext.setLoadingFalse();
+                            appContext.setError('Si è verificato un errore nel caricamento del prodotto. Riprovare.');
                         }
                     })
                 } else {
@@ -218,18 +229,18 @@ export default function User() {
                         }
                     }).catch((error) => {
                         appContext.setLoadingFalse();
+                        appContext.setError('Si è verificato un errore nel caricamento del prodotto. Riprovare.');
                     })
                 }
             }
             appContext.setLoadingFalse();
         }).catch((error) => {
             appContext.setLoadingFalse();
+            appContext.setError('Si è verificato un errore nel caricamento del prodotto. Riprovare.');
         })
     };
 
     const updateProduct = (params) => {
-
-        /*****************/
         appContext.setLoadingTrue();
         const data = {
             'title': params.title,
@@ -237,7 +248,6 @@ export default function User() {
             'price': params.price,
             'pieces': params.pieces
         };
-        // data[type] = value;
         const formData = new FormData();
         if (params.cover.rawPicture != null) {
             formData.append('files.cover', params.cover.rawPicture, params.cover.rawPicture.name);
@@ -246,8 +256,6 @@ export default function User() {
         axios.put(appContext.hostProducts + "/" + productToUpdate, formData, {headers: {
                 'Authorization': 'Bearer ' + appContext.token,
             }}).then((response) => {
-            // getProducts();
-            // appContext.setLoadingFalse();
             for (let picture of params.pictures) {
                 if (picture.image != null) {
                     new Compressor(picture.rawPicture, {
@@ -263,9 +271,11 @@ export default function User() {
                                 }
                             }).catch((error) => {
                                 appContext.setLoadingFalse();
+                                appContext.setError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.');
                             })
                         }, error(err) {
                             appContext.setLoadingFalse();
+                            appContext.setError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.');
                         }
                     })
                 } else {
@@ -279,17 +289,14 @@ export default function User() {
                         }
                     }).catch((error) => {
                         appContext.setLoadingFalse();
+                        appContext.setError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.');
                     })
                 }
             }
-
-
-
-
         }).catch((error) => {
             appContext.setLoadingFalse();
+            appContext.setError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.');
         })
-        /******************/
     };
 
     const deleteProduct = (consens) => {
@@ -304,6 +311,7 @@ export default function User() {
                 getProducts();
             }).catch((error) => {
                 appContext.setLoadingFalse();
+                appContext.setError('Si è verificato un errore nella cancellazione del prodotto. Riprovare.');
             })
         }
     }

@@ -29,8 +29,8 @@ export default function Home() {
             setProducts(tmpProducts);
             setLoadingProduct(false);
         }).catch((error) => {
-            //TODO: aggiungere controllo errore
             setLoadingProduct(false);
+            appContext.setError('Si è verificato un errore nella ricezione della lista dei prodotti. Riprovare ad aggiornare la pagina.');
         })
     };
 

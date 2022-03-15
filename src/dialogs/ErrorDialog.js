@@ -1,10 +1,12 @@
 import {Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import Button from "@mui/material/Button";
 import DialogContentText from "@mui/material/DialogContentText";
+import * as React from "react";
 
 export default function ErrorDialog(props) {
 
     const onClose = () => {
+        props.onClose();
     };
 
     return (
@@ -15,18 +17,18 @@ export default function ErrorDialog(props) {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">
-                    {"Use Google's location service?"}
+                <DialogTitle>
+                    Attenzione
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        Let Google help apps determine location. This means sending anonymous
-                        location data to Google, even when no apps are running.
+                    <DialogContentText>
+                        {props.errorMessage}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button>Disagree</Button>
-                    <Button></Button>
+                    <Button variant="contained" style={{backgroundColor: 'darkred'}} onClick={onClose}>
+                        OK
+                    </Button>
                 </DialogActions>
             </Dialog>
         </>

@@ -156,7 +156,6 @@ export default function UpdateProductDialog(props) {
     };
 
     const getProductInfo = () => {
-        // appContext.setLoadingTrue();
         axios.get(appContext.hostProducts + "?id=" + props.productToUpdate, {
             headers: {'Authorization': 'Bearer ' + appContext.token}
         }).then((response) => {
@@ -177,9 +176,8 @@ export default function UpdateProductDialog(props) {
             setDescription(response.data[0]?.description);
             setPrice(response.data[0]?.price);
             setPieces(response.data[0]?.pieces);
-            // appContext.setLoadingFalse();
         }).catch((error) => {
-            // appContext.setLoadingTrue();
+            appContext.setError('Si è verificato un errore nella ricezione delle informazioni del prodotto. Riprovare.');
         })
     }
 

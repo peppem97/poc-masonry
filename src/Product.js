@@ -117,11 +117,11 @@ export default function Product() {
             setTitle(response.data[0]?.title);
             setPrice(response.data[0]?.price);
             setPieces(response.data[0]?.pieces);
-
             setDescription(response.data[0]?.description);
             appContext.setLoadingFalse();
         }).catch((error) => {
             appContext.setLoadingFalse();
+            appContext.setError('Si è verificato un errore nella ricezione delle informazioni del prodotto. Riprovare ad aggiornare la pagina.');
         })
     };
 
@@ -135,6 +135,8 @@ export default function Product() {
             appContext.setLoadingFalse();
         }).catch((error) => {
             appContext.setLoadingFalse();
+            appContext.setError('Si è verificato un errore nella ricezione delle informazioni dell\'utente. Riprovare ad aggiornare la pagina.');
+
         })
     };
 
@@ -221,19 +223,17 @@ export default function Product() {
                                 </Typography>
                             </Row>
                             <br/>
-                            <Row className='row-cols-auto'>
+                            {(price && pieces) && <Row className='row-cols-auto'>
                                 <Col>
                                     <Typography variant='subtitle2' color="text.secondary">Prezzo: </Typography>
-                                    <Typography variant='h6' sx={{display: 'inline'}}>{'€ ' + price ?? ' N.D.'}</Typography>
-
+                                    <Typography variant='h6'
+                                                sx={{display: 'inline'}}>{'€ ' + price ?? ' N.D.'}</Typography>
                                 </Col>
                                 <Col>
                                     <Typography variant='subtitle2' color="text.secondary">Pezzi: </Typography>
                                     <Typography variant='h6' sx={{display: 'inline'}}>{pieces ?? ' N.D.'}</Typography>
-
-
                                 </Col>
-                            </Row>
+                            </Row>}
                             <br/>
                             <Row>
                                 <Col style={{width: '100%'}}>

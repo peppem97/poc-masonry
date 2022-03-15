@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 import User from "./User";
 import TopToolbar from "./TopToolbar";
@@ -18,6 +18,7 @@ export default function App() {
     const [columnWidth, setColumnWidth] = useState(200);
     const [loading, setLoading] = useState(false);
     const [errorDialog, setErrorDialog] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
     const appContext = {
         token: token,
         disabledIncrease: disabledIncrease,
@@ -25,11 +26,11 @@ export default function App() {
         columnWidth: columnWidth,
         loading: loading,
         errorDialog: errorDialog,
-        setErrorDialogTrue: () => {setErrorDialog(true)},
-        setErrorDialogFalse: () => {setErrorDialog(false)},
+        errorMessage: errorMessage,
         setLoadingTrue: () => {setLoading(true)},
         setLoadingFalse: () => {setLoading(false)},
-        qualityPictures: 0.1,
+        setError: (message) => {setErrorMessage(message); setErrorDialog(true);},
+        qualityPictures: 0.3,
         host: "http://zion.datafactor.it:40505",
         hostShops: "http://zion.datafactor.it:40505/shops",
         hostProducts: "http://zion.datafactor.it:40505/products",
@@ -45,6 +46,7 @@ export default function App() {
             setToken(response.data.jwt);
             appContext.setLoadingFalse();
         }).catch((error) => {
+            appContext.setError('Errore di autenticazione. Riprovare.');
         })
     };
 
@@ -105,7 +107,7 @@ export default function App() {
                     open={loading}>
                     <CircularProgress color="inherit" />
                 </Backdrop>
-                <ErrorDialog open={false}/>
+                <ErrorDialog open={errorDialog} errorMessage={errorMessage} onClose={() => {setErrorDialog(false);}}/>
             </GlobalContext.Provider>
         </>
     );
