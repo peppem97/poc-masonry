@@ -12,6 +12,7 @@ import Product from "./Product";
 import ErrorDialog from "./dialogs/ErrorDialog";
 import About from "./About";
 import ProtectedRoute from "./ProtectedRoute";
+import jwtDecode from "jwt-decode";
 
 export default function App() {
     const [token, setToken] = useState(localStorage.getItem('token'));
@@ -70,16 +71,8 @@ export default function App() {
         }
     };
 
-    const JWTisExpired = () => {
-        // let decodedToken = jwt.decode(token, {complete: true});
-        // let dateNow = new Date();
-        // let isExpired;
-        //
-        // if (decodedToken.exp < dateNow.getTime())
-        //     isExpired = true;
-        //
-        // console.log(isExpired);
-
+    const jwtIsExpired = () => {
+        return (jwtDecode(token).exp * 1000 >= new Date().getTime());
     };
 
     const appContext = {

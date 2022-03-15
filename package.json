@@ -46,8 +46,7 @@
     "react-swipeable-views": "npm install react-swipeable-views",
     "carousel-material": "npm install react-material-ui-carousel --save",
     "compressor": "npm install compressorjs",
-    "jwt-tool": "npm i jwt-decode",
-    "version": "npm --version"
+    "jwt-tool": "npm i jwt-decode"
   },
   "eslintConfig": {
     "extends": [
