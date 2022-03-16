@@ -15,6 +15,7 @@ import {areAllFetched, generateHeight} from "./Utility";
 import DeleteProductDialog from "./dialogs/DeleteProductDialog";
 import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
+import {isError} from "./store/error";
 
 export default function User() {
     const [id, setId] = useState(null);
@@ -44,14 +45,14 @@ export default function User() {
 
     const getUserInfo = () => {
         dispatch(setBusy());
-        axios.get(appContext.hostShops + "?username=" + username, {
+        axios.get(appContext.ENDPOINT_SHOPS + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             setId(response.data[0]?.id);
             setEmail(response.data[0]?.email);
             setTitle(response.data[0]?.title);
             setDescription(response.data[0]?.description);
-            setAvatar(appContext.host + response.data[0]?.avatar?.url);
+            setAvatar(appContext.HOST + response.data[0]?.avatar?.url);
             setCarousel(getCarousel(response.data[0]?.carousel0, response.data[0]?.carousel1, response.data[0]?.carousel2));
             setTelephone(response.data[0]?.telephone);
             setWebsite(response.data[0]?.website);
@@ -64,7 +65,7 @@ export default function User() {
 
     const getProducts = () => {
         setLoadingProducts(true);
-        axios.get(appContext.hostProducts + "?username=" + username, {
+        axios.get(appContext.ENDPOINT_PRODUCTS + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             let items = response.data.map((element) => ({
@@ -72,7 +73,7 @@ export default function User() {
                 title: element?.title,
                 id: element?.id,
                 username: username,
-                picture: appContext.host + element?.cover?.url
+                picture: appContext.HOST + element?.cover?.url
             }));
             setProducts(items);
             setLoadingProducts(false);
@@ -80,7 +81,7 @@ export default function User() {
         }).catch(() => {
             setLoadingProducts(false);
             dispatch(setIdle());
-            appContext.setError('Si è verificato un errore nella ricezione dei prodotti. Riprovare ad aggiornare la pagina.');
+            dispatch(isError('Si è verificato un errore nella ricezione dei prodotti. Riprovare ad aggiornare la pagina.'));
         })
     };
 
@@ -88,7 +89,7 @@ export default function User() {
         let returnList = [];
         for (let i = 0; i < pictures.length; i++) {
             if (pictures[i] != null) {
-                returnList.push({index: i, image: appContext.host + pictures[i].url, rawImage: null, add: false});
+                returnList.push({index: i, image: appContext.HOST + pictures[i].url, rawImage: null, add: false});
             }
         }
         return returnList;
@@ -101,18 +102,18 @@ export default function User() {
             quality: appContext.qualityPictures, success(result) {
                 formData.append('files.avatar', result, 'avatar.jpg');
                 formData.append('data', JSON.stringify({}));
-                axios.put(appContext.hostShops + "/" + id, formData, {
+                axios.put(appContext.ENDPOINT_SHOPS + "/" + id, formData, {
                     headers: {'Authorization': 'Bearer ' + token}
                 }).then(() => {
                     dispatch(setIdle());
                     getUserInfo();
                 }).catch(() => {
                     dispatch(setIdle());
-                    appContext.setError('Si è verificato un errore nell\'aggiornamento dell\'avatar. Riprovare.');
+                    dispatch(isError('Si è verificato un errore nell\'aggiornamento dell\'avatar. Riprovare.'));
                 })
             }, error() {
                 dispatch(setIdle());
-                appContext.setError('Si è verificato un errore nell\'aggiornamento dell\'avatar. Riprovare.');
+                dispatch(isError('Si è verificato un errore nell\'aggiornamento dell\'avatar. Riprovare.'));
             }
         })
     };
@@ -128,7 +129,7 @@ export default function User() {
                             const formData = new FormData();
                             formData.append('files.carousel' + picture.index, result, 'example.jpg');
                             formData.append('data', JSON.stringify({}));
-                            axios.put(appContext.hostShops + "/" + id, formData, {
+                            axios.put(appContext.ENDPOINT_SHOPS + "/" + id, formData, {
                                 headers: {'Authorization': 'Bearer ' + token}
                             }).then(() => {
                                 fetched++;
@@ -138,11 +139,11 @@ export default function User() {
                                 }
                             }).catch(() => {
                                 dispatch(setIdle());
-                                appContext.setError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.');
+                                dispatch(isError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.'));
                             })
                         }, error() {
                             dispatch(setIdle());
-                            appContext.setError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.');
+                            dispatch(isError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.'));
                         }
                     })
                 } else {
@@ -156,7 +157,7 @@ export default function User() {
                 dispatch(setBusy());
                 let data = {};
                 data['carousel' + picture.index] = null;
-                axios.put(appContext.hostShops + "/" + id, data, {
+                axios.put(appContext.ENDPOINT_SHOPS + "/" + id, data, {
                     headers: {'Authorization': 'Bearer ' + token}
                 }).then(() => {
                     fetched++;
@@ -166,7 +167,7 @@ export default function User() {
                     }
                 }).catch(() => {
                     dispatch(setIdle());
-                    appContext.setError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.');
+                    dispatch(isError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.'));
                 })
             }
         }
@@ -178,7 +179,7 @@ export default function User() {
         const formData = new FormData();
         data[type] = value;
         formData.append('data', JSON.stringify(data));
-        axios.put(appContext.hostShops + "/" + id, formData, {
+        axios.put(appContext.ENDPOINT_SHOPS + "/" + id, formData, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -187,7 +188,7 @@ export default function User() {
             getUserInfo();
         }).catch(() => {
             dispatch(setIdle());
-            appContext.setError('Si è verificato un errore nell\'aggiornamento dell\'informazione. Riprovare.');
+            dispatch(isError('Si è verificato un errore nell\'aggiornamento dell\'informazione. Riprovare.'));
         })
     };
 
@@ -203,7 +204,7 @@ export default function User() {
         };
         formData.append('data', JSON.stringify(data));
         formData.append('files.cover', params.cover.rawPicture, params.cover.rawPicture.name);
-        axios.post(appContext.hostProducts, formData, {
+        axios.post(appContext.ENDPOINT_PRODUCTS, formData, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -216,7 +217,7 @@ export default function User() {
                             const formData = new FormData();
                             formData.append('files.picture' + picture.index, result, picture.rawPicture.name);
                             formData.append('data', JSON.stringify({}));
-                            axios.put(appContext.hostProducts + "/" + response?.data?.id, formData, {
+                            axios.put(appContext.ENDPOINT_PRODUCTS + "/" + response?.data?.id, formData, {
                                 headers: {
                                     'Authorization': 'Bearer ' + token
                                 }
@@ -228,18 +229,18 @@ export default function User() {
                                 }
                             }).catch(() => {
                                 dispatch(setIdle());
-                                appContext.setError('Si è verificato un errore nel caricamento del prodotto. Riprovare.');
+                                dispatch(isError('Si è verificato un errore nel caricamento del prodotto. Riprovare.'));
                             })
                         }, error() {
                             dispatch(setIdle());
-                            appContext.setError('Si è verificato un errore nel caricamento del prodotto. Riprovare.');
+                            dispatch(isError('Si è verificato un errore nel caricamento del prodotto. Riprovare.'));
                         }
                     })
                 } else {
                     dispatch(setBusy());
                     let data = {};
                     data['picture' + picture.index] = null;
-                    axios.put(appContext.hostProducts + "/" + response.data.id, data, {
+                    axios.put(appContext.ENDPOINT_PRODUCTS + "/" + response.data.id, data, {
                         headers: {'Authorization': 'Bearer ' + token}
                     }).then(() => {
                         fetched++;
@@ -249,13 +250,13 @@ export default function User() {
                         }
                     }).catch(() => {
                         dispatch(setIdle());
-                        appContext.setError('Si è verificato un errore nel caricamento del prodotto. Riprovare.');
+                        dispatch(isError('Si è verificato un errore nel caricamento del prodotto. Riprovare.'));
                     })
                 }
             }
         }).catch(() => {
             dispatch(setIdle());
-            appContext.setError('Si è verificato un errore nel caricamento del prodotto. Riprovare.');
+            dispatch(isError('Si è verificato un errore nel caricamento del prodotto. Riprovare.'));
         })
     };
 
@@ -272,7 +273,7 @@ export default function User() {
             formData.append('files.cover', params.cover.rawPicture, params.cover.rawPicture.name);
         }
         formData.append('data', JSON.stringify(data));
-        axios.put(appContext.hostProducts + "/" + productToUpdate, formData, {
+        axios.put(appContext.ENDPOINT_PRODUCTS + "/" + productToUpdate, formData, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -286,7 +287,7 @@ export default function User() {
                                 const formData = new FormData();
                                 formData.append('files.picture' + picture.index, result, 'example.jpg');
                                 formData.append('data', JSON.stringify({}));
-                                axios.put(appContext.hostProducts + "/" + productToUpdate, formData, {
+                                axios.put(appContext.ENDPOINT_PRODUCTS + "/" + productToUpdate, formData, {
                                     headers: {'Authorization': 'Bearer ' + token}
                                 }).then(() => {
                                     fetched++;
@@ -296,11 +297,11 @@ export default function User() {
                                     }
                                 }).catch(() => {
                                     dispatch(setIdle());
-                                    appContext.setError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.');
+                                    dispatch(isError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.'));
                                 })
                             }, error() {
                                 dispatch(setIdle());
-                                appContext.setError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.');
+                                dispatch(isError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.'));
                             }
                         })
 
@@ -314,7 +315,7 @@ export default function User() {
                 } else {
                     let data = {};
                     data['picture' + picture.index] = null;
-                    axios.put(appContext.hostProducts + "/" + productToUpdate, data, {
+                    axios.put(appContext.ENDPOINT_PRODUCTS + "/" + productToUpdate, data, {
                         headers: {'Authorization': 'Bearer ' + token}
                     }).then(() => {
                         fetched++;
@@ -324,13 +325,13 @@ export default function User() {
                         }
                     }).catch(() => {
                         dispatch(setIdle());
-                        appContext.setError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.');
+                        dispatch(isError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.'));
                     })
                 }
             }
         }).catch(() => {
             dispatch(setIdle());
-            appContext.setError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.');
+            dispatch(isError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.'));
         })
     };
 
@@ -338,7 +339,7 @@ export default function User() {
         if (consens === true) {
             const formData = new FormData();
             formData.append('data', JSON.stringify({}));
-            axios.delete(appContext.hostProducts + "/" + productToDelete, {
+            axios.delete(appContext.ENDPOINT_PRODUCTS + "/" + productToDelete, {
                 headers: {
                     'Authorization': 'Bearer ' + token
                 }
@@ -347,7 +348,7 @@ export default function User() {
                 getProducts();
             }).catch(() => {
                 dispatch(setIdle());
-                appContext.setError('Si è verificato un errore nella cancellazione del prodotto. Riprovare.');
+                dispatch(isError('Si è verificato un errore nella cancellazione del prodotto. Riprovare.'));
             })
         }
     }

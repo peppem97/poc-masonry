@@ -9,30 +9,32 @@ import GridSystem from "./GridSystem";
 import axios from "axios";
 import GlobalContext from "./GlobalContext";
 import {generateHeight} from "./Utility";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {isError} from "./store/error";
 
 export default function Home() {
     const [products, setProducts] = useState([]);
     const [loadingProduct, setLoadingProduct] = useState(false);
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
+    const dispatch = useDispatch();
 
     const getProducts = () => {
         setLoadingProduct(true);
-        axios.get(appContext.hostProducts, {
+        axios.get(appContext.ENDPOINT_PRODUCTS, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             let tmpProducts = response.data.map((element) => ({
                 height: generateHeight(),
                 title: element.title,
                 id: element.id,
-                picture: appContext.host + element.cover?.url,
+                picture: appContext.HOST + element.cover?.url,
                 username: element.username}))
             setProducts(tmpProducts);
             setLoadingProduct(false);
-        }).catch((error) => {
+        }).catch(() => {
             setLoadingProduct(false);
-            appContext.setError('Si è verificato un errore nella ricezione della lista dei prodotti. Riprovare ad aggiornare la pagina.');
+            dispatch(isError('Si è verificato un errore nella ricezione della lista dei prodotti. Riprovare ad aggiornare la pagina.'));
         })
     };
 

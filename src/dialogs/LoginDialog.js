@@ -20,6 +20,7 @@ import GlobalContext from "../GlobalContext";
 import {useDispatch, useSelector} from "react-redux";
 import {isLogged} from "../store/login";
 import {setToken} from "../store/token";
+import {isError} from "../store/error";
 
 export default function LoginDialog(props) {
     const [email, setEmail] = useState(null);
@@ -28,7 +29,6 @@ export default function LoginDialog(props) {
     const [showPassword, setShowPassword] = useState(false);
     const appContext = useContext(GlobalContext);
     const dispatch = useDispatch();
-
 
     const closeDialog = () => {
         setEmail(null);
@@ -53,16 +53,16 @@ export default function LoginDialog(props) {
     const login = () => {
         setLoading(true);
         let data = {identifier: email, password: password};
-        axios.post(appContext.hostSignin, data).then((response) => {
+        axios.post(appContext.ENDPOINT_AUTH, data).then((response) => {
             localStorage.setItem('token', response.data.jwt);
             dispatch(setToken(response.data.jwt));
-            setLoading(false);
             dispatch(isLogged());
+            setLoading(false);
             props.goToHome();
             closeDialog();
         }).catch(() => {
             setLoading(false);
-            appContext.setError('Errore di autenticazione. Riprovare.');
+            dispatch(isError('Errore di autenticazione. Riprovare.'));
         })
     }
 

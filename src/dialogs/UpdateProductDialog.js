@@ -20,7 +20,8 @@ import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
 import EuroIcon from '@mui/icons-material/Euro';
 import ProgressiveImg from "../ProgessiveImage";
 import {initImageList} from "../Utility";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {isError} from "../store/error";
 
 export default function UpdateProductDialog(props) {
     const [pictures, setPictures] = useState([]);
@@ -31,6 +32,7 @@ export default function UpdateProductDialog(props) {
     const [description, setDescription] = useState('');
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
+    const dispatch = useDispatch();
 
 
     const addCover = (e) => {
@@ -136,14 +138,14 @@ export default function UpdateProductDialog(props) {
         let pictureList = [];
         for (let i = 0; i < pictures.length; i++) {
             if (pictures[i] != null) {
-                pictureList.push({index: i, image: appContext.host + pictures[i].url, rawImage: null, add: false});
+                pictureList.push({index: i, image: appContext.HOST + pictures[i].url, rawImage: null, add: false});
             }
         }
         return pictureList;
     };
 
     const getProductInfo = () => {
-        axios.get(appContext.hostProducts + "?id=" + props.productToUpdate, {
+        axios.get(appContext.ENDPOINT_PRODUCTS + "?id=" + props.productToUpdate, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             let tmpPictures = setPicturesList(
@@ -158,13 +160,13 @@ export default function UpdateProductDialog(props) {
                 response.data[0]?.picture8,
                 response.data[0]?.picture9);
             setPictures(initImageList(tmpPictures, appContext.MAX_PICTURES_PRODUCT));
-            setCover({image: appContext.host + response.data[0].cover?.url, rawPicture: null});
+            setCover({image: appContext.HOST + response.data[0].cover?.url, rawPicture: null});
             setTitle(response.data[0]?.title);
             setDescription(response.data[0]?.description);
             setPrice(response.data[0]?.price);
             setPieces(response.data[0]?.pieces);
-        }).catch((error) => {
-            appContext.setError('Si è verificato un errore nella ricezione delle informazioni del prodotto. Riprovare.');
+        }).catch(() => {
+            dispatch(isError('Si è verificato un errore nella ricezione delle informazioni del prodotto. Riprovare.'));
         })
     };
 

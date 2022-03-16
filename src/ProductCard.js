@@ -72,10 +72,10 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
 
     const getUserInfo = () => {
         dispatch(setBusy());
-        axios.get(appContext.hostShops + "?username=" + props.product.username, {
+        axios.get(appContext.ENDPOINT_SHOPS + "?username=" + props.product.username, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
-            setAvatar(appContext.host + response.data[0].avatar.url);
+            setAvatar(appContext.HOST + response.data[0].avatar.url);
             dispatch(setIdle());
         }).catch(() => {
             dispatch(setIdle());

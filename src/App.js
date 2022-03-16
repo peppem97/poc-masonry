@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 import User from "./User";
 import TopToolbar from "./TopToolbar";
@@ -15,11 +15,12 @@ import jwtDecode from "jwt-decode";
 import {useDispatch, useSelector} from 'react-redux'
 import {isLogged, isNotLogged} from './store/login';
 import {setToken} from "./store/token";
+import {isNotError} from "./store/error";
 
 export default function App() {
-    const [errorDialog, setErrorDialog] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(null);
     const loading = useSelector((state) => state.loading.value);
+    const errorState = useSelector((state) => state.error.value);
+    const errorMessage = useSelector((state) => state.error.message);
     const dispatch = useDispatch();
 
     const checkStateLogin = () => {
@@ -38,20 +39,14 @@ export default function App() {
     };
 
     const appContext = {
-        errorDialog: errorDialog,
-        errorMessage: errorMessage,
-        setError: (message) => {
-            setErrorMessage(message);
-            setErrorDialog(true);
-        },
         MAX_PICTURES_CAROUSEL: 3,
         MAX_PICTURES_PRODUCT: 9,
         qualityPictures: 0.3,
-        host: "http://zion.datafactor.it:40505",
-        hostShops: "http://zion.datafactor.it:40505/shops",
-        hostProducts: "http://zion.datafactor.it:40505/products",
-        hostExample: "http://zion.datafactor.it:40505/image-uploadeds",
-        hostSignin: "http://zion.datafactor.it:40505/auth/local"
+        HOST: "http://zion.datafactor.it:40505",
+        ENDPOINT_SHOPS: "http://zion.datafactor.it:40505/shops",
+        ENDPOINT_PRODUCTS: "http://zion.datafactor.it:40505/products",
+        ENDPOINT_EXAMPLES: "http://zion.datafactor.it:40505/image-uploadeds",
+        ENDPOINT_AUTH: "http://zion.datafactor.it:40505/auth/local"
     };
 
     useEffect(() => {
@@ -79,11 +74,9 @@ export default function App() {
                     <CircularProgress color="inherit"/>
                 </Backdrop>
                 <ErrorDialog
-                    open={errorDialog}
+                    open={errorState}
                     errorMessage={errorMessage}
-                    onClose={() => {
-                        setErrorDialog(false);
-                    }}/>
+                    onClose={() => {dispatch(isNotError())}}/>
             </GlobalContext.Provider>
         </>
     );

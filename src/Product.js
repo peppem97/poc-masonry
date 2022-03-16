@@ -17,6 +17,7 @@ import Avatar from "@material-ui/core/Avatar";
 import {initImageList} from "./Utility";
 import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
+import {isError} from "./store/error";
 
 const useStyles = makeStyles(({breakpoints, spacing}) => ({
     root: {
@@ -100,7 +101,7 @@ export default function Product() {
 
     const getProductInfo = () => {
         dispatch(setBusy());
-        axios.get(appContext.hostProducts + "?id=" + id, {
+        axios.get(appContext.ENDPOINT_PRODUCTS + "?id=" + id, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             let tmpPictures = setPicturesList(
@@ -116,7 +117,7 @@ export default function Product() {
                 response.data[0].picture9);
             setUsername(response.data[0]?.username);
             setPictures(initImageList(tmpPictures, appContext.MAX_PICTURES_PRODUCT));
-            setCover(appContext.host + response.data[0]?.cover?.url);
+            setCover(appContext.HOST + response.data[0]?.cover?.url);
             setTitle(response.data[0]?.title);
             setPrice(response.data[0]?.price);
             setPieces(response.data[0]?.pieces);
@@ -124,21 +125,21 @@ export default function Product() {
             dispatch(setIdle());
         }).catch(() => {
             dispatch(setIdle());
-            appContext.setError('Si è verificato un errore nella ricezione delle informazioni del prodotto. Riprovare ad aggiornare la pagina.');
+            dispatch(isError('Si è verificato un errore nella ricezione delle informazioni del prodotto. Riprovare ad aggiornare la pagina.'));
         })
     };
 
     const getUserInfo = () => {
         dispatch(setBusy());
-        axios.get(appContext.hostShops + "?username=" + username, {
+        axios.get(appContext.ENDPOINT_SHOPS + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
-            setAvatar(appContext.host + response.data[0]?.avatar?.url);
+            setAvatar(appContext.HOST + response.data[0]?.avatar?.url);
             setShop(response.data[0]?.title);
             dispatch(setIdle());
         }).catch(() => {
             dispatch(setIdle());
-            appContext.setError('Si è verificato un errore nella ricezione delle informazioni dell\'utente. Riprovare ad aggiornare la pagina.');
+            dispatch(isError('Si è verificato un errore nella ricezione delle informazioni dell\'utente. Riprovare ad aggiornare la pagina.'));
         })
     };
 
@@ -146,7 +147,7 @@ export default function Product() {
         let pictureList = [];
         for (let i = 0; i < pictures.length; i++) {
             if (pictures[i] != null) {
-                pictureList.push({index: i, image: appContext.host + pictures[i].url, rawImage: null, add: false});
+                pictureList.push({index: i, image: appContext.HOST + pictures[i].url, rawImage: null, add: false});
             }
         }
         return pictureList;
