@@ -13,7 +13,8 @@ import Compressor from 'compressorjs';
 import UpdateCarouselDialog from "./dialogs/UpdateCarouselDialog";
 import {areAllFetched, generateHeight} from "./Utility";
 import DeleteProductDialog from "./dialogs/DeleteProductDialog";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {setBusy, setIdle} from "./store/loading";
 
 export default function User() {
     const [id, setId] = useState(null);
@@ -37,14 +38,12 @@ export default function User() {
     const [loadingProducts, setLoadingProducts] = useState(false);
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
-    const columnWidth = useSelector((state) => state.columnWidth.value);
     const token = useSelector((state) => state.token.value);
-
-
+    const dispatch = useDispatch();
     let navigate = useNavigate();
 
     const getUserInfo = () => {
-        appContext.setLoading(true);
+        dispatch(setBusy());
         axios.get(appContext.hostShops + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
@@ -56,9 +55,9 @@ export default function User() {
             setCarousel(getCarousel(response.data[0]?.carousel0, response.data[0]?.carousel1, response.data[0]?.carousel2));
             setTelephone(response.data[0]?.telephone);
             setWebsite(response.data[0]?.website);
-            appContext.setLoading(false);
+            dispatch(setIdle());
         }).catch(() => {
-            appContext.setLoading(false);
+            dispatch(setIdle());
             navigate('/no-user');
         })
     };
@@ -77,10 +76,10 @@ export default function User() {
             }));
             setProducts(items);
             setLoadingProducts(false);
-            appContext.setLoading(false);
+            dispatch(setIdle());
         }).catch(() => {
             setLoadingProducts(false);
-            appContext.setLoading(false);
+            dispatch(setIdle());
             appContext.setError('Si è verificato un errore nella ricezione dei prodotti. Riprovare ad aggiornare la pagina.');
         })
     };
@@ -96,7 +95,7 @@ export default function User() {
     };
 
     const updateAvatar = (e) => {
-        appContext.setLoading(true);
+        dispatch(setBusy());
         const formData = new FormData();
         new Compressor(e.target.files[0], {
             quality: appContext.qualityPictures, success(result) {
@@ -105,14 +104,14 @@ export default function User() {
                 axios.put(appContext.hostShops + "/" + id, formData, {
                     headers: {'Authorization': 'Bearer ' + token}
                 }).then(() => {
-                    appContext.setLoading(false);
+                    dispatch(setIdle());
                     getUserInfo();
                 }).catch(() => {
-                    appContext.setLoading(false);
+                    dispatch(setIdle());
                     appContext.setError('Si è verificato un errore nell\'aggiornamento dell\'avatar. Riprovare.');
                 })
             }, error() {
-                appContext.setLoading(false);
+                dispatch(setIdle());
                 appContext.setError('Si è verificato un errore nell\'aggiornamento dell\'avatar. Riprovare.');
             }
         })
@@ -125,7 +124,7 @@ export default function User() {
                 if (picture.rawImage != null) {
                     new Compressor(picture.rawImage, {
                         quality: appContext.qualityPictures, success(result) {
-                            appContext.setLoading(true);
+                            dispatch(setBusy());
                             const formData = new FormData();
                             formData.append('files.carousel' + picture.index, result, 'example.jpg');
                             formData.append('data', JSON.stringify({}));
@@ -134,27 +133,27 @@ export default function User() {
                             }).then(() => {
                                 fetched++;
                                 if (pictures.length === fetched) {
-                                    appContext.setLoading(false);
+                                    dispatch(setIdle());
                                     getUserInfo();
                                 }
                             }).catch(() => {
-                                appContext.setLoading(false);
+                                dispatch(setIdle());
                                 appContext.setError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.');
                             })
                         }, error() {
-                            appContext.setLoading(false);
+                            dispatch(setIdle());
                             appContext.setError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.');
                         }
                     })
                 } else {
                     fetched++;
                     if (pictures.length === fetched) {
-                        appContext.setLoading(false);
+                        dispatch(setIdle());
                         getUserInfo();
                     }
                 }
             } else {
-                appContext.setLoading(true);
+                dispatch(setBusy());
                 let data = {};
                 data['carousel' + picture.index] = null;
                 axios.put(appContext.hostShops + "/" + id, data, {
@@ -162,11 +161,11 @@ export default function User() {
                 }).then(() => {
                     fetched++;
                     if (pictures.length === fetched) {
-                        appContext.setLoading(false);
+                        dispatch(setIdle());
                         getUserInfo();
                     }
                 }).catch(() => {
-                    appContext.setLoading(false);
+                    dispatch(setIdle());
                     appContext.setError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.');
                 })
             }
@@ -174,7 +173,7 @@ export default function User() {
     };
 
     const updateInfo = (type, value) => {
-        appContext.setLoading(true);
+        dispatch(setBusy());
         const data = {};
         const formData = new FormData();
         data[type] = value;
@@ -184,16 +183,16 @@ export default function User() {
                 'Authorization': 'Bearer ' + token
             }
         }).then(() => {
-            appContext.setLoading(false);
+            dispatch(setIdle());
             getUserInfo();
         }).catch(() => {
-            appContext.setLoading(false);
+            dispatch(setIdle());
             appContext.setError('Si è verificato un errore nell\'aggiornamento dell\'informazione. Riprovare.');
         })
     };
 
     const uploadProduct = (params) => {
-        appContext.setLoading(true);
+        dispatch(setBusy());
         const formData = new FormData();
         const data = {
             title: params.title,
@@ -224,20 +223,20 @@ export default function User() {
                             }).then(() => {
                                 fetched++;
                                 if (params.pictures.length === fetched) {
-                                    appContext.setLoading(false);
+                                    dispatch(setIdle());
                                     getProducts();
                                 }
                             }).catch(() => {
-                                appContext.setLoading(false);
+                                dispatch(setIdle());
                                 appContext.setError('Si è verificato un errore nel caricamento del prodotto. Riprovare.');
                             })
                         }, error() {
-                            appContext.setLoading(false);
+                            dispatch(setIdle());
                             appContext.setError('Si è verificato un errore nel caricamento del prodotto. Riprovare.');
                         }
                     })
                 } else {
-                    appContext.setLoading(true);
+                    dispatch(setBusy());
                     let data = {};
                     data['picture' + picture.index] = null;
                     axios.put(appContext.hostProducts + "/" + response.data.id, data, {
@@ -245,23 +244,23 @@ export default function User() {
                     }).then(() => {
                         fetched++;
                         if (params.pictures.length === fetched) {
-                            appContext.setLoading(false);
+                            dispatch(setIdle());
                             getProducts();
                         }
                     }).catch(() => {
-                        appContext.setLoading(false);
+                        dispatch(setIdle());
                         appContext.setError('Si è verificato un errore nel caricamento del prodotto. Riprovare.');
                     })
                 }
             }
         }).catch(() => {
-            appContext.setLoading(false);
+            dispatch(setIdle());
             appContext.setError('Si è verificato un errore nel caricamento del prodotto. Riprovare.');
         })
     };
 
     const updateProduct = (params) => {
-        appContext.setLoading(true);
+        dispatch(setBusy());
         const data = {
             'title': params.title,
             'description': params.description,
@@ -292,15 +291,15 @@ export default function User() {
                                 }).then(() => {
                                     fetched++;
                                     if (params.pictures.length === fetched) {
-                                        appContext.setLoading(false);
+                                        dispatch(setIdle());
                                         getProducts();
                                     }
                                 }).catch(() => {
-                                    appContext.setLoading(false);
+                                    dispatch(setIdle());
                                     appContext.setError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.');
                                 })
                             }, error() {
-                                appContext.setLoading(false);
+                                dispatch(setIdle());
                                 appContext.setError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.');
                             }
                         })
@@ -308,7 +307,7 @@ export default function User() {
                     } else {
                         fetched++;
                         if (params.pictures.length === fetched) {
-                            appContext.setLoading(false);
+                            dispatch(setIdle());
                             getProducts();
                         }
                     }
@@ -320,17 +319,17 @@ export default function User() {
                     }).then(() => {
                         fetched++;
                         if (params.pictures.length === fetched) {
-                            appContext.setLoading(false);
+                            dispatch(setIdle());
                             getProducts();
                         }
                     }).catch(() => {
-                        appContext.setLoading(false);
+                        dispatch(setIdle());
                         appContext.setError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.');
                     })
                 }
             }
         }).catch(() => {
-            appContext.setLoading(false);
+            dispatch(setIdle());
             appContext.setError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.');
         })
     };
@@ -344,10 +343,10 @@ export default function User() {
                     'Authorization': 'Bearer ' + token
                 }
             }).then(() => {
-                appContext.setLoading(false);
+                dispatch(setIdle());
                 getProducts();
             }).catch(() => {
-                appContext.setLoading(false);
+                dispatch(setIdle());
                 appContext.setError('Si è verificato un errore nella cancellazione del prodotto. Riprovare.');
             })
         }
@@ -420,7 +419,6 @@ export default function User() {
                     loadingProducts={loadingProducts}
                     isProducts={true}
                     products={products}
-                    columnWidth={columnWidth}
                     isUser={true}
                     updateProduct={(id) => {
                         setProductToUpdate(id);

@@ -4,13 +4,16 @@ import ProductCard from "./ProductCard";
 import {CircularProgress, ImageListItem} from "@mui/material";
 import Box from "@mui/material/Box";
 import PictureCard from "./PictureCard";
+import {useSelector} from "react-redux";
 
 export default function GridSystem(props) {
     const myTransition = 'fadeDown';
+    const columnWidth = useSelector((state) => state.columnWidth.value);
+
     return (
         <>
             <StackGrid duration={500}
-                       columnWidth={props.columnWidth}
+                       columnWidth={columnWidth}
                        gutterWidth={30}
                        gutterHeight={30}
                        easing={easings.quartOut}

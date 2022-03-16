@@ -12,14 +12,14 @@ import ErrorDialog from "./dialogs/ErrorDialog";
 import About from "./About";
 import ProtectedRoute from "./ProtectedRoute";
 import jwtDecode from "jwt-decode";
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {isLogged, isNotLogged} from './store/login';
 import {setToken} from "./store/token";
 
 export default function App() {
-    const [loading, setLoading] = useState(false);
     const [errorDialog, setErrorDialog] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
+    const loading = useSelector((state) => state.loading.value);
     const dispatch = useDispatch();
 
     const checkStateLogin = () => {
@@ -38,10 +38,8 @@ export default function App() {
     };
 
     const appContext = {
-        loading: loading,
         errorDialog: errorDialog,
         errorMessage: errorMessage,
-        setLoading: (state) => {setLoading(state)},
         setError: (message) => {
             setErrorMessage(message);
             setErrorDialog(true);
@@ -62,31 +60,31 @@ export default function App() {
 
     return (
         <>
-                <GlobalContext.Provider value={appContext}>
-                    <Router>
-                        <TopToolbar/>
-                        <Routes>
-                            <Route exact path="/" element={<Navigate to="/about"/>}/>
-                            <Route exact path='/about' element={<About/>}/>
-                            <Route path="/home" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
-                            <Route path="/user/:username" element={<ProtectedRoute><User/></ProtectedRoute>}/>
-                            <Route path="/product/:id" element={<ProtectedRoute><Product/></ProtectedRoute>}/>
-                            <Route path="/no-user" element={<ProtectedRoute><ErrorNoUser/></ProtectedRoute>}/>
-                            <Route exact path='*' element={<Error404/>}/>
-                        </Routes>
-                    </Router>
-                    <Backdrop
-                        sx={{color: '#fff', zIndex: '999'}}
-                        open={loading}>
-                        <CircularProgress color="inherit"/>
-                    </Backdrop>
-                    <ErrorDialog
-                        open={errorDialog}
-                        errorMessage={errorMessage}
-                        onClose={() => {
-                            setErrorDialog(false);
-                        }}/>
-                </GlobalContext.Provider>
+            <GlobalContext.Provider value={appContext}>
+                <Router>
+                    <TopToolbar/>
+                    <Routes>
+                        <Route exact path="/" element={<Navigate to="/about"/>}/>
+                        <Route exact path='/about' element={<About/>}/>
+                        <Route path="/home" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
+                        <Route path="/user/:username" element={<ProtectedRoute><User/></ProtectedRoute>}/>
+                        <Route path="/product/:id" element={<ProtectedRoute><Product/></ProtectedRoute>}/>
+                        <Route path="/no-user" element={<ProtectedRoute><ErrorNoUser/></ProtectedRoute>}/>
+                        <Route exact path='*' element={<Error404/>}/>
+                    </Routes>
+                </Router>
+                <Backdrop
+                    sx={{color: '#fff', zIndex: '999'}}
+                    open={loading}>
+                    <CircularProgress color="inherit"/>
+                </Backdrop>
+                <ErrorDialog
+                    open={errorDialog}
+                    errorMessage={errorMessage}
+                    onClose={() => {
+                        setErrorDialog(false);
+                    }}/>
+            </GlobalContext.Provider>
         </>
     );
 }

@@ -15,7 +15,8 @@ import cx from 'clsx';
 import GridSystem from "./GridSystem";
 import Avatar from "@material-ui/core/Avatar";
 import {initImageList} from "./Utility";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {setBusy, setIdle} from "./store/loading";
 
 const useStyles = makeStyles(({breakpoints, spacing}) => ({
     root: {
@@ -88,7 +89,7 @@ export default function Product() {
     const [pieces, setPieces] = useState(null);
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
-
+    const dispatch = useDispatch();
     const {id} = useParams();
     let navigate = useNavigate();
     const styles = useStyles();
@@ -98,7 +99,7 @@ export default function Product() {
     };
 
     const getProductInfo = () => {
-        appContext.setLoading(true);
+        dispatch(setBusy());
         axios.get(appContext.hostProducts + "?id=" + id, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
@@ -120,25 +121,24 @@ export default function Product() {
             setPrice(response.data[0]?.price);
             setPieces(response.data[0]?.pieces);
             setDescription(response.data[0]?.description);
-            appContext.setLoading(false);
-        }).catch((error) => {
-            appContext.setLoading(false);
+            dispatch(setIdle());
+        }).catch(() => {
+            dispatch(setIdle());
             appContext.setError('Si è verificato un errore nella ricezione delle informazioni del prodotto. Riprovare ad aggiornare la pagina.');
         })
     };
 
     const getUserInfo = () => {
-        appContext.setLoading(true);
+        dispatch(setBusy());
         axios.get(appContext.hostShops + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             setAvatar(appContext.host + response.data[0]?.avatar?.url);
             setShop(response.data[0]?.title);
-            appContext.setLoading(false);
-        }).catch((error) => {
-            appContext.setLoading(false);
+            dispatch(setIdle());
+        }).catch(() => {
+            dispatch(setIdle());
             appContext.setError('Si è verificato un errore nella ricezione delle informazioni dell\'utente. Riprovare ad aggiornare la pagina.');
-
         })
     };
 

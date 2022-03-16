@@ -15,7 +15,6 @@ export default function Home() {
     const [products, setProducts] = useState([]);
     const [loadingProduct, setLoadingProduct] = useState(false);
     const appContext = useContext(GlobalContext);
-    const columnWidth = useSelector((state) => state.columnWidth.value);
     const token = useSelector((state) => state.token.value);
 
     const getProducts = () => {
@@ -62,7 +61,7 @@ export default function Home() {
                 <br/>
                 <br/>
                 <Row>
-                    <GridSystem loadingProducts={loadingProduct} isProducts={true} products={products} columnWidth={columnWidth} isUser={false}/>
+                    <GridSystem loadingProducts={loadingProduct} isProducts={true} products={products} isUser={false}/>
                 </Row>
                 <br/>
                 <br/>

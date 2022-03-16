@@ -17,7 +17,8 @@ import GlobalContext from "./GlobalContext";
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {setBusy, setIdle} from "./store/loading";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -59,6 +60,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
     let navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const goToUser = () => {
         navigate("/user/" + props.product.username);
@@ -69,14 +71,14 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     };
 
     const getUserInfo = () => {
-        appContext.setLoading(true);
+        dispatch(setBusy());
         axios.get(appContext.hostShops + "?username=" + props.product.username, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             setAvatar(appContext.host + response.data[0].avatar.url);
-            appContext.setLoading(false);
+            dispatch(setIdle());
         }).catch(() => {
-            appContext.setLoading(false);
+            dispatch(setIdle());
         })
     };
 
