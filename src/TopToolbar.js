@@ -64,6 +64,10 @@ export default function TopToolbar() {
         navigate("/home");
     };
 
+    const login = () => {
+        appContext.setLogin(true);
+    };
+
     const increaseColumnsSize = () => {
         if (appContext.columnWidth >= 500) {
             appContext.setColumnWidth(appContext.columnWidth);
@@ -122,7 +126,7 @@ export default function TopToolbar() {
                         {/*    />*/}
                         {/*</Search>*/}
                         &nbsp;
-                        <Button variant="contained" style={{backgroundColor: 'darkred'}}>ACCEDI</Button>
+                        <Button variant="contained" style={{backgroundColor: 'darkred'}} onClick={login}>ACCEDI</Button>
                         &nbsp;&nbsp;
                         <Button variant="contained" style={{backgroundColor: 'white', color: 'black'}}>REGISTRATI</Button>
                     </Toolbar>

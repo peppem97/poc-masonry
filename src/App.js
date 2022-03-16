@@ -15,12 +15,14 @@ import ProtectedRoute from "./ProtectedRoute";
 import jwtDecode from "jwt-decode";
 import store from './store/store'
 import { Provider } from 'react-redux'
+import LoginDialog from "./dialogs/LoginDialog";
 
 export default function App() {
     const [token, setToken] = useState(localStorage.getItem('token'));
     const [columnWidth, setColumnWidth] = useState(200);
     const [loading, setLoading] = useState(false);
     const [errorDialog, setErrorDialog] = useState(false);
+    const [loginDialog, setLoginDialog] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
 
     const getNewToken = () => {
@@ -46,9 +48,10 @@ export default function App() {
         errorDialog: errorDialog,
         errorMessage: errorMessage,
         getNewToken: getNewToken,
-        setToken: (token) => {setToken(token)},
+        // setToken: (token) => {setToken(token)},
         setColumnWidth: (value) => {setColumnWidth(value)},
         setLoading: (state) => {setLoading(state)},
+        setLogin: (state) =>  {setLoginDialog(state)},
         setError: (message) => {
             setErrorMessage(message);
             setErrorDialog(true);
@@ -89,6 +92,11 @@ export default function App() {
                         errorMessage={errorMessage}
                         onClose={() => {
                             setErrorDialog(false);
+                        }}/>
+                    <LoginDialog
+                        open={loginDialog}
+                        onClose={() => {
+                            setLoginDialog(false);
                         }}/>
                 </GlobalContext.Provider>
             </Provider>
