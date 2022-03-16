@@ -13,6 +13,7 @@ import {useNavigate} from "react-router-dom";
 import GlobalContext from "./GlobalContext";
 import {useContext} from "react";
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import InfoIcon from '@mui/icons-material/Info';
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -64,6 +65,10 @@ export default function TopToolbar() {
         navigate("/home");
     };
 
+    const goToAbout = () => {
+        navigate("/about");
+    }
+
     const login = () => {
         appContext.setLogin(true);
     };
@@ -113,6 +118,11 @@ export default function TopToolbar() {
                                     style={{color: 'darkred', fontWeight: 'bold'}}
                                     onClick={decreaseColumnsSize}>
                             <ZoomOutIcon/>
+                        </IconButton>
+                        <IconButton size="large"
+                                    style={{color: 'darkred', fontWeight: 'bold'}}
+                                    onClick={goToAbout}>
+                            <InfoIcon/>
                         </IconButton>
                         {/*<Button color="inherit" style={{color: 'darkred', fontWeight: 'bold'}}>Informazioni</Button>*/}
                         {/*<Button color="inherit" style={{color: 'darkred', fontWeight: 'bold'}}>Negozi</Button>*/}
