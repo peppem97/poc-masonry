@@ -9,16 +9,19 @@ import GridSystem from "./GridSystem";
 import axios from "axios";
 import GlobalContext from "./GlobalContext";
 import {generateHeight} from "./Utility";
+import {useSelector} from "react-redux";
 
 export default function Home() {
     const [products, setProducts] = useState([]);
     const [loadingProduct, setLoadingProduct] = useState(false);
     const appContext = useContext(GlobalContext);
+    const columnWidth = useSelector((state) => state.columnWidth.value);
+    const token = useSelector((state) => state.token.value);
 
     const getProducts = () => {
         setLoadingProduct(true);
         axios.get(appContext.hostProducts, {
-            headers: {'Authorization': 'Bearer ' + appContext.token}
+            headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             let tmpProducts = response.data.map((element) => ({
                 height: generateHeight(),
@@ -59,7 +62,7 @@ export default function Home() {
                 <br/>
                 <br/>
                 <Row>
-                    <GridSystem loadingProducts={loadingProduct} isProducts={true} products={products} columnWidth={appContext.columnWidth} isUser={false}/>
+                    <GridSystem loadingProducts={loadingProduct} isProducts={true} products={products} columnWidth={columnWidth} isUser={false}/>
                 </Row>
                 <br/>
                 <br/>

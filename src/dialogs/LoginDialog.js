@@ -17,7 +17,9 @@ import {Visibility, VisibilityOff} from "@material-ui/icons";
 import Box from "@mui/material/Box";
 import axios from "axios";
 import GlobalContext from "../GlobalContext";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {isLogged} from "../store/login";
+import {setToken} from "../store/token";
 
 export default function LoginDialog(props) {
     const [email, setEmail] = useState(null);
@@ -25,6 +27,8 @@ export default function LoginDialog(props) {
     const [loading, setLoading] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const appContext = useContext(GlobalContext);
+    const dispatch = useDispatch();
+
 
     const closeDialog = () => {
         setEmail(null);
@@ -51,11 +55,12 @@ export default function LoginDialog(props) {
         let data = {identifier: email, password: password};
         axios.post(appContext.hostSignin, data).then((response) => {
             localStorage.setItem('token', response.data.jwt);
-            appContext.setToken(response.data.jwt);
+            dispatch(setToken(response.data.jwt));
             setLoading(false);
-            // props.goToHome();
+            dispatch(isLogged());
+            props.goToHome();
             closeDialog();
-        }).catch((error) => {
+        }).catch(() => {
             setLoading(false);
             appContext.setError('Errore di autenticazione. Riprovare.');
         })
@@ -83,7 +88,6 @@ export default function LoginDialog(props) {
                         <Row>
                             <TextField
                                 onChange={onChangePassword}
-                                autoFocus
                                 type={showPassword ? 'text' : 'password'}
                                 color='secondary'
                                 margin="dense"

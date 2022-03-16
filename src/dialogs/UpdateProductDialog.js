@@ -20,6 +20,7 @@ import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
 import EuroIcon from '@mui/icons-material/Euro';
 import ProgressiveImg from "../ProgessiveImage";
 import {initImageList} from "../Utility";
+import {useSelector} from "react-redux";
 
 export default function UpdateProductDialog(props) {
     const [pictures, setPictures] = useState([]);
@@ -29,6 +30,8 @@ export default function UpdateProductDialog(props) {
     const [pieces, setPieces] = useState('');
     const [description, setDescription] = useState('');
     const appContext = useContext(GlobalContext);
+    const token = useSelector((state) => state.token.value);
+
 
     const addCover = (e) => {
         let tmpCover = {
@@ -141,7 +144,7 @@ export default function UpdateProductDialog(props) {
 
     const getProductInfo = () => {
         axios.get(appContext.hostProducts + "?id=" + props.productToUpdate, {
-            headers: {'Authorization': 'Bearer ' + appContext.token}
+            headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             let tmpPictures = setPicturesList(
                 response.data[0]?.picture0,

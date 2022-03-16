@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {BrowserRouter as Router, Routes, Route, Navigate, useNavigate} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 import User from "./User";
 import TopToolbar from "./TopToolbar";
 import Home from "./Home";
 import GlobalContext from "./GlobalContext";
-import axios from "axios";
 import Error404 from "./Error404";
 import ErrorNoUser from "./ErrorNoUser";
 import {Backdrop, CircularProgress} from "@mui/material";
@@ -13,62 +12,36 @@ import ErrorDialog from "./dialogs/ErrorDialog";
 import About from "./About";
 import ProtectedRoute from "./ProtectedRoute";
 import jwtDecode from "jwt-decode";
-import store from './store/store'
-import {Provider, useDispatch} from 'react-redux'
-import LoginDialog from "./dialogs/LoginDialog";
+import {useDispatch} from 'react-redux'
 import {isLogged, isNotLogged} from './store/login';
+import {setToken} from "./store/token";
 
 export default function App() {
-    const [token, setToken] = useState(localStorage.getItem('token'));
-    const [columnWidth, setColumnWidth] = useState(200);
     const [loading, setLoading] = useState(false);
     const [errorDialog, setErrorDialog] = useState(false);
-    const [loginDialog, setLoginDialog] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
-    // const count = useSelector((state) => state.counter.value)
     const dispatch = useDispatch();
-    // let navigate = useNavigate();
-
-
-    // const getNewToken = () => {
-    //     appContext.setLoading(true);
-    //     let data = {identifier: 'prova@prova.it', password: 'provaprova'};
-    //     axios.post(appContext.hostSignin, data).then((response) => {
-    //         localStorage.setItem('token', response.data.jwt);
-    //         setToken(response.data.jwt);
-    //         appContext.setLoading(false);
-    //     }).catch((error) => {
-    //         appContext.setError('Errore di autenticazione. Riprovare.');
-    //     })
-    // };
-
-    const goToHome = () => {
-        // navigate("/home");
-    };
-
-    const jwtIsExpired = () => {
-        return !(jwtDecode(token).exp * 1000 >= new Date().getTime());
-    };
 
     const checkStateLogin = () => {
-        if (!jwtIsExpired()) {
-            dispatch(isLogged());
-        } else {
+        let token = localStorage.getItem('token');
+        try {
+            if ((jwtDecode(token).exp * 1000 >= new Date().getTime())) {
+                dispatch(isLogged());
+                dispatch(setToken(token));
+            } else {
+                localStorage.removeItem('token');
+                dispatch(isNotLogged());
+            }
+        } catch (e) {
             dispatch(isNotLogged());
         }
     };
 
     const appContext = {
-        token: token,
-        columnWidth: columnWidth,
         loading: loading,
         errorDialog: errorDialog,
         errorMessage: errorMessage,
-        // getNewToken: getNewToken,
-        setToken: (token) => {setToken(token)},
-        setColumnWidth: (value) => {setColumnWidth(value)},
         setLoading: (state) => {setLoading(state)},
-        setInitLogin: () =>  {setLoginDialog(true)},
         setError: (message) => {
             setErrorMessage(message);
             setErrorDialog(true);
@@ -112,12 +85,6 @@ export default function App() {
                         errorMessage={errorMessage}
                         onClose={() => {
                             setErrorDialog(false);
-                        }}/>
-                    <LoginDialog
-                        open={loginDialog}
-                        goToHome={goToHome}
-                        onClose={() => {
-                            setLoginDialog(false);
                         }}/>
                 </GlobalContext.Provider>
         </>

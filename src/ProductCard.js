@@ -17,6 +17,7 @@ import GlobalContext from "./GlobalContext";
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -56,6 +57,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const styles = useStyles();
     const appContext = useContext(GlobalContext);
+    const token = useSelector((state) => state.token.value);
     let navigate = useNavigate();
 
     const goToUser = () => {
@@ -69,11 +71,11 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     const getUserInfo = () => {
         appContext.setLoading(true);
         axios.get(appContext.hostShops + "?username=" + props.product.username, {
-            headers: {'Authorization': 'Bearer ' + appContext.token}
+            headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             setAvatar(appContext.host + response.data[0].avatar.url);
             appContext.setLoading(false);
-        }).catch((error) => {
+        }).catch(() => {
             appContext.setLoading(false);
         })
     };
@@ -89,9 +91,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 <Box py={3} px={2} className={styles.contentHeader}>
                     {props.showAvatar && (
                         <IconButton onClick={goToUser}>
-                            {appContext.loading ? <Skeleton variant="circular">
-                                <Avatar src={avatar}/>
-                            </Skeleton> : <Avatar src={avatar}/>}
+                            <Avatar src={avatar}/>
                         </IconButton>)}
                 </Box>
                 <Box py={3} px={2} className={styles.contentDescription}>

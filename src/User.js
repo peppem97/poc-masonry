@@ -13,6 +13,7 @@ import Compressor from 'compressorjs';
 import UpdateCarouselDialog from "./dialogs/UpdateCarouselDialog";
 import {areAllFetched, generateHeight} from "./Utility";
 import DeleteProductDialog from "./dialogs/DeleteProductDialog";
+import {useSelector} from "react-redux";
 
 export default function User() {
     const [id, setId] = useState(null);
@@ -36,12 +37,16 @@ export default function User() {
     const [loadingProducts, setLoadingProducts] = useState(false);
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
+    const columnWidth = useSelector((state) => state.columnWidth.value);
+    const token = useSelector((state) => state.token.value);
+
+
     let navigate = useNavigate();
 
     const getUserInfo = () => {
         appContext.setLoading(true);
         axios.get(appContext.hostShops + "?username=" + username, {
-            headers: {'Authorization': 'Bearer ' + appContext.token}
+            headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             setId(response.data[0]?.id);
             setEmail(response.data[0]?.email);
@@ -61,7 +66,7 @@ export default function User() {
     const getProducts = () => {
         setLoadingProducts(true);
         axios.get(appContext.hostProducts + "?username=" + username, {
-            headers: {'Authorization': 'Bearer ' + appContext.token}
+            headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             let items = response.data.map((element) => ({
                 height: generateHeight(),
@@ -98,7 +103,7 @@ export default function User() {
                 formData.append('files.avatar', result, 'avatar.jpg');
                 formData.append('data', JSON.stringify({}));
                 axios.put(appContext.hostShops + "/" + id, formData, {
-                    headers: {'Authorization': 'Bearer ' + appContext.token,}
+                    headers: {'Authorization': 'Bearer ' + token}
                 }).then(() => {
                     appContext.setLoading(false);
                     getUserInfo();
@@ -125,7 +130,7 @@ export default function User() {
                             formData.append('files.carousel' + picture.index, result, 'example.jpg');
                             formData.append('data', JSON.stringify({}));
                             axios.put(appContext.hostShops + "/" + id, formData, {
-                                headers: {'Authorization': 'Bearer ' + appContext.token,}
+                                headers: {'Authorization': 'Bearer ' + token}
                             }).then(() => {
                                 fetched++;
                                 if (pictures.length === fetched) {
@@ -153,7 +158,7 @@ export default function User() {
                 let data = {};
                 data['carousel' + picture.index] = null;
                 axios.put(appContext.hostShops + "/" + id, data, {
-                    headers: {'Authorization': 'Bearer ' + appContext.token,}
+                    headers: {'Authorization': 'Bearer ' + token}
                 }).then(() => {
                     fetched++;
                     if (pictures.length === fetched) {
@@ -176,7 +181,7 @@ export default function User() {
         formData.append('data', JSON.stringify(data));
         axios.put(appContext.hostShops + "/" + id, formData, {
             headers: {
-                'Authorization': 'Bearer ' + appContext.token,
+                'Authorization': 'Bearer ' + token
             }
         }).then(() => {
             appContext.setLoading(false);
@@ -201,7 +206,7 @@ export default function User() {
         formData.append('files.cover', params.cover.rawPicture, params.cover.rawPicture.name);
         axios.post(appContext.hostProducts, formData, {
             headers: {
-                'Authorization': 'Bearer ' + appContext.token,
+                'Authorization': 'Bearer ' + token
             }
         }).then((response) => {
             let fetched = 0;
@@ -214,7 +219,7 @@ export default function User() {
                             formData.append('data', JSON.stringify({}));
                             axios.put(appContext.hostProducts + "/" + response?.data?.id, formData, {
                                 headers: {
-                                    'Authorization': 'Bearer ' + appContext.token,
+                                    'Authorization': 'Bearer ' + token
                                 }
                             }).then(() => {
                                 fetched++;
@@ -236,7 +241,7 @@ export default function User() {
                     let data = {};
                     data['picture' + picture.index] = null;
                     axios.put(appContext.hostProducts + "/" + response.data.id, data, {
-                        headers: {'Authorization': 'Bearer ' + appContext.token}
+                        headers: {'Authorization': 'Bearer ' + token}
                     }).then(() => {
                         fetched++;
                         if (params.pictures.length === fetched) {
@@ -270,7 +275,7 @@ export default function User() {
         formData.append('data', JSON.stringify(data));
         axios.put(appContext.hostProducts + "/" + productToUpdate, formData, {
             headers: {
-                'Authorization': 'Bearer ' + appContext.token,
+                'Authorization': 'Bearer ' + token
             }
         }).then(() => {
             let fetched = 0;
@@ -283,7 +288,7 @@ export default function User() {
                                 formData.append('files.picture' + picture.index, result, 'example.jpg');
                                 formData.append('data', JSON.stringify({}));
                                 axios.put(appContext.hostProducts + "/" + productToUpdate, formData, {
-                                    headers: {'Authorization': 'Bearer ' + appContext.token}
+                                    headers: {'Authorization': 'Bearer ' + token}
                                 }).then(() => {
                                     fetched++;
                                     if (params.pictures.length === fetched) {
@@ -311,7 +316,7 @@ export default function User() {
                     let data = {};
                     data['picture' + picture.index] = null;
                     axios.put(appContext.hostProducts + "/" + productToUpdate, data, {
-                        headers: {'Authorization': 'Bearer ' + appContext.token,}
+                        headers: {'Authorization': 'Bearer ' + token}
                     }).then(() => {
                         fetched++;
                         if (params.pictures.length === fetched) {
@@ -336,7 +341,7 @@ export default function User() {
             formData.append('data', JSON.stringify({}));
             axios.delete(appContext.hostProducts + "/" + productToDelete, {
                 headers: {
-                    'Authorization': 'Bearer ' + appContext.token,
+                    'Authorization': 'Bearer ' + token
                 }
             }).then(() => {
                 appContext.setLoading(false);
@@ -415,7 +420,7 @@ export default function User() {
                     loadingProducts={loadingProducts}
                     isProducts={true}
                     products={products}
-                    columnWidth={appContext.columnWidth}
+                    columnWidth={columnWidth}
                     isUser={true}
                     updateProduct={(id) => {
                         setProductToUpdate(id);

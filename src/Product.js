@@ -15,6 +15,7 @@ import cx from 'clsx';
 import GridSystem from "./GridSystem";
 import Avatar from "@material-ui/core/Avatar";
 import {initImageList} from "./Utility";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles(({breakpoints, spacing}) => ({
     root: {
@@ -86,6 +87,8 @@ export default function Product() {
     const [price, setPrice] = useState(null);
     const [pieces, setPieces] = useState(null);
     const appContext = useContext(GlobalContext);
+    const token = useSelector((state) => state.token.value);
+
     const {id} = useParams();
     let navigate = useNavigate();
     const styles = useStyles();
@@ -97,7 +100,7 @@ export default function Product() {
     const getProductInfo = () => {
         appContext.setLoading(true);
         axios.get(appContext.hostProducts + "?id=" + id, {
-            headers: {'Authorization': 'Bearer ' + appContext.token}
+            headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             let tmpPictures = setPicturesList(
                 response.data[0].picture0,
@@ -127,7 +130,7 @@ export default function Product() {
     const getUserInfo = () => {
         appContext.setLoading(true);
         axios.get(appContext.hostShops + "?username=" + username, {
-            headers: {'Authorization': 'Bearer ' + appContext.token}
+            headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             setAvatar(appContext.host + response.data[0]?.avatar?.url);
             setShop(response.data[0]?.title);
