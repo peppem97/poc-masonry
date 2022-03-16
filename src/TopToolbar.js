@@ -14,52 +14,14 @@ import GlobalContext from "./GlobalContext";
 import {useContext} from "react";
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import InfoIcon from '@mui/icons-material/Info';
-
-const Search = styled('div')(({theme}) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-        backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(1),
-        width: 'auto',
-    },
-}));
-
-const SearchIconWrapper = styled('div')(({theme}) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({theme}) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-                width: '20ch',
-            },
-        },
-    },
-}));
+import {useDispatch, useSelector} from "react-redux";
+import {isNotLogged} from "./store/login";
 
 export default function TopToolbar() {
     let navigate = useNavigate();
     const appContext = useContext(GlobalContext);
+    const stateLogin = useSelector((state) => state.login.value);
+    const dispatch = useDispatch();
 
     const goToHome = () => {
         navigate("/home");
@@ -70,8 +32,13 @@ export default function TopToolbar() {
     }
 
     const login = () => {
-        appContext.setLogin(true);
+        appContext.setInitLogin(true);
     };
+
+    const logout = () => {
+        localStorage.removeItem('token');
+        dispatch(isNotLogged());
+    }
 
     const increaseColumnsSize = () => {
         if (appContext.columnWidth >= 500) {
@@ -136,9 +103,13 @@ export default function TopToolbar() {
                         {/*    />*/}
                         {/*</Search>*/}
                         &nbsp;
-                        <Button variant="contained" style={{backgroundColor: 'darkred'}} onClick={login}>ACCEDI</Button>
+                        {stateLogin ? <Button variant="contained" style={{backgroundColor: 'darkred'}}
+                                              onClick={logout}>{'ESCI'}</Button>
+                            : <Button variant="contained" style={{backgroundColor: 'darkred'}}
+                                      onClick={login}>{'LOGIN'}</Button>}
                         &nbsp;&nbsp;
-                        <Button variant="contained" style={{backgroundColor: 'white', color: 'black'}}>REGISTRATI</Button>
+                        <Button variant="contained"
+                                style={{backgroundColor: 'white', color: 'black'}}>REGISTRATI</Button>
                     </Toolbar>
                 </AppBar>
                 {/*{appContext.loading ? <Box sx={{width: '100%'}}>*/}

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Navigate, useNavigate} from 'react-router-dom';
 import User from "./User";
 import TopToolbar from "./TopToolbar";
 import Home from "./Home";
@@ -14,8 +14,9 @@ import About from "./About";
 import ProtectedRoute from "./ProtectedRoute";
 import jwtDecode from "jwt-decode";
 import store from './store/store'
-import { Provider } from 'react-redux'
+import {Provider, useDispatch} from 'react-redux'
 import LoginDialog from "./dialogs/LoginDialog";
+import {isLogged, isNotLogged} from './store/login';
 
 export default function App() {
     const [token, setToken] = useState(localStorage.getItem('token'));
@@ -24,21 +25,37 @@ export default function App() {
     const [errorDialog, setErrorDialog] = useState(false);
     const [loginDialog, setLoginDialog] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
+    // const count = useSelector((state) => state.counter.value)
+    const dispatch = useDispatch();
+    // let navigate = useNavigate();
 
-    const getNewToken = () => {
-        appContext.setLoading(true);
-        let data = {identifier: 'prova@prova.it', password: 'provaprova'};
-        axios.post(appContext.hostSignin, data).then((response) => {
-            localStorage.setItem('token', response.data.jwt);
-            setToken(response.data.jwt);
-            appContext.setLoading(false);
-        }).catch((error) => {
-            appContext.setError('Errore di autenticazione. Riprovare.');
-        })
+
+    // const getNewToken = () => {
+    //     appContext.setLoading(true);
+    //     let data = {identifier: 'prova@prova.it', password: 'provaprova'};
+    //     axios.post(appContext.hostSignin, data).then((response) => {
+    //         localStorage.setItem('token', response.data.jwt);
+    //         setToken(response.data.jwt);
+    //         appContext.setLoading(false);
+    //     }).catch((error) => {
+    //         appContext.setError('Errore di autenticazione. Riprovare.');
+    //     })
+    // };
+
+    const goToHome = () => {
+        // navigate("/home");
     };
 
     const jwtIsExpired = () => {
-        return (jwtDecode(token).exp * 1000 >= new Date().getTime());
+        return !(jwtDecode(token).exp * 1000 >= new Date().getTime());
+    };
+
+    const checkStateLogin = () => {
+        if (!jwtIsExpired()) {
+            dispatch(isLogged());
+        } else {
+            dispatch(isNotLogged());
+        }
     };
 
     const appContext = {
@@ -47,11 +64,11 @@ export default function App() {
         loading: loading,
         errorDialog: errorDialog,
         errorMessage: errorMessage,
-        getNewToken: getNewToken,
-        // setToken: (token) => {setToken(token)},
+        // getNewToken: getNewToken,
+        setToken: (token) => {setToken(token)},
         setColumnWidth: (value) => {setColumnWidth(value)},
         setLoading: (state) => {setLoading(state)},
-        setLogin: (state) =>  {setLoginDialog(state)},
+        setInitLogin: () =>  {setLoginDialog(true)},
         setError: (message) => {
             setErrorMessage(message);
             setErrorDialog(true);
@@ -66,9 +83,12 @@ export default function App() {
         hostSignin: "http://zion.datafactor.it:40505/auth/local"
     };
 
+    useEffect(() => {
+        checkStateLogin();
+    }, []);
+
     return (
         <>
-            <Provider store={store}>
                 <GlobalContext.Provider value={appContext}>
                     <Router>
                         <TopToolbar/>
@@ -95,11 +115,11 @@ export default function App() {
                         }}/>
                     <LoginDialog
                         open={loginDialog}
+                        goToHome={goToHome}
                         onClose={() => {
                             setLoginDialog(false);
                         }}/>
                 </GlobalContext.Provider>
-            </Provider>
         </>
     );
 }
