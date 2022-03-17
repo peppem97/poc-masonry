@@ -48,6 +48,7 @@ export default function MyStepper() {
     const [pictures, setPictures] = useState([]);
     const [avatar, setAvatar] = useState(null);
     const [editAvatar, setEditAvatar] = useState(false);
+    const [consens, setConsens] = useState(false);
 
     const [name, setName] = useState(null);
     const [surname, setSurname] = useState(null);
@@ -84,6 +85,10 @@ export default function MyStepper() {
     const onChangeSurname = (e) => {
         setSurname(e.target.value);
     };
+
+    const onChangeConsens = () => {
+        setConsens(!consens);
+    }
 
     const addPicture = (e, i) => {
         let tmpPictures = [];
@@ -137,6 +142,32 @@ export default function MyStepper() {
     // const resetStep = () => {
     //     setActiveStep(0);
     // };
+
+    const canNext = () => {
+        if (userType === 'negozio') {
+            switch (activeStep) {
+                case 0:
+                    return true;
+                case 1:
+                    return (email !== '' && title !== '' && website !== '' && telephone !== '' && description !== '' && avatar && pictures.some((element) => (!element.add)) > 0);
+                case 2:
+                    return consens;
+                default:
+                    return true;
+            }
+        } else if (userType === 'cliente') {
+            switch (activeStep) {
+                case 0:
+                    return true;
+                case 1:
+                    return (email !== '' && name !== '' && surname !== '' && telephone !== '' && avatar);
+                case 2:
+                    return consens;
+                default:
+                    return true;
+            }
+        }
+    };
 
     useEffect(() => {
         setPictures(initImageList([], appContext.MAX_PICTURES_CAROUSEL));
@@ -206,6 +237,7 @@ export default function MyStepper() {
                                                     <TextField
                                                         onChange={onChangeEmail}
                                                         autoFocus
+                                                        value={email}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Email"
@@ -220,6 +252,7 @@ export default function MyStepper() {
                                                     <TextField
                                                         onChange={onChangeTitle}
                                                         autoFocus
+                                                        value={title}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Nome"
@@ -234,6 +267,7 @@ export default function MyStepper() {
                                                     <TextField
                                                         onChange={onChangeWebsite}
                                                         autoFocus
+                                                        value={website}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Sito Web"
@@ -248,6 +282,7 @@ export default function MyStepper() {
                                                     <TextField
                                                         onChange={onChangeTelephone}
                                                         autoFocus
+                                                        value={telephone}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Telefono"
@@ -264,6 +299,7 @@ export default function MyStepper() {
                                                     <TextField fullWidth={true}
                                                                onChange={onChangeDescription}
                                                                autoFocus
+                                                               value={description}
                                                                multiline={true}
                                                                color='secondary'
                                                                margin="dense"
@@ -291,11 +327,21 @@ export default function MyStepper() {
                                                             id="avatar-uploader"
                                                             type="file"
                                                             hidden
-                                                            onChange={(e) => {setAvatar(URL.createObjectURL(e.target.files[0]))}}/>
+                                                            onChange={(e) => {
+                                                                setAvatar(URL.createObjectURL(e.target.files[0]))
+                                                            }}/>
                                                         <Avatar
-                                                            onMouseOver={() => {setEditAvatar(true)}}
-                                                            onMouseLeave={() => {setEditAvatar(false)}}
-                                                            style={{width: 48, height: 48, cursor: editAvatar ? 'pointer' : null}}
+                                                            onMouseOver={() => {
+                                                                setEditAvatar(true)
+                                                            }}
+                                                            onMouseLeave={() => {
+                                                                setEditAvatar(false)
+                                                            }}
+                                                            style={{
+                                                                width: 48,
+                                                                height: 48,
+                                                                cursor: editAvatar ? 'pointer' : null
+                                                            }}
                                                             src={!editAvatar && avatar}>
                                                             {editAvatar && <AddPhotoAlternateIcon/>}
                                                         </Avatar>
@@ -313,43 +359,54 @@ export default function MyStepper() {
                                                                gap={5} cols={30}>
                                                         {pictures.map((item) => {
                                                             if (item.add) {
-                                                                return (<ImageListItem key={item.index} cols={10} rows={1}>
+                                                                return (
+                                                                    <ImageListItem key={item.index} cols={10} rows={1}>
 
-                                                                    <ImageListItemBar
-                                                                        actionIcon={
-                                                                            [
-                                                                                <label htmlFor="icon-button-file" key={0}>
-                                                                                    <Input accept="image/*" id="icon-button-file" type="file" hidden
-                                                                                           onChange={(e) => {
-                                                                                               addPicture(e, item.index)
-                                                                                           }}/>
-                                                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                                                                aria-label="upload picture" component="span">
-                                                                                        <PhotoCamera/>
-                                                                                    </IconButton>
-                                                                                </label>]}
-                                                                    />
-                                                                </ImageListItem>)
+                                                                        <ImageListItemBar
+                                                                            actionIcon={
+                                                                                [
+                                                                                    <label htmlFor="icon-button-file"
+                                                                                           key={0}>
+                                                                                        <Input accept="image/*"
+                                                                                               id="icon-button-file"
+                                                                                               type="file" hidden
+                                                                                               onChange={(e) => {
+                                                                                                   addPicture(e, item.index)
+                                                                                               }}/>
+                                                                                        <IconButton
+                                                                                            sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                                                            aria-label="upload picture"
+                                                                                            component="span">
+                                                                                            <PhotoCamera/>
+                                                                                        </IconButton>
+                                                                                    </label>]}
+                                                                        />
+                                                                    </ImageListItem>)
                                                             } else {
-                                                                return (<ImageListItem key={item.index} cols={10} rows={1}>
-                                                                    <ProgressiveImg image={item.image} />
-                                                                    <ImageListItemBar
-                                                                        actionIcon={
-                                                                            [
-                                                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0}
-                                                                                            onClick={() => {
-                                                                                                window.open(item.image, '_blank', 'noopener,noreferrer')
-                                                                                            }}>
-                                                                                    <OpenInFullIcon/>
-                                                                                </IconButton>,
-                                                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} onClick={() => {
-                                                                                    removePicture(item.index)
-                                                                                }} key={1}>
-                                                                                    <DeleteForeverIcon/>
-                                                                                </IconButton>
-                                                                            ]}
-                                                                    />
-                                                                </ImageListItem>)
+                                                                return (
+                                                                    <ImageListItem key={item.index} cols={10} rows={1}>
+                                                                        <ProgressiveImg image={item.image}/>
+                                                                        <ImageListItemBar
+                                                                            actionIcon={
+                                                                                [
+                                                                                    <IconButton
+                                                                                        sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                                                        key={0}
+                                                                                        onClick={() => {
+                                                                                            window.open(item.image, '_blank', 'noopener,noreferrer')
+                                                                                        }}>
+                                                                                        <OpenInFullIcon/>
+                                                                                    </IconButton>,
+                                                                                    <IconButton
+                                                                                        sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                                                        onClick={() => {
+                                                                                            removePicture(item.index)
+                                                                                        }} key={1}>
+                                                                                        <DeleteForeverIcon/>
+                                                                                    </IconButton>
+                                                                                ]}
+                                                                        />
+                                                                    </ImageListItem>)
                                                             }
                                                         })}
                                                     </ImageList>
@@ -370,6 +427,7 @@ export default function MyStepper() {
                                                     <TextField
                                                         onChange={onChangeEmail}
                                                         autoFocus
+                                                        value={email}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Email"
@@ -384,6 +442,7 @@ export default function MyStepper() {
                                                     <TextField
                                                         onChange={onChangeName}
                                                         autoFocus
+                                                        value={name}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Nome"
@@ -398,6 +457,7 @@ export default function MyStepper() {
                                                     <TextField
                                                         onChange={onChangeSurname}
                                                         autoFocus
+                                                        value={surname}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Cognome"
@@ -412,6 +472,7 @@ export default function MyStepper() {
                                                     <TextField
                                                         onChange={onChangeTelephone}
                                                         autoFocus
+                                                        value={telephone}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Telefono"
@@ -438,11 +499,21 @@ export default function MyStepper() {
                                                             id="avatar-uploader"
                                                             type="file"
                                                             hidden
-                                                            onChange={(e) => {setAvatar(URL.createObjectURL(e.target.files[0]))}}/>
+                                                            onChange={(e) => {
+                                                                setAvatar(URL.createObjectURL(e.target.files[0]))
+                                                            }}/>
                                                         <Avatar
-                                                            onMouseOver={() => {setEditAvatar(true)}}
-                                                            onMouseLeave={() => {setEditAvatar(false)}}
-                                                            style={{width: 48, height: 48, cursor: editAvatar ? 'pointer' : null}}
+                                                            onMouseOver={() => {
+                                                                setEditAvatar(true)
+                                                            }}
+                                                            onMouseLeave={() => {
+                                                                setEditAvatar(false)
+                                                            }}
+                                                            style={{
+                                                                width: 48,
+                                                                height: 48,
+                                                                cursor: editAvatar ? 'pointer' : null
+                                                            }}
                                                             src={!editAvatar && avatar}>
                                                             {editAvatar && <AddPhotoAlternateIcon/>}
                                                         </Avatar>
@@ -454,24 +525,26 @@ export default function MyStepper() {
                                 }
                                 {(activeStep === 2) &&
                                     <>
-                                    <Box sx={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        gap: 2,
-                                        justifyContent: 'center'
-                                    }}>
-                                        <Checkbox
-                                            defaultChecked
-                                            sx={{
-                                                color: red[800],
-                                                '&.Mui-checked': {
-                                                    color: red[600],
-                                                },
-                                            }}
-                                        />
-                                        Accetti i nostri Termini di Servizio e la nostra policy relativa alla privacy
-                                    </Box>
+                                        <Box sx={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            gap: 2,
+                                            justifyContent: 'center'
+                                        }}>
+                                            <Checkbox
+                                                checked={consens}
+                                                onChange={onChangeConsens}
+                                                sx={{
+                                                    color: red[800],
+                                                    '&.Mui-checked': {
+                                                        color: red[600],
+                                                    },
+                                                }}
+                                            />
+                                            Accetti i nostri Termini di Servizio e la nostra policy relativa alla
+                                            privacy
+                                        </Box>
                                     </>
                                 }
                                 {/*{(activeStep === 3) &&*/}
@@ -501,13 +574,15 @@ export default function MyStepper() {
                                 </Button>
                                 <Box sx={{flex: '1 1 auto'}}/>
                                 {!(activeStep === steps.length - 1) && <Button onClick={nextStep}
-                                         variant='contained'
-                                         style={{backgroundColor: 'darkred'}}>
+                                                                               variant='contained' disabled={!canNext()}
+                                                                               style={{backgroundColor: canNext() ? 'darkred' : 'grey'}}>
                                     Avanti
                                 </Button>}
-                                {(activeStep === steps.length - 1) && <Button onClick={() => {alert('Registrazione...')}}
-                                         variant='contained'
-                                         style={{backgroundColor: 'darkred'}}>
+                                {(activeStep === steps.length - 1) && <Button onClick={() => {
+                                    alert('Registrazione...')
+                                }}
+                                                                              variant='contained' disabled={!canNext()}
+                                                                              style={{backgroundColor: canNext() ? 'darkred' : 'grey'}}>
                                     Concludi
                                 </Button>}
                             </Box>
