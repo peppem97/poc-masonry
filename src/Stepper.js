@@ -5,24 +5,26 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import {Container} from "@mui/material";
-import {Row} from "react-bootstrap";
-
-const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
+import {Container, ToggleButton, ToggleButtonGroup} from "@mui/material";
+import {Col, Row} from "react-bootstrap";
+import StoreIcon from '@mui/icons-material/Store';
+import GroupIcon from '@mui/icons-material/Group';
 
 export default function MyStepper() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
+    const [typeUser, setTypeUser] = React.useState(null);
+    const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
 
-    // const isStepOptional = (step) => {
-    //     return step === 1;
-    // };
+    const onChangeTypeUser = (event, typeUser) => {
+        setTypeUser(typeUser);
+    };
 
     const isStepSkipped = (step) => {
         return skipped.has(step);
     };
 
-    const handleNext = () => {
+    const nextStep = () => {
         let newSkipped = skipped;
         if (isStepSkipped(activeStep)) {
             newSkipped = new Set(newSkipped.values());
@@ -33,26 +35,11 @@ export default function MyStepper() {
         setSkipped(newSkipped);
     };
 
-    const handleBack = () => {
+    const backStep = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    // const handleSkip = () => {
-    //     if (!isStepOptional(activeStep)) {
-    //         // You probably want to guard against something like this,
-    //         // it should never occur unless someone's actively trying to break something.
-    //         throw new Error("You can't skip a step that isn't optional.");
-    //     }
-    //
-    //     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    //     setSkipped((prevSkipped) => {
-    //         const newSkipped = new Set(prevSkipped.values());
-    //         newSkipped.add(activeStep);
-    //         return newSkipped;
-    //     });
-    // };
-
-    const handleReset = () => {
+    const resetStep = () => {
         setActiveStep(0);
     };
 
@@ -65,56 +52,91 @@ export default function MyStepper() {
                 <br/>
                 <Row className='justify-content-center'>
                     <Typography variant='h1' className='text-center'>REGISTRATI</Typography>
-
                 </Row>
                 <br/>
                 <br/>
-                <Row>
-                    <Stepper activeStep={activeStep}>
-                        {steps.map((label, index) => {
-                            const stepProps = {};
-                            const labelProps = {};
+                <Row className='justify-content-center'>
+                    <Col>
+                        <Row className='justify-content-center'>
+                            <Stepper activeStep={activeStep}>
+                                {steps.map((label, index) => {
+                                    return (
+                                        <Step key={label} completed={isStepSkipped(index)}>
+                                            <StepLabel>{label}</StepLabel>
+                                        </Step>
+                                    );
+                                })}
+                            </Stepper>
+                        </Row>
+                        <br/>
+                        <br/>
+                        <Row className='justify-content-center'>
+                            <Col className='align-self-center'>
+                                {(activeStep === 0) &&
+                                    <>
+                                        <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                            <ToggleButtonGroup
+                                                size="large"
+                                                value={typeUser}
+                                                onChange={onChangeTypeUser}
+                                                exclusive={true}>
+                                                <ToggleButton value="negozio">
+                                                    <StoreIcon/>
+                                                    <Typography variant='subtitle1'>Negozio</Typography>
+                                                </ToggleButton>,
+                                                <ToggleButton value="cliente">
+                                                    <GroupIcon/>
+                                                    <Typography variant='subtitle1'>Cliente</Typography>
+                                                </ToggleButton>
+                                            </ToggleButtonGroup>
+                                        </Box>
 
-                            if (isStepSkipped(index)) {
-                                stepProps.completed = false;
-                            }
-                            return (
-                                <Step key={label} {...stepProps}>
-                                    <StepLabel {...labelProps}>{label}</StepLabel>
-                                </Step>
-                            );
-                        })}
-                    </Stepper>
-                    {activeStep === steps.length ? (
-                        <>
-                            <Typography sx={{mt: 2, mb: 1}}>
-                                Step completati
-                            </Typography>
-                            <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
-                                <Box sx={{flex: '1 1 auto'}}/>
-                                <Button onClick={handleReset}>Reset</Button>
-                            </Box>
-                        </>
-                    ) : (
-                        <>
-                            <Typography sx={{mt: 2, mb: 1}}>Step {activeStep + 1}</Typography>
+                                    </>
+                                }
+                                {(activeStep === 1) &&
+                                    <>
+                                        <Typography variant='h2'>Step B</Typography>
+                                    </>
+                                }
+                                {(activeStep === 2) &&
+                                    <>
+                                        <Typography variant='h2'>Step C</Typography>
+                                    </>
+                                }
+                                {(activeStep === 3) &&
+                                    <>
+                                        <Typography sx={{mt: 2, mb: 1}}>
+                                            Step completati
+                                        </Typography>
+                                        <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
+                                            <Box sx={{flex: '1 1 auto'}}/>
+                                            <Button onClick={resetStep}>Reset</Button>
+                                        </Box>
+                                    </>
+                                }
+                            </Col>
+                        </Row>
+                        <br/>
+                        <br/>
+                        <Row>
                             <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
                                 <Button
-                                    color="inherit"
+                                    variant='contained'
+                                    style={{backgroundColor: activeStep === 0 ? 'grey' : 'darkred'}}
                                     disabled={activeStep === 0}
-                                    onClick={handleBack}
-                                    sx={{mr: 1}}
-                                >
+                                    onClick={backStep}
+                                    sx={{mr: 1}}>
                                     Indietro
                                 </Button>
                                 <Box sx={{flex: '1 1 auto'}}/>
-
-                                <Button onClick={handleNext}>
+                                <Button onClick={nextStep}
+                                        variant='contained'
+                                        style={{backgroundColor: 'darkred'}}>
                                     {activeStep === steps.length - 1 ? 'Concludi' : 'Avanti'}
                                 </Button>
                             </Box>
-                        </>
-                    )}
+                        </Row>
+                    </Col>
                 </Row>
             </Container>
         </>

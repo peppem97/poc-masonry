@@ -63,7 +63,7 @@ export default function App() {
                     <Routes>
                         <Route exact path="/" element={<Navigate to="/about"/>}/>
                         <Route exact path='/about' element={<About/>}/>
-                        <Route exact path='/stepper' element={<MyStepper/>}/>
+                        <Route exact path='/registrati' element={<MyStepper/>}/>
                         <Route path="/home" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
                         <Route path="/user/:username" element={<ProtectedRoute><User/></ProtectedRoute>}/>
                         <Route path="/product/:id" element={<ProtectedRoute><Product/></ProtectedRoute>}/>
