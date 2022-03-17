@@ -25,10 +25,15 @@ export default function App() {
     const errorMessage = useSelector((state) => state.error.message);
     const dispatch = useDispatch();
 
+    const jwtIsValid = (token) => {
+        return (jwtDecode(token).exp * 1000 >= new Date().getTime());
+    }
+
     const checkStateLogin = () => {
         let token = localStorage.getItem('token');
+
         try {
-            if ((jwtDecode(token).exp * 1000 >= new Date().getTime())) {
+            if (jwtIsValid(token)) {
                 dispatch(isLogged());
                 dispatch(setToken(token));
             } else {
@@ -41,6 +46,7 @@ export default function App() {
     };
 
     const appContext = {
+        jwtIsValid: (token) => { return jwtIsValid(token)},
         MAX_PICTURES_CAROUSEL: 3,
         MAX_PICTURES_PRODUCT: 9,
         COMPRESSION_QUALITY: 0.3,

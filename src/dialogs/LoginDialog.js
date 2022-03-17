@@ -35,7 +35,7 @@ export default function LoginDialog(props) {
         props.onClose();
     };
 
-    const onChangeUsername = (e) => {
+    const onChangeEmail = (e) => {
         setEmail(e.target.value);
     };
 
@@ -75,7 +75,7 @@ export default function LoginDialog(props) {
                     <Container>
                         <Row>
                             <TextField
-                                onChange={onChangeUsername}
+                                onChange={onChangeEmail}
                                 autoFocus
                                 color='secondary'
                                 margin="dense"

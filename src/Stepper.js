@@ -5,19 +5,26 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import {Container, ToggleButton, ToggleButtonGroup} from "@mui/material";
+import {Container, TextField, ToggleButton, ToggleButtonGroup} from "@mui/material";
 import {Col, Row} from "react-bootstrap";
 import StoreIcon from '@mui/icons-material/Store';
 import GroupIcon from '@mui/icons-material/Group';
+import {useState} from "react";
 
 export default function MyStepper() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
-    const [typeUser, setTypeUser] = React.useState(null);
+    const [userType, setUserType] = React.useState(null);
     const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
 
+    const [email, setEmail] = useState(null);
+
     const onChangeTypeUser = (event, typeUser) => {
-        setTypeUser(typeUser);
+        setUserType(typeUser);
+    };
+
+    const onChangeEmail = (e) => {
+        setEmail(e.target.value);
     };
 
     const isStepSkipped = (step) => {
@@ -77,7 +84,7 @@ export default function MyStepper() {
                                         <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                                             <ToggleButtonGroup
                                                 size="large"
-                                                value={typeUser}
+                                                value={userType}
                                                 onChange={onChangeTypeUser}
                                                 exclusive={true}>
                                                 <ToggleButton value="negozio">
@@ -90,12 +97,28 @@ export default function MyStepper() {
                                                 </ToggleButton>
                                             </ToggleButtonGroup>
                                         </Box>
-
                                     </>
                                 }
                                 {(activeStep === 1) &&
                                     <>
-                                        <Typography variant='h2'>Step B</Typography>
+                                        {
+                                            (userType === 'negozio') &&
+                                            <>
+                                                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                                    <TextField
+                                                        onChange={onChangeEmail}
+                                                        autoFocus
+                                                        color='secondary'
+                                                        margin="dense"
+                                                        label="Email"
+                                                        variant="outlined"/>
+                                                </Box>
+
+                                            </>
+                                        }
+                                        {
+                                            (userType === 'cliente') && <></>
+                                        }
                                     </>
                                 }
                                 {(activeStep === 2) &&
@@ -132,7 +155,7 @@ export default function MyStepper() {
                                 <Button onClick={nextStep}
                                         variant='contained'
                                         style={{backgroundColor: 'darkred'}}>
-                                    {activeStep === steps.length - 1 ? 'Concludi' : 'Avanti'}
+                                    {(activeStep === steps.length - 1) ? 'Concludi' : 'Avanti'}
                                 </Button>
                             </Box>
                         </Row>
