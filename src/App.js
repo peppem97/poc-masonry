@@ -16,6 +16,8 @@ import {useDispatch, useSelector} from 'react-redux'
 import {isLogged, isNotLogged} from './store/login';
 import {setToken} from "./store/token";
 import {isNotError} from "./store/error";
+import Stepper from "./Stepper";
+import MyStepper from "./Stepper";
 
 export default function App() {
     const loading = useSelector((state) => state.loading.value);
@@ -41,7 +43,7 @@ export default function App() {
     const appContext = {
         MAX_PICTURES_CAROUSEL: 3,
         MAX_PICTURES_PRODUCT: 9,
-        qualityPictures: 0.3,
+        COMPRESSION_QUALITY: 0.3,
         HOST: "http://zion.datafactor.it:40505",
         ENDPOINT_SHOPS: "http://zion.datafactor.it:40505/shops",
         ENDPOINT_PRODUCTS: "http://zion.datafactor.it:40505/products",
@@ -61,6 +63,7 @@ export default function App() {
                     <Routes>
                         <Route exact path="/" element={<Navigate to="/about"/>}/>
                         <Route exact path='/about' element={<About/>}/>
+                        <Route exact path='/stepper' element={<MyStepper/>}/>
                         <Route path="/home" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
                         <Route path="/user/:username" element={<ProtectedRoute><User/></ProtectedRoute>}/>
                         <Route path="/product/:id" element={<ProtectedRoute><Product/></ProtectedRoute>}/>

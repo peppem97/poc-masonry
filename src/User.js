@@ -99,7 +99,7 @@ export default function User() {
         dispatch(setBusy());
         const formData = new FormData();
         new Compressor(e.target.files[0], {
-            quality: appContext.qualityPictures, success(result) {
+            quality: appContext.COMPRESSION_QUALITY, success(result) {
                 formData.append('files.avatar', result, 'avatar.jpg');
                 formData.append('data', JSON.stringify({}));
                 axios.put(appContext.ENDPOINT_SHOPS + "/" + id, formData, {
@@ -124,7 +124,7 @@ export default function User() {
             if (picture.image != null) {
                 if (picture.rawImage != null) {
                     new Compressor(picture.rawImage, {
-                        quality: appContext.qualityPictures, success(result) {
+                        quality: appContext.COMPRESSION_QUALITY, success(result) {
                             dispatch(setBusy());
                             const formData = new FormData();
                             formData.append('files.carousel' + picture.index, result, 'example.jpg');
@@ -213,7 +213,7 @@ export default function User() {
             for (let picture of params.pictures) {
                 if (picture.image != null) {
                     new Compressor(picture.rawPicture, {
-                        quality: appContext.qualityPictures, success(result) {
+                        quality: appContext.COMPRESSION_QUALITY, success(result) {
                             const formData = new FormData();
                             formData.append('files.picture' + picture.index, result, picture.rawPicture.name);
                             formData.append('data', JSON.stringify({}));
@@ -283,7 +283,7 @@ export default function User() {
                 if (picture.image != null) {
                     if (picture.rawImage != null) {
                         new Compressor(picture.rawPicture, {
-                            quality: appContext.qualityPictures, success(result) {
+                            quality: appContext.COMPRESSION_QUALITY, success(result) {
                                 const formData = new FormData();
                                 formData.append('files.picture' + picture.index, result, 'example.jpg');
                                 formData.append('data', JSON.stringify({}));

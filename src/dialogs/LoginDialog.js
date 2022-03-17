@@ -6,18 +6,15 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    FormControl, IconButton, InputAdornment,
-    InputLabel, OutlinedInput,
+    IconButton,
     TextField
 } from "@mui/material";
-import DialogContentText from "@mui/material/DialogContentText";
 import {Col, Row} from "react-bootstrap";
 import {useContext, useState} from "react";
 import {Visibility, VisibilityOff} from "@material-ui/icons";
-import Box from "@mui/material/Box";
 import axios from "axios";
 import GlobalContext from "../GlobalContext";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {isLogged} from "../store/login";
 import {setToken} from "../store/token";
 import {isError} from "../store/error";
