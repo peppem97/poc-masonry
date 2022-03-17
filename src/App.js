@@ -25,17 +25,17 @@ export default function App() {
     const errorMessage = useSelector((state) => state.error.message);
     const dispatch = useDispatch();
 
-    const jwtIsValid = (token) => {
-        return (jwtDecode(token).exp * 1000 >= new Date().getTime());
-    }
+    // const jwtIsValid = (token) => {
+    //     return (jwtDecode(token).exp * 1000 >= new Date().getTime());
+    // }
 
     const checkStateLogin = () => {
         let token = localStorage.getItem('token');
 
         try {
-            if (jwtIsValid(token)) {
-                dispatch(isLogged());
+            if ((jwtDecode(token).exp * 1000 >= new Date().getTime())) {
                 dispatch(setToken(token));
+                dispatch(isLogged());
             } else {
                 localStorage.removeItem('token');
                 dispatch(isNotLogged());
@@ -46,7 +46,7 @@ export default function App() {
     };
 
     const appContext = {
-        jwtIsValid: (token) => { return jwtIsValid(token)},
+        // jwtIsValid: (token) => { return jwtIsValid(token)},
         MAX_PICTURES_CAROUSEL: 3,
         MAX_PICTURES_PRODUCT: 9,
         COMPRESSION_QUALITY: 0.3,

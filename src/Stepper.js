@@ -5,24 +5,45 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import {Container, TextField, ToggleButton, ToggleButtonGroup} from "@mui/material";
+import {
+    Checkbox,
+    Container, IconButton, ImageList,
+    ImageListItem,
+    ImageListItemBar, Input,
+    InputAdornment,
+    TextField,
+    ToggleButton,
+    ToggleButtonGroup
+} from "@mui/material";
 import {Col, Row} from "react-bootstrap";
 import StoreIcon from '@mui/icons-material/Store';
 import GroupIcon from '@mui/icons-material/Group';
-import {useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import EmailIcon from '@mui/icons-material/Email';
+import StarIcon from '@mui/icons-material/Star';
+import LanguageIcon from '@mui/icons-material/Language';
+import CallIcon from '@mui/icons-material/Call';
+import TextFieldsIcon from '@mui/icons-material/TextFields';
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import ProgressiveImg from "./ProgessiveImage";
+import OpenInFullIcon from "@mui/icons-material/OpenInFull";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import {initImageList} from "./Utility";
+import GlobalContext from "./GlobalContext";
+import {pink, red} from "@mui/material/colors";
 
 export default function MyStepper() {
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [skipped, setSkipped] = React.useState(new Set());
-    const [userType, setUserType] = React.useState(null);
     const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
-
+    const [activeStep, setActiveStep] = useState(0);
+    const [skipped, setSkipped] = useState(new Set());
+    const [userType, setUserType] = useState('negozio');
     const [email, setEmail] = useState(null);
     const [title, setTitle] = useState(null);
     const [website, setWebsite] = useState(null);
     const [telephone, setTelephone] = useState(null);
     const [description, setDescription] = useState(null);
-
+    const [pictures, setPictures] = useState([]);
+    const appContext = useContext(GlobalContext);
 
     const onChangeTypeUser = (event, typeUser) => {
         setUserType(typeUser);
@@ -48,6 +69,36 @@ export default function MyStepper() {
         setDescription(e.target.value);
     };
 
+    const addPicture = (e, i) => {
+        let tmpPictures = [];
+        for (let picture of pictures) {
+            if (picture.index === i) {
+                tmpPictures.push({
+                    index: picture.index,
+                    image: URL.createObjectURL(e.target.files[0]),
+                    rawImage: e.target.files[0],
+                    add: false
+                });
+            } else {
+                tmpPictures.push(picture);
+            }
+        }
+        setPictures(tmpPictures);
+    };
+
+    const removePicture = (i) => {
+        let tmpPictures = [];
+
+        for (let picture of pictures) {
+            if (picture.index === i) {
+                tmpPictures.push({index: picture.index, image: null, rawImage: null, add: true});
+            } else {
+                tmpPictures.push(picture);
+            }
+        }
+        setPictures(tmpPictures);
+    };
+
     const isStepSkipped = (step) => {
         return skipped.has(step);
     };
@@ -67,9 +118,13 @@ export default function MyStepper() {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const resetStep = () => {
-        setActiveStep(0);
-    };
+    // const resetStep = () => {
+    //     setActiveStep(0);
+    // };
+
+    useEffect(() => {
+        setPictures(initImageList([], appContext.MAX_PICTURES_CAROUSEL));
+    }, []);
 
     return (
         <>
@@ -89,7 +144,7 @@ export default function MyStepper() {
                             <Stepper activeStep={activeStep}>
                                 {steps.map((label, index) => {
                                     return (
-                                        <Step key={label} completed={isStepSkipped(index)}>
+                                        <Step key={label} completed={isStepSkipped(index)} sx={{color: red[600]}}>
                                             <StepLabel>{label}</StepLabel>
                                         </Step>
                                     );
@@ -125,13 +180,26 @@ export default function MyStepper() {
                                         {
                                             (userType === 'negozio') &&
                                             <>
-                                                <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2, justifyContent: 'center'}}>
+                                                <Box sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
+                                                    gap: 2,
+                                                    justifyContent: 'center'
+                                                }}>
                                                     <TextField
                                                         onChange={onChangeEmail}
                                                         autoFocus
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Email"
+                                                        InputProps={{
+                                                            startAdornment: (
+                                                                <InputAdornment position="start">
+                                                                    <EmailIcon/>
+                                                                </InputAdornment>
+                                                            ),
+                                                        }}
                                                         variant="outlined"/>
                                                     <TextField
                                                         onChange={onChangeTitle}
@@ -139,6 +207,13 @@ export default function MyStepper() {
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Nome"
+                                                        InputProps={{
+                                                            startAdornment: (
+                                                                <InputAdornment position="start">
+                                                                    <StarIcon/>
+                                                                </InputAdornment>
+                                                            ),
+                                                        }}
                                                         variant="outlined"/>
                                                     <TextField
                                                         onChange={onChangeWebsite}
@@ -146,6 +221,13 @@ export default function MyStepper() {
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Sito Web"
+                                                        InputProps={{
+                                                            startAdornment: (
+                                                                <InputAdornment position="start">
+                                                                    <LanguageIcon/>
+                                                                </InputAdornment>
+                                                            ),
+                                                        }}
                                                         variant="outlined"/>
                                                     <TextField
                                                         onChange={onChangeTelephone}
@@ -153,16 +235,86 @@ export default function MyStepper() {
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Telefono"
+                                                        InputProps={{
+                                                            startAdornment: (
+                                                                <InputAdornment position="start">
+                                                                    <CallIcon/>
+                                                                </InputAdornment>
+                                                            ),
+                                                        }}
                                                         variant="outlined"/>
                                                 </Box>
+                                                <Box>
                                                     <TextField fullWidth={true}
-                                                        onChange={onChangeDescription}
-                                                        autoFocus
-                                                        multiline={true}
-                                                        color='secondary'
-                                                        margin="dense"
-                                                        label="Descrizione"
-                                                        variant="outlined"/>
+                                                               onChange={onChangeDescription}
+                                                               autoFocus
+                                                               multiline={true}
+                                                               color='secondary'
+                                                               margin="dense"
+                                                               InputProps={{
+                                                                   startAdornment: (
+                                                                       <InputAdornment position="start">
+                                                                           <TextFieldsIcon/>
+                                                                       </InputAdornment>
+                                                                   ),
+                                                               }}
+                                                               label="Descrizione"
+                                                               variant="outlined"/>
+                                                </Box>
+                                                <br/>
+                                                <br/>
+                                                <Box sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
+                                                    gap: 2,
+                                                    justifyContent: 'center'
+                                                }}>
+                                                    <ImageList sx={{width: 500, height: 250}}
+                                                               gap={5} cols={30}>
+                                                        {pictures.map((item) => {
+                                                            if (item.add) {
+                                                                return (<ImageListItem key={item.index} cols={10} rows={1}>
+
+                                                                    <ImageListItemBar
+                                                                        actionIcon={
+                                                                            [
+                                                                                <label htmlFor="icon-button-file" key={0}>
+                                                                                    <Input accept="image/*" id="icon-button-file" type="file" hidden
+                                                                                           onChange={(e) => {
+                                                                                               addPicture(e, item.index)
+                                                                                           }}/>
+                                                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                                                                aria-label="upload picture" component="span">
+                                                                                        <PhotoCamera/>
+                                                                                    </IconButton>
+                                                                                </label>]}
+                                                                    />
+                                                                </ImageListItem>)
+                                                            } else {
+                                                                return (<ImageListItem key={item.index} cols={10} rows={1}>
+                                                                    <ProgressiveImg image={item.image} />
+                                                                    <ImageListItemBar
+                                                                        actionIcon={
+                                                                            [
+                                                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0}
+                                                                                            onClick={() => {
+                                                                                                window.open(item.image, '_blank', 'noopener,noreferrer')
+                                                                                            }}>
+                                                                                    <OpenInFullIcon/>
+                                                                                </IconButton>,
+                                                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} onClick={() => {
+                                                                                    removePicture(item.index)
+                                                                                }} key={1}>
+                                                                                    <DeleteForeverIcon/>
+                                                                                </IconButton>
+                                                                            ]}
+                                                                    />
+                                                                </ImageListItem>)
+                                                            }
+                                                        })}
+                                                    </ImageList>
+                                                </Box>
 
                                             </>
                                         }
@@ -173,20 +325,37 @@ export default function MyStepper() {
                                 }
                                 {(activeStep === 2) &&
                                     <>
-                                        <Typography variant='h2'>Step C</Typography>
+                                    <Box sx={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        gap: 2,
+                                        justifyContent: 'center'
+                                    }}>
+                                        <Checkbox
+                                            defaultChecked
+                                            sx={{
+                                                color: red[800],
+                                                '&.Mui-checked': {
+                                                    color: red[600],
+                                                },
+                                            }}
+                                        />
+                                        Accetti i nostri Termini di Servizio e la nostra policy relativa alla privacy
+                                    </Box>
                                     </>
                                 }
-                                {(activeStep === 3) &&
-                                    <>
-                                        <Typography sx={{mt: 2, mb: 1}}>
-                                            Step completati
-                                        </Typography>
-                                        <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
-                                            <Box sx={{flex: '1 1 auto'}}/>
-                                            <Button onClick={resetStep}>Reset</Button>
-                                        </Box>
-                                    </>
-                                }
+                                {/*{(activeStep === 3) &&*/}
+                                {/*    <>*/}
+                                {/*        <Typography sx={{mt: 2, mb: 1}}>*/}
+                                {/*            Step completati*/}
+                                {/*        </Typography>*/}
+                                {/*        <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>*/}
+                                {/*            <Box sx={{flex: '1 1 auto'}}/>*/}
+                                {/*            <Button onClick={resetStep}>Reset</Button>*/}
+                                {/*        </Box>*/}
+                                {/*    </>*/}
+                                {/*}*/}
                             </Col>
                         </Row>
                         <br/>
@@ -202,11 +371,16 @@ export default function MyStepper() {
                                     Indietro
                                 </Button>
                                 <Box sx={{flex: '1 1 auto'}}/>
-                                <Button onClick={nextStep}
-                                        variant='contained'
-                                        style={{backgroundColor: 'darkred'}}>
-                                    {(activeStep === steps.length - 1) ? 'Concludi' : 'Avanti'}
-                                </Button>
+                                {!(activeStep === steps.length - 1) && <Button onClick={nextStep}
+                                         variant='contained'
+                                         style={{backgroundColor: 'darkred'}}>
+                                    Avanti
+                                </Button>}
+                                {(activeStep === steps.length - 1) && <Button onClick={() => {alert('Registrazione...')}}
+                                         variant='contained'
+                                         style={{backgroundColor: 'darkred'}}>
+                                    Concludi
+                                </Button>}
                             </Box>
                         </Row>
                     </Col>
