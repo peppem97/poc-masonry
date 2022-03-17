@@ -30,7 +30,10 @@ import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {initImageList} from "./Utility";
 import GlobalContext from "./GlobalContext";
-import {pink, red} from "@mui/material/colors";
+import {red} from "@mui/material/colors";
+import Avatar from "@material-ui/core/Avatar";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import PersonIcon from '@mui/icons-material/Person';
 
 export default function MyStepper() {
     const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
@@ -43,6 +46,11 @@ export default function MyStepper() {
     const [telephone, setTelephone] = useState(null);
     const [description, setDescription] = useState(null);
     const [pictures, setPictures] = useState([]);
+    const [avatar, setAvatar] = useState(null);
+    const [editAvatar, setEditAvatar] = useState(false);
+
+    const [name, setName] = useState(null);
+    const [surname, setSurname] = useState(null);
     const appContext = useContext(GlobalContext);
 
     const onChangeTypeUser = (event, typeUser) => {
@@ -67,6 +75,14 @@ export default function MyStepper() {
 
     const onChangeDescription = (e) => {
         setDescription(e.target.value);
+    };
+
+    const onChangeName = (e) => {
+        setName(e.target.value);
+    };
+
+    const onChangeSurname = (e) => {
+        setSurname(e.target.value);
     };
 
     const addPicture = (e, i) => {
@@ -262,7 +278,6 @@ export default function MyStepper() {
                                                                variant="outlined"/>
                                                 </Box>
                                                 <br/>
-                                                <br/>
                                                 <Box sx={{
                                                     display: 'flex',
                                                     flexDirection: 'row',
@@ -270,7 +285,31 @@ export default function MyStepper() {
                                                     gap: 2,
                                                     justifyContent: 'center'
                                                 }}>
-                                                    <ImageList sx={{width: 500, height: 250}}
+                                                    <label htmlFor="avatar-uploader" className='text-center'>
+                                                        <Input
+                                                            accept="image/*"
+                                                            id="avatar-uploader"
+                                                            type="file"
+                                                            hidden
+                                                            onChange={(e) => {setAvatar(URL.createObjectURL(e.target.files[0]))}}/>
+                                                        <Avatar
+                                                            onMouseOver={() => {setEditAvatar(true)}}
+                                                            onMouseLeave={() => {setEditAvatar(false)}}
+                                                            style={{width: 48, height: 48, cursor: editAvatar ? 'pointer' : null}}
+                                                            src={!editAvatar && avatar}>
+                                                            {editAvatar && <AddPhotoAlternateIcon/>}
+                                                        </Avatar>
+                                                    </label>
+                                                </Box>
+                                                <br/>
+                                                <Box sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'center',
+                                                    gap: 2,
+                                                    justifyContent: 'center'
+                                                }}>
+                                                    <ImageList sx={{width: 800, height: 350}}
                                                                gap={5} cols={30}>
                                                         {pictures.map((item) => {
                                                             if (item.add) {
@@ -319,7 +358,97 @@ export default function MyStepper() {
                                             </>
                                         }
                                         {
-                                            (userType === 'cliente') && <></>
+                                            (userType === 'cliente') &&
+                                            <>
+                                                <Box sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
+                                                    gap: 2,
+                                                    justifyContent: 'center'
+                                                }}>
+                                                    <TextField
+                                                        onChange={onChangeEmail}
+                                                        autoFocus
+                                                        color='secondary'
+                                                        margin="dense"
+                                                        label="Email"
+                                                        InputProps={{
+                                                            startAdornment: (
+                                                                <InputAdornment position="start">
+                                                                    <EmailIcon/>
+                                                                </InputAdornment>
+                                                            ),
+                                                        }}
+                                                        variant="outlined"/>
+                                                    <TextField
+                                                        onChange={onChangeName}
+                                                        autoFocus
+                                                        color='secondary'
+                                                        margin="dense"
+                                                        label="Nome"
+                                                        InputProps={{
+                                                            startAdornment: (
+                                                                <InputAdornment position="start">
+                                                                    <StarIcon/>
+                                                                </InputAdornment>
+                                                            ),
+                                                        }}
+                                                        variant="outlined"/>
+                                                    <TextField
+                                                        onChange={onChangeSurname}
+                                                        autoFocus
+                                                        color='secondary'
+                                                        margin="dense"
+                                                        label="Cognome"
+                                                        InputProps={{
+                                                            startAdornment: (
+                                                                <InputAdornment position="start">
+                                                                    <StarIcon/>
+                                                                </InputAdornment>
+                                                            ),
+                                                        }}
+                                                        variant="outlined"/>
+                                                    <TextField
+                                                        onChange={onChangeTelephone}
+                                                        autoFocus
+                                                        color='secondary'
+                                                        margin="dense"
+                                                        label="Telefono"
+                                                        InputProps={{
+                                                            startAdornment: (
+                                                                <InputAdornment position="start">
+                                                                    <CallIcon/>
+                                                                </InputAdornment>
+                                                            ),
+                                                        }}
+                                                        variant="outlined"/>
+                                                </Box>
+                                                <br/>
+                                                <Box sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
+                                                    gap: 2,
+                                                    justifyContent: 'center'
+                                                }}>
+                                                    <label htmlFor="avatar-uploader" className='text-center'>
+                                                        <Input
+                                                            accept="image/*"
+                                                            id="avatar-uploader"
+                                                            type="file"
+                                                            hidden
+                                                            onChange={(e) => {setAvatar(URL.createObjectURL(e.target.files[0]))}}/>
+                                                        <Avatar
+                                                            onMouseOver={() => {setEditAvatar(true)}}
+                                                            onMouseLeave={() => {setEditAvatar(false)}}
+                                                            style={{width: 48, height: 48, cursor: editAvatar ? 'pointer' : null}}
+                                                            src={!editAvatar && avatar}>
+                                                            {editAvatar && <AddPhotoAlternateIcon/>}
+                                                        </Avatar>
+                                                    </label>
+                                                </Box>
+                                            </>
                                         }
                                     </>
                                 }
@@ -385,6 +514,8 @@ export default function MyStepper() {
                         </Row>
                     </Col>
                 </Row>
+                <br/>
+                <br/>
             </Container>
         </>
     );
