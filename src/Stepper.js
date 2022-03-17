@@ -18,6 +18,11 @@ export default function MyStepper() {
     const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
 
     const [email, setEmail] = useState(null);
+    const [title, setTitle] = useState(null);
+    const [website, setWebsite] = useState(null);
+    const [telephone, setTelephone] = useState(null);
+    const [description, setDescription] = useState(null);
+
 
     const onChangeTypeUser = (event, typeUser) => {
         setUserType(typeUser);
@@ -25,6 +30,22 @@ export default function MyStepper() {
 
     const onChangeEmail = (e) => {
         setEmail(e.target.value);
+    };
+
+    const onChangeTitle = (e) => {
+        setTitle(e.target.value);
+    };
+
+    const onChangeWebsite = (e) => {
+        setWebsite(e.target.value);
+    };
+
+    const onChangeTelephone = (e) => {
+        setTelephone(e.target.value);
+    };
+
+    const onChangeDescription = (e) => {
+        setDescription(e.target.value);
     };
 
     const isStepSkipped = (step) => {
@@ -104,7 +125,7 @@ export default function MyStepper() {
                                         {
                                             (userType === 'negozio') &&
                                             <>
-                                                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                                <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2, justifyContent: 'center'}}>
                                                     <TextField
                                                         onChange={onChangeEmail}
                                                         autoFocus
@@ -112,7 +133,36 @@ export default function MyStepper() {
                                                         margin="dense"
                                                         label="Email"
                                                         variant="outlined"/>
+                                                    <TextField
+                                                        onChange={onChangeTitle}
+                                                        autoFocus
+                                                        color='secondary'
+                                                        margin="dense"
+                                                        label="Nome"
+                                                        variant="outlined"/>
+                                                    <TextField
+                                                        onChange={onChangeWebsite}
+                                                        autoFocus
+                                                        color='secondary'
+                                                        margin="dense"
+                                                        label="Sito Web"
+                                                        variant="outlined"/>
+                                                    <TextField
+                                                        onChange={onChangeTelephone}
+                                                        autoFocus
+                                                        color='secondary'
+                                                        margin="dense"
+                                                        label="Telefono"
+                                                        variant="outlined"/>
                                                 </Box>
+                                                    <TextField fullWidth={true}
+                                                        onChange={onChangeDescription}
+                                                        autoFocus
+                                                        multiline={true}
+                                                        color='secondary'
+                                                        margin="dense"
+                                                        label="Descrizione"
+                                                        variant="outlined"/>
 
                                             </>
                                         }
