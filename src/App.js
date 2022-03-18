@@ -16,8 +16,8 @@ import {useDispatch, useSelector} from 'react-redux'
 import {isLogged, isNotLogged} from './store/login';
 import {setToken} from "./store/token";
 import {isNotError} from "./store/error";
-import Stepper from "./Stepper";
-import MyStepper from "./Stepper";
+import Stepper from "./Signup";
+import Signup from "./Signup";
 
 export default function App() {
     const loading = useSelector((state) => state.loading.value);
@@ -69,7 +69,7 @@ export default function App() {
                     <Routes>
                         <Route exact path="/" element={<Navigate to="/about"/>}/>
                         <Route exact path='/about' element={<About/>}/>
-                        <Route exact path='/registrati' element={<MyStepper/>}/>
+                        <Route exact path='/signup' element={<Signup/>}/>
                         <Route path="/home" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
                         <Route path="/user/:username" element={<ProtectedRoute><User/></ProtectedRoute>}/>
                         <Route path="/product/:id" element={<ProtectedRoute><Product/></ProtectedRoute>}/>

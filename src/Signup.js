@@ -34,13 +34,18 @@ import {red} from "@mui/material/colors";
 import Avatar from "@material-ui/core/Avatar";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import PersonIcon from '@mui/icons-material/Person';
+import {Visibility, VisibilityOff} from "@material-ui/icons";
 
-export default function MyStepper() {
+export default function Signup() {
     const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
     const [userType, setUserType] = useState('negozio');
     const [email, setEmail] = useState(null);
+    const [password, setPassword] = useState(null);
+    const [confirmPassword, setConfirmPassword] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
+
     const [title, setTitle] = useState(null);
     const [website, setWebsite] = useState(null);
     const [telephone, setTelephone] = useState(null);
@@ -60,6 +65,14 @@ export default function MyStepper() {
 
     const onChangeEmail = (e) => {
         setEmail(e.target.value);
+    };
+
+    const onChangePassword = (e) => {
+        setPassword(e.target.value);
+    };
+
+    const onChangeConfirmPassword = (e) => {
+        setConfirmPassword(e.target.value);
     };
 
     const onChangeTitle = (e) => {
@@ -89,6 +102,10 @@ export default function MyStepper() {
     const onChangeConsens = () => {
         setConsens(!consens);
     }
+
+    const onChangeShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
 
     const addPicture = (e, i) => {
         let tmpPictures = [];
@@ -149,9 +166,9 @@ export default function MyStepper() {
                 case 0:
                     return true;
                 case 1:
-                    return (email !== '' && title !== '' && website !== '' && telephone !== '' && description !== '' && avatar && pictures.some((element) => (!element.add)) > 0);
+                    return (title !== '' && website !== '' && telephone !== '' && description !== '' && avatar && pictures.some((element) => (!element.add)) > 0);
                 case 2:
-                    return consens;
+                    return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consens);
                 default:
                     return true;
             }
@@ -234,21 +251,7 @@ export default function MyStepper() {
                                                     gap: 2,
                                                     justifyContent: 'center'
                                                 }}>
-                                                    <TextField
-                                                        onChange={onChangeEmail}
-                                                        autoFocus
-                                                        value={email}
-                                                        color='secondary'
-                                                        margin="dense"
-                                                        label="Email"
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start">
-                                                                    <EmailIcon/>
-                                                                </InputAdornment>
-                                                            ),
-                                                        }}
-                                                        variant="outlined"/>
+
                                                     <TextField
                                                         onChange={onChangeTitle}
                                                         autoFocus
@@ -425,21 +428,6 @@ export default function MyStepper() {
                                                     justifyContent: 'center'
                                                 }}>
                                                     <TextField
-                                                        onChange={onChangeEmail}
-                                                        autoFocus
-                                                        value={email}
-                                                        color='secondary'
-                                                        margin="dense"
-                                                        label="Email"
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start">
-                                                                    <EmailIcon/>
-                                                                </InputAdornment>
-                                                            ),
-                                                        }}
-                                                        variant="outlined"/>
-                                                    <TextField
                                                         onChange={onChangeName}
                                                         autoFocus
                                                         value={name}
@@ -525,6 +513,53 @@ export default function MyStepper() {
                                 }
                                 {(activeStep === 2) &&
                                     <>
+                                    <Box sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        gap: 2,
+                                        justifyContent: 'center'
+                                    }}>
+                                        <TextField
+                                            onChange={onChangeEmail}
+                                            autoFocus
+                                            value={email}
+                                            color='secondary'
+                                            margin="dense"
+                                            label="Email"
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <EmailIcon/>
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                            variant="outlined"/>
+                                        <TextField
+                                            onChange={onChangePassword}
+                                            type={showPassword ? 'text' : 'password'}
+                                            color='secondary'
+                                            margin="dense"
+                                            InputProps={{
+                                                endAdornment: <IconButton position="start" onClick={onChangeShowPassword}>{
+                                                    showPassword ? <VisibilityOff/> : <Visibility/>}</IconButton>,
+                                            }}
+
+                                            label="Password"
+                                            variant="outlined"/>
+                                        <TextField
+                                            onChange={onChangeConfirmPassword}
+                                            type={showPassword ? 'text' : 'password'}
+                                            color='secondary'
+                                            margin="dense"
+                                            InputProps={{
+                                                endAdornment: <IconButton position="start" onClick={onChangeShowPassword}>{
+                                                    showPassword ? <VisibilityOff/> : <Visibility/>}</IconButton>,
+                                            }}
+
+                                            label="Conferma Password"
+                                            variant="outlined"/>
+                                    </Box>
                                         <Box sx={{
                                             display: 'flex',
                                             flexDirection: 'row',
@@ -542,7 +577,7 @@ export default function MyStepper() {
                                                     },
                                                 }}
                                             />
-                                            Accetti i nostri Termini di Servizio e la nostra policy relativa alla
+                                            Accetto i Termini di Servizio e la policy relativa alla
                                             privacy
                                         </Box>
                                     </>
@@ -583,7 +618,7 @@ export default function MyStepper() {
                                 }}
                                                                               variant='contained' disabled={!canNext()}
                                                                               style={{backgroundColor: canNext() ? 'darkred' : 'grey'}}>
-                                    Concludi
+                                    Registrati
                                 </Button>}
                             </Box>
                         </Row>
