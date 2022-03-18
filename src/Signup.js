@@ -39,6 +39,7 @@ import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
 import Compressor from "compressorjs";
+import {isError} from "./store/error";
 
 export default function Signup() {
     const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
@@ -170,6 +171,7 @@ export default function Signup() {
     };
 
     const signup = () => {
+        let fetched = 0;
         let dataSignup = {
             username: username,
             email: email,
@@ -185,23 +187,72 @@ export default function Signup() {
         };
         // let dataUser = {};
         const formData = new FormData();
-
         dispatch(setBusy());
+        //creo l'utenza relativa a Strapi
         axios.post(appContext.ENDPOINT_REGISTER, dataSignup).then((response) => {
             console.log(response);
             if (userType === 'negozio') {
-                // axios.post(appContext.ENDPOINT_SHOPS, dataShop).then((response) => {
-                // }).catch(() => {
-                // })
                 new Compressor(avatar.rawImage, {
                     quality: appContext.COMPRESSION_QUALITY, success(result) {
                         formData.append('files.avatar', result, 'avatar.jpg');
                         formData.append('data', JSON.stringify(dataShop));
+                        //creo il record del negozio associato all'utenza appena creata
                         axios.post(appContext.ENDPOINT_SHOPS, formData, {
                             headers: {'Authorization': 'Bearer ' + token}
-                        }).then((response) => {
-                            console.log(response);
-                            dispatch(setIdle());
+                        }).then((responseFinal) => {
+                            //inserisco le immagini del carosello al record del negozio
+                            console.log(responseFinal);
+                            for (let picture of carousel) {
+                                if (picture.image != null) {
+                                    if (picture.rawImage != null) {
+                                        new Compressor(picture.rawImage, {
+                                            quality: appContext.COMPRESSION_QUALITY, success(result) {
+                                                dispatch(setBusy());
+                                                const formData = new FormData();
+                                                formData.append('files.carousel' + picture.index, result, 'example.jpg');
+                                                formData.append('data', JSON.stringify({}));
+                                                axios.put(appContext.ENDPOINT_SHOPS + "/" + responseFinal?.data?.id, formData, {
+                                                    headers: {'Authorization': 'Bearer ' + token}
+                                                }).then(() => {
+                                                    fetched++;
+                                                    if (carousel.length === fetched) {
+                                                        dispatch(setIdle());
+                                                        // getUserInfo();
+                                                    }
+                                                }).catch(() => {
+                                                    dispatch(setIdle());
+                                                    dispatch(isError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.'));
+                                                })
+                                            }, error() {
+                                                dispatch(setIdle());
+                                                dispatch(isError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.'));
+                                            }
+                                        })
+                                    } else {
+                                        fetched++;
+                                        if (carousel.length === fetched) {
+                                            dispatch(setIdle());
+                                            // getUserInfo();
+                                        }
+                                    }
+                                } else {
+                                    dispatch(setBusy());
+                                    let data = {};
+                                    data['carousel' + picture.index] = null;
+                                    axios.put(appContext.ENDPOINT_SHOPS + "/" + responseFinal?.data?.id, data, {
+                                        headers: {'Authorization': 'Bearer ' + token}
+                                    }).then(() => {
+                                        fetched++;
+                                        if (carousel.length === fetched) {
+                                            dispatch(setIdle());
+                                            // getUserInfo();
+                                        }
+                                    }).catch(() => {
+                                        dispatch(setIdle());
+                                        dispatch(isError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.'));
+                                    })
+                                }
+                            }
 
                         }).catch(() => {
                             dispatch(setIdle());
@@ -210,6 +261,8 @@ export default function Signup() {
                         dispatch(setIdle());
                     }
                 })
+            } else if (userType === 'cliente') {
+                alert('Da implementare...')
             }
         }).catch(() => {
             dispatch(setIdle());
