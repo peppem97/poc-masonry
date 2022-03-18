@@ -54,7 +54,8 @@ export default function App() {
         ENDPOINT_SHOPS: "http://zion.datafactor.it:40505/shops",
         ENDPOINT_PRODUCTS: "http://zion.datafactor.it:40505/products",
         ENDPOINT_EXAMPLES: "http://zion.datafactor.it:40505/image-uploadeds",
-        ENDPOINT_AUTH: "http://zion.datafactor.it:40505/auth/local"
+        ENDPOINT_AUTH: "http://zion.datafactor.it:40505/auth/local",
+        ENDPOINT_REGISTER: "http://zion.datafactor.it:40505/auth/local/register"
     };
 
     useEffect(() => {

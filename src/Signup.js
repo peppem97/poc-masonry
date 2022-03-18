@@ -5,6 +5,7 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import BadgeIcon from '@mui/icons-material/Badge';
 import {
     Checkbox,
     Container, IconButton, ImageList,
@@ -35,6 +36,12 @@ import Avatar from "@material-ui/core/Avatar";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import PersonIcon from '@mui/icons-material/Person';
 import {Visibility, VisibilityOff} from "@material-ui/icons";
+import axios from "axios";
+import {setToken} from "./store/token";
+import {isLogged} from "./store/login";
+import {isError} from "./store/error";
+import {useDispatch} from "react-redux";
+import {setBusy, setIdle} from "./store/loading";
 
 export default function Signup() {
     const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
@@ -45,7 +52,7 @@ export default function Signup() {
     const [password, setPassword] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
-
+    const [username, setUsername] = useState(null);
     const [title, setTitle] = useState(null);
     const [website, setWebsite] = useState(null);
     const [telephone, setTelephone] = useState(null);
@@ -58,6 +65,7 @@ export default function Signup() {
     const [name, setName] = useState(null);
     const [surname, setSurname] = useState(null);
     const appContext = useContext(GlobalContext);
+    const dispatch = useDispatch();
 
     const onChangeTypeUser = (event, typeUser) => {
         setUserType(typeUser);
@@ -65,6 +73,10 @@ export default function Signup() {
 
     const onChangeEmail = (e) => {
         setEmail(e.target.value);
+    };
+
+    const onChangeUsername = (e) => {
+        setUsername(e.target.value);
     };
 
     const onChangePassword = (e) => {
@@ -156,6 +168,21 @@ export default function Signup() {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
+    const signup = () => {
+        let data = {
+            username: username,
+            email: email,
+            password: password
+        };
+        dispatch(setBusy());
+        axios.post(appContext.ENDPOINT_REGISTER, data).then((response) => {
+            console.log(response);
+            dispatch(setIdle());
+        }).catch(() => {
+            dispatch(setIdle());
+        });
+    };
+
     // const resetStep = () => {
     //     setActiveStep(0);
     // };
@@ -166,7 +193,7 @@ export default function Signup() {
                 case 0:
                     return true;
                 case 1:
-                    return (title !== '' && website !== '' && telephone !== '' && description !== '' && avatar && pictures.some((element) => (!element.add)) > 0);
+                    return (username !== '' && title !== '' && website !== '' && telephone !== '' && description !== '' && avatar && pictures.some((element) => (!element.add)) > 0);
                 case 2:
                     return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consens);
                 default:
@@ -177,7 +204,7 @@ export default function Signup() {
                 case 0:
                     return true;
                 case 1:
-                    return (email !== '' && name !== '' && surname !== '' && telephone !== '' && avatar);
+                    return (username !== '' && email !== '' && name !== '' && surname !== '' && telephone !== '' && avatar);
                 case 2:
                     return consens;
                 default:
@@ -251,14 +278,28 @@ export default function Signup() {
                                                     gap: 2,
                                                     justifyContent: 'center'
                                                 }}>
-
+                                                    <TextField
+                                                        onChange={onChangeUsername}
+                                                        autoFocus
+                                                        value={username}
+                                                        color='secondary'
+                                                        margin="dense"
+                                                        label="Username"
+                                                        InputProps={{
+                                                            startAdornment: (
+                                                                <InputAdornment position="start">
+                                                                    <BadgeIcon/>
+                                                                </InputAdornment>
+                                                            ),
+                                                        }}
+                                                        variant="outlined"/>
                                                     <TextField
                                                         onChange={onChangeTitle}
                                                         autoFocus
                                                         value={title}
                                                         color='secondary'
                                                         margin="dense"
-                                                        label="Nome"
+                                                        label="Titolo"
                                                         InputProps={{
                                                             startAdornment: (
                                                                 <InputAdornment position="start">
@@ -427,6 +468,21 @@ export default function Signup() {
                                                     gap: 2,
                                                     justifyContent: 'center'
                                                 }}>
+                                                    <TextField
+                                                        onChange={onChangeUsername}
+                                                        autoFocus
+                                                        value={username}
+                                                        color='secondary'
+                                                        margin="dense"
+                                                        label="Username"
+                                                        InputProps={{
+                                                            startAdornment: (
+                                                                <InputAdornment position="start">
+                                                                    <BadgeIcon/>
+                                                                </InputAdornment>
+                                                            ),
+                                                        }}
+                                                        variant="outlined"/>
                                                     <TextField
                                                         onChange={onChangeName}
                                                         autoFocus
@@ -613,9 +669,7 @@ export default function Signup() {
                                                                                style={{backgroundColor: canNext() ? 'darkred' : 'grey'}}>
                                     Avanti
                                 </Button>}
-                                {(activeStep === steps.length - 1) && <Button onClick={() => {
-                                    alert('Registrazione...')
-                                }}
+                                {(activeStep === steps.length - 1) && <Button onClick={signup}
                                                                               variant='contained' disabled={!canNext()}
                                                                               style={{backgroundColor: canNext() ? 'darkred' : 'grey'}}>
                                     Registrati
