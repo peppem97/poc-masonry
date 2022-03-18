@@ -45,8 +45,17 @@ export default function App() {
         }
     };
 
+    const routes = {
+        about: '/masonry/about',
+        home: '/masonry/home',
+        signup: '/masonry/signup',
+        user: '/masonry/user',
+        product: '/masonry/product',
+        noUser: '/masonry/no-user'
+    }
+
     const appContext = {
-        // jwtIsValid: (token) => { return jwtIsValid(token)},
+        routes: routes,
         MAX_PICTURES_CAROUSEL: 3,
         MAX_PICTURES_PRODUCT: 9,
         COMPRESSION_QUALITY: 0.3,
@@ -68,13 +77,13 @@ export default function App() {
                 <Router>
                     <TopToolbar/>
                     <Routes>
-                        <Route exact path="/" element={<Navigate to="/about"/>}/>
-                        <Route exact path='/about' element={<About/>}/>
-                        <Route exact path='/signup' element={<Signup/>}/>
-                        <Route path="/home" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
-                        <Route path="/user/:username" element={<ProtectedRoute><User/></ProtectedRoute>}/>
-                        <Route path="/product/:id" element={<ProtectedRoute><Product/></ProtectedRoute>}/>
-                        <Route path="/no-user" element={<ProtectedRoute><ErrorNoUser/></ProtectedRoute>}/>
+                        <Route exact path="/" element={<Navigate to={routes.about}/>}/>
+                        <Route exact path={routes.about} element={<About/>}/>
+                        <Route exact path={routes.signup} element={<Signup/>}/>
+                        <Route path={routes.home} element={<ProtectedRoute><Home/></ProtectedRoute>}/>
+                        <Route path={routes.user + '/:username'} element={<ProtectedRoute><User/></ProtectedRoute>}/>
+                        <Route path={routes.product + '/:id'} element={<ProtectedRoute><Product/></ProtectedRoute>}/>
+                        <Route path={routes.noUser} element={<ProtectedRoute><ErrorNoUser/></ProtectedRoute>}/>
                         <Route exact path='*' element={<Error404/>}/>
                     </Routes>
                 </Router>

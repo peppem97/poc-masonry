@@ -63,11 +63,11 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     const dispatch = useDispatch();
 
     const goToUser = () => {
-        navigate("/user/" + props.product.username);
+        navigate(appContext.routes.user + "/" + props.product.username);
     };
 
     const goToProduct = () => {
-        navigate("/product/" + props.product.id);
+        navigate(appContext.routes.product + "/" + props.product.id);
     };
 
     const getUserInfo = () => {

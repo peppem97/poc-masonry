@@ -96,7 +96,7 @@ export default function Product() {
     const styles = useStyles();
 
     const goToUser = () => {
-        navigate("/user/" + username);
+        navigate(appContext.routes.user + "/" + username);
     };
 
     const getProductInfo = () => {

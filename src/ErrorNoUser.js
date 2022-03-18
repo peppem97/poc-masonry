@@ -2,9 +2,12 @@ import {Typography} from "@mui/material";
 import {Container, Row} from "react-bootstrap";
 import Button from "@mui/material/Button";
 import {useNavigate} from "react-router-dom";
+import {useContext} from "react";
+import GlobalContext from "./GlobalContext";
 
 export default function ErrorNoUser() {
     let navigate = useNavigate();
+    const appContext = useContext(GlobalContext);
 
     return (
         <>
@@ -19,7 +22,7 @@ export default function ErrorNoUser() {
                 <br/>
                 <Row className='justify-content-center'>
                     <Button variant="contained" style={{width: '20%', color: 'white', backgroundColor: 'darkred'}} onClick={() => {
-                        navigate("/home");
+                        navigate(appContext.routes.home);
                     }}>HOME</Button>
                 </Row>
             </Container>

@@ -25,13 +25,15 @@ export default function TopToolbar() {
     const stateLogin = useSelector((state) => state.login.value);
     const columnWidth = useSelector((state) => state.columnWidth.value);
     const dispatch = useDispatch();
+    const appContext = useContext(GlobalContext);
+
 
     const goToHome = () => {
-        navigate("/home");
+        navigate(appContext.routes.home);
     };
 
     const goToAbout = () => {
-        navigate("/about");
+        navigate(appContext.routes.about);
     }
 
     const login = () => {

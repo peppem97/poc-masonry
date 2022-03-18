@@ -59,7 +59,7 @@ export default function User() {
             dispatch(setIdle());
         }).catch(() => {
             dispatch(setIdle());
-            navigate('/no-user');
+            navigate(appContext.routes.noUser);
         })
     };
 

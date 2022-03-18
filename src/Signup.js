@@ -40,7 +40,7 @@ import axios from "axios";
 import {setToken} from "./store/token";
 import {isLogged} from "./store/login";
 import {isError} from "./store/error";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
 import Compressor from "compressorjs";
 
@@ -58,7 +58,7 @@ export default function Signup() {
     const [website, setWebsite] = useState(null);
     const [telephone, setTelephone] = useState(null);
     const [description, setDescription] = useState(null);
-    const [pictures, setPictures] = useState([]);
+    const [carousel, setCarousel] = useState([]);
     const [avatar, setAvatar] = useState({image: null, rawImage: null});
     const [editAvatar, setEditAvatar] = useState(false);
     const [consent, setConsent] = useState(false);
@@ -66,6 +66,7 @@ export default function Signup() {
     const [surname, setSurname] = useState(null);
     const appContext = useContext(GlobalContext);
     const dispatch = useDispatch();
+    const token = useSelector((state) => state.token.value);
 
     const onChangeTypeUser = (event, typeUser) => {
         setUserType(typeUser);
@@ -125,7 +126,7 @@ export default function Signup() {
 
     const addPicture = (e, i) => {
         let tmpPictures = [];
-        for (let picture of pictures) {
+        for (let picture of carousel) {
             if (picture.index === i) {
                 tmpPictures.push({
                     index: picture.index,
@@ -137,20 +138,20 @@ export default function Signup() {
                 tmpPictures.push(picture);
             }
         }
-        setPictures(tmpPictures);
+        setCarousel(tmpPictures);
     };
 
     const removePicture = (i) => {
         let tmpPictures = [];
 
-        for (let picture of pictures) {
+        for (let picture of carousel) {
             if (picture.index === i) {
                 tmpPictures.push({index: picture.index, image: null, rawImage: null, add: true});
             } else {
                 tmpPictures.push(picture);
             }
         }
-        setPictures(tmpPictures);
+        setCarousel(tmpPictures);
     };
 
     const isStepSkipped = (step) => {
@@ -196,18 +197,21 @@ export default function Signup() {
                 // axios.post(appContext.ENDPOINT_SHOPS, dataShop).then((response) => {
                 // }).catch(() => {
                 // })
-                new Compressor(e.target.files[0], {
+                new Compressor(avatar.rawImage, {
                     quality: appContext.COMPRESSION_QUALITY, success(result) {
                         formData.append('files.avatar', result, 'avatar.jpg');
-                        formData.append('data', JSON.stringify({}));
-                        axios.put(appContext.ENDPOINT_SHOPS + "/q" + id, formData, {
+                        formData.append('data', JSON.stringify(dataShop));
+                        axios.post(appContext.ENDPOINT_SHOPS, formData, {
                             headers: {'Authorization': 'Bearer ' + token}
-                        }).then(() => {
+                        }).then((response) => {
+                            console.log(response);
+                            dispatch(setIdle());
 
                         }).catch(() => {
-
+                            dispatch(setIdle());
                         })
                     }, error() {
+                        dispatch(setIdle());
                     }
                 })
             }
@@ -222,7 +226,7 @@ export default function Signup() {
                 case 0:
                     return true;
                 case 1:
-                    return (username !== '' && title !== '' && website !== '' && telephone !== '' && description !== '' && avatar.image && pictures.some((element) => (!element.add)) > 0);
+                    return (username !== '' && title !== '' && website !== '' && telephone !== '' && description !== '' && avatar.image && carousel.some((element) => (!element.add)) > 0);
                 case 2:
                     return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consent);
                 default:
@@ -243,7 +247,7 @@ export default function Signup() {
     };
 
     useEffect(() => {
-        setPictures(initImageList([], appContext.MAX_PICTURES_CAROUSEL));
+        setCarousel(initImageList([], appContext.MAX_PICTURES_CAROUSEL));
     }, []);
 
     return (
@@ -428,7 +432,7 @@ export default function Signup() {
                                                 }}>
                                                     <ImageList sx={{width: 800, height: 350}}
                                                                gap={5} cols={30}>
-                                                        {pictures.map((item) => {
+                                                        {carousel.map((item) => {
                                                             if (item.add) {
                                                                 return (
                                                                     <ImageListItem key={item.index} cols={10} rows={1}>
