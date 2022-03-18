@@ -60,8 +60,8 @@ export default function LoginDialog(props) {
         }).catch(() => {
             setLoading(false);
             dispatch(isError('Errore di autenticazione. Riprovare.'));
-        })
-    }
+        });
+    };
 
     return (
         <>

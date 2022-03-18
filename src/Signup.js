@@ -42,6 +42,7 @@ import {isLogged} from "./store/login";
 import {isError} from "./store/error";
 import {useDispatch} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
+import Compressor from "compressorjs";
 
 export default function Signup() {
     const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
@@ -58,10 +59,9 @@ export default function Signup() {
     const [telephone, setTelephone] = useState(null);
     const [description, setDescription] = useState(null);
     const [pictures, setPictures] = useState([]);
-    const [avatar, setAvatar] = useState(null);
+    const [avatar, setAvatar] = useState({image: null, rawImage: null});
     const [editAvatar, setEditAvatar] = useState(false);
-    const [consens, setConsens] = useState(false);
-
+    const [consent, setConsent] = useState(false);
     const [name, setName] = useState(null);
     const [surname, setSurname] = useState(null);
     const appContext = useContext(GlobalContext);
@@ -107,13 +107,17 @@ export default function Signup() {
         setName(e.target.value);
     };
 
+    const onChangeAvatar = (e) => {
+        setAvatar({image: URL.createObjectURL(e.target.files[0]), rawImage: e.target.files[0]});
+    };
+
     const onChangeSurname = (e) => {
         setSurname(e.target.value);
     };
 
     const onChangeConsens = () => {
-        setConsens(!consens);
-    }
+        setConsent(!consent);
+    };
 
     const onChangeShowPassword = () => {
         setShowPassword(!showPassword);
@@ -169,23 +173,48 @@ export default function Signup() {
     };
 
     const signup = () => {
-        let data = {
+        let dataSignup = {
             username: username,
             email: email,
             password: password
         };
+        let dataShop = {
+            email: email,
+            title: title,
+            description: description,
+            username: username,
+            website: website,
+            telephone: telephone
+        };
+        // let dataUser = {};
+        const formData = new FormData();
+
         dispatch(setBusy());
-        axios.post(appContext.ENDPOINT_REGISTER, data).then((response) => {
+        axios.post(appContext.ENDPOINT_REGISTER, dataSignup).then((response) => {
             console.log(response);
-            dispatch(setIdle());
+            if (userType === 'negozio') {
+                // axios.post(appContext.ENDPOINT_SHOPS, dataShop).then((response) => {
+                // }).catch(() => {
+                // })
+                new Compressor(e.target.files[0], {
+                    quality: appContext.COMPRESSION_QUALITY, success(result) {
+                        formData.append('files.avatar', result, 'avatar.jpg');
+                        formData.append('data', JSON.stringify({}));
+                        axios.put(appContext.ENDPOINT_SHOPS + "/q" + id, formData, {
+                            headers: {'Authorization': 'Bearer ' + token}
+                        }).then(() => {
+
+                        }).catch(() => {
+
+                        })
+                    }, error() {
+                    }
+                })
+            }
         }).catch(() => {
             dispatch(setIdle());
         });
     };
-
-    // const resetStep = () => {
-    //     setActiveStep(0);
-    // };
 
     const canNext = () => {
         if (userType === 'negozio') {
@@ -193,9 +222,9 @@ export default function Signup() {
                 case 0:
                     return true;
                 case 1:
-                    return (username !== '' && title !== '' && website !== '' && telephone !== '' && description !== '' && avatar && pictures.some((element) => (!element.add)) > 0);
+                    return (username !== '' && title !== '' && website !== '' && telephone !== '' && description !== '' && avatar.image && pictures.some((element) => (!element.add)) > 0);
                 case 2:
-                    return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consens);
+                    return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consent);
                 default:
                     return true;
             }
@@ -204,9 +233,9 @@ export default function Signup() {
                 case 0:
                     return true;
                 case 1:
-                    return (username !== '' && email !== '' && name !== '' && surname !== '' && telephone !== '' && avatar);
+                    return (username !== '' && email !== '' && name !== '' && surname !== '' && telephone !== '' && avatar.image);
                 case 2:
-                    return consens;
+                    return consent;
                 default:
                     return true;
             }
@@ -371,9 +400,7 @@ export default function Signup() {
                                                             id="avatar-uploader"
                                                             type="file"
                                                             hidden
-                                                            onChange={(e) => {
-                                                                setAvatar(URL.createObjectURL(e.target.files[0]))
-                                                            }}/>
+                                                            onChange={onChangeAvatar}/>
                                                         <Avatar
                                                             onMouseOver={() => {
                                                                 setEditAvatar(true)
@@ -386,7 +413,7 @@ export default function Signup() {
                                                                 height: 48,
                                                                 cursor: editAvatar ? 'pointer' : null
                                                             }}
-                                                            src={!editAvatar && avatar}>
+                                                            src={!editAvatar && avatar.image}>
                                                             {editAvatar && <AddPhotoAlternateIcon/>}
                                                         </Avatar>
                                                     </label>
@@ -543,9 +570,7 @@ export default function Signup() {
                                                             id="avatar-uploader"
                                                             type="file"
                                                             hidden
-                                                            onChange={(e) => {
-                                                                setAvatar(URL.createObjectURL(e.target.files[0]))
-                                                            }}/>
+                                                            onChange={onChangeAvatar}/>
                                                         <Avatar
                                                             onMouseOver={() => {
                                                                 setEditAvatar(true)
@@ -558,7 +583,7 @@ export default function Signup() {
                                                                 height: 48,
                                                                 cursor: editAvatar ? 'pointer' : null
                                                             }}
-                                                            src={!editAvatar && avatar}>
+                                                            src={!editAvatar && avatar.image}>
                                                             {editAvatar && <AddPhotoAlternateIcon/>}
                                                         </Avatar>
                                                     </label>
@@ -624,7 +649,7 @@ export default function Signup() {
                                             justifyContent: 'center'
                                         }}>
                                             <Checkbox
-                                                checked={consens}
+                                                checked={consent}
                                                 onChange={onChangeConsens}
                                                 sx={{
                                                     color: red[800],
