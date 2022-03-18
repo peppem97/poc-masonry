@@ -11,7 +11,7 @@ import UpdateProductDialog from "./dialogs/UpdateProductDialog";
 import UpdateInfoDialog from "./dialogs/UpdateInfoDialog";
 import Compressor from 'compressorjs';
 import UpdateCarouselDialog from "./dialogs/UpdateCarouselDialog";
-import {areAllFetched, generateHeight} from "./Utility";
+import {generateHeight} from "./Utility";
 import DeleteProductDialog from "./dialogs/DeleteProductDialog";
 import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";

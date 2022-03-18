@@ -2,8 +2,7 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import {alpha, IconButton, InputBase, styled} from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
+import {IconButton} from "@mui/material";
 import Button from "@mui/material/Button";
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
@@ -12,21 +11,19 @@ import LocalFloristIcon from "@mui/icons-material/LocalFlorist";
 import {useNavigate} from "react-router-dom";
 import GlobalContext from "./GlobalContext";
 import {useContext, useState} from "react";
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import InfoIcon from '@mui/icons-material/Info';
 import {useDispatch, useSelector} from "react-redux";
-import {isNotLogged} from "./store/login";
 import LoginDialog from "./dialogs/LoginDialog";
 import {setColumnWidth} from "./store/columnWidth";
+import {clearToken} from "./store/token";
 
 export default function TopToolbar() {
     const [loginDialog, setLoginDialog] = useState(false);
     let navigate = useNavigate();
-    const stateLogin = useSelector((state) => state.login.value);
+    const stateLogin = useSelector((state) => state.token.value);
     const columnWidth = useSelector((state) => state.columnWidth.value);
     const dispatch = useDispatch();
     const appContext = useContext(GlobalContext);
-
 
     const goToHome = () => {
         navigate(appContext.routes.home);
@@ -41,8 +38,7 @@ export default function TopToolbar() {
     };
 
     const logout = () => {
-        localStorage.removeItem('token');
-        dispatch(isNotLogged());
+        dispatch(clearToken());
     }
 
     const increaseColumnsSize = () => {

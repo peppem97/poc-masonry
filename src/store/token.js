@@ -1,15 +1,34 @@
 import {createSlice} from "@reduxjs/toolkit";
+import jwtDecode from "jwt-decode";
+
+const checkStateLogin = () => {
+    let token = localStorage.getItem('token');
+
+    try {
+        if ((jwtDecode(token).exp * 1000 >= new Date().getTime())) {
+            return token;
+        } else {
+            localStorage.removeItem('token');
+            return null;
+        }
+    } catch (e) {
+        localStorage.removeItem('token');
+        return null;
+    }
+};
 
 export const tokenSlice = createSlice({
     name: 'token',
     initialState: {
-        value: null,
+        value: checkStateLogin(),
     },
     reducers: {
         setToken: (state, value) => {
+            localStorage.setItem('token', value.payload);
             state.value = value.payload;
         },
         clearToken: (state) => {
+            localStorage.removeItem('token');
             state.value = null;
         },
     },

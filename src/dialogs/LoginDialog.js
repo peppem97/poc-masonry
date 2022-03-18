@@ -15,7 +15,6 @@ import {Visibility, VisibilityOff} from "@material-ui/icons";
 import axios from "axios";
 import GlobalContext from "../GlobalContext";
 import {useDispatch} from "react-redux";
-import {isLogged} from "../store/login";
 import {setToken} from "../store/token";
 import {isError} from "../store/error";
 
@@ -51,9 +50,7 @@ export default function LoginDialog(props) {
         setLoading(true);
         let data = {identifier: email, password: password};
         axios.post(appContext.ENDPOINT_AUTH, data).then((response) => {
-            localStorage.setItem('token', response.data.jwt);
             dispatch(setToken(response.data.jwt));
-            dispatch(isLogged());
             setLoading(false);
             props.goToHome();
             closeDialog();

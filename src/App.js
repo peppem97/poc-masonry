@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 import User from "./User";
 import TopToolbar from "./TopToolbar";
@@ -11,12 +11,8 @@ import Product from "./Product";
 import ErrorDialog from "./dialogs/ErrorDialog";
 import About from "./About";
 import ProtectedRoute from "./ProtectedRoute";
-import jwtDecode from "jwt-decode";
 import {useDispatch, useSelector} from 'react-redux'
-import {isLogged, isNotLogged} from './store/login';
-import {setToken} from "./store/token";
 import {isNotError} from "./store/error";
-import Stepper from "./Signup";
 import Signup from "./Signup";
 
 export default function App() {
@@ -24,27 +20,6 @@ export default function App() {
     const errorState = useSelector((state) => state.error.value);
     const errorMessage = useSelector((state) => state.error.message);
     const dispatch = useDispatch();
-
-    // const jwtIsValid = (token) => {
-    //     return (jwtDecode(token).exp * 1000 >= new Date().getTime());
-    // }
-
-    const checkStateLogin = () => {
-        let token = localStorage.getItem('token');
-
-        try {
-            if ((jwtDecode(token).exp * 1000 >= new Date().getTime())) {
-                dispatch(setToken(token));
-                dispatch(isLogged());
-            } else {
-                localStorage.removeItem('token');
-                dispatch(isNotLogged());
-            }
-        } catch (e) {
-            dispatch(isNotLogged());
-        }
-    };
-
     const routes = {
         about: '/masonry/about',
         home: '/masonry/home',
@@ -53,7 +28,6 @@ export default function App() {
         product: '/masonry/product',
         noUser: '/masonry/no-user'
     }
-
     const appContext = {
         routes: routes,
         MAX_PICTURES_CAROUSEL: 3,
@@ -66,10 +40,6 @@ export default function App() {
         ENDPOINT_AUTH: "http://zion.datafactor.it:40505/auth/local",
         ENDPOINT_REGISTER: "http://zion.datafactor.it:40505/auth/local/register"
     };
-
-    useEffect(() => {
-        checkStateLogin();
-    }, []);
 
     return (
         <>
