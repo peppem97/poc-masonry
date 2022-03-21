@@ -7,7 +7,7 @@ import {
     DialogContent,
     DialogTitle,
     IconButton,
-    TextField
+    TextField, ToggleButton, ToggleButtonGroup
 } from "@mui/material";
 import {Col, Row} from "react-bootstrap";
 import {useContext, useState} from "react";
@@ -17,12 +17,18 @@ import GlobalContext from "../GlobalContext";
 import {useDispatch} from "react-redux";
 import {setToken} from "../store/token";
 import {isError} from "../store/error";
+import StoreIcon from "@mui/icons-material/Store";
+import Typography from "@mui/material/Typography";
+import GroupIcon from "@mui/icons-material/Group";
+import * as React from "react";
 
 export default function LoginDialog(props) {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
     const [loading, setLoading] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
+    const [userType, setUserType] = useState('negozio');
+
     const appContext = useContext(GlobalContext);
     const dispatch = useDispatch();
 
@@ -44,6 +50,10 @@ export default function LoginDialog(props) {
 
     const onChangeShowPassword = () => {
         setShowPassword(!showPassword);
+    };
+
+    const onChangeUserType = (event, typeUser) => {
+        setUserType(typeUser);
     };
 
     const login = () => {
@@ -94,6 +104,22 @@ export default function LoginDialog(props) {
                                 variant="outlined"/>
                         </Row>
                         <br/>
+                        <Row>
+                            <ToggleButtonGroup
+                                size="large"
+                                value={userType ?? ''}
+                                onChange={onChangeUserType}
+                                exclusive={true}>
+                                <ToggleButton value="negozio">
+                                    <StoreIcon/>
+                                    <Typography variant='subtitle1'>Negozio</Typography>
+                                </ToggleButton>,
+                                <ToggleButton value="cliente">
+                                    <GroupIcon/>
+                                    <Typography variant='subtitle1'>Cliente</Typography>
+                                </ToggleButton>
+                            </ToggleButtonGroup>
+                        </Row>
                         {loading ? <Row className='justify-content-center'>
                             <Col className='align-self-center'>
                                 <CircularProgress color={'error'} className='text-center'/>

@@ -65,7 +65,7 @@ export default function Signup() {
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token.value);
 
-    const onChangeTypeUser = (event, typeUser) => {
+    const onChangeUserType = (event, typeUser) => {
         setUserType(typeUser);
     };
 
@@ -333,8 +333,8 @@ export default function Signup() {
                                         <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                                             <ToggleButtonGroup
                                                 size="large"
-                                                value={userType}
-                                                onChange={onChangeTypeUser}
+                                                value={userType ?? ''}
+                                                onChange={onChangeUserType}
                                                 exclusive={true}>
                                                 <ToggleButton value="negozio">
                                                     <StoreIcon/>
@@ -363,7 +363,7 @@ export default function Signup() {
                                                     <TextField
                                                         onChange={onChangeUsername}
                                                         autoFocus
-                                                        value={username}
+                                                        value={username ?? ''}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Username"
@@ -378,7 +378,7 @@ export default function Signup() {
                                                     <TextField
                                                         onChange={onChangeTitle}
                                                         autoFocus
-                                                        value={title}
+                                                        value={title ?? ''}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Titolo"
@@ -393,7 +393,7 @@ export default function Signup() {
                                                     <TextField
                                                         onChange={onChangeWebsite}
                                                         autoFocus
-                                                        value={website}
+                                                        value={website ?? ''}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Sito Web"
@@ -408,7 +408,7 @@ export default function Signup() {
                                                     <TextField
                                                         onChange={onChangeTelephone}
                                                         autoFocus
-                                                        value={telephone}
+                                                        value={telephone ?? ''}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Telefono"
@@ -425,7 +425,7 @@ export default function Signup() {
                                                     <TextField fullWidth={true}
                                                                onChange={onChangeDescription}
                                                                autoFocus
-                                                               value={description}
+                                                               value={description ?? ''}
                                                                multiline={true}
                                                                color='secondary'
                                                                margin="dense"
@@ -466,7 +466,7 @@ export default function Signup() {
                                                                 height: 48,
                                                                 cursor: editAvatar ? 'pointer' : null
                                                             }}
-                                                            src={!editAvatar && avatar.image}>
+                                                            src={!editAvatar ? avatar.image : null}>
                                                             {editAvatar && <AddPhotoAlternateIcon/>}
                                                         </Avatar>
                                                     </label>
@@ -551,7 +551,7 @@ export default function Signup() {
                                                     <TextField
                                                         onChange={onChangeUsername}
                                                         autoFocus
-                                                        value={username}
+                                                        value={username ?? ''}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Username"
@@ -566,7 +566,7 @@ export default function Signup() {
                                                     <TextField
                                                         onChange={onChangeName}
                                                         autoFocus
-                                                        value={name}
+                                                        value={name ?? ''}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Nome"
@@ -581,7 +581,7 @@ export default function Signup() {
                                                     <TextField
                                                         onChange={onChangeSurname}
                                                         autoFocus
-                                                        value={surname}
+                                                        value={surname ?? ''}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Cognome"
@@ -596,7 +596,7 @@ export default function Signup() {
                                                     <TextField
                                                         onChange={onChangeTelephone}
                                                         autoFocus
-                                                        value={telephone}
+                                                        value={telephone ?? ''}
                                                         color='secondary'
                                                         margin="dense"
                                                         label="Telefono"
@@ -636,7 +636,7 @@ export default function Signup() {
                                                                 height: 48,
                                                                 cursor: editAvatar ? 'pointer' : null
                                                             }}
-                                                            src={!editAvatar && avatar.image}>
+                                                            src={!editAvatar ? avatar.image : null}>
                                                             {editAvatar && <AddPhotoAlternateIcon/>}
                                                         </Avatar>
                                                     </label>
@@ -657,7 +657,7 @@ export default function Signup() {
                                         <TextField
                                             onChange={onChangeEmail}
                                             autoFocus
-                                            value={email}
+                                            value={email ?? ''}
                                             color='secondary'
                                             margin="dense"
                                             label="Email"

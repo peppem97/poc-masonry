@@ -48,15 +48,21 @@ export default function User() {
         axios.get(appContext.ENDPOINT_SHOPS + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
-            setId(response.data[0]?.id);
-            setEmail(response.data[0]?.email);
-            setTitle(response.data[0]?.title);
-            setDescription(response.data[0]?.description);
-            setAvatar(appContext.HOST + response.data[0]?.avatar?.url);
-            setCarousel(getCarousel(response.data[0]?.carousel0, response.data[0]?.carousel1, response.data[0]?.carousel2));
-            setTelephone(response.data[0]?.telephone);
-            setWebsite(response.data[0]?.website);
-            dispatch(setIdle());
+            console.log(response)
+            if (response.data.length > 0) {
+                setId(response.data[0]?.id);
+                setEmail(response.data[0]?.email);
+                setTitle(response.data[0]?.title);
+                setDescription(response.data[0]?.description);
+                setAvatar(appContext.HOST + response.data[0]?.avatar?.url);
+                setCarousel(getCarousel(response.data[0]?.carousel0, response.data[0]?.carousel1, response.data[0]?.carousel2));
+                setTelephone(response.data[0]?.telephone);
+                setWebsite(response.data[0]?.website);
+                dispatch(setIdle());
+            } else {
+                dispatch(setIdle());
+                navigate(appContext.routes.noUser);
+            }
         }).catch(() => {
             dispatch(setIdle());
             navigate(appContext.routes.noUser);
