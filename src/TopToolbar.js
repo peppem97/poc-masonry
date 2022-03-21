@@ -18,6 +18,7 @@ import {setColumnWidth} from "./store/columnWidth";
 import {clearToken} from "./store/token";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HomeIcon from '@mui/icons-material/Home';
+import {clearMail, clearType, clearUsername} from "./store/user";
 
 export default function TopToolbar() {
     const [loginDialog, setLoginDialog] = useState(false);
@@ -46,6 +47,9 @@ export default function TopToolbar() {
 
     const logout = () => {
         dispatch(clearToken());
+        dispatch(clearType());
+        dispatch(clearMail());
+        dispatch(clearUsername());
     }
 
     const increaseColumnsSize = () => {
@@ -69,8 +73,8 @@ export default function TopToolbar() {
             <Box sx={{flexGrow: 1}} style={{position: 'fixed', top: 0, zIndex: 100, width: '100%'}}>
                 <AppBar position="static">
                     <Toolbar style={{color: 'black', backgroundColor: '#ffcccc'}}>
-                        <IconButton onClick={goToHome} style={{color: 'darkred', fontWeight: 'bold'}}>
-                            <HomeIcon/></IconButton>
+                        {stateLogin ? <IconButton onClick={goToHome} style={{color: 'darkred', fontWeight: 'bold'}}>
+                            <HomeIcon/></IconButton> : null}
                         <Box sx={{flexGrow: 1}}/>
                         {stateLogin ? <IconButton size="large"
                                      style={{color: 'darkred', fontWeight: 'bold'}}
