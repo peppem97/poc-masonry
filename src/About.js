@@ -8,7 +8,6 @@ export default function About() {
     const theme = useTheme();
     const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
-    const largeScreen = useMediaQuery(theme.breakpoints.down('lg'));
 
     return (
         <>

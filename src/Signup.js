@@ -41,6 +41,7 @@ import {setBusy, setIdle} from "./store/loading";
 import Compressor from "compressorjs";
 import {isError} from "./store/error";
 import signupOk from "./assets/signup.svg"
+import HomeIcon from "@mui/icons-material/Home";
 
 export default function Signup() {
     const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
@@ -66,8 +67,7 @@ export default function Signup() {
     const appContext = useContext(GlobalContext);
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token.value);
-    let theme = createTheme();
-    theme = responsiveFontSizes(theme);
+    const theme = responsiveFontSizes(createTheme());
     const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -273,11 +273,11 @@ export default function Signup() {
                 case 0:
                     return true;
                 case 1:
-                    // return (username !== '' && title !== '' && website !== '' && telephone !== '' && description !== '' && avatar.image && carousel.some((element) => (!element.add)) > 0);
-                    return true;
+                    return (username !== '' && title !== '' && website !== '' && telephone !== '' && description !== '' && avatar.image && carousel.some((element) => (!element.add)) > 0);
+                    // return true;
                 case 2:
-                    // return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consent);
-                    return true;
+                    return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consent);
+                    // return true;
                 default:
                     return true;
             }
@@ -775,6 +775,12 @@ export default function Signup() {
                                 <br/>
                                 <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
                                     <img src={signupOk} alt='' style={{width: smallScreen ? '80%' : mediumScreen ? '50%' : '30%', height: 'auto'}}/>
+                                </Box>
+                                <br/>
+                                <br/>
+                                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+                                    <Button variant="contained" style={{backgroundColor: 'darkred'}}
+                                            onClick={null}>{'LOGIN'}</Button>
                                 </Box>
                                 {/*<Row className='justify-content-center'>*/}
                                 {/*</Row>*/}
