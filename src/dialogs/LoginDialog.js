@@ -28,7 +28,6 @@ export default function LoginDialog(props) {
     const [loading, setLoading] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const [userType, setUserType] = useState('negozio');
-
     const appContext = useContext(GlobalContext);
     const dispatch = useDispatch();
 

@@ -3,6 +3,7 @@ import tokenReducer from './token'
 import columnWidthReducer from './columnWidth'
 import loadingReducer from './loading'
 import errorReducer from './error'
+import loginReducer from './error'
 
 export default configureStore({
     reducer: {
@@ -10,6 +11,6 @@ export default configureStore({
         columnWidth: columnWidthReducer,
         loading: loadingReducer,
         error: errorReducer,
-        user: null
+        user: loginReducer
     }
 });
