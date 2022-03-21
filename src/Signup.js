@@ -218,6 +218,7 @@ export default function Signup() {
                                                     fetched++;
                                                     if (carousel.length === fetched) {
                                                         dispatch(setIdle());
+                                                        setSignupCompleted(true);
                                                     }
                                                 }).catch(() => {
                                                     dispatch(setIdle());
@@ -232,6 +233,7 @@ export default function Signup() {
                                         fetched++;
                                         if (carousel.length === fetched) {
                                             dispatch(setIdle());
+                                            setSignupCompleted(true);
                                         }
                                     }
                                 } else {
@@ -244,6 +246,7 @@ export default function Signup() {
                                         fetched++;
                                         if (carousel.length === fetched) {
                                             dispatch(setIdle());
+                                            setSignupCompleted(true);
                                         }
                                     }).catch(() => {
                                         dispatch(setIdle());
@@ -251,7 +254,6 @@ export default function Signup() {
                                     })
                                 }
                             }
-
                         }).catch(() => {
                             dispatch(setIdle());
                         })
@@ -752,7 +754,7 @@ export default function Signup() {
                                                                                        style={{backgroundColor: canNext() ? 'darkred' : 'grey'}}>
                                             Avanti
                                         </Button>}
-                                        {(activeStep === steps.length - 1) && <Button onClick={() => {setSignupCompleted(true)}}
+                                        {(activeStep === steps.length - 1) && <Button onClick={signup}
                                                                                       variant='contained' disabled={!canNext()}
                                                                                       style={{backgroundColor: canNext() ? 'darkred' : 'grey'}}>
                                             Registrati

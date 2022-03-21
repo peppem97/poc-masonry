@@ -9,7 +9,7 @@ import ErrorNoUser from "./ErrorNoUser";
 import {Backdrop, CircularProgress} from "@mui/material";
 import Product from "./Product";
 import ErrorDialog from "./dialogs/ErrorDialog";
-import About from "./About";
+import Signin from "./Signin";
 import ProtectedRoute from "./ProtectedRoute";
 import {useDispatch, useSelector} from 'react-redux'
 import {isNotError} from "./store/error";
@@ -21,7 +21,7 @@ export default function App() {
     const errorMessage = useSelector((state) => state.error.message);
     const dispatch = useDispatch();
     const routes = {
-        about: '/masonry/about',
+        signin: '/masonry/welcome',
         home: '/masonry/home',
         signup: '/masonry/signup',
         user: '/masonry/user',
@@ -47,8 +47,9 @@ export default function App() {
                 <Router>
                     <TopToolbar/>
                     <Routes>
-                        <Route exact path="/" element={<Navigate to={routes.about}/>}/>
-                        <Route exact path={routes.about} element={<About/>}/>
+                        <Route exact path="/" element={<Navigate to={routes.signin}/>}/>
+                        <Route exact path="/masonry" element={<Navigate to={routes.signin}/>}/>
+                        <Route exact path={routes.signin} element={<Signin/>}/>
                         <Route exact path={routes.signup} element={<Signup/>}/>
                         <Route path={routes.home} element={<ProtectedRoute><Home/></ProtectedRoute>}/>
                         <Route path={routes.user + '/:username'} element={<ProtectedRoute><User/></ProtectedRoute>}/>

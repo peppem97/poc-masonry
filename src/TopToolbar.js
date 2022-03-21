@@ -34,7 +34,7 @@ export default function TopToolbar() {
     };
 
     const goToAbout = () => {
-        navigate(appContext.routes.about);
+        navigate(appContext.routes.signin);
     }
 
     const goToProfile = () => {
