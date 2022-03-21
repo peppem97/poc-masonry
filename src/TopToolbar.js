@@ -41,6 +41,10 @@ export default function TopToolbar() {
         navigate(appContext.routes.user + '/' + username);
     };
 
+    const goToSignup = () => {
+        navigate(appContext.routes.signup);
+    };
+
     const login = () => {
         setLoginDialog(true);
     };
@@ -102,6 +106,9 @@ export default function TopToolbar() {
                             : <Button variant="contained" style={{backgroundColor: 'darkred'}}
                                       onClick={login}>{'LOGIN'}</Button>}
                         &nbsp;&nbsp;
+                        {stateLogin ? null
+                            : <Button variant="contained" style={{backgroundColor: 'white', color: 'black'}}
+                                      onClick={goToSignup}>{'REGISTRATI'}</Button>}
                         {/*<Button variant="contained"*/}
                         {/*        style={{backgroundColor: 'white', color: 'black'}}>REGISTRATI</Button>*/}
                     </Toolbar>

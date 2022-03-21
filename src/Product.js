@@ -178,7 +178,7 @@ export default function Product() {
                             <Row className='row-cols-auto '>
                                 <Col>
                                     <IconButton onClick={goToUser}>
-                                        <Avatar src={avatar}/>
+                                        <Avatar src={avatar ?? null}/>
                                     </IconButton>
                                 </Col>
                                 <Col>

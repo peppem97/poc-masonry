@@ -43,7 +43,7 @@ export const PictureCard = React.memo(function GalaxyCard(props) {
     return (
         <>
             <Card className={styles.card} style={{height: props.height, width: props.width}} raised>
-                <CardMedia classes={mediaStyles} image={props.picture}/>
+                <CardMedia classes={mediaStyles} image={props.picture ?? null}/>
                 <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles}>
                         <CardActions className={styles.contentDescription}>

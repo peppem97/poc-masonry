@@ -93,7 +93,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 <Box py={3} px={2} className={styles.contentHeader}>
                     {props.showAvatar && (
                         <IconButton onClick={goToUser}>
-                            <Avatar src={avatar}/>
+                            <Avatar src={avatar ?? null}/>
                         </IconButton>)}
                 </Box>
                 <Box py={3} px={2} className={styles.contentDescription}>
