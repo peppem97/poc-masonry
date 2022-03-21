@@ -1,10 +1,15 @@
-import {Container} from "@mui/material";
+import {Container, useMediaQuery, useTheme} from "@mui/material";
 import {Row} from "react-bootstrap";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import girl from './assets/girl.svg';
 
 export default function About() {
+    const theme = useTheme();
+    const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const largeScreen = useMediaQuery(theme.breakpoints.down('lg'));
+
     return (
         <>
             <Container>
@@ -25,7 +30,7 @@ export default function About() {
                 <br/>
                 <br/>
                 <Row className='justify-content-center'>
-                    <img src={girl} style={{width: '50%', height: 'auto'}} alt=""/>
+                    <img src={girl} style={{width: smallScreen ? '80%' : mediumScreen ? '60%' : '50%', height: 'auto'}} alt=""/>
                 </Row>
                 <br/>
             </Container>

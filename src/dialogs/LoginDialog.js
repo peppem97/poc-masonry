@@ -60,7 +60,6 @@ export default function LoginDialog(props) {
         setLoading(true);
         let data = {identifier: email, password: password};
         axios.post(appContext.ENDPOINT_AUTH, data).then((response) => {
-            console.log(response)
             dispatch(setToken(response.data.jwt));
             dispatch(setMail(response.data.user.email));
             dispatch(setUsername(response.data.user.username));

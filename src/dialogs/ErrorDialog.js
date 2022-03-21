@@ -12,10 +12,7 @@ export default function ErrorDialog(props) {
         <>
             <Dialog
                 open={props.open}
-                onClose={closeDialog}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
+                onClose={closeDialog}>
                 <DialogTitle>
                     Attenzione
                 </DialogTitle>

@@ -11,6 +11,8 @@ import {
 import {Col, Row} from "react-bootstrap";
 import {Visibility, VisibilityOff} from "@material-ui/icons";
 import Button from "@mui/material/Button";
+import DialogContentText from "@mui/material/DialogContentText";
+import * as React from "react";
 
 export default function SignupDialog(props) {
     const closeDialog = () => {
@@ -26,6 +28,9 @@ export default function SignupDialog(props) {
                     Registrazione
                 </DialogTitle>
                 <DialogContent>
+                    <DialogContentText>
+                        Registrazione avvenuta
+                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button component="span" style={{color: 'darkred'}} onClick={closeDialog}>ANNULLA</Button>

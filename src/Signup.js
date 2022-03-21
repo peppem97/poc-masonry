@@ -8,13 +8,13 @@ import Typography from '@mui/material/Typography';
 import BadgeIcon from '@mui/icons-material/Badge';
 import {
     Checkbox,
-    Container, IconButton, ImageList,
+    Container, createTheme, IconButton, ImageList,
     ImageListItem,
     ImageListItemBar, Input,
-    InputAdornment,
-    TextField,
+    InputAdornment, responsiveFontSizes,
+    TextField, ThemeProvider,
     ToggleButton,
-    ToggleButtonGroup
+    ToggleButtonGroup, useMediaQuery
 } from "@mui/material";
 import {Col, Row} from "react-bootstrap";
 import StoreIcon from '@mui/icons-material/Store';
@@ -40,6 +40,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
 import Compressor from "compressorjs";
 import {isError} from "./store/error";
+import signupOk from "./assets/signup.svg"
 
 export default function Signup() {
     const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
@@ -61,9 +62,14 @@ export default function Signup() {
     const [consent, setConsent] = useState(false);
     const [name, setName] = useState(null);
     const [surname, setSurname] = useState(null);
+    const [signupCompleted, setSignupCompleted] = useState(false);
     const appContext = useContext(GlobalContext);
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token.value);
+    let theme = createTheme();
+    theme = responsiveFontSizes(theme);
+    const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
 
     const onChangeUserType = (event, typeUser) => {
         setUserType(typeUser);
@@ -188,20 +194,15 @@ export default function Signup() {
         // let dataUser = {};
         const formData = new FormData();
         dispatch(setBusy());
-        //creo l'utenza relativa a Strapi
         axios.post(appContext.ENDPOINT_REGISTER, dataSignup).then((response) => {
-            console.log(response);
             if (userType === 'negozio') {
                 new Compressor(avatar.rawImage, {
                     quality: appContext.COMPRESSION_QUALITY, success(result) {
                         formData.append('files.avatar', result, 'avatar.jpg');
                         formData.append('data', JSON.stringify(dataShop));
-                        //creo il record del negozio associato all'utenza appena creata
                         axios.post(appContext.ENDPOINT_SHOPS, formData, {
                             headers: {'Authorization': 'Bearer ' + token}
                         }).then((responseFinal) => {
-                            //inserisco le immagini del carosello al record del negozio
-                            console.log(responseFinal);
                             for (let picture of carousel) {
                                 if (picture.image != null) {
                                     if (picture.rawImage != null) {
@@ -217,7 +218,6 @@ export default function Signup() {
                                                     fetched++;
                                                     if (carousel.length === fetched) {
                                                         dispatch(setIdle());
-                                                        // getUserInfo();
                                                     }
                                                 }).catch(() => {
                                                     dispatch(setIdle());
@@ -232,7 +232,6 @@ export default function Signup() {
                                         fetched++;
                                         if (carousel.length === fetched) {
                                             dispatch(setIdle());
-                                            // getUserInfo();
                                         }
                                     }
                                 } else {
@@ -245,7 +244,6 @@ export default function Signup() {
                                         fetched++;
                                         if (carousel.length === fetched) {
                                             dispatch(setIdle());
-                                            // getUserInfo();
                                         }
                                     }).catch(() => {
                                         dispatch(setIdle());
@@ -275,9 +273,11 @@ export default function Signup() {
                 case 0:
                     return true;
                 case 1:
-                    return (username !== '' && title !== '' && website !== '' && telephone !== '' && description !== '' && avatar.image && carousel.some((element) => (!element.add)) > 0);
+                    // return (username !== '' && title !== '' && website !== '' && telephone !== '' && description !== '' && avatar.image && carousel.some((element) => (!element.add)) > 0);
+                    return true;
                 case 2:
-                    return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consent);
+                    // return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consent);
+                    return true;
                 default:
                     return true;
             }
@@ -306,172 +306,350 @@ export default function Signup() {
                 <br/>
                 <br/>
                 <br/>
-                <Row className='justify-content-center'>
+                {!signupCompleted &&
+                    <Row className='justify-content-center'>
                     <Typography variant='h1' className='text-center'>REGISTRATI</Typography>
-                </Row>
+                </Row>}
                 <br/>
                 <br/>
                 <Row className='justify-content-center'>
-                    <Col>
-                        <Row className='justify-content-center'>
-                            <Stepper activeStep={activeStep}>
-                                {steps.map((label, index) => {
-                                    return (
-                                        <Step key={label} completed={isStepSkipped(index)} sx={{color: red[600]}}>
-                                            <StepLabel>{label}</StepLabel>
-                                        </Step>
-                                    );
-                                })}
-                            </Stepper>
-                        </Row>
-                        <br/>
-                        <br/>
-                        <Row className='justify-content-center'>
-                            <Col className='align-self-center'>
-                                {(activeStep === 0) &&
-                                    <>
-                                        <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                            <ToggleButtonGroup
-                                                size="large"
-                                                value={userType ?? ''}
-                                                onChange={onChangeUserType}
-                                                exclusive={true}>
-                                                <ToggleButton value="negozio">
-                                                    <StoreIcon/>
-                                                    <Typography variant='subtitle1'>Negozio</Typography>
-                                                </ToggleButton>,
-                                                <ToggleButton value="cliente">
-                                                    <GroupIcon/>
-                                                    <Typography variant='subtitle1'>Cliente</Typography>
-                                                </ToggleButton>
-                                            </ToggleButtonGroup>
-                                        </Box>
-                                    </>
-                                }
-                                {(activeStep === 1) &&
-                                    <>
-                                        {
-                                            (userType === 'negozio') &&
+                    {!signupCompleted &&
+                        <>
+                            <Col>
+                                <Row className='justify-content-center'>
+                                    <Stepper activeStep={activeStep}>
+                                        {steps.map((label, index) => {
+                                            return (
+                                                <Step key={label} completed={isStepSkipped(index)} sx={{color: red[600]}}>
+                                                    <StepLabel>{label}</StepLabel>
+                                                </Step>
+                                            );
+                                        })}
+                                    </Stepper>
+                                </Row>
+                                <br/>
+                                <br/>
+                                <Row className='justify-content-center'>
+                                    <Col className='align-self-center'>
+                                        {(activeStep === 0) &&
                                             <>
-                                                <Box sx={{
-                                                    display: 'flex',
-                                                    flexDirection: 'row',
-                                                    alignItems: 'center',
-                                                    gap: 2,
-                                                    justifyContent: 'center'
-                                                }}>
-                                                    <TextField
-                                                        onChange={onChangeUsername}
-                                                        autoFocus
-                                                        value={username ?? ''}
-                                                        color='secondary'
-                                                        margin="dense"
-                                                        label="Username"
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start">
-                                                                    <BadgeIcon/>
-                                                                </InputAdornment>
-                                                            ),
-                                                        }}
-                                                        variant="outlined"/>
-                                                    <TextField
-                                                        onChange={onChangeTitle}
-                                                        autoFocus
-                                                        value={title ?? ''}
-                                                        color='secondary'
-                                                        margin="dense"
-                                                        label="Titolo"
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start">
-                                                                    <StarIcon/>
-                                                                </InputAdornment>
-                                                            ),
-                                                        }}
-                                                        variant="outlined"/>
-                                                    <TextField
-                                                        onChange={onChangeWebsite}
-                                                        autoFocus
-                                                        value={website ?? ''}
-                                                        color='secondary'
-                                                        margin="dense"
-                                                        label="Sito Web"
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start">
-                                                                    <LanguageIcon/>
-                                                                </InputAdornment>
-                                                            ),
-                                                        }}
-                                                        variant="outlined"/>
-                                                    <TextField
-                                                        onChange={onChangeTelephone}
-                                                        autoFocus
-                                                        value={telephone ?? ''}
-                                                        color='secondary'
-                                                        margin="dense"
-                                                        label="Telefono"
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start">
-                                                                    <CallIcon/>
-                                                                </InputAdornment>
-                                                            ),
-                                                        }}
-                                                        variant="outlined"/>
+                                                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                                    <ToggleButtonGroup
+                                                        size="large"
+                                                        value={userType ?? ''}
+                                                        onChange={onChangeUserType}
+                                                        exclusive={true}>
+                                                        <ToggleButton value="negozio">
+                                                            <StoreIcon/>
+                                                            <Typography variant='subtitle1'>Negozio</Typography>
+                                                        </ToggleButton>,
+                                                        <ToggleButton value="cliente">
+                                                            <GroupIcon/>
+                                                            <Typography variant='subtitle1'>Cliente</Typography>
+                                                        </ToggleButton>
+                                                    </ToggleButtonGroup>
                                                 </Box>
-                                                <Box>
-                                                    <TextField fullWidth={true}
-                                                               onChange={onChangeDescription}
-                                                               autoFocus
-                                                               value={description ?? ''}
-                                                               multiline={true}
-                                                               color='secondary'
-                                                               margin="dense"
-                                                               InputProps={{
-                                                                   startAdornment: (
-                                                                       <InputAdornment position="start">
-                                                                           <TextFieldsIcon/>
-                                                                       </InputAdornment>
-                                                                   ),
-                                                               }}
-                                                               label="Descrizione"
-                                                               variant="outlined"/>
-                                                </Box>
-                                                <br/>
-                                                <Box sx={{
-                                                    display: 'flex',
-                                                    flexDirection: 'row',
-                                                    alignItems: 'center',
-                                                    gap: 2,
-                                                    justifyContent: 'center'
-                                                }}>
-                                                    <label htmlFor="avatar-uploader" className='text-center'>
-                                                        <Input
-                                                            accept="image/*"
-                                                            id="avatar-uploader"
-                                                            type="file"
-                                                            hidden
-                                                            onChange={onChangeAvatar}/>
-                                                        <Avatar
-                                                            onMouseOver={() => {
-                                                                setEditAvatar(true)
-                                                            }}
-                                                            onMouseLeave={() => {
-                                                                setEditAvatar(false)
-                                                            }}
-                                                            style={{
-                                                                width: 48,
-                                                                height: 48,
-                                                                cursor: editAvatar ? 'pointer' : null
-                                                            }}
-                                                            src={!editAvatar ? avatar.image : null}>
-                                                            {editAvatar && <AddPhotoAlternateIcon/>}
-                                                        </Avatar>
-                                                    </label>
-                                                </Box>
-                                                <br/>
+                                            </>
+                                        }
+                                        {(activeStep === 1) &&
+                                            <>
+                                                {
+                                                    (userType === 'negozio') &&
+                                                    <>
+                                                        <Box sx={{
+                                                            display: 'flex',
+                                                            flexDirection: 'row',
+                                                            alignItems: 'center',
+                                                            gap: 2,
+                                                            justifyContent: 'center'
+                                                        }}>
+                                                            <TextField
+                                                                onChange={onChangeUsername}
+                                                                autoFocus
+                                                                value={username ?? ''}
+                                                                color='secondary'
+                                                                margin="dense"
+                                                                label="Username"
+                                                                InputProps={{
+                                                                    startAdornment: (
+                                                                        <InputAdornment position="start">
+                                                                            <BadgeIcon/>
+                                                                        </InputAdornment>
+                                                                    ),
+                                                                }}
+                                                                variant="outlined"/>
+                                                            <TextField
+                                                                onChange={onChangeTitle}
+                                                                autoFocus
+                                                                value={title ?? ''}
+                                                                color='secondary'
+                                                                margin="dense"
+                                                                label="Titolo"
+                                                                InputProps={{
+                                                                    startAdornment: (
+                                                                        <InputAdornment position="start">
+                                                                            <StarIcon/>
+                                                                        </InputAdornment>
+                                                                    ),
+                                                                }}
+                                                                variant="outlined"/>
+                                                            <TextField
+                                                                onChange={onChangeWebsite}
+                                                                autoFocus
+                                                                value={website ?? ''}
+                                                                color='secondary'
+                                                                margin="dense"
+                                                                label="Sito Web"
+                                                                InputProps={{
+                                                                    startAdornment: (
+                                                                        <InputAdornment position="start">
+                                                                            <LanguageIcon/>
+                                                                        </InputAdornment>
+                                                                    ),
+                                                                }}
+                                                                variant="outlined"/>
+                                                            <TextField
+                                                                onChange={onChangeTelephone}
+                                                                autoFocus
+                                                                value={telephone ?? ''}
+                                                                color='secondary'
+                                                                margin="dense"
+                                                                label="Telefono"
+                                                                InputProps={{
+                                                                    startAdornment: (
+                                                                        <InputAdornment position="start">
+                                                                            <CallIcon/>
+                                                                        </InputAdornment>
+                                                                    ),
+                                                                }}
+                                                                variant="outlined"/>
+                                                        </Box>
+                                                        <Box>
+                                                            <TextField fullWidth={true}
+                                                                       onChange={onChangeDescription}
+                                                                       autoFocus
+                                                                       value={description ?? ''}
+                                                                       multiline={true}
+                                                                       color='secondary'
+                                                                       margin="dense"
+                                                                       InputProps={{
+                                                                           startAdornment: (
+                                                                               <InputAdornment position="start">
+                                                                                   <TextFieldsIcon/>
+                                                                               </InputAdornment>
+                                                                           ),
+                                                                       }}
+                                                                       label="Descrizione"
+                                                                       variant="outlined"/>
+                                                        </Box>
+                                                        <br/>
+                                                        <Box sx={{
+                                                            display: 'flex',
+                                                            flexDirection: 'row',
+                                                            alignItems: 'center',
+                                                            gap: 2,
+                                                            justifyContent: 'center'
+                                                        }}>
+                                                            <label htmlFor="avatar-uploader" className='text-center'>
+                                                                <Input
+                                                                    accept="image/*"
+                                                                    id="avatar-uploader"
+                                                                    type="file"
+                                                                    hidden
+                                                                    onChange={onChangeAvatar}/>
+                                                                <Avatar
+                                                                    onMouseOver={() => {
+                                                                        setEditAvatar(true)
+                                                                    }}
+                                                                    onMouseLeave={() => {
+                                                                        setEditAvatar(false)
+                                                                    }}
+                                                                    style={{
+                                                                        width: 48,
+                                                                        height: 48,
+                                                                        cursor: editAvatar ? 'pointer' : null
+                                                                    }}
+                                                                    src={!editAvatar ? avatar.image : null}>
+                                                                    {editAvatar && <AddPhotoAlternateIcon/>}
+                                                                </Avatar>
+                                                            </label>
+                                                        </Box>
+                                                        <br/>
+                                                        <Box sx={{
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            alignItems: 'center',
+                                                            gap: 2,
+                                                            justifyContent: 'center'
+                                                        }}>
+                                                            <ImageList sx={{width: 800, height: 350}}
+                                                                       gap={5} cols={30}>
+                                                                {carousel.map((item) => {
+                                                                    if (item.add) {
+                                                                        return (
+                                                                            <ImageListItem key={item.index} cols={10} rows={1}>
+
+                                                                                <ImageListItemBar
+                                                                                    actionIcon={
+                                                                                        [
+                                                                                            <label htmlFor="icon-button-file"
+                                                                                                   key={0}>
+                                                                                                <Input accept="image/*"
+                                                                                                       id="icon-button-file"
+                                                                                                       type="file" hidden
+                                                                                                       onChange={(e) => {
+                                                                                                           addPicture(e, item.index)
+                                                                                                       }}/>
+                                                                                                <IconButton
+                                                                                                    sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                                                                    aria-label="upload picture"
+                                                                                                    component="span">
+                                                                                                    <PhotoCamera/>
+                                                                                                </IconButton>
+                                                                                            </label>]}
+                                                                                />
+                                                                            </ImageListItem>)
+                                                                    } else {
+                                                                        return (
+                                                                            <ImageListItem key={item.index} cols={10} rows={1}>
+                                                                                <ProgressiveImg image={item.image}/>
+                                                                                <ImageListItemBar
+                                                                                    actionIcon={
+                                                                                        [
+                                                                                            <IconButton
+                                                                                                sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                                                                key={0}
+                                                                                                onClick={() => {
+                                                                                                    window.open(item.image, '_blank', 'noopener,noreferrer')
+                                                                                                }}>
+                                                                                                <OpenInFullIcon/>
+                                                                                            </IconButton>,
+                                                                                            <IconButton
+                                                                                                sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                                                                onClick={() => {
+                                                                                                    removePicture(item.index)
+                                                                                                }} key={1}>
+                                                                                                <DeleteForeverIcon/>
+                                                                                            </IconButton>
+                                                                                        ]}
+                                                                                />
+                                                                            </ImageListItem>)
+                                                                    }
+                                                                })}
+                                                            </ImageList>
+                                                        </Box>
+
+                                                    </>
+                                                }
+                                                {
+                                                    (userType === 'cliente') &&
+                                                    <>
+                                                        <Box sx={{
+                                                            display: 'flex',
+                                                            flexDirection: 'row',
+                                                            alignItems: 'center',
+                                                            gap: 2,
+                                                            justifyContent: 'center'
+                                                        }}>
+                                                            <TextField
+                                                                onChange={onChangeUsername}
+                                                                autoFocus
+                                                                value={username ?? ''}
+                                                                color='secondary'
+                                                                margin="dense"
+                                                                label="Username"
+                                                                InputProps={{
+                                                                    startAdornment: (
+                                                                        <InputAdornment position="start">
+                                                                            <BadgeIcon/>
+                                                                        </InputAdornment>
+                                                                    ),
+                                                                }}
+                                                                variant="outlined"/>
+                                                            <TextField
+                                                                onChange={onChangeName}
+                                                                autoFocus
+                                                                value={name ?? ''}
+                                                                color='secondary'
+                                                                margin="dense"
+                                                                label="Nome"
+                                                                InputProps={{
+                                                                    startAdornment: (
+                                                                        <InputAdornment position="start">
+                                                                            <StarIcon/>
+                                                                        </InputAdornment>
+                                                                    ),
+                                                                }}
+                                                                variant="outlined"/>
+                                                            <TextField
+                                                                onChange={onChangeSurname}
+                                                                autoFocus
+                                                                value={surname ?? ''}
+                                                                color='secondary'
+                                                                margin="dense"
+                                                                label="Cognome"
+                                                                InputProps={{
+                                                                    startAdornment: (
+                                                                        <InputAdornment position="start">
+                                                                            <StarIcon/>
+                                                                        </InputAdornment>
+                                                                    ),
+                                                                }}
+                                                                variant="outlined"/>
+                                                            <TextField
+                                                                onChange={onChangeTelephone}
+                                                                autoFocus
+                                                                value={telephone ?? ''}
+                                                                color='secondary'
+                                                                margin="dense"
+                                                                label="Telefono"
+                                                                InputProps={{
+                                                                    startAdornment: (
+                                                                        <InputAdornment position="start">
+                                                                            <CallIcon/>
+                                                                        </InputAdornment>
+                                                                    ),
+                                                                }}
+                                                                variant="outlined"/>
+                                                        </Box>
+                                                        <br/>
+                                                        <Box sx={{
+                                                            display: 'flex',
+                                                            flexDirection: 'row',
+                                                            alignItems: 'center',
+                                                            gap: 2,
+                                                            justifyContent: 'center'
+                                                        }}>
+                                                            <label htmlFor="avatar-uploader" className='text-center'>
+                                                                <Input
+                                                                    accept="image/*"
+                                                                    id="avatar-uploader"
+                                                                    type="file"
+                                                                    hidden
+                                                                    onChange={onChangeAvatar}/>
+                                                                <Avatar
+                                                                    onMouseOver={() => {
+                                                                        setEditAvatar(true)
+                                                                    }}
+                                                                    onMouseLeave={() => {
+                                                                        setEditAvatar(false)
+                                                                    }}
+                                                                    style={{
+                                                                        width: 48,
+                                                                        height: 48,
+                                                                        cursor: editAvatar ? 'pointer' : null
+                                                                    }}
+                                                                    src={!editAvatar ? avatar.image : null}>
+                                                                    {editAvatar && <AddPhotoAlternateIcon/>}
+                                                                </Avatar>
+                                                            </label>
+                                                        </Box>
+                                                    </>
+                                                }
+                                            </>
+                                        }
+                                        {(activeStep === 2) &&
+                                            <>
                                                 <Box sx={{
                                                     display: 'flex',
                                                     flexDirection: 'column',
@@ -479,68 +657,48 @@ export default function Signup() {
                                                     gap: 2,
                                                     justifyContent: 'center'
                                                 }}>
-                                                    <ImageList sx={{width: 800, height: 350}}
-                                                               gap={5} cols={30}>
-                                                        {carousel.map((item) => {
-                                                            if (item.add) {
-                                                                return (
-                                                                    <ImageListItem key={item.index} cols={10} rows={1}>
+                                                    <TextField
+                                                        onChange={onChangeEmail}
+                                                        autoFocus
+                                                        value={email ?? ''}
+                                                        color='secondary'
+                                                        margin="dense"
+                                                        label="Email"
+                                                        InputProps={{
+                                                            startAdornment: (
+                                                                <InputAdornment position="start">
+                                                                    <EmailIcon/>
+                                                                </InputAdornment>
+                                                            ),
+                                                        }}
+                                                        variant="outlined"/>
+                                                    <TextField
+                                                        onChange={onChangePassword}
+                                                        type={showPassword ? 'text' : 'password'}
+                                                        color='secondary'
+                                                        margin="dense"
+                                                        InputProps={{
+                                                            endAdornment: <IconButton position="start"
+                                                                                      onClick={onChangeShowPassword}>{
+                                                                showPassword ? <VisibilityOff/> : <Visibility/>}</IconButton>,
+                                                        }}
 
-                                                                        <ImageListItemBar
-                                                                            actionIcon={
-                                                                                [
-                                                                                    <label htmlFor="icon-button-file"
-                                                                                           key={0}>
-                                                                                        <Input accept="image/*"
-                                                                                               id="icon-button-file"
-                                                                                               type="file" hidden
-                                                                                               onChange={(e) => {
-                                                                                                   addPicture(e, item.index)
-                                                                                               }}/>
-                                                                                        <IconButton
-                                                                                            sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                                                            aria-label="upload picture"
-                                                                                            component="span">
-                                                                                            <PhotoCamera/>
-                                                                                        </IconButton>
-                                                                                    </label>]}
-                                                                        />
-                                                                    </ImageListItem>)
-                                                            } else {
-                                                                return (
-                                                                    <ImageListItem key={item.index} cols={10} rows={1}>
-                                                                        <ProgressiveImg image={item.image}/>
-                                                                        <ImageListItemBar
-                                                                            actionIcon={
-                                                                                [
-                                                                                    <IconButton
-                                                                                        sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                                                        key={0}
-                                                                                        onClick={() => {
-                                                                                            window.open(item.image, '_blank', 'noopener,noreferrer')
-                                                                                        }}>
-                                                                                        <OpenInFullIcon/>
-                                                                                    </IconButton>,
-                                                                                    <IconButton
-                                                                                        sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                                                        onClick={() => {
-                                                                                            removePicture(item.index)
-                                                                                        }} key={1}>
-                                                                                        <DeleteForeverIcon/>
-                                                                                    </IconButton>
-                                                                                ]}
-                                                                        />
-                                                                    </ImageListItem>)
-                                                            }
-                                                        })}
-                                                    </ImageList>
+                                                        label="Password"
+                                                        variant="outlined"/>
+                                                    <TextField
+                                                        onChange={onChangeConfirmPassword}
+                                                        type={showPassword ? 'text' : 'password'}
+                                                        color='secondary'
+                                                        margin="dense"
+                                                        InputProps={{
+                                                            endAdornment: <IconButton position="start"
+                                                                                      onClick={onChangeShowPassword}>{
+                                                                showPassword ? <VisibilityOff/> : <Visibility/>}</IconButton>,
+                                                        }}
+
+                                                        label="Conferma Password"
+                                                        variant="outlined"/>
                                                 </Box>
-
-                                            </>
-                                        }
-                                        {
-                                            (userType === 'cliente') &&
-                                            <>
                                                 <Box sx={{
                                                     display: 'flex',
                                                     flexDirection: 'row',
@@ -548,213 +706,82 @@ export default function Signup() {
                                                     gap: 2,
                                                     justifyContent: 'center'
                                                 }}>
-                                                    <TextField
-                                                        onChange={onChangeUsername}
-                                                        autoFocus
-                                                        value={username ?? ''}
-                                                        color='secondary'
-                                                        margin="dense"
-                                                        label="Username"
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start">
-                                                                    <BadgeIcon/>
-                                                                </InputAdornment>
-                                                            ),
+                                                    <Checkbox
+                                                        checked={consent}
+                                                        onChange={onChangeConsens}
+                                                        sx={{
+                                                            color: red[800],
+                                                            '&.Mui-checked': {
+                                                                color: red[600],
+                                                            },
                                                         }}
-                                                        variant="outlined"/>
-                                                    <TextField
-                                                        onChange={onChangeName}
-                                                        autoFocus
-                                                        value={name ?? ''}
-                                                        color='secondary'
-                                                        margin="dense"
-                                                        label="Nome"
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start">
-                                                                    <StarIcon/>
-                                                                </InputAdornment>
-                                                            ),
-                                                        }}
-                                                        variant="outlined"/>
-                                                    <TextField
-                                                        onChange={onChangeSurname}
-                                                        autoFocus
-                                                        value={surname ?? ''}
-                                                        color='secondary'
-                                                        margin="dense"
-                                                        label="Cognome"
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start">
-                                                                    <StarIcon/>
-                                                                </InputAdornment>
-                                                            ),
-                                                        }}
-                                                        variant="outlined"/>
-                                                    <TextField
-                                                        onChange={onChangeTelephone}
-                                                        autoFocus
-                                                        value={telephone ?? ''}
-                                                        color='secondary'
-                                                        margin="dense"
-                                                        label="Telefono"
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start">
-                                                                    <CallIcon/>
-                                                                </InputAdornment>
-                                                            ),
-                                                        }}
-                                                        variant="outlined"/>
-                                                </Box>
-                                                <br/>
-                                                <Box sx={{
-                                                    display: 'flex',
-                                                    flexDirection: 'row',
-                                                    alignItems: 'center',
-                                                    gap: 2,
-                                                    justifyContent: 'center'
-                                                }}>
-                                                    <label htmlFor="avatar-uploader" className='text-center'>
-                                                        <Input
-                                                            accept="image/*"
-                                                            id="avatar-uploader"
-                                                            type="file"
-                                                            hidden
-                                                            onChange={onChangeAvatar}/>
-                                                        <Avatar
-                                                            onMouseOver={() => {
-                                                                setEditAvatar(true)
-                                                            }}
-                                                            onMouseLeave={() => {
-                                                                setEditAvatar(false)
-                                                            }}
-                                                            style={{
-                                                                width: 48,
-                                                                height: 48,
-                                                                cursor: editAvatar ? 'pointer' : null
-                                                            }}
-                                                            src={!editAvatar ? avatar.image : null}>
-                                                            {editAvatar && <AddPhotoAlternateIcon/>}
-                                                        </Avatar>
-                                                    </label>
+                                                    />
+                                                    Accetto i Termini di Servizio e la policy relativa alla
+                                                    privacy
                                                 </Box>
                                             </>
                                         }
-                                    </>
-                                }
-                                {(activeStep === 2) &&
-                                    <>
-                                    <Box sx={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        gap: 2,
-                                        justifyContent: 'center'
-                                    }}>
-                                        <TextField
-                                            onChange={onChangeEmail}
-                                            autoFocus
-                                            value={email ?? ''}
-                                            color='secondary'
-                                            margin="dense"
-                                            label="Email"
-                                            InputProps={{
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                        <EmailIcon/>
-                                                    </InputAdornment>
-                                                ),
-                                            }}
-                                            variant="outlined"/>
-                                        <TextField
-                                            onChange={onChangePassword}
-                                            type={showPassword ? 'text' : 'password'}
-                                            color='secondary'
-                                            margin="dense"
-                                            InputProps={{
-                                                endAdornment: <IconButton position="start" onClick={onChangeShowPassword}>{
-                                                    showPassword ? <VisibilityOff/> : <Visibility/>}</IconButton>,
-                                            }}
-
-                                            label="Password"
-                                            variant="outlined"/>
-                                        <TextField
-                                            onChange={onChangeConfirmPassword}
-                                            type={showPassword ? 'text' : 'password'}
-                                            color='secondary'
-                                            margin="dense"
-                                            InputProps={{
-                                                endAdornment: <IconButton position="start" onClick={onChangeShowPassword}>{
-                                                    showPassword ? <VisibilityOff/> : <Visibility/>}</IconButton>,
-                                            }}
-
-                                            label="Conferma Password"
-                                            variant="outlined"/>
+                                        {/*{(activeStep === 3) &&*/}
+                                        {/*    <>*/}
+                                        {/*        <Typography sx={{mt: 2, mb: 1}}>*/}
+                                        {/*            Step completati*/}
+                                        {/*        </Typography>*/}
+                                        {/*        <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>*/}
+                                        {/*            <Box sx={{flex: '1 1 auto'}}/>*/}
+                                        {/*            <Button onClick={resetStep}>Reset</Button>*/}
+                                        {/*        </Box>*/}
+                                        {/*    </>*/}
+                                        {/*}*/}
+                                    </Col>
+                                </Row>
+                                <br/>
+                                <br/>
+                                <Row>
+                                    <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
+                                        <Button
+                                            variant='contained'
+                                            style={{backgroundColor: activeStep === 0 ? 'grey' : 'darkred'}}
+                                            disabled={activeStep === 0}
+                                            onClick={backStep}
+                                            sx={{mr: 1}}>
+                                            Indietro
+                                        </Button>
+                                        <Box sx={{flex: '1 1 auto'}}/>
+                                        {!(activeStep === steps.length - 1) && <Button onClick={nextStep}
+                                                                                       variant='contained' disabled={!canNext()}
+                                                                                       style={{backgroundColor: canNext() ? 'darkred' : 'grey'}}>
+                                            Avanti
+                                        </Button>}
+                                        {(activeStep === steps.length - 1) && <Button onClick={() => {setSignupCompleted(true)}}
+                                                                                      variant='contained' disabled={!canNext()}
+                                                                                      style={{backgroundColor: canNext() ? 'darkred' : 'grey'}}>
+                                            Registrati
+                                        </Button>}
                                     </Box>
-                                        <Box sx={{
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            gap: 2,
-                                            justifyContent: 'center'
-                                        }}>
-                                            <Checkbox
-                                                checked={consent}
-                                                onChange={onChangeConsens}
-                                                sx={{
-                                                    color: red[800],
-                                                    '&.Mui-checked': {
-                                                        color: red[600],
-                                                    },
-                                                }}
-                                            />
-                                            Accetto i Termini di Servizio e la policy relativa alla
-                                            privacy
-                                        </Box>
-                                    </>
-                                }
-                                {/*{(activeStep === 3) &&*/}
-                                {/*    <>*/}
-                                {/*        <Typography sx={{mt: 2, mb: 1}}>*/}
-                                {/*            Step completati*/}
-                                {/*        </Typography>*/}
-                                {/*        <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>*/}
-                                {/*            <Box sx={{flex: '1 1 auto'}}/>*/}
-                                {/*            <Button onClick={resetStep}>Reset</Button>*/}
-                                {/*        </Box>*/}
-                                {/*    </>*/}
-                                {/*}*/}
+                                </Row>
                             </Col>
-                        </Row>
-                        <br/>
-                        <br/>
-                        <Row>
-                            <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
-                                <Button
-                                    variant='contained'
-                                    style={{backgroundColor: activeStep === 0 ? 'grey' : 'darkred'}}
-                                    disabled={activeStep === 0}
-                                    onClick={backStep}
-                                    sx={{mr: 1}}>
-                                    Indietro
-                                </Button>
-                                <Box sx={{flex: '1 1 auto'}}/>
-                                {!(activeStep === steps.length - 1) && <Button onClick={nextStep}
-                                                                               variant='contained' disabled={!canNext()}
-                                                                               style={{backgroundColor: canNext() ? 'darkred' : 'grey'}}>
-                                    Avanti
-                                </Button>}
-                                {(activeStep === steps.length - 1) && <Button onClick={signup}
-                                                                              variant='contained' disabled={!canNext()}
-                                                                              style={{backgroundColor: canNext() ? 'darkred' : 'grey'}}>
-                                    Registrati
-                                </Button>}
-                            </Box>
-                        </Row>
-                    </Col>
+                        </>
+                    }
+                    {signupCompleted &&
+                        <>
+                            <Col>
+                                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+                                    <ThemeProvider theme={theme}>
+                                        <Typography variant='h2' st>REGISTRAZIONE COMPLETATA!</Typography>
+                                        <Typography variant='h5'>Per potere accedere all'applicazione conferma la registrazione attraverso il link ricevuto nella tua mail.</Typography>
+                                    </ThemeProvider>
+                                </Box>
+                                <br/>
+                                <br/>
+                                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+                                    <img src={signupOk} alt='' style={{width: smallScreen ? '80%' : mediumScreen ? '50%' : '30%', height: 'auto'}}/>
+                                </Box>
+                                {/*<Row className='justify-content-center'>*/}
+                                {/*</Row>*/}
+                            </Col>
+
+                        </>
+                    }
                 </Row>
                 <br/>
                 <br/>
