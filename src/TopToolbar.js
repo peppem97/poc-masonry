@@ -16,12 +16,15 @@ import {useDispatch, useSelector} from "react-redux";
 import LoginDialog from "./dialogs/LoginDialog";
 import {setColumnWidth} from "./store/columnWidth";
 import {clearToken} from "./store/token";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import HomeIcon from '@mui/icons-material/Home';
 
 export default function TopToolbar() {
     const [loginDialog, setLoginDialog] = useState(false);
     let navigate = useNavigate();
     const stateLogin = useSelector((state) => state.token.value);
     const columnWidth = useSelector((state) => state.columnWidth.value);
+    const username = useSelector((state) => state.user.username);
     const dispatch = useDispatch();
     const appContext = useContext(GlobalContext);
 
@@ -32,6 +35,10 @@ export default function TopToolbar() {
     const goToAbout = () => {
         navigate(appContext.routes.about);
     }
+
+    const goToProfile = () => {
+        navigate(appContext.routes.user + '/' + username);
+    };
 
     const login = () => {
         setLoginDialog(true);
@@ -62,29 +69,29 @@ export default function TopToolbar() {
             <Box sx={{flexGrow: 1}} style={{position: 'fixed', top: 0, zIndex: 100, width: '100%'}}>
                 <AppBar position="static">
                     <Toolbar style={{color: 'black', backgroundColor: '#ffcccc'}}>
-                        <Typography variant="h6"
-                                    noWrap
-                                    component="div"
-                                    sx={{display: {xs: 'none', sm: 'block'}, color: 'darkred', fontWeight: 'bold'}}>
-                            <Button onClick={goToHome} color="inherit"><LocalFloristIcon
-                                fontSize="inherit"/>&nbsp;Masonry</Button>
-                        </Typography>
+                        <IconButton onClick={goToHome} style={{color: 'darkred', fontWeight: 'bold'}}>
+                            <HomeIcon/></IconButton>
                         <Box sx={{flexGrow: 1}}/>
-                        <IconButton size="large"
-                                    style={{color: 'darkred', fontWeight: 'bold'}}
-                                    onClick={increaseColumnsSize}>
+                        {stateLogin ? <IconButton size="large"
+                                     style={{color: 'darkred', fontWeight: 'bold'}}
+                                     onClick={increaseColumnsSize}>
                             <ZoomInIcon/>
-                        </IconButton>
-                        <IconButton size="large"
-                                    style={{color: 'darkred', fontWeight: 'bold'}}
-                                    onClick={decreaseColumnsSize}>
+                        </IconButton> : null}
+                        {stateLogin ? <IconButton size="large"
+                                     style={{color: 'darkred', fontWeight: 'bold'}}
+                                     onClick={decreaseColumnsSize}>
                             <ZoomOutIcon/>
-                        </IconButton>
+                        </IconButton> : null}
                         <IconButton size="large"
                                     style={{color: 'darkred', fontWeight: 'bold'}}
                                     onClick={goToAbout}>
                             <InfoIcon/>
                         </IconButton>
+                        {stateLogin ? <IconButton size="large"
+                                     style={{color: 'darkred', fontWeight: 'bold'}}
+                                     onClick={goToProfile}>
+                            <AccountCircleIcon/>
+                        </IconButton> : null}
                         &nbsp;
                         {stateLogin ? <Button variant="contained" style={{backgroundColor: 'darkred'}}
                                               onClick={logout}>{'ESCI'}</Button>

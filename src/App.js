@@ -41,6 +41,10 @@ export default function App() {
         ENDPOINT_REGISTER: "http://zion.datafactor.it:40505/auth/local/register"
     };
 
+    const getUserInfo = () => {
+
+    }
+
     return (
         <>
             <GlobalContext.Provider value={appContext}>

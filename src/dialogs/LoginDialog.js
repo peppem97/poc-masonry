@@ -21,6 +21,7 @@ import StoreIcon from "@mui/icons-material/Store";
 import Typography from "@mui/material/Typography";
 import GroupIcon from "@mui/icons-material/Group";
 import * as React from "react";
+import {setUsername, setMail, setType} from "../store/user";
 
 export default function LoginDialog(props) {
     const [email, setEmail] = useState(null);
@@ -59,11 +60,15 @@ export default function LoginDialog(props) {
         setLoading(true);
         let data = {identifier: email, password: password};
         axios.post(appContext.ENDPOINT_AUTH, data).then((response) => {
+            console.log(response)
             dispatch(setToken(response.data.jwt));
+            dispatch(setMail(response.data.user.email));
+            dispatch(setUsername(response.data.user.username));
             setLoading(false);
             props.goToHome();
             closeDialog();
-        }).catch(() => {
+        }).catch((e) => {
+            console.log(e)
             setLoading(false);
             dispatch(isError('Errore di autenticazione. Riprovare.'));
         });
