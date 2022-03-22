@@ -11,7 +11,10 @@ import {
 import {Col, Row} from "react-bootstrap";
 import Typography from "@mui/material/Typography";
 import React, {useContext, useState} from "react";
-import girl from './assets/girl.svg';
+import signinSVG from './assets/signin.svg';
+import signupSVG from './assets/signup.svg';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
 import {Visibility, VisibilityOff} from "@material-ui/icons";
 import StoreIcon from "@mui/icons-material/Store";
 import GroupIcon from "@mui/icons-material/Group";
@@ -24,10 +27,14 @@ import {isError} from "./store/error";
 import GlobalContext from "./GlobalContext";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import {setBusy} from "./store/loading";
 
 export default function Welcome() {
     const [email, setEmail] = useState(null);
+    const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
+    const [confirmPassword, setConfirmPassword] = useState(null);
+
     const [loading, setLoading] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const [userType, setUserType] = useState('negozio');
@@ -47,6 +54,10 @@ export default function Welcome() {
         setPassword(e.target.value);
     };
 
+    const onChangeConfirmPassword = (e) => {
+        setConfirmPassword(e.target.value);
+    };
+
     const onChangeShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -57,6 +68,10 @@ export default function Welcome() {
 
     const canSignin = () => {
         return (email !== '' && password !== '');
+    };
+
+    const canSignup = () => {
+        return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword));
     };
 
     const signin = () => {
@@ -73,6 +88,19 @@ export default function Welcome() {
             setLoading(false);
             dispatch(isError('Errore di autenticazione. Riprovare.'));
         });
+    };
+
+    const signup = () => {
+        let dataSignup = {
+            username: username,
+            email: email,
+            password: password
+        };
+        dispatch(setBusy());
+        axios.post(appContext.ENDPOINT_REGISTER, dataSignup).then(
+            (response) => {}
+        ).catch((error) => {
+        })
     };
 
     return (
@@ -96,9 +124,9 @@ export default function Welcome() {
                 <br/>
                 <br/>
                 <Row className='justify-content-center'>
-                    <Grid container spacing={5}>
+                    {isSignin && <Grid container spacing={5}>
                         {(!smallScreen && !mediumScreen) && <Grid item md={5} lg={5} xl={7}>
-                            <img src={girl} style={{width: '90%', height: 'auto'}} alt=""/>
+                            <img src={signinSVG} style={{width: '90%', height: 'auto'}} alt=""/>
                         </Grid>}
                         <Grid item xs={12} sm={12} md={7} lg={7} xl={5}>
                             <Row className='justify-content-center'>
@@ -174,11 +202,83 @@ export default function Welcome() {
                                 <Button
                                     variant="contained"
                                     component="span"
-                                    style={{backgroundColor: canSignin() ? 'red' : 'gray'}}
-                                    onClick={null}>PRIMA VOLTA? REGISTRATI!</Button>
+                                    style={{backgroundColor: 'red' }}
+                                    onClick={() => {setIsSignin(false)}}>PRIMA VOLTA? REGISTRATI!</Button>
                             </Row>}
                         </Grid>
-                    </Grid>
+                    </Grid>}
+                    {!isSignin && <Grid container spacing={5}>
+                        {(!smallScreen && !mediumScreen) && <Grid item md={5} lg={5} xl={7}>
+                            <img src={signupSVG} style={{width: '90%', height: 'auto'}} alt=""/>
+                        </Grid>}
+                        <Grid item xs={12} sm={12} md={7} lg={7} xl={5}>
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                gap: 2,
+                                justifyContent: 'center'
+                            }}>
+                                <IconButton onClick={() => {setIsSignin(true)}}><ArrowBackIcon/></IconButton>
+                                <Typography variant='subtitle1'>Compila i seguenti campi per registrarti: </Typography>
+                            </Box>
+                            <Row className='justify-content-center'>
+                                <TextField
+                                    onChange={onChangeEmail}
+                                    autoFocus
+                                    color='secondary'
+                                    margin="dense"
+                                    label="Email"
+                                    variant="outlined"/>
+                            </Row>
+                            <Row className='justify-content-center'>
+                                <TextField
+                                    onChange={onChangePassword}
+                                    type={showPassword ? 'text' : 'password'}
+                                    color='secondary'
+                                    InputProps={{
+                                        endAdornment: <IconButton position="start" onClick={onChangeShowPassword}>{
+                                            showPassword ? <VisibilityOff/> : <Visibility/>}</IconButton>,
+                                    }}
+                                    margin="dense"
+                                    label="Password"
+                                    variant="outlined"/>
+                            </Row>
+                            <Row className='justify-content-center'>
+                                <TextField
+                                    onChange={onChangeConfirmPassword}
+                                    type={showPassword ? 'text' : 'password'}
+                                    color='secondary'
+                                    InputProps={{
+                                        endAdornment: <IconButton position="start" onClick={onChangeShowPassword}>{
+                                            showPassword ? <VisibilityOff/> : <Visibility/>}</IconButton>,
+                                    }}
+                                    margin="dense"
+                                    label="Conferma Password"
+                                    variant="outlined"/>
+                            </Row>
+                            <br/>
+                            {loading && <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                gap: 2,
+                                justifyContent: 'center'
+                            }}>
+                                <CircularProgress color={'error'} className='text-center'/>
+                            </Box>}
+                            {!loading && <Row className='justify-content-center'>
+                                <Button
+                                    disabled={!canSignup()}
+                                    variant="contained"
+                                    component="span"
+                                    style={{backgroundColor: canSignup() ? 'darkred' : 'gray'}}
+                                    onClick={signin}>REGISTRATI</Button>
+                            </Row>
+                            }
+                        </Grid>
+                    </Grid>}
+
                 </Row>
                 <br/>
             </Container>

@@ -38,7 +38,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import {Visibility, VisibilityOff} from "@material-ui/icons";
 import Compressor from "compressorjs";
 import Button from "@mui/material/Button";
-import signupOk from "./assets/signup.svg";
+import signupOk from "./assets/complete.svg";
 import * as React from "react";
 import {isError} from "./store/error";
 

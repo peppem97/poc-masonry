@@ -40,7 +40,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
 import Compressor from "compressorjs";
 import {isError} from "./store/error";
-import signupOk from "./assets/signup.svg"
+import signupOk from "./assets/complete.svg"
 import {useNavigate} from "react-router-dom";
 
 export default function Signup() {
