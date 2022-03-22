@@ -4,11 +4,20 @@ import Button from "@mui/material/Button";
 import {useNavigate} from "react-router-dom";
 import {useContext} from "react";
 import GlobalContext from "./GlobalContext";
+import {useSelector} from "react-redux";
 
 export default function Error404() {
     let navigate = useNavigate();
     const appContext = useContext(GlobalContext);
+    const stateLogin = useSelector((state) => state.token.value);
 
+    const goToHome = () => {
+        if (stateLogin) {
+            navigate(appContext.routes.home);
+        } else {
+            navigate(appContext.routes.signin);
+        }
+    };
 
     return (
         <>
@@ -23,9 +32,7 @@ export default function Error404() {
                 <br/>
                 <Row className='justify-content-center'>
                     <Button variant="contained" style={{width: '20%', color: 'white', backgroundColor: 'darkred'}}
-                            onClick={() => {
-                                navigate(appContext.routes.home);
-                            }}>HOME</Button>
+                            onClick={goToHome}>HOME</Button>
                 </Row>
             </Container>
         </>

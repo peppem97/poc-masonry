@@ -14,6 +14,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import {useDispatch, useSelector} from 'react-redux'
 import {isNotError} from "./store/error";
 import Signup from "./Signup";
+import UnprotectedRoute from "./UnprotectedRoute";
 
 export default function App() {
     const loading = useSelector((state) => state.loading.value);
@@ -49,8 +50,8 @@ export default function App() {
                     <Routes>
                         <Route exact path="/" element={<Navigate to={routes.signin}/>}/>
                         <Route exact path="/masonry" element={<Navigate to={routes.signin}/>}/>
-                        <Route exact path={routes.signin} element={<Signin/>}/>
-                        <Route exact path={routes.signup} element={<Signup/>}/>
+                        <Route path={routes.signin} element={<UnprotectedRoute><Signin/></UnprotectedRoute>}/>
+                        <Route path={routes.signup} element={<UnprotectedRoute><Signup/></UnprotectedRoute>}/>
                         <Route path={routes.home} element={<ProtectedRoute><Home/></ProtectedRoute>}/>
                         <Route path={routes.user + '/:username'} element={<ProtectedRoute><User/></ProtectedRoute>}/>
                         <Route path={routes.product + '/:id'} element={<ProtectedRoute><Product/></ProtectedRoute>}/>

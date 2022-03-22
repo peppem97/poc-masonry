@@ -73,8 +73,6 @@ export default function TopToolbar() {
                     <Toolbar style={{color: 'black', backgroundColor: '#ffcccc'}}>
                         <IconButton onClick={goToHome} style={{color: 'darkred', fontWeight: 'bold'}}>
                             <HomeIcon/></IconButton>
-                        {stateLogin && <IconButton onClick={goToHome} style={{color: 'darkred', fontWeight: 'bold'}}>
-                            <HomeIcon/></IconButton>}
                         <Box sx={{flexGrow: 1}}/>
                         {stateLogin && <IconButton size="large"
                                      style={{color: 'darkred', fontWeight: 'bold'}}

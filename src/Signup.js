@@ -41,7 +41,7 @@ import {setBusy, setIdle} from "./store/loading";
 import Compressor from "compressorjs";
 import {isError} from "./store/error";
 import signupOk from "./assets/signup.svg"
-import HomeIcon from "@mui/icons-material/Home";
+import {useNavigate} from "react-router-dom";
 
 export default function Signup() {
     const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
@@ -70,6 +70,8 @@ export default function Signup() {
     const theme = responsiveFontSizes(createTheme());
     const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
+    let navigate = useNavigate();
+
 
     const onChangeUserType = (event, typeUser) => {
         setUserType(typeUser);
@@ -275,11 +277,11 @@ export default function Signup() {
                 case 0:
                     return true;
                 case 1:
-                    return (username !== '' && title !== '' && website !== '' && telephone !== '' && description !== '' && avatar.image && carousel.some((element) => (!element.add)) > 0);
-                    // return true;
+                    // return (username !== '' && title !== '' && website !== '' && telephone !== '' && description !== '' && avatar.image && carousel.some((element) => (!element.add)) > 0);
+                    return true;
                 case 2:
-                    return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consent);
-                    // return true;
+                    // return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consent);
+                    return true;
                 default:
                     return true;
             }
@@ -297,6 +299,10 @@ export default function Signup() {
         }
     };
 
+    const goToSignin = () => {
+        navigate(appContext.routes.signin);
+    };
+
     useEffect(() => {
         setCarousel(initImageList([], appContext.MAX_PICTURES_CAROUSEL));
     }, []);
@@ -310,8 +316,8 @@ export default function Signup() {
                 <br/>
                 {!signupCompleted &&
                     <Row className='justify-content-center'>
-                    <Typography variant='h1' className='text-center'>REGISTRATI</Typography>
-                </Row>}
+                        <Typography variant='h1' className='text-center'>REGISTRATI</Typography>
+                    </Row>}
                 <br/>
                 <br/>
                 <Row className='justify-content-center'>
@@ -322,7 +328,8 @@ export default function Signup() {
                                     <Stepper activeStep={activeStep}>
                                         {steps.map((label, index) => {
                                             return (
-                                                <Step key={label} completed={isStepSkipped(index)} sx={{color: red[600]}}>
+                                                <Step key={label} completed={isStepSkipped(index)}
+                                                      sx={{color: red[600]}}>
                                                     <StepLabel>{label}</StepLabel>
                                                 </Step>
                                             );
@@ -335,7 +342,11 @@ export default function Signup() {
                                     <Col className='align-self-center'>
                                         {(activeStep === 0) &&
                                             <>
-                                                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                                <Box sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'center'
+                                                }}>
                                                     <ToggleButtonGroup
                                                         size="large"
                                                         value={userType ?? ''}
@@ -489,16 +500,19 @@ export default function Signup() {
                                                                 {carousel.map((item) => {
                                                                     if (item.add) {
                                                                         return (
-                                                                            <ImageListItem key={item.index} cols={10} rows={1}>
+                                                                            <ImageListItem key={item.index} cols={10}
+                                                                                           rows={1}>
 
                                                                                 <ImageListItemBar
                                                                                     actionIcon={
                                                                                         [
-                                                                                            <label htmlFor="icon-button-file"
-                                                                                                   key={0}>
+                                                                                            <label
+                                                                                                htmlFor="icon-button-file"
+                                                                                                key={0}>
                                                                                                 <Input accept="image/*"
                                                                                                        id="icon-button-file"
-                                                                                                       type="file" hidden
+                                                                                                       type="file"
+                                                                                                       hidden
                                                                                                        onChange={(e) => {
                                                                                                            addPicture(e, item.index)
                                                                                                        }}/>
@@ -513,7 +527,8 @@ export default function Signup() {
                                                                             </ImageListItem>)
                                                                     } else {
                                                                         return (
-                                                                            <ImageListItem key={item.index} cols={10} rows={1}>
+                                                                            <ImageListItem key={item.index} cols={10}
+                                                                                           rows={1}>
                                                                                 <ProgressiveImg image={item.image}/>
                                                                                 <ImageListItemBar
                                                                                     actionIcon={
@@ -682,7 +697,8 @@ export default function Signup() {
                                                         InputProps={{
                                                             endAdornment: <IconButton position="start"
                                                                                       onClick={onChangeShowPassword}>{
-                                                                showPassword ? <VisibilityOff/> : <Visibility/>}</IconButton>,
+                                                                showPassword ? <VisibilityOff/> :
+                                                                    <Visibility/>}</IconButton>,
                                                         }}
 
                                                         label="Password"
@@ -695,7 +711,8 @@ export default function Signup() {
                                                         InputProps={{
                                                             endAdornment: <IconButton position="start"
                                                                                       onClick={onChangeShowPassword}>{
-                                                                showPassword ? <VisibilityOff/> : <Visibility/>}</IconButton>,
+                                                                showPassword ? <VisibilityOff/> :
+                                                                    <Visibility/>}</IconButton>,
                                                         }}
 
                                                         label="Conferma Password"
@@ -723,17 +740,6 @@ export default function Signup() {
                                                 </Box>
                                             </>
                                         }
-                                        {/*{(activeStep === 3) &&*/}
-                                        {/*    <>*/}
-                                        {/*        <Typography sx={{mt: 2, mb: 1}}>*/}
-                                        {/*            Step completati*/}
-                                        {/*        </Typography>*/}
-                                        {/*        <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>*/}
-                                        {/*            <Box sx={{flex: '1 1 auto'}}/>*/}
-                                        {/*            <Button onClick={resetStep}>Reset</Button>*/}
-                                        {/*        </Box>*/}
-                                        {/*    </>*/}
-                                        {/*}*/}
                                     </Col>
                                 </Row>
                                 <br/>
@@ -750,12 +756,14 @@ export default function Signup() {
                                         </Button>
                                         <Box sx={{flex: '1 1 auto'}}/>
                                         {!(activeStep === steps.length - 1) && <Button onClick={nextStep}
-                                                                                       variant='contained' disabled={!canNext()}
+                                                                                       variant='contained'
+                                                                                       disabled={!canNext()}
                                                                                        style={{backgroundColor: canNext() ? 'darkred' : 'grey'}}>
                                             Avanti
                                         </Button>}
-                                        {(activeStep === steps.length - 1) && <Button onClick={signup}
-                                                                                      variant='contained' disabled={!canNext()}
+                                        {(activeStep === steps.length - 1) && <Button onClick={() => {setSignupCompleted(true);}}
+                                                                                      variant='contained'
+                                                                                      disabled={!canNext()}
                                                                                       style={{backgroundColor: canNext() ? 'darkred' : 'grey'}}>
                                             Registrati
                                         </Button>}
@@ -767,27 +775,45 @@ export default function Signup() {
                     {signupCompleted &&
                         <>
                             <Col>
-                                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}>
                                     <ThemeProvider theme={theme}>
                                         <Typography variant='h2' st>REGISTRAZIONE COMPLETATA!</Typography>
-                                        <Typography variant='h5'>Per potere accedere all'applicazione conferma la registrazione attraverso il link ricevuto nella tua mail.</Typography>
+                                        <Typography variant='h5'>Per potere accedere all'applicazione conferma la
+                                            registrazione attraverso il link ricevuto nella tua mail.</Typography>
                                     </ThemeProvider>
                                 </Box>
                                 <br/>
                                 <br/>
-                                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                    <img src={signupOk} alt='' style={{width: smallScreen ? '80%' : mediumScreen ? '50%' : '30%', height: 'auto'}}/>
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}>
+                                    <img src={signupOk} alt='' style={{
+                                        width: smallScreen ? '80%' : mediumScreen ? '50%' : '30%',
+                                        height: 'auto'
+                                    }}/>
                                 </Box>
                                 <br/>
                                 <br/>
-                                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                                    <Button variant="contained" style={{backgroundColor: 'darkred'}}
-                                            onClick={null}>{'LOGIN'}</Button>
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}>
+                                    <Button variant="contained"
+                                            style={{backgroundColor: 'darkred'}}
+                                            fullWidth={true}
+                                            onClick={goToSignin}>ENTRA</Button>
                                 </Box>
-                                {/*<Row className='justify-content-center'>*/}
-                                {/*</Row>*/}
                             </Col>
-
                         </>
                     }
                 </Row>
