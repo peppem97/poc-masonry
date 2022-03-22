@@ -25,12 +25,13 @@ import GlobalContext from "./GlobalContext";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
-export default function Signin() {
+export default function Welcome() {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
     const [loading, setLoading] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const [userType, setUserType] = useState('negozio');
+    const [isSignin, setIsSignin] = useState(true);
     const theme = useTheme();
     const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -54,11 +55,11 @@ export default function Signin() {
         setUserType(typeUser);
     };
 
-    const canLogin = () => {
+    const canSignin = () => {
         return (email !== '' && password !== '');
     };
 
-    const login = () => {
+    const signin = () => {
         setLoading(true);
         let data = {identifier: email, password: password};
         axios.post(appContext.ENDPOINT_AUTH, data).then((response) => {
@@ -97,7 +98,7 @@ export default function Signin() {
                 <Row className='justify-content-center'>
                     <Grid container spacing={5}>
                         {(!smallScreen && !mediumScreen) && <Grid item md={5} lg={5} xl={7}>
-                            <img src={girl} style={{width: '100%', height: 'auto'}} alt=""/>
+                            <img src={girl} style={{width: '90%', height: 'auto'}} alt=""/>
                         </Grid>}
                         <Grid item xs={12} sm={12} md={7} lg={7} xl={5}>
                             <Row className='justify-content-center'>
@@ -149,7 +150,6 @@ export default function Signin() {
                                     </ToggleButton>
                                 </ToggleButtonGroup>
                             </Box>
-                            <br/>
                             {loading && <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'row',
@@ -162,11 +162,20 @@ export default function Signin() {
                             <br/>
                             {!loading && <Row className='justify-content-center'>
                                 <Button
-                                    disabled={!canLogin()}
+                                    disabled={!canSignin()}
                                     variant="contained"
                                     component="span"
-                                    style={{backgroundColor: canLogin() ? 'darkred' : 'gray'}}
-                                    onClick={login}>ENTRA</Button>
+                                    style={{backgroundColor: canSignin() ? 'darkred' : 'gray'}}
+                                    onClick={signin}>ENTRA</Button>
+                            </Row>
+                            }
+                            <hr/>
+                            {!loading && <Row className='justify-content-center'>
+                                <Button
+                                    variant="contained"
+                                    component="span"
+                                    style={{backgroundColor: canSignin() ? 'red' : 'gray'}}
+                                    onClick={null}>PRIMA VOLTA? REGISTRATI!</Button>
                             </Row>}
                         </Grid>
                     </Grid>

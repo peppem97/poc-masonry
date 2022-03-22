@@ -1,49 +1,48 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import BadgeIcon from '@mui/icons-material/Badge';
+import Typography from "@mui/material/Typography";
+import {Col, Container, Row} from "react-bootstrap";
+import {useContext, useEffect, useState} from "react";
+import GlobalContext from "./GlobalContext";
+import {useDispatch, useSelector} from "react-redux";
 import {
     Checkbox,
-    Container, createTheme, IconButton, ImageList,
-    ImageListItem,
-    ImageListItemBar, Input,
-    InputAdornment, responsiveFontSizes,
+    createTheme, IconButton, ImageList, ImageListItem, ImageListItemBar, Input, InputAdornment,
+    responsiveFontSizes,
     TextField, ThemeProvider,
     ToggleButton,
-    ToggleButtonGroup, useMediaQuery
+    ToggleButtonGroup,
+    useMediaQuery
 } from "@mui/material";
-import {Col, Row} from "react-bootstrap";
-import StoreIcon from '@mui/icons-material/Store';
-import GroupIcon from '@mui/icons-material/Group';
-import {useContext, useEffect, useState} from "react";
-import EmailIcon from '@mui/icons-material/Email';
-import StarIcon from '@mui/icons-material/Star';
-import LanguageIcon from '@mui/icons-material/Language';
-import CallIcon from '@mui/icons-material/Call';
-import TextFieldsIcon from '@mui/icons-material/TextFields';
+import {useNavigate} from "react-router-dom";
+import {setBusy, setIdle} from "./store/loading";
+import axios from "axios";
+import {initImageList} from "./Utility";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import {red} from "@mui/material/colors";
+import StepLabel from "@mui/material/StepLabel";
+import Box from "@mui/material/Box";
+import StoreIcon from "@mui/icons-material/Store";
+import GroupIcon from "@mui/icons-material/Group";
+import BadgeIcon from "@mui/icons-material/Badge";
+import StarIcon from "@mui/icons-material/Star";
+import LanguageIcon from "@mui/icons-material/Language";
+import CallIcon from "@mui/icons-material/Call";
+import TextFieldsIcon from "@mui/icons-material/TextFields";
+import Avatar from "@material-ui/core/Avatar";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import ProgressiveImg from "./ProgessiveImage";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import {initImageList} from "./Utility";
-import GlobalContext from "./GlobalContext";
-import {red} from "@mui/material/colors";
-import Avatar from "@material-ui/core/Avatar";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import EmailIcon from "@mui/icons-material/Email";
 import {Visibility, VisibilityOff} from "@material-ui/icons";
-import axios from "axios";
-import {useDispatch, useSelector} from "react-redux";
-import {setBusy, setIdle} from "./store/loading";
 import Compressor from "compressorjs";
+import Button from "@mui/material/Button";
+import signupOk from "./assets/signup.svg";
+import * as React from "react";
 import {isError} from "./store/error";
-import signupOk from "./assets/signup.svg"
-import {useNavigate} from "react-router-dom";
 
-export default function Signup() {
+export default function Wizard() {
     const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
@@ -71,7 +70,6 @@ export default function Signup() {
     const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
     let navigate = useNavigate();
-
 
     const onChangeUserType = (event, typeUser) => {
         setUserType(typeUser);
@@ -178,13 +176,8 @@ export default function Signup() {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const signup = () => {
+    const addUser = () => {
         let fetched = 0;
-        let dataSignup = {
-            username: username,
-            email: email,
-            password: password
-        };
         let dataShop = {
             email: email,
             title: title,
@@ -196,81 +189,75 @@ export default function Signup() {
         // let dataUser = {};
         const formData = new FormData();
         dispatch(setBusy());
-        axios.post(appContext.ENDPOINT_REGISTER, dataSignup).then((response) => {
-            // if (userType === 'negozio') {
-            //     new Compressor(avatar.rawImage, {
-            //         quality: appContext.COMPRESSION_QUALITY, success(result) {
-            //             formData.append('files.avatar', result, 'avatar.jpg');
-            //             formData.append('data', JSON.stringify(dataShop));
-            //             axios.post(appContext.ENDPOINT_SHOPS, formData, {
-            //                 headers: {'Authorization': 'Bearer ' + token}
-            //             }).then((responseFinal) => {
-            //                 for (let picture of carousel) {
-            //                     if (picture.image != null) {
-            //                         if (picture.rawImage != null) {
-            //                             new Compressor(picture.rawImage, {
-            //                                 quality: appContext.COMPRESSION_QUALITY, success(result) {
-            //                                     dispatch(setBusy());
-            //                                     const formData = new FormData();
-            //                                     formData.append('files.carousel' + picture.index, result, 'example.jpg');
-            //                                     formData.append('data', JSON.stringify({}));
-            //                                     axios.put(appContext.ENDPOINT_SHOPS + "/" + responseFinal?.data?.id, formData, {
-            //                                         headers: {'Authorization': 'Bearer ' + token}
-            //                                     }).then(() => {
-            //                                         fetched++;
-            //                                         if (carousel.length === fetched) {
-            //                                             dispatch(setIdle());
-            //                                             setSignupCompleted(true);
-            //                                         }
-            //                                     }).catch(() => {
-            //                                         dispatch(setIdle());
-            //                                         dispatch(isError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.'));
-            //                                     })
-            //                                 }, error() {
-            //                                     dispatch(setIdle());
-            //                                     dispatch(isError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.'));
-            //                                 }
-            //                             })
-            //                         } else {
-            //                             fetched++;
-            //                             if (carousel.length === fetched) {
-            //                                 dispatch(setIdle());
-            //                                 setSignupCompleted(true);
-            //                             }
-            //                         }
-            //                     } else {
-            //                         dispatch(setBusy());
-            //                         let data = {};
-            //                         data['carousel' + picture.index] = null;
-            //                         axios.put(appContext.ENDPOINT_SHOPS + "/" + responseFinal?.data?.id, data, {
-            //                             headers: {'Authorization': 'Bearer ' + token}
-            //                         }).then(() => {
-            //                             fetched++;
-            //                             if (carousel.length === fetched) {
-            //                                 dispatch(setIdle());
-            //                                 setSignupCompleted(true);
-            //                             }
-            //                         }).catch(() => {
-            //                             dispatch(setIdle());
-            //                             dispatch(isError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.'));
-            //                         })
-            //                     }
-            //                 }
-            //             }).catch(() => {
-            //                 dispatch(setIdle());
-            //             })
-            //         }, error() {
-            //             dispatch(setIdle());
-            //         }
-            //     })
-            // } else if (userType === 'cliente') {
-            //     alert('Da implementare...')
-            // }
-            dispatch(setIdle());
-            setSignupCompleted(true);
-        }).catch(() => {
-            dispatch(setIdle());
-        });
+        if (userType === 'negozio') {
+            new Compressor(avatar.rawImage, {
+                quality: appContext.COMPRESSION_QUALITY, success(result) {
+                    formData.append('files.avatar', result, 'avatar.jpg');
+                    formData.append('data', JSON.stringify(dataShop));
+                    axios.post(appContext.ENDPOINT_SHOPS, formData, {
+                        headers: {'Authorization': 'Bearer ' + token}
+                    }).then((responseFinal) => {
+                        for (let picture of carousel) {
+                            if (picture.image != null) {
+                                if (picture.rawImage != null) {
+                                    new Compressor(picture.rawImage, {
+                                        quality: appContext.COMPRESSION_QUALITY, success(result) {
+                                            dispatch(setBusy());
+                                            const formData = new FormData();
+                                            formData.append('files.carousel' + picture.index, result, 'example.jpg');
+                                            formData.append('data', JSON.stringify({}));
+                                            axios.put(appContext.ENDPOINT_SHOPS + "/" + responseFinal?.data?.id, formData, {
+                                                headers: {'Authorization': 'Bearer ' + token}
+                                            }).then(() => {
+                                                fetched++;
+                                                if (carousel.length === fetched) {
+                                                    dispatch(setIdle());
+                                                    setSignupCompleted(true);
+                                                }
+                                            }).catch(() => {
+                                                dispatch(setIdle());
+                                                dispatch(isError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.'));
+                                            })
+                                        }, error() {
+                                            dispatch(setIdle());
+                                            dispatch(isError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.'));
+                                        }
+                                    })
+                                } else {
+                                    fetched++;
+                                    if (carousel.length === fetched) {
+                                        dispatch(setIdle());
+                                        setSignupCompleted(true);
+                                    }
+                                }
+                            } else {
+                                dispatch(setBusy());
+                                let data = {};
+                                data['carousel' + picture.index] = null;
+                                axios.put(appContext.ENDPOINT_SHOPS + "/" + responseFinal?.data?.id, data, {
+                                    headers: {'Authorization': 'Bearer ' + token}
+                                }).then(() => {
+                                    fetched++;
+                                    if (carousel.length === fetched) {
+                                        dispatch(setIdle());
+                                        setSignupCompleted(true);
+                                    }
+                                }).catch(() => {
+                                    dispatch(setIdle());
+                                    dispatch(isError('Si è verificato un errore nell\'aggiornamento della copertina. Riprovare.'));
+                                })
+                            }
+                        }
+                    }).catch(() => {
+                        dispatch(setIdle());
+                    })
+                }, error() {
+                    dispatch(setIdle());
+                }
+            })
+        } else if (userType === 'cliente') {
+            alert('Da implementare...')
+        }
     };
 
     const canNext = () => {
@@ -280,10 +267,10 @@ export default function Signup() {
                     return true;
                 case 1:
                     return (username !== '' && title !== '' && website !== '' && telephone !== '' && description !== '' && avatar.image && carousel.some((element) => (!element.add)) > 0);
-                    // return true;
+                // return true;
                 case 2:
                     return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consent);
-                    // return true;
+                // return true;
                 default:
                     return true;
             }
@@ -763,7 +750,7 @@ export default function Signup() {
                                                                                        style={{backgroundColor: canNext() ? 'darkred' : 'grey'}}>
                                             Avanti
                                         </Button>}
-                                        {(activeStep === steps.length - 1) && <Button onClick={signup}
+                                        {(activeStep === steps.length - 1) && <Button onClick={addUser}
                                                                                       variant='contained'
                                                                                       disabled={!canNext()}
                                                                                       style={{backgroundColor: canNext() ? 'darkred' : 'grey'}}>

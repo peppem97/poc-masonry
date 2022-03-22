@@ -98,7 +98,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 </Box>
                 <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles} style={{position: 'absolute', bottom: 0}}>
-                        <InfoTitle>{props.product.title}</InfoTitle>
+                        <InfoTitle noWrap={false}>{props.product.title}</InfoTitle>
                         <CardActions className="justify-content-left">
                             {props.showAvatar ?
                                 <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={goToProduct}>

@@ -18,6 +18,8 @@ import {initImageList} from "./Utility";
 import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
 import {isError} from "./store/error";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
 const useStyles = makeStyles(({breakpoints, spacing}) => ({
     root: {
@@ -162,76 +164,88 @@ export default function Product() {
     }, [username]);
 
     return (
-        <Container>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <Row>
-                <Card className={cx(styles.root)}>
-                    <CardMedia
-                        className={styles.media}
-                        image={cover}
-                    />
-                    <CardContent>
-                        <Container>
-                            <Row className='row-cols-auto '>
-                                <Col>
-                                    <IconButton onClick={goToUser}>
-                                        <Avatar src={avatar ?? null}/>
-                                    </IconButton>
-                                </Col>
-                                <Col>
-                                    <Row>
-                                        <Typography variant='subtitle2' color="text.secondary">Pubblicato
-                                            da: </Typography>
-                                        <Typography variant='subtitle2'
-                                                    color={'text.primary'}>{shop}</Typography>
-                                    </Row>
-                                </Col>
-                            </Row>
-                            <br/>
-                            <Row>
-                                <Typography gutterBottom variant="h3">
-                                    {title}
-                                </Typography>
-                            </Row>
-                            <Row>
-                                <Typography variant="body2" color="text.secondary">
-                                    {description}
-                                    Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt
-                                    ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum
-                                    exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
-                                    consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu
-                                    fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa
-                                    qui officia deserunt mollit anim id est laborum.
-                                </Typography>
-                            </Row>
-                            <br/>
-                            {(price && pieces) && <Row className='row-cols-auto'>
-                                <Col>
-                                    <Typography variant='subtitle2' color="text.secondary">Prezzo: </Typography>
-                                    <Typography variant='h6'
-                                                sx={{display: 'inline'}}>{'€ ' + price ?? ' N.D.'}</Typography>
-                                </Col>
-                                <Col>
-                                    <Typography variant='subtitle2' color="text.secondary">Pezzi: </Typography>
-                                    <Typography variant='h6' sx={{display: 'inline'}}>{pieces ?? ' N.D.'}</Typography>
-                                </Col>
-                            </Row>}
-                            <br/>
-                            <Row>
-                                <Col style={{width: '100%'}}>
-                                    <GridSystem isProducts={false} pictures={pictures}/>
-                                </Col>
-                            </Row>
-                        </Container>
-                    </CardContent>
-                </Card>
-            </Row>
-            <br/>
-            <br/>
-        </Container>
-
+        <>
+            <Container>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <Row>
+                    <Card className={cx(styles.root)}>
+                        <CardMedia
+                            className={styles.media}
+                            image={cover}
+                        />
+                        <CardContent>
+                            <Container>
+                                <Row className='row-cols-auto '>
+                                    <Col>
+                                        <IconButton onClick={goToUser}>
+                                            <Avatar src={avatar ?? null}/>
+                                        </IconButton>
+                                    </Col>
+                                    <Col>
+                                        <Row>
+                                            <Typography variant='subtitle2' color="text.secondary">Pubblicato
+                                                da: </Typography>
+                                            <Typography variant='subtitle2'
+                                                        color={'text.primary'}>{shop}</Typography>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                                <br/>
+                                <Row>
+                                    <Typography gutterBottom variant="h3">
+                                        {title}
+                                    </Typography>
+                                </Row>
+                                <Row>
+                                    <Typography variant="body2" color="text.secondary">
+                                        {description}
+                                        Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor
+                                        incidunt
+                                        ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum
+                                        exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
+                                        consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore
+                                        eu
+                                        fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in
+                                        culpa
+                                        qui officia deserunt mollit anim id est laborum.
+                                    </Typography>
+                                </Row>
+                                <br/>
+                                {(price && pieces) &&
+                                    <Row className='row-cols-auto'>
+                                        <Col>
+                                            <Typography variant='subtitle2' color="text.secondary">Prezzo: </Typography>
+                                            <Typography variant='h6'
+                                                        sx={{display: 'inline'}}>{'€ ' + price ?? ' N.D.'}</Typography>
+                                        </Col>
+                                        <Col>
+                                            <Typography variant='subtitle2' color="text.secondary">Pezzi: </Typography>
+                                            <Typography variant='h6'
+                                                        sx={{display: 'inline'}}>{pieces ?? ' N.D.'}</Typography>
+                                        </Col>
+                                        <Col>
+                                            <IconButton><FavoriteBorderIcon/></IconButton>
+                                        </Col>
+                                        <Col>
+                                            <IconButton><WhatsAppIcon/></IconButton>
+                                        </Col>
+                                    </Row>}
+                                <br/>
+                                <Row>
+                                    <Col style={{width: '100%'}}>
+                                        <GridSystem isProducts={false} pictures={pictures}/>
+                                    </Col>
+                                </Row>
+                            </Container>
+                        </CardContent>
+                    </Card>
+                </Row>
+                <br/>
+                <br/>
+            </Container>
+        </>
     )
 }

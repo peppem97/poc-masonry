@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 import User from "./User";
 import TopToolbar from "./TopToolbar";
@@ -9,23 +9,28 @@ import ErrorNoUser from "./ErrorNoUser";
 import {Backdrop, CircularProgress} from "@mui/material";
 import Product from "./Product";
 import ErrorDialog from "./dialogs/ErrorDialog";
-import Signin from "./Signin";
+import Welcome from "./Welcome";
 import ProtectedRoute from "./ProtectedRoute";
 import {useDispatch, useSelector} from 'react-redux'
 import {isNotError} from "./store/error";
 import Signup from "./Signup";
 import UnprotectedRoute from "./UnprotectedRoute";
+import axios from "axios";
+import Wizard from "./Wizard";
 
 export default function App() {
     const loading = useSelector((state) => state.loading.value);
     const errorState = useSelector((state) => state.error.value);
     const errorMessage = useSelector((state) => state.error.message);
+    const token = useSelector((state) => state.token.value);
+
     const dispatch = useDispatch();
     const routes = {
         signin: '/masonry/welcome',
         home: '/masonry/home',
         signup: '/masonry/signup',
         user: '/masonry/user',
+        wizard: '/masonry/wizard',
         product: '/masonry/product',
         noUser: '/masonry/no-user'
     }
@@ -38,6 +43,7 @@ export default function App() {
         ENDPOINT_SHOPS: "http://zion.datafactor.it:40505/shops",
         ENDPOINT_PRODUCTS: "http://zion.datafactor.it:40505/products",
         ENDPOINT_EXAMPLES: "http://zion.datafactor.it:40505/image-uploadeds",
+        ENDPOINT_PENDENTS: "http://zion.datafactor.it:40505/pendents",
         ENDPOINT_AUTH: "http://zion.datafactor.it:40505/auth/local",
         ENDPOINT_REGISTER: "http://zion.datafactor.it:40505/auth/local/register"
     };
@@ -50,7 +56,9 @@ export default function App() {
                     <Routes>
                         <Route exact path="/" element={<Navigate to={routes.signin}/>}/>
                         <Route exact path="/masonry" element={<Navigate to={routes.signin}/>}/>
-                        <Route path={routes.signin} element={<UnprotectedRoute><Signin/></UnprotectedRoute>}/>
+                        <Route exact path={routes.wizard + "/:username"} element={<Wizard/>}/>
+
+                        <Route path={routes.signin} element={<UnprotectedRoute><Welcome/></UnprotectedRoute>}/>
                         <Route path={routes.signup} element={<UnprotectedRoute><Signup/></UnprotectedRoute>}/>
                         <Route path={routes.home} element={<ProtectedRoute><Home/></ProtectedRoute>}/>
                         <Route path={routes.user + '/:username'} element={<ProtectedRoute><User/></ProtectedRoute>}/>

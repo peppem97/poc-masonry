@@ -383,6 +383,7 @@ export default function User() {
     };
 
     useEffect(() => {
+
         getUserInfo();
         getProducts();
     }, []);
@@ -472,7 +473,6 @@ export default function User() {
                     setDeleteProductDialogOpened(false)
                 }}>
             </DeleteProductDialog>
-
         </>
     )
 }

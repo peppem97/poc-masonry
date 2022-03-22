@@ -17,6 +17,7 @@ export default function Home() {
     const [loadingProduct, setLoadingProduct] = useState(false);
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
+    const username = useSelector((state) => state.user.username);
     const dispatch = useDispatch();
 
     const getProducts = () => {
@@ -35,6 +36,14 @@ export default function Home() {
         }).catch(() => {
             setLoadingProduct(false);
             dispatch(isError('Si è verificato un errore nella ricezione della lista dei prodotti. Riprovare ad aggiornare la pagina.'));
+        })
+    };
+
+    const checkFirstAccess = () => {
+        axios.get(appContext.ENDPOINT_PENDENTS + + "?username=" + username, {
+            headers: {'Authorization': 'Bearer ' + token}
+        }).then((response) => {
+            console.log(response)
         })
     };
 
