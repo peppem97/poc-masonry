@@ -13,7 +13,6 @@ import GlobalContext from "./GlobalContext";
 import {useContext, useState} from "react";
 import InfoIcon from '@mui/icons-material/Info';
 import {useDispatch, useSelector} from "react-redux";
-import LoginDialog from "./dialogs/LoginDialog";
 import {setColumnWidth} from "./store/columnWidth";
 import {clearToken} from "./store/token";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -21,7 +20,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import {clearMail, clearType, clearUsername} from "./store/user";
 
 export default function TopToolbar() {
-    const [loginDialog, setLoginDialog] = useState(false);
     let navigate = useNavigate();
     const stateLogin = useSelector((state) => state.token.value);
     const columnWidth = useSelector((state) => state.columnWidth.value);
@@ -30,12 +28,12 @@ export default function TopToolbar() {
     const appContext = useContext(GlobalContext);
 
     const goToHome = () => {
-        navigate(appContext.routes.home);
+        if (stateLogin) {
+            navigate(appContext.routes.home);
+        } else {
+            navigate(appContext.routes.signin);
+        }
     };
-
-    const goToAbout = () => {
-        navigate(appContext.routes.signin);
-    }
 
     const goToProfile = () => {
         navigate(appContext.routes.user + '/' + username);
@@ -43,10 +41,6 @@ export default function TopToolbar() {
 
     const goToSignup = () => {
         navigate(appContext.routes.signup);
-    };
-
-    const login = () => {
-        setLoginDialog(true);
     };
 
     const logout = () => {
@@ -77,52 +71,34 @@ export default function TopToolbar() {
             <Box sx={{flexGrow: 1}} style={{position: 'fixed', top: 0, zIndex: 100, width: '100%'}}>
                 <AppBar position="static">
                     <Toolbar style={{color: 'black', backgroundColor: '#ffcccc'}}>
-                        {stateLogin ? <IconButton onClick={goToHome} style={{color: 'darkred', fontWeight: 'bold'}}>
-                            <HomeIcon/></IconButton> : null}
+                        <IconButton onClick={goToHome} style={{color: 'darkred', fontWeight: 'bold'}}>
+                            <HomeIcon/></IconButton>
+                        {stateLogin && <IconButton onClick={goToHome} style={{color: 'darkred', fontWeight: 'bold'}}>
+                            <HomeIcon/></IconButton>}
                         <Box sx={{flexGrow: 1}}/>
-                        {stateLogin ? <IconButton size="large"
+                        {stateLogin && <IconButton size="large"
                                      style={{color: 'darkred', fontWeight: 'bold'}}
                                      onClick={increaseColumnsSize}>
                             <ZoomInIcon/>
-                        </IconButton> : null}
-                        {stateLogin ? <IconButton size="large"
+                        </IconButton>}
+                        {stateLogin && <IconButton size="large"
                                      style={{color: 'darkred', fontWeight: 'bold'}}
                                      onClick={decreaseColumnsSize}>
                             <ZoomOutIcon/>
-                        </IconButton> : null}
-                        <IconButton size="large"
-                                    style={{color: 'darkred', fontWeight: 'bold'}}
-                                    onClick={goToAbout}>
-                            <InfoIcon/>
-                        </IconButton>
-                        {stateLogin ? <IconButton size="large"
+                        </IconButton>}
+                        {stateLogin && <IconButton size="large"
                                      style={{color: 'darkred', fontWeight: 'bold'}}
                                      onClick={goToProfile}>
                             <AccountCircleIcon/>
-                        </IconButton> : null}
+                        </IconButton>}
                         &nbsp;
-                        {stateLogin ? <Button variant="contained" style={{backgroundColor: 'darkred'}}
-                                              onClick={logout}>{'ESCI'}</Button>
-                            : <Button variant="contained" style={{backgroundColor: 'darkred'}}
-                                      onClick={login}>{'LOGIN'}</Button>}
-                        &nbsp;&nbsp;
-                        {stateLogin ? null
-                            : <Button variant="contained" style={{backgroundColor: 'white', color: 'black'}}
-                                      onClick={goToSignup}>{'REGISTRATI'}</Button>}
-                        {/*<Button variant="contained"*/}
-                        {/*        style={{backgroundColor: 'white', color: 'black'}}>REGISTRATI</Button>*/}
+                        {stateLogin && <Button variant="contained" style={{backgroundColor: 'darkred'}}
+                                              onClick={logout}>{'ESCI'}</Button>}
+                        {!stateLogin && <Button variant="contained" style={{backgroundColor: 'darkred'}}
+                                                onClick={goToSignup}>{'REGISTRATI'}</Button>}
                     </Toolbar>
                 </AppBar>
-                {/*{appContext.loading ? <Box sx={{width: '100%'}}>*/}
-                {/*    <LinearProgress color={"secondary"}/>*/}
-                {/*</Box> : null}*/}
             </Box>
-            <LoginDialog
-                open={loginDialog}
-                goToHome={goToHome}
-                onClose={() => {
-                    setLoginDialog(false);
-                }}/>
         </>
     );
 }

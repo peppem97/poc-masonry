@@ -48,7 +48,6 @@ export default function User() {
         axios.get(appContext.ENDPOINT_SHOPS + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
-            console.log(response)
             if (response.data.length > 0) {
                 setId(response.data[0]?.id);
                 setEmail(response.data[0]?.email);
