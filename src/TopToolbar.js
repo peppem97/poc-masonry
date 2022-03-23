@@ -39,10 +39,6 @@ export default function TopToolbar() {
         navigate(appContext.routes.user + '/' + username);
     };
 
-    const goToSignup = () => {
-        navigate(appContext.routes.signup);
-    };
-
     const logout = () => {
         dispatch(clearToken());
         dispatch(clearType());
@@ -92,8 +88,6 @@ export default function TopToolbar() {
                         &nbsp;
                         {stateLogin && <Button variant="contained" style={{backgroundColor: 'darkred'}}
                                               onClick={logout}>{'ESCI'}</Button>}
-                        {!stateLogin && <Button variant="contained" style={{backgroundColor: 'darkred'}}
-                                                onClick={goToSignup}>{'REGISTRATI'}</Button>}
                     </Toolbar>
                 </AppBar>
             </Box>

@@ -18,7 +18,6 @@ export default function Home() {
     const [loadingProduct, setLoadingProduct] = useState(false);
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
-    const username = useSelector((state) => state.user.username);
     const firstAccess = useSelector((state) => state.user.firstAccess);
     const dispatch = useDispatch();
     let navigate = useNavigate();

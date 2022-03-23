@@ -40,6 +40,7 @@ export default function User() {
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
+    const firstAccess = useSelector((state) => state.user.firstAccess);
     const dispatch = useDispatch();
     let navigate = useNavigate();
 
@@ -383,9 +384,12 @@ export default function User() {
     };
 
     useEffect(() => {
-
-        getUserInfo();
-        getProducts();
+        if (firstAccess) {
+            navigate(appContext.routes.wizard);
+        } else {
+            getUserInfo();
+            getProducts();
+        }
     }, []);
 
     return (

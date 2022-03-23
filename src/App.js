@@ -13,7 +13,6 @@ import Welcome from "./Welcome";
 import ProtectedRoute from "./ProtectedRoute";
 import {useDispatch, useSelector} from 'react-redux'
 import {isNotError, isNotNotice} from "./store/dialogs";
-import Signup from "./Signup";
 import UnprotectedRoute from "./UnprotectedRoute";
 import Wizard from "./Wizard";
 
@@ -26,7 +25,6 @@ export default function App() {
     const routes = {
         welcome: '/masonry/welcome',
         home: '/masonry/home',
-        signup: '/masonry/signup',
         user: '/masonry/user',
         wizard: '/masonry/wizard',
         product: '/masonry/product',
@@ -55,7 +53,6 @@ export default function App() {
                         <Route exact path="/" element={<Navigate to={routes.welcome}/>}/>
                         <Route exact path="/masonry" element={<Navigate to={routes.welcome}/>}/>
                         <Route path={routes.welcome} element={<UnprotectedRoute><Welcome/></UnprotectedRoute>}/>
-                        <Route path={routes.signup} element={<UnprotectedRoute><Signup/></UnprotectedRoute>}/>
                         <Route path={routes.wizard} element={<ProtectedRoute><Wizard/></ProtectedRoute>}/>
                         <Route path={routes.home} element={<ProtectedRoute><Home/></ProtectedRoute>}/>
                         <Route path={routes.user + '/:username'} element={<ProtectedRoute><User/></ProtectedRoute>}/>

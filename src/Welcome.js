@@ -72,7 +72,6 @@ export default function Welcome() {
     };
 
     const clearAll = () => {
-        console.log('cancello utto')
         dispatch(clearToken());
         dispatch(clearType());
         dispatch(clearMail());
