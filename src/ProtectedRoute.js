@@ -8,8 +8,5 @@ export default function ProtectedRoute({ children }) {
     const token = useSelector((state) => state.token.value);
     const email = useSelector((state) => state.user.email);
     const username = useSelector((state) => state.user.username);
-    console.log(token);
-    console.log(email);
-    console.log(username);
     return (token && email && username) ? children : <Navigate to={appContext.routes.welcome}/>;
 }

@@ -33,10 +33,8 @@ export default function Welcome() {
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState(null);
-
     const [loading, setLoading] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
-    const [userType, setUserType] = useState('negozio');
     const [isSignin, setIsSignin] = useState(true);
     const theme = useTheme();
     const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -65,10 +63,6 @@ export default function Welcome() {
         setShowPassword(!showPassword);
     };
 
-    const onChangeUserType = (event, typeUser) => {
-        setUserType(typeUser);
-    };
-
     const canSignin = () => {
         return (email !== '' && password !== '');
     };
@@ -85,6 +79,14 @@ export default function Welcome() {
             dispatch(setMail(response.data.user.email));
             dispatch(setUser(response.data.user.username));
             setLoading(false);
+            //controllo se è il primo accesso...
+            axios.get(appContext.ENDPOINT_PENDENTS + '/?username=' + response.data.user.username, {
+                headers: {'Authorization': 'Bearer ' + response.data.jwt}
+            }).then((response) => {
+                console.log(response)
+            }).catch((error) => {
+                console.log(error)
+            })
             navigate(appContext.routes.home);
         }).catch((e) => {
             setLoading(false);
@@ -126,7 +128,7 @@ export default function Welcome() {
         dispatch(clearType());
         dispatch(clearMail());
         dispatch(clearUsername());
-    }, [])
+    }, []);
 
     return (
         <>

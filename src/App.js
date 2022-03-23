@@ -22,7 +22,6 @@ export default function App() {
     const errorState = useSelector((state) => state.dialogs.error);
     const message = useSelector((state) => state.dialogs.message);
     const noticeState = useSelector((state) => state.dialogs.notice);
-
     const dispatch = useDispatch();
     const routes = {
         welcome: '/masonry/welcome',
