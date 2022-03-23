@@ -11,6 +11,7 @@ import GlobalContext from "./GlobalContext";
 import {generateHeight} from "./Utility";
 import {useDispatch, useSelector} from "react-redux";
 import {isError} from "./store/dialogs";
+import {useNavigate} from "react-router-dom";
 
 export default function Home() {
     const [products, setProducts] = useState([]);
@@ -18,7 +19,9 @@ export default function Home() {
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
     const username = useSelector((state) => state.user.username);
+    const firstAccess = useSelector((state) => state.user.firstAccess);
     const dispatch = useDispatch();
+    let navigate = useNavigate();
 
     const getProducts = () => {
         setLoadingProduct(true);
@@ -39,16 +42,12 @@ export default function Home() {
         })
     };
 
-    const checkFirstAccess = () => {
-        axios.get(appContext.ENDPOINT_PENDENTS + + "?username=" + username, {
-            headers: {'Authorization': 'Bearer ' + token}
-        }).then((response) => {
-            console.log(response)
-        })
-    };
-
     useEffect(() => {
-        getProducts();
+        if (firstAccess) {
+            navigate(appContext.routes.wizard);
+        } else {
+            getProducts();
+        }
     }, []);
 
     return (

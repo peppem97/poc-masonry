@@ -6,7 +6,7 @@ export const userSlice = createSlice({
         type: localStorage.getItem('type'),
         email: localStorage.getItem('email'),
         username: localStorage.getItem('username'),
-        firstAccess: null
+        firstAccess: JSON.parse(localStorage.getItem('firstAccess')) === true
     },
     reducers: {
         setType: (state, value) => {
@@ -41,8 +41,7 @@ export const userSlice = createSlice({
             localStorage.removeItem('firstAccess');
             state.firstAccess = null;
         },
-
     },
 })
-export const { setType, setMail, setUser, clearType, clearMail, clearUsername} = userSlice.actions;
+export const { setType, setMail, setUser, setFirstAccess, clearType, clearMail, clearUsername, clearFirstAccess} = userSlice.actions;
 export default userSlice.reducer;

@@ -54,9 +54,9 @@ export default function App() {
                     <Routes>
                         <Route exact path="/" element={<Navigate to={routes.welcome}/>}/>
                         <Route exact path="/masonry" element={<Navigate to={routes.welcome}/>}/>
-                        <Route exact path={routes.wizard + "/:username"} element={<Wizard/>}/>
                         <Route path={routes.welcome} element={<UnprotectedRoute><Welcome/></UnprotectedRoute>}/>
                         <Route path={routes.signup} element={<UnprotectedRoute><Signup/></UnprotectedRoute>}/>
+                        <Route path={routes.wizard} element={<ProtectedRoute><Wizard/></ProtectedRoute>}/>
                         <Route path={routes.home} element={<ProtectedRoute><Home/></ProtectedRoute>}/>
                         <Route path={routes.user + '/:username'} element={<ProtectedRoute><User/></ProtectedRoute>}/>
                         <Route path={routes.product + '/:id'} element={<ProtectedRoute><Product/></ProtectedRoute>}/>

@@ -22,7 +22,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import {clearToken, setToken} from "./store/token";
-import {clearMail, clearType, clearUsername, setMail, setUser} from "./store/user";
+import {clearFirstAccess, clearMail, clearType, clearUsername, setFirstAccess, setMail, setUser} from "./store/user";
 import {isError, isNotice} from "./store/dialogs";
 import GlobalContext from "./GlobalContext";
 import {useDispatch} from "react-redux";
@@ -71,6 +71,15 @@ export default function Welcome() {
         return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword));
     };
 
+    const clearAll = () => {
+        console.log('cancello utto')
+        dispatch(clearToken());
+        dispatch(clearType());
+        dispatch(clearMail());
+        dispatch(clearUsername());
+        dispatch(clearFirstAccess());
+    };
+
     const signin = () => {
         setLoading(true);
         let data = {identifier: email, password: password};
@@ -79,16 +88,23 @@ export default function Welcome() {
             dispatch(setMail(response.data.user.email));
             dispatch(setUser(response.data.user.username));
             setLoading(false);
-            //controllo se è il primo accesso...
             axios.get(appContext.ENDPOINT_PENDENTS + '/?username=' + response.data.user.username, {
                 headers: {'Authorization': 'Bearer ' + response.data.jwt}
             }).then((response) => {
-                console.log(response)
+                if (response.data.length === 0) {
+                    dispatch(setFirstAccess(false));
+                    navigate(appContext.routes.home);
+                } else {
+                    dispatch(setFirstAccess(true));
+                    navigate(appContext.routes.wizard);
+                }
             }).catch((error) => {
-                console.log(error)
+                clearAll();
+                setLoading(false);
+                dispatch(isError('Errore nella fase di autenticazione. Riprovare.'));
             })
-            navigate(appContext.routes.home);
         }).catch((e) => {
+            clearAll();
             setLoading(false);
             dispatch(isError('Errore nella fase di autenticazione. Riprovare.'));
         });
@@ -108,11 +124,12 @@ export default function Welcome() {
         axios.post(appContext.ENDPOINT_REGISTER, dataSignup).then(
             () => {
                 axios.post(appContext.ENDPOINT_PENDENTS, dataPendent).then(
-                    (response) => {
+                    () => {
                         setLoading(false);
                         dispatch(isNotice('Registrazione completata! Per potere accedere, conferma la registrazione attraverso il link ricevuto nella tua mail!'));
+                        setIsSignin(true);
                     }
-                ).catch((error) => {
+                ).catch(() => {
                     setLoading(false);
                     dispatch(isError('Errore nella fase di registrazione. Riprovare.'));
                 })
@@ -124,10 +141,7 @@ export default function Welcome() {
     };
 
     useEffect(() => {
-        dispatch(clearToken());
-        dispatch(clearType());
-        dispatch(clearMail());
-        dispatch(clearUsername());
+        clearAll();
     }, []);
 
     return (
