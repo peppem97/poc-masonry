@@ -1,4 +1,5 @@
 import {
+    Checkbox,
     CircularProgress,
     Container, Grid,
     IconButton,
@@ -27,12 +28,15 @@ import {isError, isNotice} from "./store/dialogs";
 import GlobalContext from "./GlobalContext";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import {red} from "@mui/material/colors";
 
 export default function Welcome() {
     const [email, setEmail] = useState(null);
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState(null);
+    const [consent, setConsent] = useState(false);
+
     const [loading, setLoading] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const [isSignin, setIsSignin] = useState(true);
@@ -63,12 +67,16 @@ export default function Welcome() {
         setShowPassword(!showPassword);
     };
 
+    const onChangeConsent = () => {
+        setConsent(!consent);
+    };
+
     const canSignin = () => {
         return (email !== '' && password !== '');
     };
 
     const canSignup = () => {
-        return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword));
+        return (username !== '' && email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consent);
     };
 
     const clearAll = () => {
@@ -269,6 +277,7 @@ export default function Welcome() {
                             <Row className='justify-content-center'>
                                 <TextField
                                     onChange={onChangeUsername}
+                                    value={username}
                                     autoFocus
                                     color='secondary'
                                     margin="dense"
@@ -278,6 +287,7 @@ export default function Welcome() {
                             <Row className='justify-content-center'>
                                 <TextField
                                     onChange={onChangeEmail}
+                                    value={email}
                                     autoFocus
                                     color='secondary'
                                     margin="dense"
@@ -287,6 +297,7 @@ export default function Welcome() {
                             <Row className='justify-content-center'>
                                 <TextField
                                     onChange={onChangePassword}
+                                    value={password}
                                     type={showPassword ? 'text' : 'password'}
                                     color='secondary'
                                     InputProps={{
@@ -300,6 +311,7 @@ export default function Welcome() {
                             <Row className='justify-content-center'>
                                 <TextField
                                     onChange={onChangeConfirmPassword}
+                                    value={confirmPassword}
                                     type={showPassword ? 'text' : 'password'}
                                     color='secondary'
                                     InputProps={{
@@ -311,6 +323,27 @@ export default function Welcome() {
                                     variant="outlined"/>
                             </Row>
                             <br/>
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                gap: 2,
+                                justifyContent: 'center'
+                            }}>
+                                <Checkbox
+                                    checked={consent}
+                                    onChange={onChangeConsent}
+                                    sx={{
+                                        color: red[800],
+                                        '&.Mui-checked': {
+                                            color: red[600],
+                                        },
+                                    }}
+                                />
+                                Accetto i Termini di Servizio e la Privacy Policy
+                            </Box>
+                            <br/>
+
                             {loading && <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'row',

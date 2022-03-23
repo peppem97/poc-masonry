@@ -119,7 +119,7 @@ export default function Wizard() {
         setSurname(e.target.value);
     };
 
-    const onChangeConsens = () => {
+    const onChangeConsent = () => {
         setConsent(!consent);
     };
 
@@ -716,7 +716,7 @@ export default function Wizard() {
                                                 }}>
                                                     <Checkbox
                                                         checked={consent}
-                                                        onChange={onChangeConsens}
+                                                        onChange={onChangeConsent}
                                                         sx={{
                                                             color: red[800],
                                                             '&.Mui-checked': {
