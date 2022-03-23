@@ -94,7 +94,7 @@ export default function UpdateProductDialog(props) {
     };
 
     const onChangePieces = (e) => {
-        setPieces(e.target.value)
+        setPieces(e.target.value.replace(/[^0-9]/g, ''));
     };
 
     const closeDialog = () => {
@@ -214,8 +214,7 @@ export default function UpdateProductDialog(props) {
                                 fullWidth
                                 value={price}
                                 onChange={onChangePrice}
-                                pattern="[0-9]*"
-                                type='number'
+                                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start"><EuroIcon/></InputAdornment>,
                                 }}
@@ -235,7 +234,7 @@ export default function UpdateProductDialog(props) {
                                     startAdornment: <InputAdornment position="start"><AutoAwesomeMotionIcon/></InputAdornment>,
                                 }}
                                 onChange={onChangePieces}
-                                type='number'
+                                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*'}}
                                 color='secondary'
                                 margin="dense"
                                 label="Pezzi"

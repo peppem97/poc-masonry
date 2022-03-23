@@ -22,12 +22,11 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import {setToken} from "./store/token";
-import {setMail, setUsername} from "./store/user";
+import {setMail, setUser} from "./store/user";
 import {isError} from "./store/error";
 import GlobalContext from "./GlobalContext";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import {setBusy} from "./store/loading";
 
 export default function Welcome() {
     const [email, setEmail] = useState(null);
@@ -48,6 +47,10 @@ export default function Welcome() {
 
     const onChangeEmail = (e) => {
         setEmail(e.target.value);
+    };
+
+    const onChangeUsername = (e) => {
+        setUsername(e.target.value);
     };
 
     const onChangePassword = (e) => {
@@ -80,13 +83,12 @@ export default function Welcome() {
         axios.post(appContext.ENDPOINT_AUTH, data).then((response) => {
             dispatch(setToken(response.data.jwt));
             dispatch(setMail(response.data.user.email));
-            dispatch(setUsername(response.data.user.username));
+            dispatch(setUser(response.data.user.username));
             setLoading(false);
             navigate(appContext.routes.home);
-
         }).catch((e) => {
             setLoading(false);
-            dispatch(isError('Errore di autenticazione. Riprovare.'));
+            dispatch(isError('Errore nella fase di autenticazione. Riprovare.'));
         });
     };
 
@@ -96,10 +98,12 @@ export default function Welcome() {
             email: email,
             password: password
         };
-        dispatch(setBusy());
+        setLoading(true);
         axios.post(appContext.ENDPOINT_REGISTER, dataSignup).then(
-            (response) => {}
-        ).catch((error) => {
+            () => {}
+        ).catch(() => {
+            setLoading(false);
+            dispatch(isError('Errore nella fase di registrazione. Riprovare.'));
         })
     };
 
@@ -224,6 +228,15 @@ export default function Welcome() {
                             </Box>
                             <Row className='justify-content-center'>
                                 <TextField
+                                    onChange={onChangeUsername}
+                                    autoFocus
+                                    color='secondary'
+                                    margin="dense"
+                                    label="Username"
+                                    variant="outlined"/>
+                            </Row>
+                            <Row className='justify-content-center'>
+                                <TextField
                                     onChange={onChangeEmail}
                                     autoFocus
                                     color='secondary'
@@ -273,7 +286,7 @@ export default function Welcome() {
                                     variant="contained"
                                     component="span"
                                     style={{backgroundColor: canSignup() ? 'darkred' : 'gray'}}
-                                    onClick={signin}>REGISTRATI</Button>
+                                    onClick={signup}>REGISTRATI</Button>
                             </Row>
                             }
                         </Grid>

@@ -16,7 +16,7 @@ export const userSlice = createSlice({
             localStorage.setItem('email', value.payload);
             state.email = value.payload;
         },
-        setUsername: (state, value) => {
+        setUser: (state, value) => {
             localStorage.setItem('username', value.payload);
             state.username = value.payload;
         },
@@ -34,5 +34,5 @@ export const userSlice = createSlice({
         },
     },
 })
-export const { setType, setMail, setUsername, clearType, clearMail, clearUsername} = userSlice.actions;
+export const { setType, setMail, setUser, clearType, clearMail, clearUsername} = userSlice.actions;
 export default userSlice.reducer;
