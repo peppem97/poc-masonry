@@ -8,11 +8,11 @@ import Error404 from "./Error404";
 import ErrorNoUser from "./ErrorNoUser";
 import {Backdrop, CircularProgress} from "@mui/material";
 import Product from "./Product";
-import ErrorDialog from "./dialogs/ErrorDialog";
+import AlertDialog from "./dialogs/AlertDialog";
 import Welcome from "./Welcome";
 import ProtectedRoute from "./ProtectedRoute";
 import {useDispatch, useSelector} from 'react-redux'
-import {isNotError} from "./store/error";
+import {isNotError, isNotNotice} from "./store/error";
 import Signup from "./Signup";
 import UnprotectedRoute from "./UnprotectedRoute";
 import axios from "axios";
@@ -21,8 +21,8 @@ import Wizard from "./Wizard";
 export default function App() {
     const loading = useSelector((state) => state.loading.value);
     const errorState = useSelector((state) => state.error.value);
-    const errorMessage = useSelector((state) => state.error.message);
-    const token = useSelector((state) => state.token.value);
+    const message = useSelector((state) => state.error.message);
+    const noticeState = useSelector((state) => state.error.notice);
 
     const dispatch = useDispatch();
     const routes = {
@@ -57,7 +57,6 @@ export default function App() {
                         <Route exact path="/" element={<Navigate to={routes.signin}/>}/>
                         <Route exact path="/masonry" element={<Navigate to={routes.signin}/>}/>
                         <Route exact path={routes.wizard + "/:username"} element={<Wizard/>}/>
-
                         <Route path={routes.signin} element={<UnprotectedRoute><Welcome/></UnprotectedRoute>}/>
                         <Route path={routes.signup} element={<UnprotectedRoute><Signup/></UnprotectedRoute>}/>
                         <Route path={routes.home} element={<ProtectedRoute><Home/></ProtectedRoute>}/>
@@ -72,10 +71,16 @@ export default function App() {
                     open={loading}>
                     <CircularProgress color="inherit"/>
                 </Backdrop>
-                <ErrorDialog
+                <AlertDialog
+                    title={'Attenzione!'}
                     open={errorState}
-                    errorMessage={errorMessage}
+                    errorMessage={message}
                     onClose={() => {dispatch(isNotError())}}/>
+                <AlertDialog
+                    title={null}
+                    open={noticeState}
+                    errorMessage={message}
+                    onClose={() => {dispatch(isNotNotice())}}/>
             </GlobalContext.Provider>
         </>
     );

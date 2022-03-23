@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import DialogContentText from "@mui/material/DialogContentText";
 import * as React from "react";
 
-export default function ErrorDialog(props) {
+export default function AlertDialog(props) {
     const closeDialog = () => {
         props.onClose();
     };
@@ -14,7 +14,7 @@ export default function ErrorDialog(props) {
                 open={props.open}
                 onClose={closeDialog}>
                 <DialogTitle>
-                    Attenzione
+                    {props.title}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>

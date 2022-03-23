@@ -23,7 +23,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import {setToken} from "./store/token";
 import {setMail, setUser} from "./store/user";
-import {isError} from "./store/error";
+import {isError, isNotice} from "./store/error";
 import GlobalContext from "./GlobalContext";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
@@ -98,9 +98,23 @@ export default function Welcome() {
             email: email,
             password: password
         };
+        let dataPendent = {
+            username: username,
+            email: email,
+        }
         setLoading(true);
         axios.post(appContext.ENDPOINT_REGISTER, dataSignup).then(
-            () => {}
+            () => {
+                axios.post(appContext.ENDPOINT_PENDENTS, dataPendent).then(
+                    (response) => {
+                        setLoading(false);
+                        dispatch(isNotice('Registrazione completata! Per potere accedere, conferma la registrazione attraverso il link ricevuto nella tua mail!'));
+                    }
+                ).catch((error) => {
+                    setLoading(false);
+                    dispatch(isError('Errore nella fase di registrazione. Riprovare.'));
+                })
+            }
         ).catch(() => {
             setLoading(false);
             dispatch(isError('Errore nella fase di registrazione. Riprovare.'));
@@ -160,28 +174,28 @@ export default function Welcome() {
                                     variant="outlined"/>
                             </Row>
                             <br/>
-                            <Box sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                gap: 2,
-                                justifyContent: 'center'
-                            }}>
-                                <ToggleButtonGroup
-                                    size="large"
-                                    value={userType ?? ''}
-                                    onChange={onChangeUserType}
-                                    exclusive={true}>
-                                    <ToggleButton value="negozio">
-                                        <StoreIcon/>
-                                        <Typography variant='subtitle1'>Negozio</Typography>
-                                    </ToggleButton>,
-                                    <ToggleButton value="cliente">
-                                        <GroupIcon/>
-                                        <Typography variant='subtitle1'>Cliente</Typography>
-                                    </ToggleButton>
-                                </ToggleButtonGroup>
-                            </Box>
+                            {/*<Box sx={{*/}
+                            {/*    display: 'flex',*/}
+                            {/*    flexDirection: 'row',*/}
+                            {/*    alignItems: 'center',*/}
+                            {/*    gap: 2,*/}
+                            {/*    justifyContent: 'center'*/}
+                            {/*}}>*/}
+                            {/*    <ToggleButtonGroup*/}
+                            {/*        size="large"*/}
+                            {/*        value={userType ?? ''}*/}
+                            {/*        onChange={onChangeUserType}*/}
+                            {/*        exclusive={true}>*/}
+                            {/*        <ToggleButton value="negozio">*/}
+                            {/*            <StoreIcon/>*/}
+                            {/*            <Typography variant='subtitle1'>Negozio</Typography>*/}
+                            {/*        </ToggleButton>,*/}
+                            {/*        <ToggleButton value="cliente">*/}
+                            {/*            <GroupIcon/>*/}
+                            {/*            <Typography variant='subtitle1'>Cliente</Typography>*/}
+                            {/*        </ToggleButton>*/}
+                            {/*    </ToggleButtonGroup>*/}
+                            {/*</Box>*/}
                             {loading && <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'row',
@@ -206,8 +220,10 @@ export default function Welcome() {
                                 <Button
                                     variant="contained"
                                     component="span"
-                                    style={{backgroundColor: 'red' }}
-                                    onClick={() => {setIsSignin(false)}}>PRIMA VOLTA? REGISTRATI!</Button>
+                                    style={{backgroundColor: 'red'}}
+                                    onClick={() => {
+                                        setIsSignin(false)
+                                    }}>PRIMA VOLTA? REGISTRATI!</Button>
                             </Row>}
                         </Grid>
                     </Grid>}
@@ -223,7 +239,9 @@ export default function Welcome() {
                                 gap: 2,
                                 justifyContent: 'center'
                             }}>
-                                <IconButton onClick={() => {setIsSignin(true)}}><ArrowBackIcon/></IconButton>
+                                <IconButton onClick={() => {
+                                    setIsSignin(true)
+                                }}><ArrowBackIcon/></IconButton>
                                 <Typography variant='subtitle1'>Compila i seguenti campi per registrarti: </Typography>
                             </Box>
                             <Row className='justify-content-center'>
