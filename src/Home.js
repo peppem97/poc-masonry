@@ -10,7 +10,7 @@ import axios from "axios";
 import GlobalContext from "./GlobalContext";
 import {generateHeight} from "./Utility";
 import {useDispatch, useSelector} from "react-redux";
-import {isError} from "./store/error";
+import {isError} from "./store/dialogs";
 
 export default function Home() {
     const [products, setProducts] = useState([]);

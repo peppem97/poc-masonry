@@ -40,7 +40,7 @@ import Compressor from "compressorjs";
 import Button from "@mui/material/Button";
 import signupOk from "./assets/complete.svg";
 import * as React from "react";
-import {isError} from "./store/error";
+import {isError} from "./store/dialogs";
 
 export default function Wizard() {
     const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
@@ -289,7 +289,7 @@ export default function Wizard() {
     };
 
     const goToSignin = () => {
-        navigate(appContext.routes.signin);
+        navigate(appContext.routes.welcome);
     };
 
     useEffect(() => {

@@ -31,7 +31,7 @@ export default function TopToolbar() {
         if (stateLogin) {
             navigate(appContext.routes.home);
         } else {
-            navigate(appContext.routes.signin);
+            navigate(appContext.routes.welcome);
         }
     };
 

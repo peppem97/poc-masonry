@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import tokenReducer from './token'
 import columnWidthReducer from './columnWidth'
 import loadingReducer from './loading'
-import errorReducer from './error'
+import dialogsReducer from './dialogs'
 import userReducer from "./user";
 
 export default configureStore({
@@ -10,7 +10,7 @@ export default configureStore({
         token: tokenReducer,
         columnWidth: columnWidthReducer,
         loading: loadingReducer,
-        error: errorReducer,
+        dialogs: dialogsReducer,
         user: userReducer
     }
 });

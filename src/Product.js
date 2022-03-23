@@ -17,7 +17,7 @@ import Avatar from "@material-ui/core/Avatar";
 import {initImageList} from "./Utility";
 import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
-import {isError} from "./store/error";
+import {isError} from "./store/dialogs";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 

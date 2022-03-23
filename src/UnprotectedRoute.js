@@ -5,6 +5,8 @@ import GlobalContext from "./GlobalContext";
 
 export default function UnprotectedRoute({ children }) {
     const appContext = useContext(GlobalContext);
-    const stateLogin = useSelector((state) => state.token.value);
-    return !stateLogin ? children : <Navigate to={appContext.routes.home}/>;
+    const token = useSelector((state) => state.token.value);
+    const email = useSelector((state) => state.user.email);
+    const username = useSelector((state) => state.user.username);
+    return (!token || !username || !email) ? children : <Navigate to={appContext.routes.home}/>;
 }

@@ -5,6 +5,11 @@ import GlobalContext from "./GlobalContext";
 
 export default function ProtectedRoute({ children }) {
     const appContext = useContext(GlobalContext);
-    const stateLogin = useSelector((state) => state.token.value);
-    return stateLogin ? children : <Navigate to={appContext.routes.signin}/>;
+    const token = useSelector((state) => state.token.value);
+    const email = useSelector((state) => state.user.email);
+    const username = useSelector((state) => state.user.username);
+    console.log(token);
+    console.log(email);
+    console.log(username);
+    return (token && email && username) ? children : <Navigate to={appContext.routes.welcome}/>;
 }

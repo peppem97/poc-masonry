@@ -15,7 +15,7 @@ import {generateHeight} from "./Utility";
 import DeleteProductDialog from "./dialogs/DeleteProductDialog";
 import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
-import {isError} from "./store/error";
+import {isError} from "./store/dialogs";
 
 export default function User() {
     const [id, setId] = useState(null);

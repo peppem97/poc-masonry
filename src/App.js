@@ -12,21 +12,20 @@ import AlertDialog from "./dialogs/AlertDialog";
 import Welcome from "./Welcome";
 import ProtectedRoute from "./ProtectedRoute";
 import {useDispatch, useSelector} from 'react-redux'
-import {isNotError, isNotNotice} from "./store/error";
+import {isNotError, isNotNotice} from "./store/dialogs";
 import Signup from "./Signup";
 import UnprotectedRoute from "./UnprotectedRoute";
-import axios from "axios";
 import Wizard from "./Wizard";
 
 export default function App() {
     const loading = useSelector((state) => state.loading.value);
-    const errorState = useSelector((state) => state.error.value);
-    const message = useSelector((state) => state.error.message);
-    const noticeState = useSelector((state) => state.error.notice);
+    const errorState = useSelector((state) => state.dialogs.error);
+    const message = useSelector((state) => state.dialogs.message);
+    const noticeState = useSelector((state) => state.dialogs.notice);
 
     const dispatch = useDispatch();
     const routes = {
-        signin: '/masonry/welcome',
+        welcome: '/masonry/welcome',
         home: '/masonry/home',
         signup: '/masonry/signup',
         user: '/masonry/user',
@@ -54,10 +53,10 @@ export default function App() {
                 <Router>
                     <TopToolbar/>
                     <Routes>
-                        <Route exact path="/" element={<Navigate to={routes.signin}/>}/>
-                        <Route exact path="/masonry" element={<Navigate to={routes.signin}/>}/>
+                        <Route exact path="/" element={<Navigate to={routes.welcome}/>}/>
+                        <Route exact path="/masonry" element={<Navigate to={routes.welcome}/>}/>
                         <Route exact path={routes.wizard + "/:username"} element={<Wizard/>}/>
-                        <Route path={routes.signin} element={<UnprotectedRoute><Welcome/></UnprotectedRoute>}/>
+                        <Route path={routes.welcome} element={<UnprotectedRoute><Welcome/></UnprotectedRoute>}/>
                         <Route path={routes.signup} element={<UnprotectedRoute><Signup/></UnprotectedRoute>}/>
                         <Route path={routes.home} element={<ProtectedRoute><Home/></ProtectedRoute>}/>
                         <Route path={routes.user + '/:username'} element={<ProtectedRoute><User/></ProtectedRoute>}/>

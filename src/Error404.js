@@ -15,7 +15,7 @@ export default function Error404() {
         if (stateLogin) {
             navigate(appContext.routes.home);
         } else {
-            navigate(appContext.routes.signin);
+            navigate(appContext.routes.welcome);
         }
     };
 

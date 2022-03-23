@@ -1,24 +1,24 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-export const errorSlice = createSlice({
-    name: 'error',
+export const dialogsSlice = createSlice({
+    name: 'dialogs',
     initialState: {
-        value: false,
+        error: false,
         notice: false,
         message: null
     },
     reducers: {
         isError: (state, value) => {
-            state.value = true;
+            state.error = true;
             state.message = value.payload;
+        },
+        isNotError: (state) => {
+            state.error = false;
+            state.message = null;
         },
         isNotice: (state, value) => {
             state.notice = true;
             state.message = value.payload;
-        },
-        isNotError: (state) => {
-            state.value = false;
-            state.message = null;
         },
         isNotNotice: (state) => {
             state.notice = false;
@@ -26,5 +26,5 @@ export const errorSlice = createSlice({
         }
     },
 })
-export const { isError, isNotError, isNotice, isNotNotice } = errorSlice.actions;
-export default errorSlice.reducer;
+export const { isError, isNotError, isNotice, isNotNotice } = dialogsSlice.actions;
+export default dialogsSlice.reducer;

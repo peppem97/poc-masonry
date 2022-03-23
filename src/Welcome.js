@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import {Col, Row} from "react-bootstrap";
 import Typography from "@mui/material/Typography";
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import signinSVG from './assets/signin.svg';
 import signupSVG from './assets/signup.svg';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -21,9 +21,9 @@ import GroupIcon from "@mui/icons-material/Group";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import axios from "axios";
-import {setToken} from "./store/token";
-import {setMail, setUser} from "./store/user";
-import {isError, isNotice} from "./store/error";
+import {clearToken, setToken} from "./store/token";
+import {clearMail, clearType, clearUsername, setMail, setUser} from "./store/user";
+import {isError, isNotice} from "./store/dialogs";
 import GlobalContext from "./GlobalContext";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
@@ -120,6 +120,13 @@ export default function Welcome() {
             dispatch(isError('Errore nella fase di registrazione. Riprovare.'));
         })
     };
+
+    useEffect(() => {
+        dispatch(clearToken());
+        dispatch(clearType());
+        dispatch(clearMail());
+        dispatch(clearUsername());
+    }, [])
 
     return (
         <>

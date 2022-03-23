@@ -21,7 +21,7 @@ import EuroIcon from '@mui/icons-material/Euro';
 import ProgressiveImg from "../ProgessiveImage";
 import {initImageList} from "../Utility";
 import {useDispatch, useSelector} from "react-redux";
-import {isError} from "../store/error";
+import {isError} from "../store/dialogs";
 
 export default function UpdateProductDialog(props) {
     const [pictures, setPictures] = useState([]);
