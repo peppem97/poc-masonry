@@ -24,6 +24,7 @@ export default function TopToolbar() {
     const stateLogin = useSelector((state) => state.token.value);
     const columnWidth = useSelector((state) => state.columnWidth.value);
     const username = useSelector((state) => state.user.username);
+    const firstAccess = useSelector((state) => state.user.firstAccess);
     const dispatch = useDispatch();
     const appContext = useContext(GlobalContext);
 
@@ -70,17 +71,17 @@ export default function TopToolbar() {
                         <IconButton onClick={goToHome} style={{color: 'darkred', fontWeight: 'bold'}}>
                             <HomeIcon/></IconButton>
                         <Box sx={{flexGrow: 1}}/>
-                        {stateLogin && <IconButton size="large"
+                        {(stateLogin && !firstAccess) && <IconButton size="large"
                                      style={{color: 'darkred', fontWeight: 'bold'}}
                                      onClick={increaseColumnsSize}>
                             <ZoomInIcon/>
                         </IconButton>}
-                        {stateLogin && <IconButton size="large"
+                        {(stateLogin && !firstAccess) && <IconButton size="large"
                                      style={{color: 'darkred', fontWeight: 'bold'}}
                                      onClick={decreaseColumnsSize}>
                             <ZoomOutIcon/>
                         </IconButton>}
-                        {stateLogin && <IconButton size="large"
+                        {(stateLogin && !firstAccess) && <IconButton size="large"
                                      style={{color: 'darkred', fontWeight: 'bold'}}
                                      onClick={goToProfile}>
                             <AccountCircleIcon/>

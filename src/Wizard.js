@@ -42,6 +42,7 @@ import signupOk from "./assets/complete.svg";
 import * as React from "react";
 import {isError} from "./store/dialogs";
 import PictureCard from "./PictureCard";
+import {setFirstAccess} from "./store/user";
 
 export default function Wizard() {
     const steps = ['Sei un negozio o un cliente?', 'Informazioni di base', 'Immagine di profilo e copertina'];
@@ -102,8 +103,6 @@ export default function Wizard() {
     };
 
     const addPicture = (e, i) => {
-        console.log(e)
-        console.log(i)
         let tmpPictures = [];
         for (let picture of carousel) {
             if (picture.index === i) {
@@ -175,12 +174,6 @@ export default function Wizard() {
         // let dataUser = {};
         const formData = new FormData();
         dispatch(setBusy());
-
-        //TODO: sto cancellando il record pendente prima di inserire tutti i dati
-        //*****
-        //*****
-
-
         if (userType === 'negozio') {
             new Compressor(avatar.rawImage, {
                 quality: appContext.COMPRESSION_QUALITY, success(result) {
@@ -205,7 +198,6 @@ export default function Wizard() {
                                                 if (carousel.length === fetched) {
                                                     dispatch(setIdle());
                                                     setSignupCompleted(true);
-                                                    console.log('finito')
                                                 }
                                             }).catch(() => {
                                                 dispatch(setIdle());
@@ -221,8 +213,6 @@ export default function Wizard() {
                                     if (carousel.length === fetched) {
                                         dispatch(setIdle());
                                         setSignupCompleted(true);
-                                        console.log('finito')
-
                                     }
                                 }
                             } else {
@@ -236,7 +226,6 @@ export default function Wizard() {
                                     if (carousel.length === fetched) {
                                         dispatch(setIdle());
                                         setSignupCompleted(true);
-                                        console.log('finito')
                                     }
                                 }).catch(() => {
                                     dispatch(setIdle());
@@ -284,8 +273,10 @@ export default function Wizard() {
         }
     };
 
-    const goToSignin = () => {
-        navigate(appContext.routes.welcome);
+    const goToProfile = () => {
+        removePendent();
+        dispatch(setFirstAccess(false))
+        navigate(appContext.routes.user + '/' + username);
     };
 
     useEffect(() => {
@@ -501,7 +492,8 @@ export default function Wizard() {
                                                             gap: 2,
                                                             justifyContent: 'center'
                                                         }}>
-                                                            <Typography variant='subtitle1'>Immagine del profilo: </Typography>
+                                                            <Typography variant='subtitle1'>Immagine del
+                                                                profilo: </Typography>
                                                             <label htmlFor="avatar-uploader" className='text-center'>
                                                                 <Input
                                                                     accept="image/*"
@@ -527,7 +519,8 @@ export default function Wizard() {
                                                             </label>
                                                         </Box>
                                                         <br/>
-                                                        <Typography variant='subtitle1'>Immagini di copertina: </Typography>
+                                                        <Typography variant='subtitle1'>Immagini di
+                                                            copertina: </Typography>
                                                         <Box sx={{
                                                             display: 'flex',
                                                             flexDirection: 'row',
@@ -644,9 +637,11 @@ export default function Wizard() {
                                     justifyContent: 'center'
                                 }}>
                                     <ThemeProvider theme={theme}>
-                                        <Typography variant='h2' st>REGISTRAZIONE COMPLETATA!</Typography>
-                                        <Typography variant='h5'>Per potere accedere all'applicazione conferma la
-                                            registrazione attraverso il link ricevuto nella tua mail.</Typography>
+                                        <Typography variant='h2' st>PROFILO COMPLETATO!</Typography>
+                                        <Typography variant='h5'>Il tuo profilo è stato completato con tutte le
+                                            informazioni.
+                                            Premi il pulsante qui in basso per vedere il tuo profilo ed iniziare a
+                                            inserire un prodotto.</Typography>
                                     </ThemeProvider>
                                 </Box>
                                 <br/>
@@ -673,7 +668,7 @@ export default function Wizard() {
                                     <Button variant="contained"
                                             style={{backgroundColor: 'darkred'}}
                                             fullWidth={true}
-                                            onClick={goToSignin}>ENTRA</Button>
+                                            onClick={goToProfile}>VEDI PROFILO</Button>
                                 </Box>
                             </Col>
                         </>
