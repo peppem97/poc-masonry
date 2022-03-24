@@ -17,6 +17,7 @@ import {initImageList} from "../Utility";
 import GlobalContext from "../GlobalContext";
 import PictureCard from "../PictureCard";
 import Box from "@mui/material/Box";
+import StackGrid, {easings, transitions} from "react-stack-grid";
 
 export default function UpdateCarouselDialog(props) {
     const [pictures, setPictures] = useState([]);
@@ -69,7 +70,7 @@ export default function UpdateCarouselDialog(props) {
     }, [props.open]);
 
     return (
-        <Dialog open={props.open} onClose={closeDialog}>
+        <Dialog open={props.open} onClose={closeDialog} fullWidth={true}>
             <DialogTitle>Modifica copertina</DialogTitle>
             <DialogContent>
                 <DialogContentText>
@@ -77,39 +78,45 @@ export default function UpdateCarouselDialog(props) {
                 </DialogContentText>
                 <br/>
                 <Container>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        gap: 2,
-                        justifyContent: 'center'
-                    }}>
-                        {pictures.map((item) => {
-                            if (item.add) {
-                                return (
-                                    <PictureCard
-                                        key={item.index}
-                                        height={250}
-                                        width={180}
-                                        edit={true}
-                                        add={item.add}
-                                        index={item.index}
-                                        addPicture={addPicture}/>
-                                )
-                            } else {
-                                return (
-                                    <PictureCard
-                                        key={item.index}
-                                        edit={true}
-                                        height={250}
-                                        width={180}
-                                        add={item.add}
-                                        picture={item.image}
-                                        removePicture={removePicture}/>
-                                )
-                            }
-                        })}
-                    </Box>
+                    <Row className='justify-content-center'>
+                        <StackGrid duration={500}
+                                   columnWidth={120}
+                                   gutterWidth={30}
+                                   gutterHeight={30}
+                                   easing={easings.quartOut}
+                                   appear={transitions['fadeDown'].appear}
+                                   appeared={transitions['fadeDown'].appeared}
+                                   enter={transitions['fadeDown'].enter}
+                                   entered={transitions['fadeDown'].entered}
+                                   leaved={transitions['fadeDown'].leaved}
+                                   rtl={false}>
+                            {pictures.map((item) => {
+                                if (item.add) {
+                                    return (
+                                        <PictureCard
+                                            key={item.index}
+                                            height={200}
+                                            width={120}
+                                            edit={true}
+                                            add={item.add}
+                                            index={item.index}
+                                            addPicture={addPicture}/>
+                                    )
+                                } else {
+                                    return (
+                                        <PictureCard
+                                            key={item.index}
+                                            edit={true}
+                                            height={200}
+                                            width={120}
+                                            add={item.add}
+                                            picture={item.image}
+                                            removePicture={removePicture}/>
+                                    )
+                                }
+                            })}
+                        </StackGrid>
+                    </Row>
                     <br/>
                     <Row>
                         <Button onClick={updateCarousel} variant="contained" component="span"

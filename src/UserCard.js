@@ -130,7 +130,7 @@ export const UserCard = React.memo(function News3Card(props) {
                         justifyContent: 'center'
                     }}>
                         <Item>
-                            <label htmlFor="avatar-uploader" className='text-center'>
+                            {props.selfUser && <label htmlFor="avatar-uploader" className='text-center'>
                                 <Input accept="image/*" id="avatar-uploader" type="file" hidden
                                        onChange={props.updateAvatar}/>
                                 <Avatar onMouseOver={() => {
@@ -143,7 +143,11 @@ export const UserCard = React.memo(function News3Card(props) {
                                         src={!editAvatar && props.avatar}>
                                     {editAvatar && <AddPhotoAlternateIcon/>}
                                 </Avatar>
-                            </label>
+                            </label>}
+                            {
+                                !props.selfUser &&
+                                <Avatar className={styles.avatar} src={props.avatar}/>
+                            }
                         </Item>
                         <Info position={'middle'} useStyles={useNewsInfoStyles}>
                             <InfoTitle style={{fontWeight: 'bold'}}>{props.website}

@@ -39,8 +39,6 @@ export default function UpdateProductDialog(props) {
 
 
     const addCover = (e) => {
-        console.log('cover')
-        console.log(e)
         let tmpCover = {
             image: URL.createObjectURL(e.target.files[0]),
             rawPicture: e.target.files[0]
@@ -57,8 +55,6 @@ export default function UpdateProductDialog(props) {
     };
 
     const addPicture = (e, index) => {
-        console.log(e, index)
-        console.log('picture')
         let picturesList = [];
         for (let picture of pictures) {
             if (picture.index === index) {
@@ -77,7 +73,6 @@ export default function UpdateProductDialog(props) {
     };
 
     const removePicture = (index) => {
-        console.log(index)
         let tmpPictures = [];
         for (let picture of pictures) {
             if (picture.index === index) {
