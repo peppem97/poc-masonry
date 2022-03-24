@@ -51,7 +51,6 @@ export default function Wizard() {
     const [password, setPassword] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
-    const [username, setUsername] = useState(null);
     const [title, setTitle] = useState(null);
     const [website, setWebsite] = useState(null);
     const [telephone, setTelephone] = useState(null);
@@ -66,6 +65,7 @@ export default function Wizard() {
     const appContext = useContext(GlobalContext);
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token.value);
+    const username = useSelector((state) => state.user.username);
     const theme = responsiveFontSizes(createTheme());
     const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -77,10 +77,6 @@ export default function Wizard() {
 
     const onChangeEmail = (e) => {
         setEmail(e.target.value);
-    };
-
-    const onChangeUsername = (e) => {
-        setUsername(e.target.value);
     };
 
     const onChangePassword = (e) => {
@@ -100,7 +96,7 @@ export default function Wizard() {
     };
 
     const onChangeTelephone = (e) => {
-        setTelephone(e.target.value);
+        setTelephone(e.target.value.replace(/[^0-9]/g, ''));
     };
 
     const onChangeDescription = (e) => {
@@ -176,6 +172,16 @@ export default function Wizard() {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
+    const removePendent = () => {
+        axios.get(appContext.ENDPOINT_PENDENTS + "?username=" + username, {
+            headers: {'Authorization': 'Bearer ' + token}
+        }).then((response) => {
+            axios.delete(appContext.ENDPOINT_PENDENTS + '/' + response.data[0].id, {
+                headers: {'Authorization': 'Bearer ' + token}
+            })
+        })
+    };
+
     const addUser = () => {
         let fetched = 0;
         let dataShop = {
@@ -189,6 +195,12 @@ export default function Wizard() {
         // let dataUser = {};
         const formData = new FormData();
         dispatch(setBusy());
+
+        //TODO: sto cancellando il record pendente prima di inserire tutti i dati
+        //*****
+        //*****
+
+
         if (userType === 'negozio') {
             new Compressor(avatar.rawImage, {
                 quality: appContext.COMPRESSION_QUALITY, success(result) {
@@ -213,6 +225,7 @@ export default function Wizard() {
                                                 if (carousel.length === fetched) {
                                                     dispatch(setIdle());
                                                     setSignupCompleted(true);
+                                                    console.log('finito')
                                                 }
                                             }).catch(() => {
                                                 dispatch(setIdle());
@@ -228,6 +241,8 @@ export default function Wizard() {
                                     if (carousel.length === fetched) {
                                         dispatch(setIdle());
                                         setSignupCompleted(true);
+                                        console.log('finito')
+
                                     }
                                 }
                             } else {
@@ -241,6 +256,7 @@ export default function Wizard() {
                                     if (carousel.length === fetched) {
                                         dispatch(setIdle());
                                         setSignupCompleted(true);
+                                        console.log('finito')
                                     }
                                 }).catch(() => {
                                     dispatch(setIdle());
@@ -266,11 +282,11 @@ export default function Wizard() {
                 case 0:
                     return true;
                 case 1:
-                    return (username !== '' && title !== '' && website !== '' && telephone !== '' && description !== '' && avatar.image && carousel.some((element) => (!element.add)) > 0);
-                // return true;
+                    // return (title !== '' && website !== '' && telephone !== '' && description !== '' && avatar.image && carousel.some((element) => (!element.add)) > 0);
+                    return true;
                 case 2:
-                    return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consent);
-                // return true;
+                    // return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consent);
+                    return true;
                 default:
                     return true;
             }
@@ -279,7 +295,7 @@ export default function Wizard() {
                 case 0:
                     return true;
                 case 1:
-                    return (username !== '' && email !== '' && name !== '' && surname !== '' && telephone !== '' && avatar.image);
+                    return (email !== '' && name !== '' && surname !== '' && telephone !== '' && avatar.image);
                 case 2:
                     return consent;
                 default:
@@ -305,7 +321,10 @@ export default function Wizard() {
                 <br/>
                 {!signupCompleted &&
                     <Row className='justify-content-center'>
-                        <Typography variant='h1' className='text-center'>REGISTRATI</Typography>
+                        <ThemeProvider theme={theme}>
+                            <Typography variant='h2' className='text-center'>COMPLETA IL TUO PROFILO</Typography>
+                        </ThemeProvider>
+
                     </Row>}
                 <br/>
                 <br/>
@@ -366,21 +385,6 @@ export default function Wizard() {
                                                             justifyContent: 'center'
                                                         }}>
                                                             <TextField
-                                                                onChange={onChangeUsername}
-                                                                autoFocus
-                                                                value={username ?? ''}
-                                                                color='secondary'
-                                                                margin="dense"
-                                                                label="Username"
-                                                                InputProps={{
-                                                                    startAdornment: (
-                                                                        <InputAdornment position="start">
-                                                                            <BadgeIcon/>
-                                                                        </InputAdornment>
-                                                                    ),
-                                                                }}
-                                                                variant="outlined"/>
-                                                            <TextField
                                                                 onChange={onChangeTitle}
                                                                 autoFocus
                                                                 value={title ?? ''}
@@ -414,6 +418,7 @@ export default function Wizard() {
                                                                 onChange={onChangeTelephone}
                                                                 autoFocus
                                                                 value={telephone ?? ''}
+                                                                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                                                                 color='secondary'
                                                                 margin="dense"
                                                                 label="Telefono"
@@ -558,21 +563,6 @@ export default function Wizard() {
                                                             justifyContent: 'center'
                                                         }}>
                                                             <TextField
-                                                                onChange={onChangeUsername}
-                                                                autoFocus
-                                                                value={username ?? ''}
-                                                                color='secondary'
-                                                                margin="dense"
-                                                                label="Username"
-                                                                InputProps={{
-                                                                    startAdornment: (
-                                                                        <InputAdornment position="start">
-                                                                            <BadgeIcon/>
-                                                                        </InputAdornment>
-                                                                    ),
-                                                                }}
-                                                                variant="outlined"/>
-                                                            <TextField
                                                                 onChange={onChangeName}
                                                                 autoFocus
                                                                 value={name ?? ''}
@@ -606,6 +596,7 @@ export default function Wizard() {
                                                                 onChange={onChangeTelephone}
                                                                 autoFocus
                                                                 value={telephone ?? ''}
+                                                                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                                                                 color='secondary'
                                                                 margin="dense"
                                                                 label="Telefono"
@@ -656,77 +647,7 @@ export default function Wizard() {
                                         }
                                         {(activeStep === 2) &&
                                             <>
-                                                <Box sx={{
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    alignItems: 'center',
-                                                    gap: 2,
-                                                    justifyContent: 'center'
-                                                }}>
-                                                    <TextField
-                                                        onChange={onChangeEmail}
-                                                        autoFocus
-                                                        value={email ?? ''}
-                                                        color='secondary'
-                                                        margin="dense"
-                                                        label="Email"
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start">
-                                                                    <EmailIcon/>
-                                                                </InputAdornment>
-                                                            ),
-                                                        }}
-                                                        variant="outlined"/>
-                                                    <TextField
-                                                        onChange={onChangePassword}
-                                                        type={showPassword ? 'text' : 'password'}
-                                                        color='secondary'
-                                                        margin="dense"
-                                                        InputProps={{
-                                                            endAdornment: <IconButton position="start"
-                                                                                      onClick={onChangeShowPassword}>{
-                                                                showPassword ? <VisibilityOff/> :
-                                                                    <Visibility/>}</IconButton>,
-                                                        }}
 
-                                                        label="Password"
-                                                        variant="outlined"/>
-                                                    <TextField
-                                                        onChange={onChangeConfirmPassword}
-                                                        type={showPassword ? 'text' : 'password'}
-                                                        color='secondary'
-                                                        margin="dense"
-                                                        InputProps={{
-                                                            endAdornment: <IconButton position="start"
-                                                                                      onClick={onChangeShowPassword}>{
-                                                                showPassword ? <VisibilityOff/> :
-                                                                    <Visibility/>}</IconButton>,
-                                                        }}
-
-                                                        label="Conferma Password"
-                                                        variant="outlined"/>
-                                                </Box>
-                                                <Box sx={{
-                                                    display: 'flex',
-                                                    flexDirection: 'row',
-                                                    alignItems: 'center',
-                                                    gap: 2,
-                                                    justifyContent: 'center'
-                                                }}>
-                                                    <Checkbox
-                                                        checked={consent}
-                                                        onChange={onChangeConsent}
-                                                        sx={{
-                                                            color: red[800],
-                                                            '&.Mui-checked': {
-                                                                color: red[600],
-                                                            },
-                                                        }}
-                                                    />
-                                                    Accetto i Termini di Servizio e la policy relativa alla
-                                                    privacy
-                                                </Box>
                                             </>
                                         }
                                     </Col>
