@@ -538,35 +538,10 @@ export default function Wizard() {
                                                             {carousel.map((item) => {
                                                                 if (item.add) {
                                                                     return (
-                                                                        // <ImageListItem key={item.index} cols={10}
-                                                                        //                rows={1}>
-                                                                        //
-                                                                        //     <ImageListItemBar
-                                                                        //         actionIcon={
-                                                                        //             [
-                                                                        //                 <label
-                                                                        //                     htmlFor="icon-button-file"
-                                                                        //                     key={0}>
-                                                                        //                     <Input accept="image/*"
-                                                                        //                            id="icon-button-file"
-                                                                        //                            type="file"
-                                                                        //                            hidden
-                                                                        //                            onChange={(e) => {
-                                                                        //                                addPicture(e, item.index)
-                                                                        //                            }}/>
-                                                                        //                     <IconButton
-                                                                        //                         sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                                        //                         aria-label="upload picture"
-                                                                        //                         component="span">
-                                                                        //                         <PhotoCamera/>
-                                                                        //                     </IconButton>
-                                                                        //                 </label>]}
-                                                                        //     />
-                                                                        // </ImageListItem>
                                                                         <PictureCard
                                                                             key={item.index}
                                                                             height={300}
-                                                                            width={150}
+                                                                            width={180}
                                                                             edit={true}
                                                                             add={item.add}
                                                                             index={item.index}
@@ -574,35 +549,11 @@ export default function Wizard() {
                                                                     )
                                                                 } else {
                                                                     return (
-                                                                        // <ImageListItem key={item.index} cols={10}
-                                                                        //                rows={1}>
-                                                                        //     <ProgressiveImg image={item.image}/>
-                                                                        //     <ImageListItemBar
-                                                                        //         actionIcon={
-                                                                        //             [
-                                                                        //                 <IconButton
-                                                                        //                     sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                                        //                     key={0}
-                                                                        //                     onClick={() => {
-                                                                        //                         window.open(item.image, '_blank', 'noopener,noreferrer')
-                                                                        //                     }}>
-                                                                        //                     <OpenInFullIcon/>
-                                                                        //                 </IconButton>,
-                                                                        //                 <IconButton
-                                                                        //                     sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                                        //                     onClick={() => {
-                                                                        //                         removePicture(item.index)
-                                                                        //                     }} key={1}>
-                                                                        //                     <DeleteForeverIcon/>
-                                                                        //                 </IconButton>
-                                                                        //             ]}
-                                                                        //     />
-                                                                        // </ImageListItem>
                                                                         <PictureCard
                                                                             key={item.index}
                                                                             edit={true}
                                                                             height={300}
-                                                                            width={150}
+                                                                            width={180}
                                                                             add={item.add}
                                                                             picture={item.image}
                                                                             removePicture={removePicture}/>

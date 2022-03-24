@@ -15,6 +15,8 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import ProgressiveImg from "../ProgessiveImage";
 import {initImageList} from "../Utility";
 import GlobalContext from "../GlobalContext";
+import PictureCard from "../PictureCard";
+import Box from "@mui/material/Box";
 
 export default function UpdateCarouselDialog(props) {
     const [pictures, setPictures] = useState([]);
@@ -75,50 +77,39 @@ export default function UpdateCarouselDialog(props) {
                 </DialogContentText>
                 <br/>
                 <Container>
-                    <ImageList sx={{width: 500, height: 250}}
-                               gap={5} cols={30}>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 2,
+                        justifyContent: 'center'
+                    }}>
                         {pictures.map((item) => {
                             if (item.add) {
-                                return (<ImageListItem key={item.index} cols={10} rows={1}>
-
-                                    <ImageListItemBar
-                                        actionIcon={
-                                            [
-                                                <label htmlFor="icon-button-file" key={0}>
-                                                    <Input accept="image/*" id="icon-button-file" type="file" hidden
-                                                           onChange={(e) => {
-                                                               addPicture(e, item.index)
-                                                           }}/>
-                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                                aria-label="upload picture" component="span">
-                                                        <PhotoCamera/>
-                                                    </IconButton>
-                                                </label>]}
-                                    />
-                                </ImageListItem>)
+                                return (
+                                    <PictureCard
+                                        key={item.index}
+                                        height={300}
+                                        width={180}
+                                        edit={true}
+                                        add={item.add}
+                                        index={item.index}
+                                        addPicture={addPicture}/>
+                                )
                             } else {
-                                return (<ImageListItem key={item.index} cols={10} rows={1}>
-                                    <ProgressiveImg image={item.image} />
-                                    <ImageListItemBar
-                                        actionIcon={
-                                            [
-                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0}
-                                                            onClick={() => {
-                                                                window.open(item.image, '_blank', 'noopener,noreferrer')
-                                                            }}>
-                                                    <OpenInFullIcon/>
-                                                </IconButton>,
-                                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} onClick={() => {
-                                                    removePicture(item.index)
-                                                }} key={1}>
-                                                    <DeleteForeverIcon/>
-                                                </IconButton>
-                                            ]}
-                                    />
-                                </ImageListItem>)
+                                return (
+                                    <PictureCard
+                                        key={item.index}
+                                        edit={true}
+                                        height={300}
+                                        width={180}
+                                        add={item.add}
+                                        picture={item.image}
+                                        removePicture={removePicture}/>
+                                )
                             }
                         })}
-                    </ImageList>
+                    </Box>
                     <br/>
                     <Row>
                         <Button onClick={updateCarousel} variant="contained" component="span"

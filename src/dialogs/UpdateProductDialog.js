@@ -22,6 +22,8 @@ import ProgressiveImg from "../ProgessiveImage";
 import {initImageList} from "../Utility";
 import {useDispatch, useSelector} from "react-redux";
 import {isError} from "../store/dialogs";
+import PictureCard from "../PictureCard";
+import Box from "@mui/material/Box";
 
 export default function UpdateProductDialog(props) {
     const [pictures, setPictures] = useState([]);
@@ -36,6 +38,8 @@ export default function UpdateProductDialog(props) {
 
 
     const addCover = (e) => {
+        console.log('cover')
+        console.log(e)
         let tmpCover = {
             image: URL.createObjectURL(e.target.files[0]),
             rawPicture: e.target.files[0]
@@ -52,6 +56,8 @@ export default function UpdateProductDialog(props) {
     };
 
     const addPicture = (e, index) => {
+        console.log(e, index)
+        console.log('picture')
         let picturesList = [];
         for (let picture of pictures) {
             if (picture.index === index) {
@@ -70,6 +76,7 @@ export default function UpdateProductDialog(props) {
     };
 
     const removePicture = (index) => {
+        console.log(index)
         let tmpPictures = [];
         for (let picture of pictures) {
             if (picture.index === index) {
@@ -199,7 +206,7 @@ export default function UpdateProductDialog(props) {
                                 value={title}
                                 onChange={onChangeTitle}
                                 required={true}
-                                inputProps={{ maxLength: 12 }}
+                                inputProps={{maxLength: 12}}
                                 autoFocus
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start"><TextFieldsIcon/></InputAdornment>,
@@ -210,11 +217,11 @@ export default function UpdateProductDialog(props) {
                                 variant="outlined"/>}
                         </Col>
                         <Col sm={12} lg={6}>
-                            { <TextField
+                            {<TextField
                                 fullWidth
                                 value={price}
                                 onChange={onChangePrice}
-                                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                                inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start"><EuroIcon/></InputAdornment>,
                                 }}
@@ -223,7 +230,7 @@ export default function UpdateProductDialog(props) {
                                 label="Prezzo"
                                 variant="outlined"/>}
                         </Col>
-                    </Row >
+                    </Row>
                     <br/>
                     <Row className='justify-content-between'>
                         <Col sm={12} lg={6}>
@@ -231,10 +238,11 @@ export default function UpdateProductDialog(props) {
                                 fullWidth
                                 value={pieces}
                                 InputProps={{
-                                    startAdornment: <InputAdornment position="start"><AutoAwesomeMotionIcon/></InputAdornment>,
+                                    startAdornment: <InputAdornment
+                                        position="start"><AutoAwesomeMotionIcon/></InputAdornment>,
                                 }}
                                 onChange={onChangePieces}
-                                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*'}}
+                                inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
                                 color='secondary'
                                 margin="dense"
                                 label="Pezzi"
@@ -249,7 +257,7 @@ export default function UpdateProductDialog(props) {
                                 }}
                                 onChange={onChangeDescription}
                                 label="Descrizione"
-                                inputProps={{ maxLength: 320 }}
+                                inputProps={{maxLength: 320}}
 
                                 multiline
                                 color='secondary'
@@ -258,116 +266,173 @@ export default function UpdateProductDialog(props) {
                         </Col>
                     </Row>
                     <br/>
-                    <Row className='justify-content-center'>
-                        <ImageList rows={1} sx={{height: 220, width: 1200}}
-                                   gap={5} cols={110}>
-                            {
-                                cover.image ? <ImageListItem cols={10} rows={1}>
-                                        <ProgressiveImg image={cover.image} />
+                    {/*<Row className='justify-content-center'>*/}
+                    {/*<ImageList rows={1} sx={{height: 220, width: 1200}}*/}
+                    {/*           gap={5} cols={110}>*/}
+                    {/*    {*/}
+                    {/*        cover.image ? <ImageListItem cols={10} rows={1}>*/}
+                    {/*                <ProgressiveImg image={cover.image} />*/}
 
-                                        <ImageListItemBar
-                                            actionIcon={
-                                                [
-                                                    <IconButton
-                                                        sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                        key={0}
-                                                        onClick={() => {
-                                                            window.open(cover.image, '_blank', 'noopener,noreferrer')
-                                                        }}>
-                                                        <OpenInFullIcon/>
-                                                    </IconButton>,
-                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                                onClick={() => {
-                                                                    removeCover()
-                                                                }}
-                                                                key={1}>
-                                                        <DeleteForeverIcon/>
-                                                    </IconButton>]}
-                                        />
-                                    </ImageListItem> :
-                                    <ImageListItem cols={10} rows={1}>
-                                        {/*<img src={item.image}*/}
-                                        {/*     alt=""*/}
-                                        {/*     loading="lazy"/>*/}
-                                        <ImageListItemBar
-                                            actionIcon={
-                                                [
-                                                    <label htmlFor="icon-button-file" key={0}>
-                                                        <Input accept="image/*" id="icon-button-file" type="file" hidden
-                                                               onChange={(e) => {
-                                                                   addCover(e)
-                                                               }}/>
-                                                        <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                                    aria-label="upload picture" component="span">
-                                                            <PhotoCamera/>
-                                                        </IconButton>
-                                                    </label>]}
-                                        />
-                                    </ImageListItem>
+                    {/*                <ImageListItemBar*/}
+                    {/*                    actionIcon={*/}
+                    {/*                        [*/}
+                    {/*                            <IconButton*/}
+                    {/*                                sx={{color: 'rgba(255, 255, 255, 0.54)'}}*/}
+                    {/*                                key={0}*/}
+                    {/*                                onClick={() => {*/}
+                    {/*                                    window.open(cover.image, '_blank', 'noopener,noreferrer')*/}
+                    {/*                                }}>*/}
+                    {/*                                <OpenInFullIcon/>*/}
+                    {/*                            </IconButton>,*/}
+                    {/*                            <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}*/}
+                    {/*                                        onClick={() => {*/}
+                    {/*                                            removeCover()*/}
+                    {/*                                        }}*/}
+                    {/*                                        key={1}>*/}
+                    {/*                                <DeleteForeverIcon/>*/}
+                    {/*                            </IconButton>]}*/}
+                    {/*                />*/}
+                    {/*            </ImageListItem> :*/}
+                    {/*            <ImageListItem cols={10} rows={1}>*/}
+                    {/*                /!*<img src={item.image}*!/*/}
+                    {/*                /!*     alt=""*!/*/}
+                    {/*                /!*     loading="lazy"/>*!/*/}
+                    {/*                <ImageListItemBar*/}
+                    {/*                    actionIcon={*/}
+                    {/*                        [*/}
+                    {/*                            <label htmlFor="icon-button-file" key={0}>*/}
+                    {/*                                <Input accept="image/*" id="icon-button-file" type="file" hidden*/}
+                    {/*                                       onChange={(e) => {*/}
+                    {/*                                           addCover(e)*/}
+                    {/*                                       }}/>*/}
+                    {/*                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}*/}
+                    {/*                                            aria-label="upload picture" component="span">*/}
+                    {/*                                    <PhotoCamera/>*/}
+                    {/*                                </IconButton>*/}
+                    {/*                            </label>]}*/}
+                    {/*                />*/}
+                    {/*            </ImageListItem>*/}
+                    {/*    }*/}
+                    {/*</ImageList>*/}
+
+
+                    {/*{pictures.map((item) => {*/}
+                    {/*    if (item.add) {*/}
+                    {/*        return (*/}
+                    {/*            <ImageListItem key={item.index} cols={10} rows={1}>*/}
+                    {/*                /!*<img src={null}*!/*/}
+                    {/*                /!*     alt=""*!/*/}
+                    {/*                /!*     loading="lazy"/>*!/*/}
+
+                    {/*                <ImageListItemBar*/}
+                    {/*                    actionIcon={*/}
+                    {/*                        [*/}
+                    {/*                            <label htmlFor="icon-button-file" key={0}>*/}
+                    {/*                                <Input accept="image/*" id="icon-button-file" type="file"*/}
+                    {/*                                       hidden onChange={(e) => {*/}
+                    {/*                                    addPicture(e, item.index)*/}
+                    {/*                                }}/>*/}
+                    {/*                                <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}*/}
+                    {/*                                            key={1}*/}
+                    {/*                                            aria-label="upload picture" component="span">*/}
+                    {/*                                    <PhotoCamera/>*/}
+                    {/*                                </IconButton>*/}
+                    {/*                            </label>]}*/}
+                    {/*                />*/}
+                    {/*            </ImageListItem>)*/}
+                    {/*    } else {*/}
+                    {/*        return (<ImageListItem key={item.index} cols={10} rows={1}>*/}
+                    {/*            <ProgressiveImg image={item.image} />*/}
+
+                    {/*            /!*<LazyLoadImage*!/*/}
+                    {/*            /!*    alt=""*!/*/}
+                    {/*            /!*    src={item.image}/>*!/*/}
+                    {/*            <ImageListItemBar*/}
+                    {/*                actionIcon={*/}
+                    {/*                    [*/}
+                    {/*                        <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0}*/}
+                    {/*                                    onClick={() => {*/}
+                    {/*                                        window.open(item.image, '_blank', 'noopener,noreferrer')*/}
+                    {/*                                    }}>*/}
+                    {/*                            <OpenInFullIcon/>*/}
+                    {/*                        </IconButton>,*/}
+                    {/*                        <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={1}*/}
+                    {/*                                    onClick={() => {*/}
+                    {/*                                        removePicture(item.index)*/}
+                    {/*                                    }}>*/}
+                    {/*                            <DeleteForeverIcon/>*/}
+                    {/*                        </IconButton>*/}
+                    {/*                    ]}*/}
+                    {/*            />*/}
+                    {/*        </ImageListItem>)*/}
+                    {/*    }*/}
+                    {/*})}*/}
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 2,
+                        justifyContent: 'center'
+                    }}>
+                        {
+                            cover.image ?
+                                <PictureCard
+                                    height={200}
+                                    width={180}
+                                    edit={true}
+                                    add={false}
+                                    index={null}
+                                    picture={cover.image}
+                                    removePicture={removeCover}
+                                /> :
+                                <PictureCard
+                                    edit={true}
+                                    height={200}
+                                    width={180}
+                                    add={true}
+                                    index={null}
+                                    addPicture={addCover}
+                                />
+                        }
+                        <div className="vr" style={{fontWeight: 'bold'}}/>
+                        {pictures.map((item) => {
+                            if (item.add) {
+                                return (
+                                    <PictureCard
+                                        key={item.index}
+                                        height={200}
+                                        width={180}
+                                        edit={true}
+                                        add={item.add}
+                                        index={item.index}
+                                        addPicture={addPicture}/>
+                                )
+                            } else {
+                                return (
+                                    <PictureCard
+                                        key={item.index}
+                                        edit={true}
+                                        height={200}
+                                        width={180}
+                                        add={item.add}
+                                        picture={item.image}
+                                        index={item.index}
+                                        removePicture={removePicture}/>
+                                )
                             }
-                            <div className="vr" style={{fontWeight: 'bold'}}/>
-                            {pictures.map((item) => {
-                                if (item.add) {
-                                    return (
-                                        <ImageListItem key={item.index} cols={10} rows={1}>
-                                            {/*<img src={null}*/}
-                                            {/*     alt=""*/}
-                                            {/*     loading="lazy"/>*/}
-
-                                            <ImageListItemBar
-                                                actionIcon={
-                                                    [
-                                                        <label htmlFor="icon-button-file" key={0}>
-                                                            <Input accept="image/*" id="icon-button-file" type="file"
-                                                                   hidden onChange={(e) => {
-                                                                addPicture(e, item.index)
-                                                            }}/>
-                                                            <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                                        key={1}
-                                                                        aria-label="upload picture" component="span">
-                                                                <PhotoCamera/>
-                                                            </IconButton>
-                                                        </label>]}
-                                            />
-                                        </ImageListItem>)
-                                } else {
-                                    return (<ImageListItem key={item.index} cols={10} rows={1}>
-                                        <ProgressiveImg image={item.image} />
-
-                                        {/*<LazyLoadImage*/}
-                                        {/*    alt=""*/}
-                                        {/*    src={item.image}/>*/}
-                                        <ImageListItemBar
-                                            actionIcon={
-                                                [
-                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={0}
-                                                                onClick={() => {
-                                                                    window.open(item.image, '_blank', 'noopener,noreferrer')
-                                                                }}>
-                                                        <OpenInFullIcon/>
-                                                    </IconButton>,
-                                                    <IconButton sx={{color: 'rgba(255, 255, 255, 0.54)'}} key={1}
-                                                                onClick={() => {
-                                                                    removePicture(item.index)
-                                                                }}>
-                                                        <DeleteForeverIcon/>
-                                                    </IconButton>
-                                                ]}
-                                        />
-                                    </ImageListItem>)
-                                }
-                            })}
-                        </ImageList>
-                    </Row>
+                        })}
+                    </Box>
+                    <br/>
+                    {/*</Row>*/}
                     <Row>
                         <Button
                             variant={"contained"}
                             disabled={!canUpdate()}
                             component="span"
                             style={{backgroundColor: canUpdate() ? 'darkred' : 'grey'}}
-                                onClick={() => {
-                                    uploadUpdateProduct();
-                                }}>
+                            onClick={() => {
+                                uploadUpdateProduct();
+                            }}>
                             {props.isUpload ? 'Inserisci' : 'Modifica'} prodotto
                         </Button>
                     </Row>
