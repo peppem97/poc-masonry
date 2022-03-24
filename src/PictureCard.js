@@ -6,8 +6,11 @@ import CardMedia from '@material-ui/core/CardMedia';
 import {Info} from '@mui-treasury/components/info';
 import {useGalaxyInfoStyles} from '@mui-treasury/styles/info/galaxy';
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
-import {CardActions, IconButton} from "@mui/material";
+import {CardActions, IconButton, Input} from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import OpenInFullIcon from "@mui/icons-material/OpenInFull";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -47,11 +50,49 @@ export const PictureCard = React.memo(function GalaxyCard(props) {
                 <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles}>
                         <CardActions className={styles.contentDescription}>
-                            <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {
+                            {props.edit == null && <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {
                                 window.open(props.picture, '_blank', 'noopener,noreferrer')
                             }}>
                                 <VisibilityIcon/>
-                            </IconButton>
+                            </IconButton>}
+                            {
+                                (props.edit && props.add) &&
+                                <>
+                                    <label
+                                        htmlFor="icon-button-file"
+                                        key={0}>
+                                        <Input accept="image/*"
+                                               id="icon-button-file"
+                                               type="file"
+                                               hidden
+                                               onChange={(e) => {
+                                                   props.addPicture(e, props.index)}}/>
+                                        <IconButton
+                                            sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                            aria-label="upload picture"
+                                            component="span">
+                                            <PhotoCamera/>
+                                        </IconButton>
+                                    </label>
+                                </>
+                            }
+                            {
+                                (props.edit && !props.add) &&
+                                <>
+                                    <IconButton
+                                        sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                        key={0}
+                                        onClick={() => {window.open(props.picture, '_blank', 'noopener,noreferrer')}}>
+                                        <OpenInFullIcon/>
+                                    </IconButton>
+                                    <IconButton
+                                        sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                        onClick={() => {props.removePicture(props.index)}}>
+                                        <DeleteForeverIcon/>
+                                    </IconButton>
+
+                                </>
+                            }
                         </CardActions>
                     </Info>
                 </Box>

@@ -41,16 +41,13 @@ import Button from "@mui/material/Button";
 import signupOk from "./assets/complete.svg";
 import * as React from "react";
 import {isError} from "./store/dialogs";
+import PictureCard from "./PictureCard";
 
 export default function Wizard() {
-    const steps = ['Sei un negozio o un cliente?', 'Inserisci le informazioni', 'Registrati'];
+    const steps = ['Sei un negozio o un cliente?', 'Informazioni di base', 'Immagine di profilo e copertina'];
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
     const [userType, setUserType] = useState('negozio');
-    const [email, setEmail] = useState(null);
-    const [password, setPassword] = useState(null);
-    const [confirmPassword, setConfirmPassword] = useState(null);
-    const [showPassword, setShowPassword] = useState(false);
     const [title, setTitle] = useState(null);
     const [website, setWebsite] = useState(null);
     const [telephone, setTelephone] = useState(null);
@@ -58,7 +55,6 @@ export default function Wizard() {
     const [carousel, setCarousel] = useState([]);
     const [avatar, setAvatar] = useState({image: null, rawImage: null});
     const [editAvatar, setEditAvatar] = useState(false);
-    const [consent, setConsent] = useState(false);
     const [name, setName] = useState(null);
     const [surname, setSurname] = useState(null);
     const [signupCompleted, setSignupCompleted] = useState(false);
@@ -66,6 +62,8 @@ export default function Wizard() {
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token.value);
     const username = useSelector((state) => state.user.username);
+    const email = useSelector((state) => state.user.email);
+
     const theme = responsiveFontSizes(createTheme());
     const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -73,18 +71,6 @@ export default function Wizard() {
 
     const onChangeUserType = (event, typeUser) => {
         setUserType(typeUser);
-    };
-
-    const onChangeEmail = (e) => {
-        setEmail(e.target.value);
-    };
-
-    const onChangePassword = (e) => {
-        setPassword(e.target.value);
-    };
-
-    const onChangeConfirmPassword = (e) => {
-        setConfirmPassword(e.target.value);
     };
 
     const onChangeTitle = (e) => {
@@ -115,15 +101,9 @@ export default function Wizard() {
         setSurname(e.target.value);
     };
 
-    const onChangeConsent = () => {
-        setConsent(!consent);
-    };
-
-    const onChangeShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
-
     const addPicture = (e, i) => {
+        console.log(e)
+        console.log(i)
         let tmpPictures = [];
         for (let picture of carousel) {
             if (picture.index === i) {
@@ -297,7 +277,7 @@ export default function Wizard() {
                 case 1:
                     return (email !== '' && name !== '' && surname !== '' && telephone !== '' && avatar.image);
                 case 2:
-                    return consent;
+                    return true;
                 default:
                     return true;
             }
@@ -379,7 +359,7 @@ export default function Wizard() {
                                                     <>
                                                         <Box sx={{
                                                             display: 'flex',
-                                                            flexDirection: 'row',
+                                                            flexDirection: 'column',
                                                             alignItems: 'center',
                                                             gap: 2,
                                                             justifyContent: 'center'
@@ -418,7 +398,7 @@ export default function Wizard() {
                                                                 onChange={onChangeTelephone}
                                                                 autoFocus
                                                                 value={telephone ?? ''}
-                                                                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                                                                inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
                                                                 color='secondary'
                                                                 margin="dense"
                                                                 label="Telefono"
@@ -430,10 +410,7 @@ export default function Wizard() {
                                                                     ),
                                                                 }}
                                                                 variant="outlined"/>
-                                                        </Box>
-                                                        <Box>
-                                                            <TextField fullWidth={true}
-                                                                       onChange={onChangeDescription}
+                                                            <TextField onChange={onChangeDescription}
                                                                        autoFocus
                                                                        value={description ?? ''}
                                                                        multiline={true}
@@ -449,107 +426,6 @@ export default function Wizard() {
                                                                        label="Descrizione"
                                                                        variant="outlined"/>
                                                         </Box>
-                                                        <br/>
-                                                        <Box sx={{
-                                                            display: 'flex',
-                                                            flexDirection: 'row',
-                                                            alignItems: 'center',
-                                                            gap: 2,
-                                                            justifyContent: 'center'
-                                                        }}>
-                                                            <label htmlFor="avatar-uploader" className='text-center'>
-                                                                <Input
-                                                                    accept="image/*"
-                                                                    id="avatar-uploader"
-                                                                    type="file"
-                                                                    hidden
-                                                                    onChange={onChangeAvatar}/>
-                                                                <Avatar
-                                                                    onMouseOver={() => {
-                                                                        setEditAvatar(true)
-                                                                    }}
-                                                                    onMouseLeave={() => {
-                                                                        setEditAvatar(false)
-                                                                    }}
-                                                                    style={{
-                                                                        width: 48,
-                                                                        height: 48,
-                                                                        cursor: editAvatar ? 'pointer' : null
-                                                                    }}
-                                                                    src={!editAvatar ? avatar.image : null}>
-                                                                    {editAvatar && <AddPhotoAlternateIcon/>}
-                                                                </Avatar>
-                                                            </label>
-                                                        </Box>
-                                                        <br/>
-                                                        <Box sx={{
-                                                            display: 'flex',
-                                                            flexDirection: 'column',
-                                                            alignItems: 'center',
-                                                            gap: 2,
-                                                            justifyContent: 'center'
-                                                        }}>
-                                                            <ImageList sx={{width: 800, height: 350}}
-                                                                       gap={5} cols={30}>
-                                                                {carousel.map((item) => {
-                                                                    if (item.add) {
-                                                                        return (
-                                                                            <ImageListItem key={item.index} cols={10}
-                                                                                           rows={1}>
-
-                                                                                <ImageListItemBar
-                                                                                    actionIcon={
-                                                                                        [
-                                                                                            <label
-                                                                                                htmlFor="icon-button-file"
-                                                                                                key={0}>
-                                                                                                <Input accept="image/*"
-                                                                                                       id="icon-button-file"
-                                                                                                       type="file"
-                                                                                                       hidden
-                                                                                                       onChange={(e) => {
-                                                                                                           addPicture(e, item.index)
-                                                                                                       }}/>
-                                                                                                <IconButton
-                                                                                                    sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                                                                    aria-label="upload picture"
-                                                                                                    component="span">
-                                                                                                    <PhotoCamera/>
-                                                                                                </IconButton>
-                                                                                            </label>]}
-                                                                                />
-                                                                            </ImageListItem>)
-                                                                    } else {
-                                                                        return (
-                                                                            <ImageListItem key={item.index} cols={10}
-                                                                                           rows={1}>
-                                                                                <ProgressiveImg image={item.image}/>
-                                                                                <ImageListItemBar
-                                                                                    actionIcon={
-                                                                                        [
-                                                                                            <IconButton
-                                                                                                sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                                                                key={0}
-                                                                                                onClick={() => {
-                                                                                                    window.open(item.image, '_blank', 'noopener,noreferrer')
-                                                                                                }}>
-                                                                                                <OpenInFullIcon/>
-                                                                                            </IconButton>,
-                                                                                            <IconButton
-                                                                                                sx={{color: 'rgba(255, 255, 255, 0.54)'}}
-                                                                                                onClick={() => {
-                                                                                                    removePicture(item.index)
-                                                                                                }} key={1}>
-                                                                                                <DeleteForeverIcon/>
-                                                                                            </IconButton>
-                                                                                        ]}
-                                                                                />
-                                                                            </ImageListItem>)
-                                                                    }
-                                                                })}
-                                                            </ImageList>
-                                                        </Box>
-
                                                     </>
                                                 }
                                                 {
@@ -596,7 +472,7 @@ export default function Wizard() {
                                                                 onChange={onChangeTelephone}
                                                                 autoFocus
                                                                 value={telephone ?? ''}
-                                                                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                                                                inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
                                                                 color='secondary'
                                                                 margin="dense"
                                                                 label="Telefono"
@@ -609,7 +485,136 @@ export default function Wizard() {
                                                                 }}
                                                                 variant="outlined"/>
                                                         </Box>
+                                                    </>
+                                                }
+                                            </>
+                                        }
+                                        {(activeStep === 2) &&
+                                            <>
+                                                {
+                                                    (userType === 'negozio') &&
+                                                    <>
+                                                        <Box sx={{
+                                                            display: 'flex',
+                                                            flexDirection: 'row',
+                                                            alignItems: 'center',
+                                                            gap: 2,
+                                                            justifyContent: 'center'
+                                                        }}>
+                                                            <Typography variant='subtitle1'>Immagine del profilo: </Typography>
+                                                            <label htmlFor="avatar-uploader" className='text-center'>
+                                                                <Input
+                                                                    accept="image/*"
+                                                                    id="avatar-uploader"
+                                                                    type="file"
+                                                                    hidden
+                                                                    onChange={onChangeAvatar}/>
+                                                                <Avatar
+                                                                    onMouseOver={() => {
+                                                                        setEditAvatar(true)
+                                                                    }}
+                                                                    onMouseLeave={() => {
+                                                                        setEditAvatar(false)
+                                                                    }}
+                                                                    style={{
+                                                                        width: 48,
+                                                                        height: 48,
+                                                                        cursor: editAvatar ? 'pointer' : null
+                                                                    }}
+                                                                    src={!editAvatar ? avatar.image : null}>
+                                                                    {editAvatar && <AddPhotoAlternateIcon/>}
+                                                                </Avatar>
+                                                            </label>
+                                                        </Box>
                                                         <br/>
+                                                        <Typography variant='subtitle1'>Immagini di copertina: </Typography>
+                                                        <Box sx={{
+                                                            display: 'flex',
+                                                            flexDirection: 'row',
+                                                            alignItems: 'center',
+                                                            gap: 2,
+                                                            justifyContent: 'center'
+                                                        }}>
+                                                            {carousel.map((item) => {
+                                                                if (item.add) {
+                                                                    return (
+                                                                        // <ImageListItem key={item.index} cols={10}
+                                                                        //                rows={1}>
+                                                                        //
+                                                                        //     <ImageListItemBar
+                                                                        //         actionIcon={
+                                                                        //             [
+                                                                        //                 <label
+                                                                        //                     htmlFor="icon-button-file"
+                                                                        //                     key={0}>
+                                                                        //                     <Input accept="image/*"
+                                                                        //                            id="icon-button-file"
+                                                                        //                            type="file"
+                                                                        //                            hidden
+                                                                        //                            onChange={(e) => {
+                                                                        //                                addPicture(e, item.index)
+                                                                        //                            }}/>
+                                                                        //                     <IconButton
+                                                                        //                         sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                                        //                         aria-label="upload picture"
+                                                                        //                         component="span">
+                                                                        //                         <PhotoCamera/>
+                                                                        //                     </IconButton>
+                                                                        //                 </label>]}
+                                                                        //     />
+                                                                        // </ImageListItem>
+                                                                        <PictureCard
+                                                                            key={item.index}
+                                                                            height={300}
+                                                                            width={150}
+                                                                            edit={true}
+                                                                            add={item.add}
+                                                                            index={item.index}
+                                                                            addPicture={addPicture}/>
+                                                                    )
+                                                                } else {
+                                                                    return (
+                                                                        // <ImageListItem key={item.index} cols={10}
+                                                                        //                rows={1}>
+                                                                        //     <ProgressiveImg image={item.image}/>
+                                                                        //     <ImageListItemBar
+                                                                        //         actionIcon={
+                                                                        //             [
+                                                                        //                 <IconButton
+                                                                        //                     sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                                        //                     key={0}
+                                                                        //                     onClick={() => {
+                                                                        //                         window.open(item.image, '_blank', 'noopener,noreferrer')
+                                                                        //                     }}>
+                                                                        //                     <OpenInFullIcon/>
+                                                                        //                 </IconButton>,
+                                                                        //                 <IconButton
+                                                                        //                     sx={{color: 'rgba(255, 255, 255, 0.54)'}}
+                                                                        //                     onClick={() => {
+                                                                        //                         removePicture(item.index)
+                                                                        //                     }} key={1}>
+                                                                        //                     <DeleteForeverIcon/>
+                                                                        //                 </IconButton>
+                                                                        //             ]}
+                                                                        //     />
+                                                                        // </ImageListItem>
+                                                                        <PictureCard
+                                                                            key={item.index}
+                                                                            edit={true}
+                                                                            height={300}
+                                                                            width={150}
+                                                                            add={item.add}
+                                                                            picture={item.image}
+                                                                            removePicture={removePicture}/>
+                                                                    )
+                                                                }
+                                                            })}
+                                                        </Box>
+                                                    </>
+                                                }
+                                                {
+                                                    (userType === 'cliente') &&
+                                                    <>
                                                         <Box sx={{
                                                             display: 'flex',
                                                             flexDirection: 'row',
@@ -641,13 +646,9 @@ export default function Wizard() {
                                                                 </Avatar>
                                                             </label>
                                                         </Box>
+
                                                     </>
                                                 }
-                                            </>
-                                        }
-                                        {(activeStep === 2) &&
-                                            <>
-
                                             </>
                                         }
                                     </Col>
