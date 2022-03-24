@@ -89,7 +89,7 @@ export default function UpdateCarouselDialog(props) {
                                 return (
                                     <PictureCard
                                         key={item.index}
-                                        height={300}
+                                        height={250}
                                         width={180}
                                         edit={true}
                                         add={item.add}
@@ -101,7 +101,7 @@ export default function UpdateCarouselDialog(props) {
                                     <PictureCard
                                         key={item.index}
                                         edit={true}
-                                        height={300}
+                                        height={250}
                                         width={180}
                                         add={item.add}
                                         picture={item.image}

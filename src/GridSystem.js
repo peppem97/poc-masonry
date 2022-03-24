@@ -13,7 +13,7 @@ export default function GridSystem(props) {
     return (
         <>
             <StackGrid duration={500}
-                       columnWidth={columnWidth}
+                       columnWidth={props.columnWidth ?? columnWidth}
                        gutterWidth={30}
                        gutterHeight={30}
                        easing={easings.quartOut}

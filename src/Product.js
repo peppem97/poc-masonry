@@ -72,6 +72,7 @@ const useStyles = makeStyles(({breakpoints, spacing}) => ({
         },
     },
     content: {
+        width: '100%',
         padding: 24,
     },
     cta: {
@@ -176,7 +177,7 @@ export default function Product() {
                             className={styles.media}
                             image={cover}
                         />
-                        <CardContent>
+                        <CardContent className={styles.content}>
                             <Container>
                                 <Row className='row-cols-auto '>
                                     <Col>
@@ -202,15 +203,6 @@ export default function Product() {
                                 <Row>
                                     <Typography variant="body2" color="text.secondary">
                                         {description}
-                                        Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor
-                                        incidunt
-                                        ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum
-                                        exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
-                                        consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore
-                                        eu
-                                        fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in
-                                        culpa
-                                        qui officia deserunt mollit anim id est laborum.
                                     </Typography>
                                 </Row>
                                 <br/>
@@ -236,7 +228,7 @@ export default function Product() {
                                 <br/>
                                 <Row>
                                     <Col style={{width: '100%'}}>
-                                        <GridSystem isProducts={false} pictures={pictures}/>
+                                        <GridSystem isProducts={false} pictures={pictures} columnWidth={150}/>
                                     </Col>
                                 </Row>
                             </Container>

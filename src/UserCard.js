@@ -118,40 +118,48 @@ export const UserCard = React.memo(function News3Card(props) {
                     pt={2}
                     gap={2}
                     bgcolor={'common.white'}>
-                    <Item>
-                        <label htmlFor="avatar-uploader" className='text-center'>
-                            <Input accept="image/*" id="avatar-uploader" type="file" hidden onChange={props.updateAvatar}/>
-                            <Avatar onMouseOver={() => {
-                                setEditAvatar(true)
-                            }} onMouseLeave={() => {
-                                setEditAvatar(false)
-                            }}
-                                    className={styles.avatar}
-                                    style={{cursor: editAvatar ? 'pointer' : null}}
-                                    src={!editAvatar && props.avatar}>
-                                {editAvatar && <AddPhotoAlternateIcon/>}
-                            </Avatar>
-                        </label>
-                    </Item>
-                    <Info position={'middle'} useStyles={useNewsInfoStyles}>
-                        <InfoTitle style={{fontWeight: 'bold'}}>{props.website}
-                            <IconButton color="inherit" size="small"
-                                        onClick={() => {
-                                            props.openUpdateInfoDialog('website')
-                                        }}><EditIcon
-                                fontSize="inherit"/>
-                            </IconButton></InfoTitle>
-                        <InfoTitle style={{fontWeight: 'bold'}}>{props.email}
-                            <IconButton color="inherit" size="small"
-                                        onClick={() => {
-                                            props.openUpdateInfoDialog('email')
-                                        }}><EditIcon
-                                fontSize="inherit"/></IconButton></InfoTitle>
-                        <InfoSubtitle>{props.telephone}<IconButton color="inherit" size="small" onClick={() => {
-                            props.openUpdateInfoDialog('telephone')
-                        }}><EditIcon
-                            fontSize="inherit"/></IconButton></InfoSubtitle>
-                    </Info>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 2,
+                        justifyContent: 'center'
+                    }}>
+                        <Item>
+                            <label htmlFor="avatar-uploader" className='text-center'>
+                                <Input accept="image/*" id="avatar-uploader" type="file" hidden onChange={props.updateAvatar}/>
+                                <Avatar onMouseOver={() => {
+                                    setEditAvatar(true)
+                                }} onMouseLeave={() => {
+                                    setEditAvatar(false)
+                                }}
+                                        className={styles.avatar}
+                                        style={{cursor: editAvatar ? 'pointer' : null}}
+                                        src={!editAvatar && props.avatar}>
+                                    {editAvatar && <AddPhotoAlternateIcon/>}
+                                </Avatar>
+                            </label>
+                        </Item>
+                        <Info position={'middle'} useStyles={useNewsInfoStyles}>
+                            <InfoTitle style={{fontWeight: 'bold'}}>{props.website}
+                                <IconButton color="inherit" size="small"
+                                            onClick={() => {
+                                                props.openUpdateInfoDialog('website')
+                                            }}><EditIcon
+                                    fontSize="inherit"/>
+                                </IconButton></InfoTitle>
+                            <InfoTitle style={{fontWeight: 'bold'}}>{props.email}
+                                <IconButton color="inherit" size="small"
+                                            onClick={() => {
+                                                props.openUpdateInfoDialog('email')
+                                            }}><EditIcon
+                                    fontSize="inherit"/></IconButton></InfoTitle>
+                            <InfoSubtitle>{props.telephone}<IconButton color="inherit" size="small" onClick={() => {
+                                props.openUpdateInfoDialog('telephone')
+                            }}><EditIcon
+                                fontSize="inherit"/></IconButton></InfoSubtitle>
+                        </Info>
+                    </Box>
                 </Row>
                 <Row className={styles.author}
                      m={0}

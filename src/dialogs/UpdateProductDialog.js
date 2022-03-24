@@ -258,7 +258,6 @@ export default function UpdateProductDialog(props) {
                                 onChange={onChangeDescription}
                                 label="Descrizione"
                                 inputProps={{maxLength: 320}}
-
                                 multiline
                                 color='secondary'
                                 rows={4}
@@ -270,14 +269,14 @@ export default function UpdateProductDialog(props) {
                         display: 'flex',
                         flexDirection: 'row',
                         alignItems: 'center',
-                        gap: 2,
+                        gap: 1,
                         justifyContent: 'center'
                     }}>
                         {
                             cover.image ?
                                 <PictureCard
                                     height={200}
-                                    width={180}
+                                    width={200}
                                     edit={true}
                                     add={false}
                                     index={null}
@@ -287,11 +286,12 @@ export default function UpdateProductDialog(props) {
                                 <PictureCard
                                     edit={true}
                                     height={200}
-                                    width={180}
+                                    width={200}
                                     add={true}
                                     index={null}
                                     addPicture={addCover}
                                 />
+
                         }
                         <div className="vr" style={{fontWeight: 'bold'}}/>
                         {pictures.map((item) => {
@@ -300,7 +300,7 @@ export default function UpdateProductDialog(props) {
                                     <PictureCard
                                         key={item.index}
                                         height={200}
-                                        width={180}
+                                        width={200}
                                         edit={true}
                                         add={item.add}
                                         index={item.index}
@@ -312,7 +312,7 @@ export default function UpdateProductDialog(props) {
                                         key={item.index}
                                         edit={true}
                                         height={200}
-                                        width={180}
+                                        width={200}
                                         add={item.add}
                                         picture={item.image}
                                         index={item.index}
