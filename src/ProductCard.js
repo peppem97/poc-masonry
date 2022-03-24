@@ -104,13 +104,10 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                                 <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={goToProduct}>
                                     <OpenInNewIcon/>
                                 </IconButton> :
-                                <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {props.updateProduct(props.product.id)}}>
+                                props.editable ? <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {props.updateProduct(props.product.id)}}>
                                     <EditIcon/>
-                                </IconButton>}
+                                </IconButton> : null}
                             {props.showAvatar ?
-                                // <IconButton style={{color: 'white', fontWeight: 'bold'}}>
-                                //     <FavoriteIcon/>
-                                // </IconButton>
                                 null
                                 :
                                 <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={goToProduct}>
@@ -122,9 +119,9 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                                 // </IconButton>
                                 null
                                 :
-                                <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {props.deleteProduct(props.product.id)}}>
+                                props.editable ? <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {props.deleteProduct(props.product.id)}}>
                                     <DeleteForeverIcon/>
-                                </IconButton>}
+                                </IconButton> : null}
                         </CardActions>
                     </Info>
                 </Box>

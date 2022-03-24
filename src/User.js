@@ -4,7 +4,7 @@ import {Row} from '@mui-treasury/components/flex';
 import {Container} from "react-bootstrap";
 import GridSystem from "./GridSystem";
 import axios from "axios";
-import {useNavigate, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import GlobalContext from "./GlobalContext";
 import UserCard from "./UserCard";
 import UpdateProductDialog from "./dialogs/UpdateProductDialog";
@@ -37,12 +37,15 @@ export default function User() {
     const [productToDelete, setProductToDelete] = useState(null);
     const [productToUpdate, setProductToUpdate] = useState(null);
     const [loadingProducts, setLoadingProducts] = useState(false);
+    const [selfUser, setSelfUser] = useState(false);
+    const token = useSelector((state) => state.token.value);
+    const myUsername = useSelector((state) => state.user.username);
+    const firstAccess = useSelector((state) => state.user.firstAccess);
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
-    const token = useSelector((state) => state.token.value);
-    const firstAccess = useSelector((state) => state.user.firstAccess);
     const dispatch = useDispatch();
     let navigate = useNavigate();
+    const location = useLocation();
 
     const getUserInfo = () => {
         dispatch(setBusy());
@@ -89,6 +92,10 @@ export default function User() {
             dispatch(setIdle());
             dispatch(isError('Si è verificato un errore nella ricezione dei prodotti. Riprovare ad aggiornare la pagina.'));
         })
+    };
+
+    const checkSelfUser = () => {
+        setSelfUser(username === myUsername);
     };
 
     const getCarousel = (...pictures) => {
@@ -383,14 +390,23 @@ export default function User() {
         setUpdateInfoDialogOpened(true);
     };
 
+    const refresh = () => {
+        checkSelfUser();
+        getUserInfo();
+        getProducts();
+    };
+
     useEffect(() => {
         if (firstAccess) {
             navigate(appContext.routes.wizard);
         } else {
-            getUserInfo();
-            getProducts();
+            refresh();
         }
     }, []);
+
+    useEffect(() => {
+        refresh();
+    }, [location]);
 
     return (
         <>
@@ -407,6 +423,7 @@ export default function User() {
                     carousel={carousel}
                     website={website}
                     telephone={telephone}
+                    selfUser={selfUser}
                     openUpdateCarouselDialog={() => {
                         setUpdateCarouselDialogOpened(true)
                     }}
@@ -431,6 +448,7 @@ export default function User() {
                     isProducts={true}
                     products={products}
                     isUser={true}
+                    isSelfUser={selfUser}
                     updateProduct={(id) => {
                         setProductToUpdate(id);
                         setUpdateProductDialogOpened(true);

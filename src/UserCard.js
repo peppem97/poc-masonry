@@ -1,5 +1,5 @@
 import {makeStyles} from "@material-ui/core/styles";
-import React, {Suspense, useState} from "react";
+import React, {Suspense, useEffect, useState} from "react";
 import Card from "@material-ui/core/Card";
 import Box from "@material-ui/core/Box";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -91,7 +91,8 @@ export const UserCard = React.memo(function News3Card(props) {
     return (
         <>
             <Card className={styles.card}>
-                <Box className={styles.main} minHeight={smallScreen ? 200 : mediumScreen ? 300 : largeScreen ? 400 : 500}
+                <Box className={styles.main}
+                     minHeight={smallScreen ? 200 : mediumScreen ? 300 : largeScreen ? 400 : 500}
                      position={'relative'}>
                     <CardMedia
                         classes={mediaStyles}
@@ -100,14 +101,17 @@ export const UserCard = React.memo(function News3Card(props) {
                     <div className={styles.content}>
                         <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
                             {props.title}
-                            <IconButton color="inherit" size="medium" onClick={() => {
-                                props.openUpdateInfoDialog('title')
-                            }}>
-                                <EditIcon fontSize="inherit"/>
-                            </IconButton>
-                            <IconButton color="inherit" size="medium" onClick={props.openUpdateCarouselDialog}>
-                                <PanoramaIcon fontSize="inherit"/>
-                            </IconButton>
+                            {props.selfUser &&
+                                <>
+                                    <IconButton color="inherit" size="medium" onClick={() => {
+                                        props.openUpdateInfoDialog('title')
+                                    }}>
+                                        <EditIcon fontSize="inherit"/>
+                                    </IconButton>
+                                    <IconButton color="inherit" size="medium" onClick={props.openUpdateCarouselDialog}>
+                                        <PanoramaIcon fontSize="inherit"/>
+                                    </IconButton>
+                                </>}
                         </Typography>
                     </div>
                 </Box>
@@ -127,7 +131,8 @@ export const UserCard = React.memo(function News3Card(props) {
                     }}>
                         <Item>
                             <label htmlFor="avatar-uploader" className='text-center'>
-                                <Input accept="image/*" id="avatar-uploader" type="file" hidden onChange={props.updateAvatar}/>
+                                <Input accept="image/*" id="avatar-uploader" type="file" hidden
+                                       onChange={props.updateAvatar}/>
                                 <Avatar onMouseOver={() => {
                                     setEditAvatar(true)
                                 }} onMouseLeave={() => {
@@ -142,22 +147,26 @@ export const UserCard = React.memo(function News3Card(props) {
                         </Item>
                         <Info position={'middle'} useStyles={useNewsInfoStyles}>
                             <InfoTitle style={{fontWeight: 'bold'}}>{props.website}
-                                <IconButton color="inherit" size="small"
-                                            onClick={() => {
-                                                props.openUpdateInfoDialog('website')
-                                            }}><EditIcon
-                                    fontSize="inherit"/>
-                                </IconButton></InfoTitle>
+                                {props.selfUser && <IconButton color="inherit" size="small" onClick={() => {
+                                    props.openUpdateInfoDialog('website')
+                                }}>
+                                    <EditIcon fontSize="inherit"/>
+                                </IconButton>}
+                            </InfoTitle>
                             <InfoTitle style={{fontWeight: 'bold'}}>{props.email}
-                                <IconButton color="inherit" size="small"
-                                            onClick={() => {
-                                                props.openUpdateInfoDialog('email')
-                                            }}><EditIcon
-                                    fontSize="inherit"/></IconButton></InfoTitle>
-                            <InfoSubtitle>{props.telephone}<IconButton color="inherit" size="small" onClick={() => {
-                                props.openUpdateInfoDialog('telephone')
-                            }}><EditIcon
-                                fontSize="inherit"/></IconButton></InfoSubtitle>
+                                {props.selfUser && <IconButton color="inherit" size="small" onClick={() => {
+                                    props.openUpdateInfoDialog('email')
+                                }}><EditIcon
+                                    fontSize="inherit"/>
+                                </IconButton>}
+                            </InfoTitle>
+                            <InfoSubtitle>{props.telephone}
+                                {props.selfUser && <IconButton color="inherit" size="small" onClick={() => {
+                                    props.openUpdateInfoDialog('telephone')
+                                }}>
+                                    <EditIcon fontSize="inherit"/>
+                                </IconButton>}
+                            </InfoSubtitle>
                         </Info>
                     </Box>
                 </Row>
@@ -168,10 +177,12 @@ export const UserCard = React.memo(function News3Card(props) {
                      gap={2}
                      bgcolor={'common.white'}>
                     <Typography variant='subtitle1' className="text-center">
-                        {props.description} <IconButton color="inherit" size="small" onClick={() => {
-                        props.openUpdateInfoDialog('description')
-                    }}><EditIcon
-                        fontSize="inherit"/></IconButton>
+                        {props.description}
+                        {props.selfUser && <IconButton color="inherit" size="small" onClick={() => {
+                            props.openUpdateInfoDialog('description')
+                        }}>
+                            <EditIcon fontSize="inherit"/>
+                        </IconButton>}
                     </Typography>
                 </Row>
                 <Row className={styles.author}
@@ -180,12 +191,13 @@ export const UserCard = React.memo(function News3Card(props) {
                      pt={2}
                      gap={2}
                      bgcolor={'common.white'}>
-                    <Col className='text-center' xl={4}>
-                        <Button variant="contained" endIcon={<AddShoppingCartIcon/>} style={{backgroundColor: 'darkred'}}
+                    {props.selfUser &&  <Col className='text-center' xl={4}>
+                        <Button variant="contained" endIcon={<AddShoppingCartIcon/>}
+                                style={{backgroundColor: 'darkred'}}
                                 onClick={props.openUploadProductDialog}>
                             Inserisci un nuovo prodotto
                         </Button>
-                    </Col>
+                    </Col>}
                 </Row>
                 <div className={styles.shadow}/>
                 <div className={`${styles.shadow} ${styles.shadow2}`}/>

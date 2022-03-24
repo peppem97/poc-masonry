@@ -28,6 +28,7 @@ export default function GridSystem(props) {
                         (<ProductCard
                             key={index}
                             product={product}
+                            editable={props.isSelfUser}
                             showAvatar={!(props.isUser)}
                             updateProduct={props.updateProduct}
                             deleteProduct={props.deleteProduct}/>))

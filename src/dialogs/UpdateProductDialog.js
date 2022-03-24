@@ -24,6 +24,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {isError} from "../store/dialogs";
 import PictureCard from "../PictureCard";
 import Box from "@mui/material/Box";
+import StackGrid, {easings, transitions} from "react-stack-grid";
 
 export default function UpdateProductDialog(props) {
     const [pictures, setPictures] = useState([]);
@@ -269,31 +270,44 @@ export default function UpdateProductDialog(props) {
                         display: 'flex',
                         flexDirection: 'row',
                         alignItems: 'center',
-                        gap: 1,
+                        gap: 2,
                         justifyContent: 'center'
                     }}>
-                        {
-                            cover.image ?
-                                <PictureCard
-                                    height={200}
-                                    width={200}
-                                    edit={true}
-                                    add={false}
-                                    index={null}
-                                    picture={cover.image}
-                                    removePicture={removeCover}
-                                /> :
-                                <PictureCard
-                                    edit={true}
-                                    height={200}
-                                    width={200}
-                                    add={true}
-                                    index={null}
-                                    addPicture={addCover}
-                                />
+                    {
+                        cover.image ?
+                            <PictureCard
+                                height={200}
+                                width={200}
+                                edit={true}
+                                add={false}
+                                index={null}
+                                picture={cover.image}
+                                removePicture={removeCover}
+                            /> :
+                            <PictureCard
+                                edit={true}
+                                height={200}
+                                width={200}
+                                add={true}
+                                index={null}
+                                addPicture={addCover}
+                            />
 
-                        }
-                        <div className="vr" style={{fontWeight: 'bold'}}/>
+                    }
+                    </Box>
+                    <hr/>
+                    <StackGrid duration={500}
+                               columnWidth={200}
+                               gutterWidth={30}
+                               gutterHeight={30}
+                               easing={easings.quartOut}
+                               appear={transitions['fadeDown'].appear}
+                               appeared={transitions['fadeDown'].appeared}
+                               enter={transitions['fadeDown'].enter}
+                               entered={transitions['fadeDown'].entered}
+                               leaved={transitions['fadeDown'].leaved}
+                               rtl={false}>
+
                         {pictures.map((item) => {
                             if (item.add) {
                                 return (
@@ -320,7 +334,8 @@ export default function UpdateProductDialog(props) {
                                 )
                             }
                         })}
-                    </Box>
+                    {/*</Box>*/}
+                    </StackGrid>
                     <br/>
                     {/*</Row>*/}
                     <Row>

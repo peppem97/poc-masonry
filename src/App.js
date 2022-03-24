@@ -33,7 +33,7 @@ export default function App() {
     const appContext = {
         routes: routes,
         MAX_PICTURES_CAROUSEL: 3,
-        MAX_PICTURES_PRODUCT: 9,
+        MAX_PICTURES_PRODUCT: 8,
         COMPRESSION_QUALITY: 0.3,
         HOST: "http://zion.datafactor.it:40505",
         ENDPOINT_SHOPS: "http://zion.datafactor.it:40505/shops",
