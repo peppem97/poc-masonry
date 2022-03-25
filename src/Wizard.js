@@ -272,9 +272,9 @@ export default function Wizard() {
         } else if (userType === 'cliente') {
             switch (activeStep) {
                 case 0:
-                    return true;
+                    return userType;
                 case 1:
-                    return (email !== '' && name !== '' && surname !== '' && telephone !== '' && avatar.image);
+                    return (name && surname && telephone );
                 case 2:
                     return true;
                 default:

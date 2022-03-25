@@ -17,6 +17,7 @@ import UnprotectedRoute from "./UnprotectedRoute";
 import Wizard from "./Wizard";
 
 export default function App() {
+    const host = "http://zion.datafactor.it:40505"
     const loading = useSelector((state) => state.loading.value);
     const errorState = useSelector((state) => state.dialogs.error);
     const message = useSelector((state) => state.dialogs.message);
@@ -35,13 +36,14 @@ export default function App() {
         MAX_PICTURES_CAROUSEL: 3,
         MAX_PICTURES_PRODUCT: 8,
         COMPRESSION_QUALITY: 0.3,
-        HOST: "http://zion.datafactor.it:40505",
-        ENDPOINT_SHOPS: "http://zion.datafactor.it:40505/shops",
-        ENDPOINT_PRODUCTS: "http://zion.datafactor.it:40505/products",
-        ENDPOINT_EXAMPLES: "http://zion.datafactor.it:40505/image-uploadeds",
-        ENDPOINT_PENDENTS: "http://zion.datafactor.it:40505/pendents",
-        ENDPOINT_AUTH: "http://zion.datafactor.it:40505/auth/local",
-        ENDPOINT_REGISTER: "http://zion.datafactor.it:40505/auth/local/register"
+        HOST: host,
+        ENDPOINT_SHOPS: host + "/shops",
+        ENDPOINT_CLIENTS: host + "/clients",
+        ENDPOINT_PRODUCTS: host + "/products",
+        ENDPOINT_EXAMPLES: host + "/image-uploadeds",
+        ENDPOINT_PENDENTS: host + "/pendents",
+        ENDPOINT_AUTH: host + "/auth/local",
+        ENDPOINT_REGISTER: host + "/auth/local/register"
     };
 
     return (
