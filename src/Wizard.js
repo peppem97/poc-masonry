@@ -162,7 +162,13 @@ export default function Wizard() {
             website: website,
             telephone: telephone
         };
-        // let dataUser = {};
+        let dataClient = {
+            email: email,
+            name: name,
+            surname: surname,
+            username: username,
+            telephone: telephone
+        };
         const formData = new FormData();
         dispatch(setBusy());
         if (userType === 'negozio') {
@@ -232,7 +238,22 @@ export default function Wizard() {
                 }
             })
         } else if (userType === 'cliente') {
-            alert('Da implementare...')
+            new Compressor(avatar.rawImage, {
+                quality: appContext.COMPRESSION_QUALITY, success(result) {
+                    formData.append('files.avatar', result, 'avatar.jpg');
+                    formData.append('data', JSON.stringify(dataClient));
+                    axios.post(appContext.ENDPOINT_SHOPS, formData, {
+                        headers: {'Authorization': 'Bearer ' + token}
+                    }).then((responseFinal) => {
+                        dispatch(setIdle());
+                        setSignupCompleted(true);
+                    }).catch(() => {
+                        dispatch(setIdle());
+                    })
+                }, error() {
+                    dispatch(setIdle());
+                }
+            })
         }
     };
 

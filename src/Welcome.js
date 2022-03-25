@@ -66,11 +66,11 @@ export default function Welcome() {
     };
 
     const canSignin = () => {
-        return (email !== '' && password !== '');
+        return (email && password);
     };
 
     const canSignup = () => {
-        return (username !== '' && email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consent);
+        return (username && email && password && confirmPassword && (password === confirmPassword) && consent);
     };
 
     const clearAll = () => {
@@ -123,7 +123,8 @@ export default function Welcome() {
         }
         setLoading(true);
         axios.post(appContext.ENDPOINT_REGISTER, dataSignup).then(
-            () => {
+            (re) => {
+                console.log(re)
                 axios.post(appContext.ENDPOINT_PENDENTS, dataPendent).then(
                     () => {
                         setLoading(false);
@@ -135,9 +136,10 @@ export default function Welcome() {
                     dispatch(isError('Errore nella fase di registrazione. Riprovare.'));
                 })
             }
-        ).catch(() => {
+        ).catch((error) => {
+            console.log(error)
             setLoading(false);
-            dispatch(isError('Errore nella fase di registrazione. Riprovare.'));
+            dispatch(isError('Errore nella fase di registrazione. Inserire correttamente la mail o riprovare con una alternativa.'));
         })
     };
 
@@ -178,6 +180,7 @@ export default function Welcome() {
                             <Row className='justify-content-center'>
                                 <TextField
                                     onChange={onChangeEmail}
+                                    value={email}
                                     autoFocus
                                     color='secondary'
                                     margin="dense"
@@ -187,6 +190,7 @@ export default function Welcome() {
                             <Row className='justify-content-center'>
                                 <TextField
                                     onChange={onChangePassword}
+                                    value={password}
                                     type={showPassword ? 'text' : 'password'}
                                     color='secondary'
                                     InputProps={{
@@ -198,28 +202,6 @@ export default function Welcome() {
                                     variant="outlined"/>
                             </Row>
                             <br/>
-                            {/*<Box sx={{*/}
-                            {/*    display: 'flex',*/}
-                            {/*    flexDirection: 'row',*/}
-                            {/*    alignItems: 'center',*/}
-                            {/*    gap: 2,*/}
-                            {/*    justifyContent: 'center'*/}
-                            {/*}}>*/}
-                            {/*    <ToggleButtonGroup*/}
-                            {/*        size="large"*/}
-                            {/*        value={userType ?? ''}*/}
-                            {/*        onChange={onChangeUserType}*/}
-                            {/*        exclusive={true}>*/}
-                            {/*        <ToggleButton value="negozio">*/}
-                            {/*            <StoreIcon/>*/}
-                            {/*            <Typography variant='subtitle1'>Negozio</Typography>*/}
-                            {/*        </ToggleButton>,*/}
-                            {/*        <ToggleButton value="cliente">*/}
-                            {/*            <GroupIcon/>*/}
-                            {/*            <Typography variant='subtitle1'>Cliente</Typography>*/}
-                            {/*        </ToggleButton>*/}
-                            {/*    </ToggleButtonGroup>*/}
-                            {/*</Box>*/}
                             {loading && <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'row',
