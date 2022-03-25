@@ -4,21 +4,16 @@ import {
     Container, Grid,
     IconButton,
     TextField,
-    ToggleButton,
-    ToggleButtonGroup,
     useMediaQuery,
     useTheme
 } from "@mui/material";
-import {Col, Row} from "react-bootstrap";
+import {Row} from "react-bootstrap";
 import Typography from "@mui/material/Typography";
 import React, {useContext, useEffect, useState} from "react";
 import signinSVG from './assets/signin.svg';
 import signupSVG from './assets/signup.svg';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
 import {Visibility, VisibilityOff} from "@material-ui/icons";
-import StoreIcon from "@mui/icons-material/Store";
-import GroupIcon from "@mui/icons-material/Group";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import axios from "axios";
@@ -36,7 +31,6 @@ export default function Welcome() {
     const [password, setPassword] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState(null);
     const [consent, setConsent] = useState(false);
-
     const [loading, setLoading] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const [isSignin, setIsSignin] = useState(true);
@@ -369,5 +363,5 @@ export default function Welcome() {
                 <br/>
             </Container>
         </>
-    )
+    );
 }

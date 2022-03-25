@@ -9,13 +9,12 @@ import CardMedia from '@material-ui/core/CardMedia';
 import {Info, InfoTitle,} from '@mui-treasury/components/info';
 import {useGalaxyInfoStyles} from '@mui-treasury/styles/info/galaxy';
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
-import {CardActions, IconButton, Skeleton} from "@mui/material";
+import {CardActions, IconButton} from "@mui/material";
 import Avatar from "@material-ui/core/Avatar";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import GlobalContext from "./GlobalContext";
 import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
@@ -23,7 +22,6 @@ import {setBusy, setIdle} from "./store/loading";
 const useStyles = makeStyles(() => ({
     card: {
         borderRadius: '1rem',
-        // boxShadow: 1,
         position: 'relative',
         minWidth: 200,
         minHeight: 200,
@@ -104,14 +102,17 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                                 <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={goToProduct}>
                                     <OpenInNewIcon/>
                                 </IconButton> :
-                                props.editable ? <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {props.updateProduct(props.product.id)}}>
-                                    <EditIcon/>
-                                </IconButton> : null}
+                                props.editable ?
+                                    <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {
+                                        props.updateProduct(props.product.id)
+                                    }}>
+                                        <EditIcon/>
+                                    </IconButton> : null}
                             {props.showAvatar ?
                                 null
                                 :
                                 <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={goToProduct}>
-                                    <OpenInNewIcon />
+                                    <OpenInNewIcon/>
                                 </IconButton>}
                             {props.showAvatar ?
                                 // <IconButton style={{color: 'white', fontWeight: 'bold'}}>
@@ -119,9 +120,12 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                                 // </IconButton>
                                 null
                                 :
-                                props.editable ? <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {props.deleteProduct(props.product.id)}}>
-                                    <DeleteForeverIcon/>
-                                </IconButton> : null}
+                                props.editable ?
+                                    <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {
+                                        props.deleteProduct(props.product.id)
+                                    }}>
+                                        <DeleteForeverIcon/>
+                                    </IconButton> : null}
                         </CardActions>
                     </Info>
                 </Box>

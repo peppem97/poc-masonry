@@ -15,10 +15,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 const useStyles = makeStyles(() => ({
     card: {
         borderRadius: '1rem',
-        // boxShadow: 1,
         position: 'relative',
-        // minWidth: 200,
-        // minHeight: 200,
         '&:after': {
             content: '""',
             display: 'block',

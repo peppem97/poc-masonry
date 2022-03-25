@@ -1,5 +1,5 @@
 import {makeStyles} from "@material-ui/core/styles";
-import React, {Suspense, useEffect, useState} from "react";
+import React, {Suspense, useState} from "react";
 import Card from "@material-ui/core/Card";
 import Box from "@material-ui/core/Box";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -195,7 +195,7 @@ export const UserCard = React.memo(function News3Card(props) {
                      pt={2}
                      gap={2}
                      bgcolor={'common.white'}>
-                    {props.selfUser &&  <Col className='text-center' xl={4}>
+                    {props.selfUser && <Col className='text-center' xl={4}>
                         <Button variant="contained" endIcon={<AddShoppingCartIcon/>}
                                 style={{backgroundColor: 'darkred'}}
                                 onClick={props.openUploadProductDialog}>

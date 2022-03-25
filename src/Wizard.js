@@ -4,8 +4,7 @@ import {useContext, useEffect, useState} from "react";
 import GlobalContext from "./GlobalContext";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    Checkbox,
-    createTheme, IconButton, ImageList, ImageListItem, ImageListItemBar, Input, InputAdornment,
+    createTheme, Input, InputAdornment,
     responsiveFontSizes,
     TextField, ThemeProvider,
     ToggleButton,
@@ -23,19 +22,12 @@ import StepLabel from "@mui/material/StepLabel";
 import Box from "@mui/material/Box";
 import StoreIcon from "@mui/icons-material/Store";
 import GroupIcon from "@mui/icons-material/Group";
-import BadgeIcon from "@mui/icons-material/Badge";
 import StarIcon from "@mui/icons-material/Star";
 import LanguageIcon from "@mui/icons-material/Language";
 import CallIcon from "@mui/icons-material/Call";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import Avatar from "@material-ui/core/Avatar";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import ProgressiveImg from "./ProgessiveImage";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import EmailIcon from "@mui/icons-material/Email";
-import {Visibility, VisibilityOff} from "@material-ui/icons";
 import Compressor from "compressorjs";
 import Button from "@mui/material/Button";
 import signupOk from "./assets/complete.svg";
@@ -64,7 +56,6 @@ export default function Wizard() {
     const token = useSelector((state) => state.token.value);
     const username = useSelector((state) => state.user.username);
     const email = useSelector((state) => state.user.email);
-
     const theme = responsiveFontSizes(createTheme());
     const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -249,13 +240,11 @@ export default function Wizard() {
         if (userType === 'negozio') {
             switch (activeStep) {
                 case 0:
-                    return true;
+                    return userType;
                 case 1:
-                    // return (title !== '' && website !== '' && telephone !== '' && description !== '' && avatar.image && carousel.some((element) => (!element.add)) > 0);
-                    return true;
+                    return (title && website && telephone && description);
                 case 2:
-                    // return (email !== '' && password !== '' && confirmPassword !== '' && (password === confirmPassword) && consent);
-                    return true;
+                    return (avatar.image && carousel.some((element) => (!element.add)) > 0);
                 default:
                     return true;
             }

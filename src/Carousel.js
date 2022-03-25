@@ -9,7 +9,6 @@ function UserCarousel(props) {
         setItems(props.pictures.map(
             (picture, index) =>
                 <ProgressiveImg  key={index} image={picture.image} />
-                // <img key={index} src={picture.image} alt="" style={{width: '100%', height: '100%'}} loading="lazy"/>
         ));
     };
 

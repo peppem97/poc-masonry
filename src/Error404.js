@@ -43,7 +43,8 @@ export default function Error404() {
                         gap: 2,
                         justifyContent: 'center'
                     }}>
-                        <img src={error404SVG} alt='' style={{width: smallScreen ? '70%' : mediumScreen ? '50%' : '30%', height: 'auto'}}/>
+                        <img src={error404SVG} alt=''
+                             style={{width: smallScreen ? '70%' : mediumScreen ? '50%' : '30%', height: 'auto'}}/>
                     </Box>
                 </Row>
                 <br/>

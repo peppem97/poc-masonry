@@ -239,5 +239,5 @@ export default function Product() {
                 <br/>
             </Container>
         </>
-    )
+    );
 }
