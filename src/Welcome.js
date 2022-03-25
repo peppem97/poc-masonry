@@ -92,7 +92,7 @@ export default function Welcome() {
             axios.get(appContext.ENDPOINT_PENDENTS + '/?username=' + response.data.user.username, {
                 headers: {'Authorization': 'Bearer ' + response.data.jwt}
             }).then((response) => {
-                if (response.data.length === 0) {
+                if (response.data[0].completed) {
                     dispatch(setFirstAccess(false));
                     navigate(appContext.routes.home);
                 } else {
@@ -120,11 +120,12 @@ export default function Welcome() {
         let dataPendent = {
             username: username,
             email: email,
+            completed: false,
+            usertype: null
         }
         setLoading(true);
         axios.post(appContext.ENDPOINT_REGISTER, dataSignup).then(
             (re) => {
-                console.log(re)
                 axios.post(appContext.ENDPOINT_PENDENTS, dataPendent).then(
                     () => {
                         setLoading(false);
@@ -137,7 +138,6 @@ export default function Welcome() {
                 })
             }
         ).catch((error) => {
-            console.log(error)
             setLoading(false);
             dispatch(isError('Errore nella fase di registrazione. Inserire correttamente la mail o riprovare con una alternativa.'));
         })

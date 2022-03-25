@@ -142,11 +142,18 @@ export default function Wizard() {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const removePendent = () => {
+    const changePendent = () => {
+        let pendentData =  {
+            completed: true,
+            usertype: userType
+        }
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(pendentData));
+
         axios.get(appContext.ENDPOINT_PENDENTS + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
-            axios.delete(appContext.ENDPOINT_PENDENTS + '/' + response.data[0].id, {
+            axios.put(appContext.ENDPOINT_PENDENTS + '/' + response.data[0].id, formData, {
                 headers: {'Authorization': 'Bearer ' + token}
             })
         })
@@ -194,7 +201,9 @@ export default function Wizard() {
                                                 fetched++;
                                                 if (carousel.length === fetched) {
                                                     dispatch(setIdle());
+                                                    dispatch(setFirstAccess(false));
                                                     setSignupCompleted(true);
+                                                    changePendent();
                                                 }
                                             }).catch(() => {
                                                 dispatch(setIdle());
@@ -209,7 +218,9 @@ export default function Wizard() {
                                     fetched++;
                                     if (carousel.length === fetched) {
                                         dispatch(setIdle());
+                                        dispatch(setFirstAccess(false));
                                         setSignupCompleted(true);
+                                        changePendent();
                                     }
                                 }
                             } else {
@@ -222,7 +233,9 @@ export default function Wizard() {
                                     fetched++;
                                     if (carousel.length === fetched) {
                                         dispatch(setIdle());
+                                        dispatch(setFirstAccess(false));
                                         setSignupCompleted(true);
+                                        changePendent();
                                     }
                                 }).catch(() => {
                                     dispatch(setIdle());
@@ -242,11 +255,13 @@ export default function Wizard() {
                 quality: appContext.COMPRESSION_QUALITY, success(result) {
                     formData.append('files.avatar', result, 'avatar.jpg');
                     formData.append('data', JSON.stringify(dataClient));
-                    axios.post(appContext.ENDPOINT_SHOPS, formData, {
+                    axios.post(appContext.ENDPOINT_CLIENTS, formData, {
                         headers: {'Authorization': 'Bearer ' + token}
-                    }).then((responseFinal) => {
+                    }).then(() => {
                         dispatch(setIdle());
+                        dispatch(setFirstAccess(false));
                         setSignupCompleted(true);
+                        changePendent();
                     }).catch(() => {
                         dispatch(setIdle());
                     })
@@ -284,8 +299,6 @@ export default function Wizard() {
     };
 
     const goToProfile = () => {
-        removePendent();
-        dispatch(setFirstAccess(false))
         navigate(appContext.routes.user + '/' + username);
     };
 

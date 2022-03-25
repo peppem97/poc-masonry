@@ -40,7 +40,6 @@ export default function App() {
         ENDPOINT_SHOPS: host + "/shops",
         ENDPOINT_CLIENTS: host + "/clients",
         ENDPOINT_PRODUCTS: host + "/products",
-        ENDPOINT_EXAMPLES: host + "/image-uploadeds",
         ENDPOINT_PENDENTS: host + "/pendents",
         ENDPOINT_AUTH: host + "/auth/local",
         ENDPOINT_REGISTER: host + "/auth/local/register"
