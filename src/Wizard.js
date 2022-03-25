@@ -34,7 +34,7 @@ import signupOk from "./assets/complete.svg";
 import * as React from "react";
 import {isError} from "./store/dialogs";
 import PictureCard from "./PictureCard";
-import {setFirstAccess} from "./store/user";
+import {setFirstAccess, setType} from "./store/user";
 
 export default function Wizard() {
     const steps = ['Sei un negozio o un cliente?', 'Informazioni di base', 'Immagine di profilo e copertina'];
@@ -149,7 +149,6 @@ export default function Wizard() {
         }
         const formData = new FormData();
         formData.append('data', JSON.stringify(pendentData));
-
         axios.get(appContext.ENDPOINT_PENDENTS + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
@@ -202,6 +201,7 @@ export default function Wizard() {
                                                 if (carousel.length === fetched) {
                                                     dispatch(setIdle());
                                                     dispatch(setFirstAccess(false));
+
                                                     setSignupCompleted(true);
                                                     changePendent();
                                                 }
@@ -219,6 +219,7 @@ export default function Wizard() {
                                     if (carousel.length === fetched) {
                                         dispatch(setIdle());
                                         dispatch(setFirstAccess(false));
+                                        dispatch(setType(userType));
                                         setSignupCompleted(true);
                                         changePendent();
                                     }
@@ -234,6 +235,7 @@ export default function Wizard() {
                                     if (carousel.length === fetched) {
                                         dispatch(setIdle());
                                         dispatch(setFirstAccess(false));
+                                        dispatch(setType(userType));
                                         setSignupCompleted(true);
                                         changePendent();
                                     }
@@ -260,6 +262,7 @@ export default function Wizard() {
                     }).then(() => {
                         dispatch(setIdle());
                         dispatch(setFirstAccess(false));
+                        dispatch(setType(userType));
                         setSignupCompleted(true);
                         changePendent();
                     }).catch(() => {

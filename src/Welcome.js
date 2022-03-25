@@ -18,7 +18,16 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import {clearToken, setToken} from "./store/token";
-import {clearFirstAccess, clearMail, clearType, clearUsername, setFirstAccess, setMail, setUser} from "./store/user";
+import {
+    clearFirstAccess,
+    clearMail,
+    clearType,
+    clearUsername,
+    setFirstAccess,
+    setMail,
+    setType,
+    setUser
+} from "./store/user";
 import {isError, isNotice} from "./store/dialogs";
 import GlobalContext from "./GlobalContext";
 import {useDispatch} from "react-redux";
@@ -91,15 +100,16 @@ export default function Welcome() {
             setLoading(false);
             axios.get(appContext.ENDPOINT_PENDENTS + '/?username=' + response.data.user.username, {
                 headers: {'Authorization': 'Bearer ' + response.data.jwt}
-            }).then((response) => {
-                if (response.data[0].completed) {
+            }).then((responseFinal) => {
+                if (responseFinal.data[0].completed) {
                     dispatch(setFirstAccess(false));
+                    dispatch(setType(responseFinal.data[0].usertype));
                     navigate(appContext.routes.home);
                 } else {
                     dispatch(setFirstAccess(true));
                     navigate(appContext.routes.wizard);
                 }
-            }).catch((error) => {
+            }).catch(() => {
                 clearAll();
                 setLoading(false);
                 dispatch(isError('Errore nella fase di autenticazione. Riprovare.'));
