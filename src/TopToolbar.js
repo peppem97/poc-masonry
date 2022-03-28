@@ -36,8 +36,12 @@ export default function TopToolbar() {
         }
     };
 
-    const goToProfile = () => {
+    const goToShop = () => {
         navigate(appContext.routes.shop + '/' + username);
+    };
+
+    const goToClient = () => {
+        navigate(appContext.routes.client + '/' + username);
     };
 
     const logout = () => {
@@ -89,13 +93,13 @@ export default function TopToolbar() {
                             </IconButton>}
                         {
                             stateLogin &&
-                            <IconButton size='large' style={{color: 'darkred', fontWeight: 'bold'}}>
+                            <IconButton size='large' style={{color: 'darkred', fontWeight: 'bold'}} onClick={goToClient}>
                                 <PeopleIcon/>
                             </IconButton>
                         }
                         {(stateLogin && !firstAccess) && <IconButton size="large"
                                                                      style={{color: 'darkred', fontWeight: 'bold'}}
-                                                                     onClick={goToProfile}>
+                                                                     onClick={goToShop}>
                             <StoreIcon/>
                         </IconButton>}
                         &nbsp;

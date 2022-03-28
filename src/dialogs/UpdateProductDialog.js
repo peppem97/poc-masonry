@@ -3,7 +3,7 @@ import {
     Dialog,
     DialogContent,
     DialogContentText,
-    DialogTitle, IconButton, ImageList, ImageListItem, ImageListItemBar,
+    DialogTitle, Divider, IconButton, ImageList, ImageListItem, ImageListItemBar,
     Input, InputAdornment,
     TextField
 } from "@mui/material";
@@ -290,7 +290,9 @@ export default function UpdateProductDialog(props) {
 
                     }
                     </Box>
-                    <hr/>
+                    <br/>
+                    <Divider orientation="vertical" flexItem />
+                    <br/>
                     <StackGrid duration={500}
                                columnWidth={200}
                                gutterWidth={30}

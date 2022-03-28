@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Carousel from 'react-material-ui-carousel'
 import ProgressiveImg from "./ProgessiveImage";
 
-function UserCarousel(props) {
+function ShopCarousel(props) {
     const [items, setItems] = useState([]);
 
     const initCarousel = () => {
@@ -25,4 +25,4 @@ function UserCarousel(props) {
     );
 }
 
-export default UserCarousel;
+export default ShopCarousel;

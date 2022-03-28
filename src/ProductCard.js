@@ -68,7 +68,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
         navigate(appContext.routes.product + "/" + props.product.id);
     };
 
-    const getUserInfo = () => {
+    const getShopInfo = () => {
         dispatch(setBusy());
         axios.get(appContext.ENDPOINT_SHOPS + "?username=" + props.product.username, {
             headers: {'Authorization': 'Bearer ' + token}
@@ -81,13 +81,13 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     };
 
     useEffect(() => {
-        getUserInfo();
+        getShopInfo();
     }, []);
 
     return (
         <>
             <Card className={styles.card} style={{height: props.product.height}} raised>
-                <CardMedia classes={mediaStyles} image={props.product.picture}/>
+                <CardMedia classes={mediaStyles} image={props.product.picture ?? ''}/>
                 <Box py={3} px={2} className={styles.contentHeader}>
                     {props.showAvatar && (
                         <IconButton onClick={goToShop}>

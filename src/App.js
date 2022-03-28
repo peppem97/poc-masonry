@@ -15,6 +15,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {isNotError, isNotNotice} from "./store/dialogs";
 import UnprotectedRoute from "./UnprotectedRoute";
 import Wizard from "./Wizard";
+import Client from "./Client";
 
 export default function App() {
     const host = "http://zion.datafactor.it:40505"
@@ -58,6 +59,7 @@ export default function App() {
                         <Route path={routes.wizard} element={<ProtectedRoute><Wizard/></ProtectedRoute>}/>
                         <Route path={routes.home} element={<ProtectedRoute><Home/></ProtectedRoute>}/>
                         <Route path={routes.shop + '/:username'} element={<ProtectedRoute><Shop/></ProtectedRoute>}/>
+                        <Route path={routes.client + '/:username'} element={<ProtectedRoute><Client/></ProtectedRoute>}/>
                         <Route path={routes.product + '/:id'} element={<ProtectedRoute><Product/></ProtectedRoute>}/>
                         <Route path={routes.noUser} element={<ProtectedRoute><ErrorNoUser/></ProtectedRoute>}/>
                         <Route exact path='*' element={<Error404/>}/>

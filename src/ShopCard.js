@@ -85,7 +85,7 @@ export const ShopCard = React.memo(function News3Card(props) {
     const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
     const largeScreen = useMediaQuery(theme.breakpoints.down('lg'));
-    const UserCarousel = React.lazy(() => import('./Carousel'));
+    const ShopCarousel = React.lazy(() => import('./Carousel'));
     const [editAvatar, setEditAvatar] = useState(false);
 
     return (
@@ -96,8 +96,8 @@ export const ShopCard = React.memo(function News3Card(props) {
                      position={'relative'}>
                     <CardMedia
                         classes={mediaStyles}
-                        image={null}
-                        children={<Suspense fallback={<></>}><UserCarousel pictures={props.carousel}/></Suspense>}/>
+                        image={''}
+                        children={<Suspense fallback={<></>}><ShopCarousel pictures={props.carousel}/></Suspense>}/>
                     <div className={styles.content}>
                         <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
                             {props.title}

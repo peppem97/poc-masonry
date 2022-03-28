@@ -47,7 +47,7 @@ export default function Shop() {
     let navigate = useNavigate();
     const location = useLocation();
 
-    const getUserInfo = () => {
+    const getShopInfo = () => {
         dispatch(setBusy());
         axios.get(appContext.ENDPOINT_SHOPS + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + token}
@@ -69,7 +69,7 @@ export default function Shop() {
         }).catch(() => {
             dispatch(setIdle());
             navigate(appContext.routes.noUser);
-        })
+        });
     };
 
     const getProducts = () => {
@@ -91,7 +91,7 @@ export default function Shop() {
             setLoadingProducts(false);
             dispatch(setIdle());
             dispatch(isError('Si è verificato un errore nella ricezione dei prodotti. Riprovare ad aggiornare la pagina.'));
-        })
+        });
     };
 
     const checkSelfUser = () => {
@@ -119,7 +119,7 @@ export default function Shop() {
                     headers: {'Authorization': 'Bearer ' + token}
                 }).then(() => {
                     dispatch(setIdle());
-                    getUserInfo();
+                    getShopInfo();
                 }).catch(() => {
                     dispatch(setIdle());
                     dispatch(isError('Si è verificato un errore nell\'aggiornamento dell\'avatar. Riprovare.'));
@@ -148,7 +148,7 @@ export default function Shop() {
                                 fetched++;
                                 if (pictures.length === fetched) {
                                     dispatch(setIdle());
-                                    getUserInfo();
+                                    getShopInfo();
                                 }
                             }).catch(() => {
                                 dispatch(setIdle());
@@ -163,7 +163,7 @@ export default function Shop() {
                     fetched++;
                     if (pictures.length === fetched) {
                         dispatch(setIdle());
-                        getUserInfo();
+                        getShopInfo();
                     }
                 }
             } else {
@@ -176,7 +176,7 @@ export default function Shop() {
                     fetched++;
                     if (pictures.length === fetched) {
                         dispatch(setIdle());
-                        getUserInfo();
+                        getShopInfo();
                     }
                 }).catch(() => {
                     dispatch(setIdle());
@@ -198,11 +198,11 @@ export default function Shop() {
             }
         }).then(() => {
             dispatch(setIdle());
-            getUserInfo();
+            getShopInfo();
         }).catch(() => {
             dispatch(setIdle());
             dispatch(isError('Si è verificato un errore nell\'aggiornamento dell\'informazione. Riprovare.'));
-        })
+        });
     };
 
     const uploadProduct = (params) => {
@@ -270,7 +270,7 @@ export default function Shop() {
         }).catch(() => {
             dispatch(setIdle());
             dispatch(isError('Si è verificato un errore nel caricamento del prodotto. Riprovare.'));
-        })
+        });
     };
 
     const updateProduct = (params) => {
@@ -345,7 +345,7 @@ export default function Shop() {
         }).catch(() => {
             dispatch(setIdle());
             dispatch(isError('Si è verificato un errore nell\'aggiornamento del prodotto. Riprovare.'));
-        })
+        });
     };
 
     const deleteProduct = (consens) => {
@@ -362,7 +362,7 @@ export default function Shop() {
             }).catch(() => {
                 dispatch(setIdle());
                 dispatch(isError('Si è verificato un errore nella cancellazione del prodotto. Riprovare.'));
-            })
+            });
         }
     }
 
@@ -392,7 +392,7 @@ export default function Shop() {
 
     const refresh = () => {
         checkSelfUser();
-        getUserInfo();
+        getShopInfo();
         getProducts();
     };
 
@@ -496,5 +496,5 @@ export default function Shop() {
                 }}>
             </DeleteProductDialog>
         </>
-    )
+    );
 }

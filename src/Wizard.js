@@ -61,8 +61,8 @@ export default function Wizard() {
     const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
     let navigate = useNavigate();
 
-    const onChangeUserType = (event, typeUser) => {
-        setUserType(typeUser);
+    const onChangeUserType = (event, userType) => {
+        setUserType(userType);
     };
 
     const onChangeTitle = (e) => {

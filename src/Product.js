@@ -132,7 +132,7 @@ export default function Product() {
         })
     };
 
-    const getUserInfo = () => {
+    const getShopInfo = () => {
         dispatch(setBusy());
         axios.get(appContext.ENDPOINT_SHOPS + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + token}
@@ -161,7 +161,7 @@ export default function Product() {
     }, []);
 
     useEffect(() => {
-        getUserInfo();
+        getShopInfo();
     }, [username]);
 
     return (
@@ -175,7 +175,7 @@ export default function Product() {
                     <Card className={cx(styles.root)}>
                         <CardMedia
                             className={styles.media}
-                            image={cover}
+                            image={cover ?? ''}
                         />
                         <CardContent className={styles.content}>
                             <Container>
