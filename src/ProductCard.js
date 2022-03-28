@@ -60,8 +60,8 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     let navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const goToUser = () => {
-        navigate(appContext.routes.user + "/" + props.product.username);
+    const goToShop = () => {
+        navigate(appContext.routes.shop + "/" + props.product.username);
     };
 
     const goToProduct = () => {
@@ -90,7 +90,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 <CardMedia classes={mediaStyles} image={props.product.picture}/>
                 <Box py={3} px={2} className={styles.contentHeader}>
                     {props.showAvatar && (
-                        <IconButton onClick={goToUser}>
+                        <IconButton onClick={goToShop}>
                             <Avatar src={avatar ?? null}/>
                         </IconButton>)}
                 </Box>

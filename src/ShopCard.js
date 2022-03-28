@@ -78,7 +78,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export const UserCard = React.memo(function News3Card(props) {
+export const ShopCard = React.memo(function News3Card(props) {
     const styles = useStyles();
     const mediaStyles = useCoverCardMediaStyles();
     const theme = useTheme();
@@ -210,4 +210,4 @@ export const UserCard = React.memo(function News3Card(props) {
     );
 });
 
-export default UserCard;
+export default ShopCard;

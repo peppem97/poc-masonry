@@ -98,8 +98,8 @@ export default function Product() {
     let navigate = useNavigate();
     const styles = useStyles();
 
-    const goToUser = () => {
-        navigate(appContext.routes.user + "/" + username);
+    const goToShop = () => {
+        navigate(appContext.routes.shop + "/" + username);
     };
 
     const getProductInfo = () => {
@@ -181,7 +181,7 @@ export default function Product() {
                             <Container>
                                 <Row className='row-cols-auto '>
                                     <Col>
-                                        <IconButton onClick={goToUser}>
+                                        <IconButton onClick={goToShop}>
                                             <Avatar src={avatar ?? null}/>
                                         </IconButton>
                                     </Col>

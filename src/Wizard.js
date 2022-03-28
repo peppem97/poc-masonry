@@ -302,7 +302,7 @@ export default function Wizard() {
     };
 
     const goToProfile = () => {
-        navigate(appContext.routes.user + '/' + username);
+        navigate(appContext.routes.shop + '/' + username);
     };
 
     useEffect(() => {

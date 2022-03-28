@@ -1,6 +1,6 @@
 import React from "react";
 import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
-import User from "./User";
+import Shop from "./Shop";
 import TopToolbar from "./TopToolbar";
 import Home from "./Home";
 import GlobalContext from "./GlobalContext";
@@ -26,7 +26,8 @@ export default function App() {
     const routes = {
         welcome: '/masonry/welcome',
         home: '/masonry/home',
-        user: '/masonry/user',
+        shop: '/masonry/shop',
+        client: '/masonry/client',
         wizard: '/masonry/wizard',
         product: '/masonry/product',
         noUser: '/masonry/no-user'
@@ -56,7 +57,7 @@ export default function App() {
                         <Route path={routes.welcome} element={<UnprotectedRoute><Welcome/></UnprotectedRoute>}/>
                         <Route path={routes.wizard} element={<ProtectedRoute><Wizard/></ProtectedRoute>}/>
                         <Route path={routes.home} element={<ProtectedRoute><Home/></ProtectedRoute>}/>
-                        <Route path={routes.user + '/:username'} element={<ProtectedRoute><User/></ProtectedRoute>}/>
+                        <Route path={routes.shop + '/:username'} element={<ProtectedRoute><Shop/></ProtectedRoute>}/>
                         <Route path={routes.product + '/:id'} element={<ProtectedRoute><Product/></ProtectedRoute>}/>
                         <Route path={routes.noUser} element={<ProtectedRoute><ErrorNoUser/></ProtectedRoute>}/>
                         <Route exact path='*' element={<Error404/>}/>

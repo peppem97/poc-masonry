@@ -6,7 +6,7 @@ import GridSystem from "./GridSystem";
 import axios from "axios";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import GlobalContext from "./GlobalContext";
-import UserCard from "./UserCard";
+import ShopCard from "./ShopCard";
 import UpdateProductDialog from "./dialogs/UpdateProductDialog";
 import UpdateInfoDialog from "./dialogs/UpdateInfoDialog";
 import Compressor from 'compressorjs';
@@ -17,7 +17,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
 import {isError} from "./store/dialogs";
 
-export default function User() {
+export default function Shop() {
     const [id, setId] = useState(null);
     const [email, setEmail] = useState(null);
     const [title, setTitle] = useState(null);
@@ -415,7 +415,7 @@ export default function User() {
                 <br/>
                 <br/>
                 <br/>
-                <UserCard
+                <ShopCard
                     email={email}
                     title={title}
                     description={description}

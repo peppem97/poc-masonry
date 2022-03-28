@@ -6,18 +6,16 @@ import {IconButton} from "@mui/material";
 import Button from "@mui/material/Button";
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
-import Typography from "@mui/material/Typography";
-import LocalFloristIcon from "@mui/icons-material/LocalFlorist";
 import {useNavigate} from "react-router-dom";
 import GlobalContext from "./GlobalContext";
-import {useContext, useState} from "react";
-import InfoIcon from '@mui/icons-material/Info';
+import {useContext, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setColumnWidth} from "./store/columnWidth";
 import {clearToken} from "./store/token";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HomeIcon from '@mui/icons-material/Home';
 import {clearMail, clearType, clearUsername} from "./store/user";
+import StoreIcon from '@mui/icons-material/Store';
+import PeopleIcon from '@mui/icons-material/People';
 
 export default function TopToolbar() {
     let navigate = useNavigate();
@@ -25,6 +23,8 @@ export default function TopToolbar() {
     const columnWidth = useSelector((state) => state.columnWidth.value);
     const username = useSelector((state) => state.user.username);
     const firstAccess = useSelector((state) => state.user.firstAccess);
+    const userType = useSelector((state) => state.user.type);
+
     const dispatch = useDispatch();
     const appContext = useContext(GlobalContext);
 
@@ -37,7 +37,7 @@ export default function TopToolbar() {
     };
 
     const goToProfile = () => {
-        navigate(appContext.routes.user + '/' + username);
+        navigate(appContext.routes.shop + '/' + username);
     };
 
     const logout = () => {
@@ -63,6 +63,10 @@ export default function TopToolbar() {
         }
     };
 
+    useEffect(() => {
+        console.log(userType);
+    }, [])
+
     return (
         <>
             <Box sx={{flexGrow: 1}} style={{position: 'fixed', top: 0, zIndex: 100, width: '100%'}}>
@@ -71,24 +75,32 @@ export default function TopToolbar() {
                         <IconButton onClick={goToHome} style={{color: 'darkred', fontWeight: 'bold'}}>
                             <HomeIcon/></IconButton>
                         <Box sx={{flexGrow: 1}}/>
+
                         {(stateLogin && !firstAccess) && <IconButton size="large"
-                                     style={{color: 'darkred', fontWeight: 'bold'}}
-                                     onClick={increaseColumnsSize}>
+                                                                     style={{color: 'darkred', fontWeight: 'bold'}}
+                                                                     onClick={increaseColumnsSize}>
                             <ZoomInIcon/>
                         </IconButton>}
+                        {(stateLogin && !firstAccess) &&
+                            <IconButton size="large"
+                                        style={{color: 'darkred', fontWeight: 'bold'}}
+                                        onClick={decreaseColumnsSize}>
+                                <ZoomOutIcon/>
+                            </IconButton>}
+                        {
+                            stateLogin &&
+                            <IconButton size='large' style={{color: 'darkred', fontWeight: 'bold'}}>
+                                <PeopleIcon/>
+                            </IconButton>
+                        }
                         {(stateLogin && !firstAccess) && <IconButton size="large"
-                                     style={{color: 'darkred', fontWeight: 'bold'}}
-                                     onClick={decreaseColumnsSize}>
-                            <ZoomOutIcon/>
-                        </IconButton>}
-                        {(stateLogin && !firstAccess) && <IconButton size="large"
-                                     style={{color: 'darkred', fontWeight: 'bold'}}
-                                     onClick={goToProfile}>
-                            <AccountCircleIcon/>
+                                                                     style={{color: 'darkred', fontWeight: 'bold'}}
+                                                                     onClick={goToProfile}>
+                            <StoreIcon/>
                         </IconButton>}
                         &nbsp;
                         {stateLogin && <Button variant="contained" style={{backgroundColor: 'darkred'}}
-                                              onClick={logout}>{'ESCI'}</Button>}
+                                               onClick={logout}>{'ESCI'}</Button>}
                     </Toolbar>
                 </AppBar>
             </Box>
