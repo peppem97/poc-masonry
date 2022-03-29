@@ -50,10 +50,16 @@ const useStyles = makeStyles(() => ({
         width: '100%',
     },
 }));
+const useAvatarShadow = makeStyles(theme => ({
+    avatar: {
+        boxShadow: theme.shadows[10],
+    }
+}));
 
 export const ProductCard = React.memo(function GalaxyCard(props) {
     const [avatar, setAvatar] = useState(null);
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
+    const avatarShadow = useAvatarShadow();
     const styles = useStyles();
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
@@ -91,7 +97,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 <Box py={3} px={2} className={styles.contentHeader}>
                     {props.showAvatar && (
                         <IconButton onClick={goToShop}>
-                            <Avatar src={avatar ?? null}/>
+                            <Avatar src={avatar ?? null} className={avatarShadow.avatar}/>
                         </IconButton>)}
                 </Box>
                 <Box py={3} px={2} className={styles.contentDescription}>

@@ -81,6 +81,12 @@ const useStyles = makeStyles(({breakpoints, spacing}) => ({
     },
 }));
 
+const useAvatarShadow = makeStyles(theme => ({
+    avatar: {
+        boxShadow: theme.shadows[10],
+    }
+}));
+
 export default function Product() {
     const [pictures, setPictures] = useState([]);
     const [cover, setCover] = useState(null);
@@ -92,6 +98,7 @@ export default function Product() {
     const [price, setPrice] = useState(null);
     const [pieces, setPieces] = useState(null);
     const appContext = useContext(GlobalContext);
+    const avatarShadow = useAvatarShadow();
     const token = useSelector((state) => state.token.value);
     const dispatch = useDispatch();
     const {id} = useParams();
@@ -182,7 +189,10 @@ export default function Product() {
                                 <Row className='row-cols-auto '>
                                     <Col>
                                         <IconButton onClick={goToShop}>
-                                            <Avatar src={avatar ?? null}/>
+                                            <Avatar
+                                                src={avatar ?? null}
+                                                className={avatarShadow.avatar}
+                                                style={{width: '50px', height: '50px'}}/>
                                         </IconButton>
                                     </Col>
                                     <Col>

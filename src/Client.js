@@ -12,25 +12,27 @@ import {makeStyles} from "@material-ui/core/styles";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import StoreIcon from '@mui/icons-material/Store';
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import Compressor from "compressorjs";
+import {isError} from "./store/dialogs";
 
 const useAvatarShadow = makeStyles(theme => ({
     avatar: {
         boxShadow: theme.shadows[10],
     }
-}))
-
+}));
 const useStyles = makeStyles((theme) => ({
     indicator: {
         backgroundColor: "green",
     }
 }));
 
-export default function Client(props) {
+export default function Client() {
+    const [id, setId] = useState(null);
     const [name, setName] = useState(null);
     const [surname, setSurname] = useState(null);
     const [avatar, setAvatar] = useState(null);
     const [editAvatar, setEditAvatar] = useState(false);
-    const [tabValue, setTabValue] = useState('PREFERITI')
+    const [tabValue, setTabValue] = useState('PREFERITI');
     const avatarShadow = useAvatarShadow();
     const tabsStyle = useStyles();
     const {username} = useParams();
@@ -48,10 +50,10 @@ export default function Client(props) {
         axios.get(appContext.ENDPOINT_CLIENTS + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
-            console.log(response)
-            setName(response.data[0].name);
-            setSurname(response.data[0].surname);
-            setAvatar(response.data[0].avatar.url);
+            setId(response.data[0]?.id);
+            setName(response.data[0]?.name);
+            setSurname(response.data[0]?.surname);
+            setAvatar(response.data[0]?.avatar?.url);
             dispatch(setIdle())
         }).catch(() => {
             dispatch(setIdle());
@@ -60,6 +62,26 @@ export default function Client(props) {
     };
 
     const updateAvatar = (e) => {
+        dispatch(setBusy());
+        const formData = new FormData();
+        new Compressor(e.target.files[0], {
+            quality: appContext.COMPRESSION_QUALITY, success(result) {
+                formData.append('files.avatar', result, 'avatar.jpg');
+                formData.append('data', JSON.stringify({}));
+                axios.put(appContext.ENDPOINT_CLIENTS + "/" + id, formData, {
+                    headers: {'Authorization': 'Bearer ' + token}
+                }).then(() => {
+                    dispatch(setIdle());
+                    getClientInfo();
+                }).catch(() => {
+                    dispatch(setIdle());
+                    dispatch(isError('Si è verificato un errore nell\'aggiornamento dell\'avatar. Riprovare.'));
+                })
+            }, error() {
+                dispatch(setIdle());
+                dispatch(isError('Si è verificato un errore nell\'aggiornamento dell\'avatar. Riprovare.'));
+            }
+        })
     };
 
     const updateName = (e) => {
@@ -89,7 +111,7 @@ export default function Client(props) {
                 }}>
                     <label htmlFor="avatar-uploader" className='text-center'>
                         <Input accept="image/*" id="avatar-uploader" type="file" hidden
-                               onChange={null}/>
+                               onChange={updateAvatar}/>
                     <Avatar
                         className={avatarShadow.avatar}
                         src={!editAvatar && appContext.HOST + avatar}
