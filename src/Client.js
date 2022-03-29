@@ -33,11 +33,11 @@ export default function Client() {
     const [name, setName] = useState(null);
     const [surname, setSurname] = useState(null);
     const [avatar, setAvatar] = useState(null);
+    const [favorites, setFavorites] = useState([]);
     const [editAvatar, setEditAvatar] = useState(false);
     const [info, setInfo] = useState(null);
     const [infoToEdit, setInfoToEdit] = useState(null);
     const [updateInfoDialogOpened, setUpdateInfoDialogOpened] = useState(false);
-
     const [tabValue, setTabValue] = useState('PREFERITI');
     const avatarShadow = useAvatarShadow();
     const tabsStyle = useStyles();
@@ -60,11 +60,41 @@ export default function Client() {
             setName(response.data[0]?.name);
             setSurname(response.data[0]?.surname);
             setAvatar(response.data[0]?.avatar?.url);
-            dispatch(setIdle())
+            setFavorites(response.data[0]?.favorites)
+            dispatch(setIdle());
         }).catch(() => {
             dispatch(setIdle());
             navigate(appContext.routes.noUser);
         });
+    };
+
+    const getFavorites = () => {
+        const qs = require('qs');
+        const query = qs.stringify({
+            _where: {
+                id: ['62209e9f551af009f24d1a50', '622b34e6f9cdcb0f3a5bd365']
+            },
+        }, {
+            encodeValuesOnly: true, // prettify url
+        });
+        console.log(query)
+        axios.get(appContext.ENDPOINT_PRODUCTS + "?" + query, {
+            headers: {'Authorization': 'Bearer ' + token}
+        }).then((response) => {
+            console.log(response)
+            // setId(response.data[0]?.id);
+            // setName(response.data[0]?.name);
+            // setSurname(response.data[0]?.surname);
+            // setAvatar(response.data[0]?.avatar?.url);
+            // setFavorites(response.data[0]?.favorites)
+            dispatch(setIdle());
+        }).catch(() => {
+            dispatch(setIdle());
+            navigate(appContext.routes.noUser);
+        });
+
+
+
     };
 
     const updateAvatar = (e) => {
@@ -124,7 +154,6 @@ export default function Client() {
         setUpdateInfoDialogOpened(true);
     };
 
-
     const updateInfo = (type, value) => {
         dispatch(setBusy());
         const data = {};
@@ -146,8 +175,9 @@ export default function Client() {
 
     useEffect(() => {
         getClientInfo();
-    }, [])
+        getFavorites();
 
+    }, []);
 
     return (
         <>
@@ -160,7 +190,7 @@ export default function Client() {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: 2,
+                    gap: 1,
                     justifyContent: 'center'
                 }}>
                     <label htmlFor="avatar-uploader" className='text-center'>
@@ -174,6 +204,7 @@ export default function Client() {
                         onMouseLeave={() => {setEditAvatar(false)}}>{editAvatar && <AddPhotoAlternateIcon sx={{fontSize: 70}}/>}
                     </Avatar>
                     </label>
+                    <br/>
 
                     <Typography className='text-center' variant='h4'>{name}
                         <IconButton color="inherit" size="medium" onClick={() => {
@@ -190,9 +221,6 @@ export default function Client() {
                         </IconButton>
                     </Typography>
                     <Typography variant='h5' className='text-center' color="text.secondary">{username}
-                        <IconButton color="inherit" size="medium" onClick={null}>
-                            <EditIcon fontSize="inherit"/>
-                        </IconButton>
                     </Typography>
                 </Box>
                 <br/>
