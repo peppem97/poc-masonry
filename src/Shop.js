@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import Typography from '@material-ui/core/Typography';
-import {Row} from '@mui-treasury/components/flex';
-import {Container} from "react-bootstrap";
+import {Row, Container} from "react-bootstrap";
 import GridSystem from "./GridSystem";
 import axios from "axios";
 import {useLocation, useNavigate, useParams} from "react-router-dom";

@@ -173,7 +173,9 @@ export default function Wizard() {
             name: name,
             surname: surname,
             username: username,
-            telephone: telephone
+            telephone: telephone,
+            favorites: [],
+            following: []
         };
         const formData = new FormData();
         dispatch(setBusy());

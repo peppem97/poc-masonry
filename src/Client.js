@@ -6,7 +6,7 @@ import GlobalContext from "./GlobalContext";
 import {setBusy, setIdle} from "./store/loading";
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
-import {Divider, Input, Tab, Tabs, Typography} from "@mui/material";
+import {Divider, IconButton, Input, Tab, Tabs, Typography} from "@mui/material";
 import Box from "@mui/material/Box";
 import {makeStyles} from "@material-ui/core/styles";
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -14,6 +14,8 @@ import StoreIcon from '@mui/icons-material/Store';
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import Compressor from "compressorjs";
 import {isError} from "./store/dialogs";
+import EditIcon from "@mui/icons-material/Edit";
+import UpdateInfoDialog from "./dialogs/UpdateInfoDialog";
 
 const useAvatarShadow = makeStyles(theme => ({
     avatar: {
@@ -32,6 +34,10 @@ export default function Client() {
     const [surname, setSurname] = useState(null);
     const [avatar, setAvatar] = useState(null);
     const [editAvatar, setEditAvatar] = useState(false);
+    const [info, setInfo] = useState(null);
+    const [infoToEdit, setInfoToEdit] = useState(null);
+    const [updateInfoDialogOpened, setUpdateInfoDialogOpened] = useState(false);
+
     const [tabValue, setTabValue] = useState('PREFERITI');
     const avatarShadow = useAvatarShadow();
     const tabsStyle = useStyles();
@@ -84,10 +90,58 @@ export default function Client() {
         })
     };
 
-    const updateName = (e) => {
+    // const example = () => {
+    //     dispatch(setBusy());
+    //     const formData = new FormData();
+    //     let data = {
+    //         favorites: [1, 2, 3]
+    //     };
+    //     formData.append('data', JSON.stringify(data));
+    //
+    //     axios.put(appContext.ENDPOINT_CLIENTS + "/" + id, formData, {
+    //         headers: {'Authorization': 'Bearer ' + token}
+    //     }).then(() => {
+    //         dispatch(setIdle());
+    //         getClientInfo();
+    //     }).catch(() => {
+    //         dispatch(setIdle());
+    //         dispatch(isError('Si è verificato un errore nell\'aggiornamento dell\'avatar. Riprovare.'));
+    //     })
+    // };
+
+    const openInfoDialog = (info) => {
+        switch (info) {
+            case 'name':
+                setInfo(name);
+                break;
+            case 'surname':
+                setInfo(surname);
+                break;
+            default:
+                break;
+        }
+        setInfoToEdit(info);
+        setUpdateInfoDialogOpened(true);
     };
 
-    const updateSurname = (e) => {
+
+    const updateInfo = (type, value) => {
+        dispatch(setBusy());
+        const data = {};
+        const formData = new FormData();
+        data[type] = value;
+        formData.append('data', JSON.stringify(data));
+        axios.put(appContext.ENDPOINT_CLIENTS + "/" + id, formData, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        }).then(() => {
+            dispatch(setIdle());
+            getClientInfo();
+        }).catch(() => {
+            dispatch(setIdle());
+            dispatch(isError('Si è verificato un errore nell\'aggiornamento dell\'informazione. Riprovare.'));
+        });
     };
 
     useEffect(() => {
@@ -121,9 +175,25 @@ export default function Client() {
                     </Avatar>
                     </label>
 
-                    <Typography className='text-center' variant='h3'>{name} {surname}</Typography>
-                    <Typography variant='h5' className='text-center' color="text.secondary">{username}</Typography>
-
+                    <Typography className='text-center' variant='h4'>{name}
+                        <IconButton color="inherit" size="medium" onClick={() => {
+                            openInfoDialog('name')
+                        }}>
+                            <EditIcon fontSize="inherit"/>
+                        </IconButton>
+                    </Typography>
+                    <Typography className='text-center' variant='h4'>{surname}
+                        <IconButton color="inherit" size="medium" onClick={() => {
+                            openInfoDialog('surname')
+                        }}>
+                            <EditIcon fontSize="inherit"/>
+                        </IconButton>
+                    </Typography>
+                    <Typography variant='h5' className='text-center' color="text.secondary">{username}
+                        <IconButton color="inherit" size="medium" onClick={null}>
+                            <EditIcon fontSize="inherit"/>
+                        </IconButton>
+                    </Typography>
                 </Box>
                 <br/>
                 <Divider/>
@@ -141,18 +211,22 @@ export default function Client() {
                         value={tabValue}
                         className={tabsStyle}
                         onChange={onChangeTabValue}
-                        textColor='inherit' TabIndicatorProps={{
-                        style: {
-                            backgroundColor: "darkred"
-                        }
-                    }}>
+                        textColor='inherit' TabIndicatorProps={{style: {backgroundColor: "darkred"}}}>
                         <Tab icon={<FavoriteIcon />} label="PREFERITI" value='PREFERITI' />
                         <Tab icon={<StoreIcon />} label="NEGOZI" value='NEGOZI' />
                     </Tabs>
                 </Box>
-
-
             </Container>
+            <UpdateInfoDialog
+                open={updateInfoDialogOpened}
+                infoToEdit={infoToEdit}
+                onClose={() => {
+                    setUpdateInfoDialogOpened(false)
+                }}
+                updateInfo={(e) => {
+                    updateInfo(infoToEdit, e)
+                }}
+                info={info}/>
         </>
     );
 }
