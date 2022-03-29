@@ -17,7 +17,7 @@ import PanoramaIcon from "@mui/icons-material/Panorama";
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     card: {
         minWidth: 320,
         position: 'relative',
@@ -48,8 +48,9 @@ const useStyles = makeStyles(() => ({
         padding: '1.5rem 1.5rem 1rem',
     },
     avatar: {
-        width: 48,
-        height: 48,
+        width: 70,
+        height: 70,
+        boxShadow: theme.shadows[10]
     },
     author: {
         zIndex: 1,
@@ -77,6 +78,7 @@ const useStyles = makeStyles(() => ({
         backgroundColor: 'rgba(0,0,0,0.04)',
     },
 }));
+
 
 export const ShopCard = React.memo(function News3Card(props) {
     const styles = useStyles();
