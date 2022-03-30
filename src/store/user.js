@@ -51,5 +51,16 @@ export const userSlice = createSlice({
         },
     },
 })
-export const { setType, setMail, setUser, setFirstAccess, clearType, clearMail, clearUsername, clearFirstAccess} = userSlice.actions;
+export const {
+    setType,
+    setMail,
+    setUser,
+    setFirstAccess,
+    setFavorites,
+    setFollowing,
+    clearType,
+    clearMail,
+    clearUsername,
+    clearFirstAccess
+} = userSlice.actions;
 export default userSlice.reducer;

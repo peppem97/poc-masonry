@@ -19,6 +19,7 @@ import UpdateInfoDialog from "./dialogs/UpdateInfoDialog";
 import {generateHeight} from "./Utility";
 import GridSystem from "./GridSystem";
 import {TabContext, TabList, TabPanel} from "@material-ui/lab";
+import {setFavorites, setFollowing} from "./store/user";
 
 const useAvatarShadow = makeStyles(theme => ({
     avatar: {
@@ -43,16 +44,28 @@ export default function Client() {
     const [infoToEdit, setInfoToEdit] = useState(null);
     const [updateInfoDialogOpened, setUpdateInfoDialogOpened] = useState(false);
     const [tabValue, setTabValue] = useState('PREFERITI');
+    const [selfUser, setSelfUser] = useState(false);
     const avatarShadow = useAvatarShadow();
     const tabsStyle = useStyles();
     const {username} = useParams();
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token.value);
+    const myUsername = useSelector((state) => state.user.username);
+    const userType = useSelector((state) => state.user.type);
     const appContext = useContext(GlobalContext);
     let navigate = useNavigate();
 
     const onChangeTabValue = (e, value) => {
         setTabValue(value);
+    };
+
+    const getFavoritesFollowing = () => {
+        axios.get(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "?username=" + myUsername,{
+            headers: {'Authorization': 'Bearer ' + token}
+        }).then((response) => {
+            dispatch(setFavorites(response.data[0].favorites));
+            dispatch(setFollowing(response.data[0].following));
+        })
     };
 
     const getClientInfo = () => {

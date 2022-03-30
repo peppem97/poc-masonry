@@ -15,6 +15,7 @@ import DeleteProductDialog from "./dialogs/DeleteProductDialog";
 import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
 import {isError} from "./store/dialogs";
+import {setFavorites, setFollowing} from "./store/user";
 
 export default function Shop() {
     const [id, setId] = useState(null);
@@ -40,6 +41,7 @@ export default function Shop() {
     const token = useSelector((state) => state.token.value);
     const myUsername = useSelector((state) => state.user.username);
     const firstAccess = useSelector((state) => state.user.firstAccess);
+    const userType = useSelector((state) => state.user.type);
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
     const dispatch = useDispatch();
@@ -69,6 +71,15 @@ export default function Shop() {
             dispatch(setIdle());
             navigate(appContext.routes.noUser);
         });
+    };
+
+    const getFavoritesFollowing = () => {
+        axios.get(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "?username=" + myUsername,{
+            headers: {'Authorization': 'Bearer ' + token}
+        }).then((response) => {
+            dispatch(setFavorites(response.data[0].favorites));
+            dispatch(setFollowing(response.data[0].following));
+        })
     };
 
     const getProducts = () => {

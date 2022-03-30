@@ -64,6 +64,8 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     const styles = useStyles();
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
+    const favorites = useSelector((state) => state.user.favorites);
+
     let navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -90,6 +92,10 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     useEffect(() => {
         getShopInfo();
     }, []);
+
+    useEffect(() => {
+        setFavorite(favorites.includes(props.product.id));
+    }, [props.product.id]);
 
     return (
         <>

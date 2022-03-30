@@ -104,10 +104,6 @@ export default function Welcome() {
                 if (responseFinal.data[0].completed) {
                     dispatch(setFirstAccess(false));
                     dispatch(setType(responseFinal.data[0].usertype));
-                    //faccio il fetching dei preferiti
-                    // axios.get(appContext.ENDP)
-
-
                     navigate(appContext.routes.home);
                 } else {
                     dispatch(setFirstAccess(true));
