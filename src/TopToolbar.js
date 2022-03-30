@@ -67,10 +67,6 @@ export default function TopToolbar() {
         }
     };
 
-    useEffect(() => {
-        console.log(userType);
-    }, [])
-
     return (
         <>
             <Box sx={{flexGrow: 1}} style={{position: 'fixed', top: 0, zIndex: 100, width: '100%'}}>

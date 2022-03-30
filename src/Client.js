@@ -16,6 +16,9 @@ import Compressor from "compressorjs";
 import {isError} from "./store/dialogs";
 import EditIcon from "@mui/icons-material/Edit";
 import UpdateInfoDialog from "./dialogs/UpdateInfoDialog";
+import {generateHeight} from "./Utility";
+import GridSystem from "./GridSystem";
+import {TabContext, TabList, TabPanel} from "@material-ui/lab";
 
 const useAvatarShadow = makeStyles(theme => ({
     avatar: {
@@ -33,7 +36,8 @@ export default function Client() {
     const [name, setName] = useState(null);
     const [surname, setSurname] = useState(null);
     const [avatar, setAvatar] = useState(null);
-    const [favorites, setFavorites] = useState([]);
+    const [favoriteProducts, setFavoriteProducts] = useState([]);
+    const [loadingProduct, setLoadingProduct] = useState(false);
     const [editAvatar, setEditAvatar] = useState(false);
     const [info, setInfo] = useState(null);
     const [infoToEdit, setInfoToEdit] = useState(null);
@@ -60,7 +64,7 @@ export default function Client() {
             setName(response.data[0]?.name);
             setSurname(response.data[0]?.surname);
             setAvatar(response.data[0]?.avatar?.url);
-            setFavorites(response.data[0]?.favorites)
+            getFavoriteProducts(response.data[0]?.favorites);
             dispatch(setIdle());
         }).catch(() => {
             dispatch(setIdle());
@@ -68,33 +72,25 @@ export default function Client() {
         });
     };
 
-    const getFavorites = () => {
+    const getFavoriteProducts = (favorites) => {
+        setLoadingProduct(true);
         const qs = require('qs');
-        const query = qs.stringify({
-            _where: {
-                id: ['62209e9f551af009f24d1a50', '622b34e6f9cdcb0f3a5bd365']
-            },
-        }, {
-            encodeValuesOnly: true, // prettify url
-        });
-        console.log(query)
+        const query = qs.stringify({_where: {id: favorites},}, {encodeValuesOnly: true});
         axios.get(appContext.ENDPOINT_PRODUCTS + "?" + query, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
-            console.log(response)
-            // setId(response.data[0]?.id);
-            // setName(response.data[0]?.name);
-            // setSurname(response.data[0]?.surname);
-            // setAvatar(response.data[0]?.avatar?.url);
-            // setFavorites(response.data[0]?.favorites)
-            dispatch(setIdle());
+            let tmpProducts = response.data.map((element) => ({
+                height: generateHeight(),
+                title: element.title,
+                id: element.id,
+                picture: appContext.HOST + element.cover?.url,
+                username: element.username
+            }))
+            setFavoriteProducts(tmpProducts);
+            setLoadingProduct(false);
         }).catch(() => {
             dispatch(setIdle());
-            navigate(appContext.routes.noUser);
         });
-
-
-
     };
 
     const updateAvatar = (e) => {
@@ -175,8 +171,6 @@ export default function Client() {
 
     useEffect(() => {
         getClientInfo();
-        getFavorites();
-
     }, []);
 
     return (
@@ -196,13 +190,17 @@ export default function Client() {
                     <label htmlFor="avatar-uploader" className='text-center'>
                         <Input accept="image/*" id="avatar-uploader" type="file" hidden
                                onChange={updateAvatar}/>
-                    <Avatar
-                        className={avatarShadow.avatar}
-                        src={!editAvatar && appContext.HOST + avatar}
-                        style={{width: '200px', height: '200px', cursor: editAvatar ? 'pointer' : null}}
-                        onMouseOver={() => {setEditAvatar(true)}}
-                        onMouseLeave={() => {setEditAvatar(false)}}>{editAvatar && <AddPhotoAlternateIcon sx={{fontSize: 70}}/>}
-                    </Avatar>
+                        <Avatar
+                            className={avatarShadow.avatar}
+                            src={!editAvatar && appContext.HOST + avatar}
+                            style={{width: '200px', height: '200px', cursor: editAvatar ? 'pointer' : null}}
+                            onMouseOver={() => {
+                                setEditAvatar(true)
+                            }}
+                            onMouseLeave={() => {
+                                setEditAvatar(false)
+                            }}>{editAvatar && <AddPhotoAlternateIcon sx={{fontSize: 70}}/>}
+                        </Avatar>
                     </label>
                     <br/>
 
@@ -226,24 +224,28 @@ export default function Client() {
                 <br/>
                 <Divider/>
                 <br/>
-                <Box sx={{
-                    width: '100%',
-                    color: 'darkred',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: 2,
-                    justifyContent: 'center'
-                }}>
-                    <Tabs
-                        value={tabValue}
-                        className={tabsStyle}
-                        onChange={onChangeTabValue}
-                        textColor='inherit' TabIndicatorProps={{style: {backgroundColor: "darkred"}}}>
-                        <Tab icon={<FavoriteIcon />} label="PREFERITI" value='PREFERITI' />
-                        <Tab icon={<StoreIcon />} label="NEGOZI" value='NEGOZI' />
-                    </Tabs>
-                </Box>
+                <TabContext value={tabValue}>
+                    <Box sx={{
+                        width: '100%',
+                        color: 'darkred',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: 2,
+                        justifyContent: 'center'
+                    }}>
+                        <TabList
+                            className={tabsStyle}
+                            onChange={onChangeTabValue}
+                            textColor='inherit' TabIndicatorProps={{style: {backgroundColor: "darkred"}}}>
+                            <Tab icon={<FavoriteIcon/>} label="PREFERITI" value='PREFERITI'/>
+                            <Tab icon={<StoreIcon/>} label="NEGOZI" value='NEGOZI'/>
+                        </TabList>
+                    </Box>
+                    <TabPanel value='PREFERITI'>
+                        <GridSystem loadingProducts={loadingProduct} isProducts={true} products={favoriteProducts} isUser={false}/>
+                    </TabPanel>
+                </TabContext>
             </Container>
             <UpdateInfoDialog
                 open={updateInfoDialogOpened}

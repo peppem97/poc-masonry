@@ -3,20 +3,14 @@ import {
     Dialog,
     DialogContent,
     DialogContentText,
-    DialogTitle, IconButton, ImageList, ImageListItem, ImageListItemBar,
-    Input,
+    DialogTitle,
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import {Row} from "react-bootstrap";
 import React, {useContext, useEffect, useState} from "react";
-import OpenInFullIcon from '@mui/icons-material/OpenInFull';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import ProgressiveImg from "../ProgessiveImage";
 import {initImageList} from "../Utility";
 import GlobalContext from "../GlobalContext";
 import PictureCard from "../PictureCard";
-import Box from "@mui/material/Box";
 import StackGrid, {easings, transitions} from "react-stack-grid";
 
 export default function UpdateCarouselDialog(props) {

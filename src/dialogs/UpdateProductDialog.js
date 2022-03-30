@@ -3,22 +3,18 @@ import {
     Dialog,
     DialogContent,
     DialogContentText,
-    DialogTitle, Divider, IconButton, ImageList, ImageListItem, ImageListItemBar,
-    Input, InputAdornment,
+    DialogTitle, Divider,
+    InputAdornment,
     TextField
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import {Col, Row} from "react-bootstrap";
 import React, {useContext, useEffect, useState} from "react";
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import axios from "axios";
 import GlobalContext from "../GlobalContext";
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
 import EuroIcon from '@mui/icons-material/Euro';
-import ProgressiveImg from "../ProgessiveImage";
 import {initImageList} from "../Utility";
 import {useDispatch, useSelector} from "react-redux";
 import {isError} from "../store/dialogs";

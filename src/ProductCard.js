@@ -1,5 +1,3 @@
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import React, {useContext, useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
