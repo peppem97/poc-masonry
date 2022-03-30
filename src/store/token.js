@@ -2,7 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 import jwtDecode from "jwt-decode";
 
 const checkStateLogin = () => {
-    let token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
     try {
         if ((jwtDecode(token).exp * 1000 >= new Date().getTime())) {

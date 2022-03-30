@@ -45,7 +45,7 @@ export default function Shop() {
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
     const dispatch = useDispatch();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     const location = useLocation();
 
     const getShopInfo = () => {

@@ -18,7 +18,7 @@ import StoreIcon from '@mui/icons-material/Store';
 import PeopleIcon from '@mui/icons-material/People';
 
 export default function TopToolbar() {
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     const stateLogin = useSelector((state) => state.token.value);
     const columnWidth = useSelector((state) => state.columnWidth.value);
     const username = useSelector((state) => state.user.username);
@@ -88,14 +88,17 @@ export default function TopToolbar() {
                                 <ZoomOutIcon/>
                             </IconButton>}
                         {
-                            stateLogin &&
-                            <IconButton size='large' style={{color: 'darkred', fontWeight: 'bold'}} onClick={goToClient}>
+                            (stateLogin && !firstAccess && userType === 'cliente') &&
+                            <IconButton size='large'
+                                        style={{color: 'darkred', fontWeight: 'bold'}}
+                                        onClick={goToClient}>
                                 <PeopleIcon/>
                             </IconButton>
                         }
-                        {(stateLogin && !firstAccess) && <IconButton size="large"
-                                                                     style={{color: 'darkred', fontWeight: 'bold'}}
-                                                                     onClick={goToShop}>
+                        {(stateLogin && !firstAccess && userType === 'negozio') &&
+                            <IconButton size="large"
+                                        style={{color: 'darkred', fontWeight: 'bold'}}
+                                        onClick={goToShop}>
                             <StoreIcon/>
                         </IconButton>}
                         &nbsp;

@@ -48,7 +48,7 @@ export default function Welcome() {
     const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
     const appContext = useContext(GlobalContext);
     const dispatch = useDispatch();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     const onChangeEmail = (e) => {
         setEmail(e.target.value);

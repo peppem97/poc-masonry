@@ -104,7 +104,7 @@ export default function Product() {
     const token = useSelector((state) => state.token.value);
     const dispatch = useDispatch();
     const {id} = useParams();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     const styles = useStyles();
 
     const goToShop = () => {

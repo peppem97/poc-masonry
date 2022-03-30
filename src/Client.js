@@ -53,7 +53,7 @@ export default function Client() {
     const myUsername = useSelector((state) => state.user.username);
     const userType = useSelector((state) => state.user.type);
     const appContext = useContext(GlobalContext);
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     const onChangeTabValue = (e, value) => {
         setTabValue(value);
@@ -251,8 +251,8 @@ export default function Client() {
                             className={tabsStyle}
                             onChange={onChangeTabValue}
                             textColor='inherit' TabIndicatorProps={{style: {backgroundColor: "darkred"}}}>
-                            <Tab icon={<FavoriteIcon/>} label="PREFERITI" value='PREFERITI'/>
-                            <Tab icon={<StoreIcon/>} label="NEGOZI" value='NEGOZI'/>
+                            <Tab icon={<FavoriteIcon/>} label="PRODOTTI PREFERITI" value='PREFERITI'/>
+                            <Tab icon={<StoreIcon/>} label="NEGOZI CHE SEGUI" value='NEGOZI'/>
                         </TabList>
                     </Box>
                     <TabPanel value='PREFERITI'>

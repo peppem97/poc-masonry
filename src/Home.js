@@ -23,7 +23,7 @@ export default function Home() {
     const username = useSelector((state) => state.user.username);
     const userType = useSelector((state) => state.user.type);
     const dispatch = useDispatch();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     const getFavoritesFollowing = () => {
         axios.get(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "?username=" + username,{

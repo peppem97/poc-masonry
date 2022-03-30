@@ -59,7 +59,7 @@ export default function Wizard() {
     const theme = responsiveFontSizes(createTheme());
     const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     const onChangeUserType = (event, userType) => {
         setUserType(userType);

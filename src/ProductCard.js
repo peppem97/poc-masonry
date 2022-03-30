@@ -65,8 +65,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
     const favorites = useSelector((state) => state.user.favorites);
-
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const goToShop = () => {

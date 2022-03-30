@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 import error404SVG from "./assets/404.svg";
 
 export default function Error404() {
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     const appContext = useContext(GlobalContext);
     const stateLogin = useSelector((state) => state.token.value);
     const theme = useTheme();

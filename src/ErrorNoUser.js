@@ -8,7 +8,7 @@ import nouserSVG from "./assets/nouser.svg";
 import Box from "@mui/material/Box";
 
 export default function ErrorNoUser() {
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     const appContext = useContext(GlobalContext);
     const theme = useTheme();
     const smallScreen = useMediaQuery(theme.breakpoints.down('sm'));
