@@ -64,7 +64,7 @@ export default function Client() {
             setName(response.data[0]?.name);
             setSurname(response.data[0]?.surname);
             setAvatar(response.data[0]?.avatar?.url);
-            getFavoriteProducts(response.data[0]?.favorites);
+            getProducts(response.data[0]?.favorites);
             dispatch(setIdle());
         }).catch(() => {
             dispatch(setIdle());
@@ -72,7 +72,7 @@ export default function Client() {
         });
     };
 
-    const getFavoriteProducts = (favorites) => {
+    const getProducts = (favorites) => {
         setLoadingProduct(true);
         const qs = require('qs');
         const query = qs.stringify({_where: {id: favorites},}, {encodeValuesOnly: true});

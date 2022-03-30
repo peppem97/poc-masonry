@@ -6,7 +6,9 @@ export const userSlice = createSlice({
         type: localStorage.getItem('type'),
         email: localStorage.getItem('email'),
         username: localStorage.getItem('username'),
-        firstAccess: JSON.parse(localStorage.getItem('firstAccess')) === true
+        firstAccess: JSON.parse(localStorage.getItem('firstAccess')) === true,
+        favorites: [],
+        following: []
     },
     reducers: {
         setType: (state, value) => {
@@ -24,6 +26,12 @@ export const userSlice = createSlice({
         setFirstAccess: (state, value) => {
             localStorage.setItem('firstAccess', value.payload);
             state.firstAccess = value.payload;
+        },
+        setFavorites: (state, value) => {
+            state.favorites = value.payload;
+        },
+        setFollowing: (state, value) => {
+            state.following = value.payload;
         },
         clearType: (state, value) => {
             localStorage.removeItem('type');

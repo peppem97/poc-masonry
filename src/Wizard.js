@@ -166,7 +166,9 @@ export default function Wizard() {
             description: description,
             username: username,
             website: website,
-            telephone: telephone
+            telephone: telephone,
+            favorites: [],
+            following: []
         };
         let dataClient = {
             email: email,
