@@ -16,6 +16,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -56,6 +58,7 @@ const useAvatarShadow = makeStyles(theme => ({
 
 export const ProductCard = React.memo(function GalaxyCard(props) {
     const [avatar, setAvatar] = useState(null);
+    const [favorite, setFavorite] = useState(false);
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const avatarShadow = useAvatarShadow();
     const styles = useStyles();
@@ -130,6 +133,15 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                                     }}>
                                         <DeleteForeverIcon/>
                                     </IconButton> : null}
+                            {
+                                favorite ?
+                                    <IconButton style={{color: 'red', fontWeight: 'bold'}} onClick={() => {setFavorite(false)}}>
+                                        <FavoriteIcon/>
+                                    </IconButton> :
+                                    <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {setFavorite(true)}}>
+                                        <FavoriteBorderIcon/>
+                                    </IconButton>
+                            }
                         </CardActions>
                     </Info>
                 </Box>

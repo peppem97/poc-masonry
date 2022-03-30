@@ -20,6 +20,7 @@ import {setBusy, setIdle} from "./store/loading";
 import {isError} from "./store/dialogs";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 const useStyles = makeStyles(({breakpoints, spacing}) => ({
     root: {
@@ -97,6 +98,7 @@ export default function Product() {
     const [shop, setShop] = useState(null);
     const [price, setPrice] = useState(null);
     const [pieces, setPieces] = useState(null);
+    const [favorite, setFavorite] = useState(false);
     const appContext = useContext(GlobalContext);
     const avatarShadow = useAvatarShadow();
     const token = useSelector((state) => state.token.value);
@@ -229,7 +231,15 @@ export default function Product() {
                                                         sx={{display: 'inline'}}>{pieces ?? ' N.D.'}</Typography>
                                         </Col>
                                         <Col>
-                                            <IconButton><FavoriteBorderIcon/></IconButton>
+                                            {
+                                                favorite ?
+                                                    <IconButton style={{color: 'red', fontWeight: 'bold'}} onClick={() => {setFavorite(false)}}>
+                                                        <FavoriteIcon/>
+                                                    </IconButton> :
+                                                    <IconButton onClick={() => {setFavorite(true)}}>
+                                                        <FavoriteBorderIcon/>
+                                                    </IconButton>
+                                            }
                                         </Col>
                                         <Col>
                                             <IconButton><WhatsAppIcon/></IconButton>

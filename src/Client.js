@@ -243,7 +243,11 @@ export default function Client() {
                         </TabList>
                     </Box>
                     <TabPanel value='PREFERITI'>
-                        <GridSystem loadingProducts={loadingProduct} isProducts={true} products={favoriteProducts} isUser={false}/>
+                        <GridSystem
+                            loadingProducts={loadingProduct}
+                            isProducts={true}
+                            products={favoriteProducts}
+                            isUser={false}/>
                     </TabPanel>
                 </TabContext>
             </Container>
