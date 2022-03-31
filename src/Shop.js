@@ -455,7 +455,7 @@ export default function Shop() {
                     </Typography>
                 </Row>
             </Container>
-            <Container fluid>
+            <Container >
                 <GridSystem
                     loadingProducts={loadingProducts}
                     isProducts={true}

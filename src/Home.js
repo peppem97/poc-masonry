@@ -65,7 +65,7 @@ export default function Home() {
 
     return (
         <>
-            <Container fluid>
+            <Container>
                 <br/>
                 <br/>
                 <br/>

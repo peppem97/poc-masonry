@@ -56,6 +56,10 @@ const useAvatarShadow = makeStyles(theme => ({
         boxShadow: theme.shadows[10],
     }
 }));
+const useActions = (theme) => ({
+    display: "flex",
+    justifyContent: "center"
+});
 
 export const ProductCard = React.memo(function GalaxyCard(props) {
     const [avatar, setAvatar] = useState(null);
@@ -63,6 +67,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const avatarShadow = useAvatarShadow();
     const styles = useStyles();
+    const actions = useActions();
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
     const favorites = useSelector((state) => state.user.favorites);
@@ -102,7 +107,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
         let data = {
             favorites: tmp
         };
-        axios.put(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "/" + id, data,{
+        axios.put((userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS) + "/" + id, data,{
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             dispatch(setFavorites(response.data.favorites));
@@ -135,35 +140,12 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles} style={{position: 'absolute', bottom: 0}}>
                         <InfoTitle noWrap={false}>{props.product.title}</InfoTitle>
-                        <CardActions className="justify-content-left">
-                            {props.showAvatar ?
+                        <CardActions className={actions}>
+                            {
                                 <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={goToProduct}>
                                     <OpenInNewIcon/>
-                                </IconButton> :
-                                props.editable ?
-                                    <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {
-                                        props.updateProduct(props.product.id)
-                                    }}>
-                                        <EditIcon/>
-                                    </IconButton> : null}
-                            {props.showAvatar ?
-                                null
-                                :
-                                <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={goToProduct}>
-                                    <OpenInNewIcon/>
-                                </IconButton>}
-                            {props.showAvatar ?
-                                // <IconButton style={{color: 'white', fontWeight: 'bold'}}>
-                                //     <ShareIcon/>
-                                // </IconButton>
-                                null
-                                :
-                                props.editable ?
-                                    <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {
-                                        props.deleteProduct(props.product.id)
-                                    }}>
-                                        <DeleteForeverIcon/>
-                                    </IconButton> : null}
+                                </IconButton>
+                            }
                             {
                                 favorite ?
                                     <IconButton style={{color: 'red', fontWeight: 'bold'}} onClick={toggleFavorite}>
@@ -172,6 +154,20 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                                     <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={toggleFavorite}>
                                         <FavoriteBorderIcon/>
                                     </IconButton>
+                            }
+                            {
+                                props.editable ?
+                                    <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {
+                                        props.updateProduct(props.product.id)
+                                    }}><EditIcon/>
+                                    </IconButton> : null
+                            }
+                            {
+                                props.editable ?
+                                    <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {
+                                        props.deleteProduct(props.product.id)
+                                    }}><DeleteForeverIcon/>
+                                    </IconButton> : null
                             }
                         </CardActions>
                     </Info>
