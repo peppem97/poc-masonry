@@ -26,11 +26,6 @@ const useAvatarShadow = makeStyles(theme => ({
         boxShadow: theme.shadows[10],
     }
 }));
-const useStyles = makeStyles((theme) => ({
-    indicator: {
-        backgroundColor: "green",
-    }
-}));
 
 export default function Client() {
     const [name, setName] = useState(null);
@@ -42,17 +37,15 @@ export default function Client() {
     const [info, setInfo] = useState(null);
     const [infoToEdit, setInfoToEdit] = useState(null);
     const [updateInfoDialogOpened, setUpdateInfoDialogOpened] = useState(false);
-    const [tabValue, setTabValue] = useState('PREFERITI');
-    const [selfUser, setSelfUser] = useState(false);
+    const [tabValue, setTabValue] = useState('favorites');
+    const [selfUser, setSelfUser] = useState(false); //TODO
     const avatarShadow = useAvatarShadow();
-    const tabsStyle = useStyles();
     const {username} = useParams();
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token.value);
     const myUsername = useSelector((state) => state.user.username);
     const userType = useSelector((state) => state.user.type);
     const id = useSelector((state) => state.user.id);
-
     const appContext = useContext(GlobalContext);
     const navigate = useNavigate();
 
@@ -129,25 +122,6 @@ export default function Client() {
             }
         })
     };
-
-    // const example = () => {
-    //     dispatch(setBusy());
-    //     const formData = new FormData();
-    //     let data = {
-    //         favorites: [1, 2, 3]
-    //     };
-    //     formData.append('data', JSON.stringify(data));
-    //
-    //     axios.put(appContext.ENDPOINT_CLIENTS + "/" + id, formData, {
-    //         headers: {'Authorization': 'Bearer ' + token}
-    //     }).then(() => {
-    //         dispatch(setIdle());
-    //         getClientInfo();
-    //     }).catch(() => {
-    //         dispatch(setIdle());
-    //         dispatch(isError('Si è verificato un errore nell\'aggiornamento dell\'avatar. Riprovare.'));
-    //     })
-    // };
 
     const openInfoDialog = (info) => {
         switch (info) {
@@ -254,19 +228,20 @@ export default function Client() {
                         justifyContent: 'center'
                     }}>
                         <TabList
-                            className={tabsStyle}
                             onChange={onChangeTabValue}
                             textColor='inherit' TabIndicatorProps={{style: {backgroundColor: "darkred"}}}>
-                            <Tab icon={<FavoriteIcon/>} label="PRODOTTI PREFERITI" value='PREFERITI'/>
-                            <Tab icon={<StoreIcon/>} label="NEGOZI CHE SEGUI" value='NEGOZI'/>
+                            <Tab icon={<FavoriteIcon/>} label="PRODOTTI PREFERITI" value='favorites'/>
+                            <Tab icon={<StoreIcon/>} label="NEGOZI CHE SEGUI" value='shops'/>
                         </TabList>
                     </Box>
-                    <TabPanel value='PREFERITI'>
+                    <TabPanel value='favorites'>
                         <GridSystem
                             loadingProducts={loadingProduct}
                             isProducts={true}
                             products={favoriteProducts}
                             isUser={false}/>
+                    </TabPanel>
+                    <TabPanel value='shops'>
                     </TabPanel>
                 </TabContext>
             </Container>

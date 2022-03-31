@@ -15,7 +15,7 @@ import {clearToken} from "./store/token";
 import HomeIcon from '@mui/icons-material/Home';
 import {clearMail, clearType, clearUsername} from "./store/user";
 import StoreIcon from '@mui/icons-material/Store';
-import PeopleIcon from '@mui/icons-material/People';
+import PersonIcon from '@mui/icons-material/Person';
 
 export default function TopToolbar() {
     const navigate = useNavigate();
@@ -92,7 +92,7 @@ export default function TopToolbar() {
                             <IconButton size='large'
                                         style={{color: 'darkred', fontWeight: 'bold'}}
                                         onClick={goToClient}>
-                                <PeopleIcon/>
+                                <PersonIcon/>
                             </IconButton>
                         }
                         {(stateLogin && !firstAccess && userType === 'negozio') &&

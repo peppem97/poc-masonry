@@ -16,8 +16,16 @@ import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
 import {isError} from "./store/dialogs";
 import {setFavorites, setFollowing, setId} from "./store/user";
+import {Tab} from "@mui/material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import StoreIcon from "@mui/icons-material/Store";
+import {TabContext, TabList} from "@material-ui/lab";
+import Box from "@mui/material/Box";
+import {makeStyles} from "@material-ui/core/styles";
+import CategoryIcon from '@mui/icons-material/Category';
 
 export default function Shop() {
+    const [tabValue, setTabValue] = useState('products');
     const [email, setEmail] = useState(null);
     const [title, setTitle] = useState(null);
     const [description, setDescription] = useState(null);
@@ -42,12 +50,15 @@ export default function Shop() {
     const firstAccess = useSelector((state) => state.user.firstAccess);
     const userType = useSelector((state) => state.user.type);
     const id = useSelector((state) => state.user.id);
-
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
+
+    const onChangeTabValue = (e, value) => {
+        setTabValue(value);
+    };
 
     const getShopInfo = () => {
         dispatch(setBusy());
@@ -448,14 +459,39 @@ export default function Shop() {
                 <br/>
                 <br/>
                 <br/>
-                <Row className="justify-content-center">
-                    <Typography variant="h3" gutterBottom component="div" className="text-center"
-                                style={{color: 'darkred', fontWeight: 'bold'}}>
-                        Tutti i prodotti:
-                    </Typography>
-                </Row>
+                {/*<Row className="justify-content-center">*/}
+                {/*    <Typography variant="h3" gutterBottom component="div" className="text-center"*/}
+                {/*                style={{color: 'darkred', fontWeight: 'bold'}}>*/}
+                {/*        Tutti i prodotti:*/}
+                {/*    </Typography>*/}
+                {/*</Row>*/}
             </Container>
-            <Container >
+            <Container>
+                <TabContext value={tabValue}>
+                    <Box sx={{
+                        width: '100%',
+                        color: 'darkred',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: 2,
+                        justifyContent: 'center'
+                    }}>
+                    </Box>
+                    <TabList
+                        onChange={onChangeTabValue}
+                        textColor='inherit' TabIndicatorProps={{style: {backgroundColor: "darkred"}}}>
+                        <Tab icon={<CategoryIcon/>} label="I TUOI PRODOTTI" value='products'/>
+                        <Tab icon={<FavoriteIcon/>} label="PRODOTT PREFERITI" value='favorites'/>
+                        <Tab icon={<StoreIcon/>} label="NEGOZI CHE SEGUI" value='shops'/>
+
+                    </TabList>
+                </TabContext>
+                <br/>
+
+
+
+
                 <GridSystem
                     loadingProducts={loadingProducts}
                     isProducts={true}

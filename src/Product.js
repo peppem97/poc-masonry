@@ -21,6 +21,7 @@ import {isError} from "./store/dialogs";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import {setFavorites} from "./store/user";
 
 const useStyles = makeStyles(({breakpoints, spacing}) => ({
     root: {
@@ -103,6 +104,12 @@ export default function Product() {
     const avatarShadow = useAvatarShadow();
     const token = useSelector((state) => state.token.value);
     const favorites = useSelector((state) => state.user.favorites);
+    const userType = useSelector((state) => state.user.type);
+    // const userType = useSelector((state) => state.user.type);
+    const idUser = useSelector((state) => state.user.id);
+
+
+
     const dispatch = useDispatch();
     const {id} = useParams();
     const navigate = useNavigate();
@@ -164,6 +171,29 @@ export default function Product() {
             }
         }
         return pictureList;
+    };
+
+    const toggleFavorite = () => {
+        let tmp;
+        if (favorite) {
+            tmp = favorites.filter((element) => (element !== id));
+        } else {
+            tmp = JSON.parse(JSON.stringify(favorites));
+            tmp.push(id);
+        }
+        let data = {
+            favorites: tmp
+        };
+        axios.put((userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS) + "/" + idUser, data,{
+            headers: {'Authorization': 'Bearer ' + token}
+        }).then((response) => {
+            dispatch(setFavorites(response.data.favorites));
+            checkFavorites(response.data.favorites);
+        });
+    };
+
+    const checkFavorites = (favorites) => {
+        setFavorite(favorites.includes(id));
     };
 
     useEffect(() => {
@@ -238,10 +268,10 @@ export default function Product() {
                                         <Col>
                                             {
                                                 favorite ?
-                                                    <IconButton style={{color: 'red', fontWeight: 'bold'}} onClick={null}>
+                                                    <IconButton style={{color: 'red', fontWeight: 'bold'}} onClick={toggleFavorite}>
                                                         <FavoriteIcon/>
                                                     </IconButton> :
-                                                    <IconButton onClick={null}>
+                                                    <IconButton onClick={toggleFavorite}>
                                                         <FavoriteBorderIcon/>
                                                     </IconButton>
                                             }
