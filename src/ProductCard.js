@@ -102,13 +102,13 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
         let data = {
             favorites: tmp
         }
-        axios.put(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "/" + id, data,{
-            headers: {'Authorization': 'Bearer ' + token}
-        }).then((response) => {
-            console.log(response)
-
-
-        })
+        // axios.put(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "/" + id, data,{
+        //     headers: {'Authorization': 'Bearer ' + token}
+        // }).then((response) => {
+        //     console.log(response)
+        //
+        //
+        // })
     };
 
     useEffect(() => {

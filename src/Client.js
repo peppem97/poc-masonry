@@ -19,7 +19,7 @@ import UpdateInfoDialog from "./dialogs/UpdateInfoDialog";
 import {generateHeight} from "./Utility";
 import GridSystem from "./GridSystem";
 import {TabContext, TabList, TabPanel} from "@material-ui/lab";
-import {setFavorites, setFollowing} from "./store/user";
+import {setFavorites, setFollowing, setId} from "./store/user";
 
 const useAvatarShadow = makeStyles(theme => ({
     avatar: {
@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Client() {
-    const [id, setId] = useState(null);
     const [name, setName] = useState(null);
     const [surname, setSurname] = useState(null);
     const [avatar, setAvatar] = useState(null);
@@ -52,6 +51,8 @@ export default function Client() {
     const token = useSelector((state) => state.token.value);
     const myUsername = useSelector((state) => state.user.username);
     const userType = useSelector((state) => state.user.type);
+    const id = useSelector((state) => state.user.id);
+
     const appContext = useContext(GlobalContext);
     const navigate = useNavigate();
 
@@ -63,6 +64,7 @@ export default function Client() {
         axios.get(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "?username=" + myUsername,{
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
+            dispatch(setId(response.data[0].id));
             dispatch(setFavorites(response.data[0].favorites));
             dispatch(setFollowing(response.data[0].following));
         })
@@ -73,7 +75,6 @@ export default function Client() {
         axios.get(appContext.ENDPOINT_CLIENTS + "?username=" + username, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
-            setId(response.data[0]?.id);
             setName(response.data[0]?.name);
             setSurname(response.data[0]?.surname);
             setAvatar(response.data[0]?.avatar?.url);

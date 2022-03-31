@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const userSlice = createSlice({
     name: 'user',
     initialState: {
+        id: localStorage.getItem('id'),
         type: localStorage.getItem('type'),
         email: localStorage.getItem('email'),
         username: localStorage.getItem('username'),
@@ -11,6 +12,10 @@ export const userSlice = createSlice({
         following: []
     },
     reducers: {
+        setId: (state, value) => {
+            localStorage.setItem('id', value.payload);
+            state.id = value.payload;
+        },
         setType: (state, value) => {
             localStorage.setItem('type', value.payload);
             state.type = value.payload;
@@ -33,6 +38,10 @@ export const userSlice = createSlice({
         setFollowing: (state, value) => {
             state.following = value.payload;
         },
+        clearId: (state, value) => {
+            localStorage.removeItem('id');
+            state.id = null;
+        },
         clearType: (state, value) => {
             localStorage.removeItem('type');
             state.type = null;
@@ -52,12 +61,14 @@ export const userSlice = createSlice({
     },
 })
 export const {
+    setId,
     setType,
     setMail,
     setUser,
     setFirstAccess,
     setFavorites,
     setFollowing,
+    clearId,
     clearType,
     clearMail,
     clearUsername,

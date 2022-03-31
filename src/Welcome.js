@@ -19,11 +19,11 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import {clearToken, setToken} from "./store/token";
 import {
-    clearFirstAccess,
+    clearFirstAccess, clearId,
     clearMail,
     clearType,
     clearUsername,
-    setFirstAccess,
+    setFirstAccess, setId,
     setMail,
     setType,
     setUser
@@ -83,6 +83,7 @@ export default function Welcome() {
     };
 
     const clearAll = () => {
+        dispatch(clearId());
         dispatch(clearToken());
         dispatch(clearType());
         dispatch(clearMail());
@@ -94,6 +95,7 @@ export default function Welcome() {
         setLoading(true);
         let data = {identifier: email, password: password};
         axios.post(appContext.ENDPOINT_AUTH, data).then((response) => {
+            console.log(response)
             dispatch(setToken(response.data.jwt));
             dispatch(setMail(response.data.user.email));
             dispatch(setUser(response.data.user.username));

@@ -12,7 +12,7 @@ import {generateHeight} from "./Utility";
 import {useDispatch, useSelector} from "react-redux";
 import {isError} from "./store/dialogs";
 import {useNavigate} from "react-router-dom";
-import {setFavorites, setFollowing} from "./store/user";
+import {setFavorites, setFollowing, setId} from "./store/user";
 
 export default function Home() {
     const [products, setProducts] = useState([]);
@@ -29,6 +29,7 @@ export default function Home() {
         axios.get(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "?username=" + username,{
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
+            dispatch(setId(response.data[0].id));
             dispatch(setFavorites(response.data[0].favorites));
             dispatch(setFollowing(response.data[0].following));
         })
