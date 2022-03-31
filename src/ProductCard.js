@@ -67,7 +67,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     const token = useSelector((state) => state.token.value);
     const favorites = useSelector((state) => state.user.favorites);
     const userType = useSelector((state) => state.user.type);
-    const username = useSelector((state) => state.user.username);
+    const id = useSelector((state) => state.user.id);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -94,21 +94,24 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     const toggleFavorite = () => {
         let tmp;
         if (favorite) {
-            tmp = favorites.filter((element) => (element !== props.product.id))
+            tmp = favorites.filter((element) => (element !== props.product.id));
         } else {
-            tmp = JSON.parse(JSON.stringify(favorites))
-            tmp.push(props.product.id)
+            tmp = JSON.parse(JSON.stringify(favorites));
+            tmp.push(props.product.id);
         }
         let data = {
             favorites: tmp
-        }
-        // axios.put(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "/" + id, data,{
-        //     headers: {'Authorization': 'Bearer ' + token}
-        // }).then((response) => {
-        //     console.log(response)
-        //
-        //
-        // })
+        };
+        axios.put(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "/" + id, data,{
+            headers: {'Authorization': 'Bearer ' + token}
+        }).then((response) => {
+            dispatch(setFavorites(response.data.favorites));
+            checkFavorites(response.data.favorites);
+        });
+    };
+
+    const checkFavorites = (favorites) => {
+        setFavorite(favorites.includes(props.product.id));
     };
 
     useEffect(() => {
@@ -116,7 +119,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     }, []);
 
     useEffect(() => {
-        setFavorite(favorites.includes(props.product.id));
+        checkFavorites(favorites);
     }, [props.product.id]);
 
     return (
