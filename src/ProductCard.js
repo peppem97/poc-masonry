@@ -18,6 +18,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import {setFavorites, setFollowing} from "./store/user";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -65,6 +66,8 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
     const favorites = useSelector((state) => state.user.favorites);
+    const userType = useSelector((state) => state.user.type);
+    const username = useSelector((state) => state.user.username);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -85,6 +88,26 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
             dispatch(setIdle());
         }).catch(() => {
             dispatch(setIdle());
+        })
+    };
+
+    const toggleFavorite = () => {
+        let tmp;
+        if (favorite) {
+            tmp = favorites.filter((element) => (element !== props.product.id))
+        } else {
+            tmp = JSON.parse(JSON.stringify(favorites))
+            tmp.push(props.product.id)
+        }
+        let data = {
+            favorites: tmp
+        }
+        axios.put(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "/" + id, data,{
+            headers: {'Authorization': 'Bearer ' + token}
+        }).then((response) => {
+            console.log(response)
+
+
         })
     };
 
@@ -140,10 +163,10 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                                     </IconButton> : null}
                             {
                                 favorite ?
-                                    <IconButton style={{color: 'red', fontWeight: 'bold'}} onClick={() => {setFavorite(false)}}>
+                                    <IconButton style={{color: 'red', fontWeight: 'bold'}} onClick={toggleFavorite}>
                                         <FavoriteIcon/>
                                     </IconButton> :
-                                    <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {setFavorite(true)}}>
+                                    <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={toggleFavorite}>
                                         <FavoriteBorderIcon/>
                                     </IconButton>
                             }

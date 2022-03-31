@@ -402,6 +402,7 @@ export default function Shop() {
 
     const refresh = () => {
         checkSelfUser();
+        getFavoritesFollowing();
         getShopInfo();
         getProducts();
     };

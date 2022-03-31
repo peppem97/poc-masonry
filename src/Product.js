@@ -102,6 +102,7 @@ export default function Product() {
     const appContext = useContext(GlobalContext);
     const avatarShadow = useAvatarShadow();
     const token = useSelector((state) => state.token.value);
+    const favorites = useSelector((state) => state.user.favorites);
     const dispatch = useDispatch();
     const {id} = useParams();
     const navigate = useNavigate();
@@ -173,6 +174,10 @@ export default function Product() {
         getShopInfo();
     }, [username]);
 
+    useEffect(() => {
+        setFavorite(favorites.includes(id));
+    }, [id]);
+
     return (
         <>
             <Container>
@@ -233,10 +238,10 @@ export default function Product() {
                                         <Col>
                                             {
                                                 favorite ?
-                                                    <IconButton style={{color: 'red', fontWeight: 'bold'}} onClick={() => {setFavorite(false)}}>
+                                                    <IconButton style={{color: 'red', fontWeight: 'bold'}} onClick={null}>
                                                         <FavoriteIcon/>
                                                     </IconButton> :
-                                                    <IconButton onClick={() => {setFavorite(true)}}>
+                                                    <IconButton onClick={null}>
                                                         <FavoriteBorderIcon/>
                                                     </IconButton>
                                             }

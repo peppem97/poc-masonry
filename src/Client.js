@@ -182,8 +182,13 @@ export default function Client() {
         });
     };
 
-    useEffect(() => {
+    const refresh = () => {
+        getFavoritesFollowing();
         getClientInfo();
+    };
+
+    useEffect(() => {
+        refresh();
     }, []);
 
     return (
