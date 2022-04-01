@@ -63,6 +63,7 @@ export default function Shop() {
         refresh();
     };
 
+    //TODO: per riaggiornare i dati dei prodtti preferiti, faccio il fetch di tutte le info del negozio
     const getShopInfo = () => {
         dispatch(setBusy());
         axios.get(appContext.ENDPOINT_SHOPS + "?username=" + username, {
@@ -505,9 +506,16 @@ export default function Shop() {
                         <TabList
                             onChange={onChangeTabValue}
                             textColor='inherit' TabIndicatorProps={{style: {backgroundColor: "darkred"}}}>
-                            <Tab icon={<CategoryIcon/>} label={selfUser ? "I TUOI PRODOTTI" : "PRODOTTI PUBBLICATI"} value='products'/>
-                            <Tab icon={<FavoriteIcon/>} label="PRODOTTI PREFERITI" value='favorites'/>
-                            <Tab icon={<StoreIcon/>} label="NEGOZI CHE SEGUI" value='shops'/>
+                            {
+                                selfUser ?
+                                    [
+                                        <Tab icon={<CategoryIcon/>} label="I TUOI PRODOTTI" value='products'/>,
+                                        <Tab icon={<FavoriteIcon/>} label="PRODOTTI PREFERITI" value='favorites'/>,
+                                        <Tab icon={<StoreIcon/>} label="NEGOZI CHE SEGUI" value='shops'/>
+                                    ]
+                                    :
+                                    <Tab icon={<CategoryIcon/>} label="PRODOTTI PUBBLICATI" value='products'/>
+                            }
                         </TabList>
                     </Box>
 
