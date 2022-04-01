@@ -7,7 +7,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import {Info, InfoTitle,} from '@mui-treasury/components/info';
 import {useGalaxyInfoStyles} from '@mui-treasury/styles/info/galaxy';
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
-import {CardActions, IconButton} from "@mui/material";
+import {CardActions, createTheme, IconButton, responsiveFontSizes, ThemeProvider} from "@mui/material";
 import Avatar from "@material-ui/core/Avatar";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
@@ -19,6 +19,7 @@ import {setBusy, setIdle} from "./store/loading";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import {setFavorites, setFollowing} from "./store/user";
+import Typography from "@mui/material/Typography";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -39,6 +40,8 @@ const useStyles = makeStyles(() => ({
     },
     contentDescription: {
         position: 'absolute',
+        justifyContent: 'center',
+        justifyItems: 'center',
         zIndex: 2,
         bottom: 0,
         width: '100%',
@@ -67,6 +70,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const avatarShadow = useAvatarShadow();
     const styles = useStyles();
+    const theme = responsiveFontSizes(createTheme());
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
     const favorites = useSelector((state) => state.user.favorites);
@@ -138,7 +142,12 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 </Box>
                 <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles} style={{position: 'absolute', bottom: 0}}>
-                        <InfoTitle noWrap={false}>{props.product.title}</InfoTitle>
+                        <ThemeProvider theme={theme}>
+                            <InfoTitle noWrap={false}>{props.product.title}</InfoTitle>
+                        </ThemeProvider>
+                        {/*<ThemeProvider theme={theme}>*/}
+                        {/*    <Typography variant='h5' className='text-center'>{props.product.title}</Typography>*/}
+                        {/*</ThemeProvider>*/}
                         <CardActions>
                             {
                                 <IconButton style={iconButtonStyle} onClick={goToProduct}>

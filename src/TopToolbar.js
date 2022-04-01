@@ -60,7 +60,7 @@ export default function TopToolbar() {
     };
 
     const decreaseColumnsSize = () => {
-        if (columnWidth <= 200) {
+        if (columnWidth <= 250) {
             dispatch(setColumnWidth(columnWidth));
         } else {
             dispatch(setColumnWidth(columnWidth - 50));
