@@ -55,7 +55,7 @@ export default function Client() {
     };
 
     const setFavoritesFollowing = () => {
-        axios.get(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "?username=" + myUsername, {
+        axios.get((userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS) + "?username=" + myUsername, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             dispatch(setId(response.data[0].id));

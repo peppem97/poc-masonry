@@ -26,7 +26,7 @@ export default function Home() {
     const navigate = useNavigate();
 
     const setFavoritesFollowing = () => {
-        axios.get(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "?username=" + username,{
+        axios.get((userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS) + "?username=" + username,{
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             dispatch(setId(response.data[0].id));

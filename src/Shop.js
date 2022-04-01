@@ -69,7 +69,6 @@ export default function Shop() {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             if (response.data.length > 0) {
-                console.log(response.data[0]?.favorites)
                 setId(response.data[0]?.id);
                 setEmail(response.data[0]?.email);
                 setTitle(response.data[0]?.title);
@@ -91,7 +90,7 @@ export default function Shop() {
     };
 
     const setFavoritesFollowing = () => {
-        axios.get(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "?username=" + myUsername,{
+        axios.get((userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS) + "?username=" + myUsername,{
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             dispatch(setId(response.data[0].id));
@@ -506,7 +505,7 @@ export default function Shop() {
                         <TabList
                             onChange={onChangeTabValue}
                             textColor='inherit' TabIndicatorProps={{style: {backgroundColor: "darkred"}}}>
-                            <Tab icon={<CategoryIcon/>} label="I TUOI PRODOTTI" value='products'/>
+                            <Tab icon={<CategoryIcon/>} label={selfUser ? "I TUOI PRODOTTI" : "PRODOTTI PUBBLICATI"} value='products'/>
                             <Tab icon={<FavoriteIcon/>} label="PRODOTTI PREFERITI" value='favorites'/>
                             <Tab icon={<StoreIcon/>} label="NEGOZI CHE SEGUI" value='shops'/>
                         </TabList>
