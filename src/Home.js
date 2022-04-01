@@ -25,7 +25,7 @@ export default function Home() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const getFavoritesFollowing = () => {
+    const setFavoritesFollowing = () => {
         axios.get(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "?username=" + username,{
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
@@ -58,7 +58,7 @@ export default function Home() {
         if (firstAccess) {
             navigate(appContext.routes.wizard);
         } else {
-            getFavoritesFollowing();
+            setFavoritesFollowing();
             getProducts();
         }
     }, []);

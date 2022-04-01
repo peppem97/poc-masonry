@@ -20,6 +20,7 @@ import {generateHeight} from "./Utility";
 import GridSystem from "./GridSystem";
 import {TabContext, TabList, TabPanel} from "@material-ui/lab";
 import {setFavorites, setFollowing, setId} from "./store/user";
+import favoriteSVG from "./assets/favorite.svg"
 
 const useAvatarShadow = makeStyles(theme => ({
     avatar: {
@@ -53,7 +54,7 @@ export default function Client() {
         setTabValue(value);
     };
 
-    const getFavoritesFollowing = () => {
+    const setFavoritesFollowing = () => {
         axios.get(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "?username=" + myUsername, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
@@ -129,21 +130,6 @@ export default function Client() {
         })
     };
 
-    const openInfoDialog = (info) => {
-        switch (info) {
-            case 'name':
-                setInfo(name);
-                break;
-            case 'surname':
-                setInfo(surname);
-                break;
-            default:
-                break;
-        }
-        setInfoToEdit(info);
-        setUpdateInfoDialogOpened(true);
-    };
-
     const updateInfo = (type, value) => {
         dispatch(setBusy());
         const data = {};
@@ -163,8 +149,23 @@ export default function Client() {
         });
     };
 
+    const openInfoDialog = (info) => {
+        switch (info) {
+            case 'name':
+                setInfo(name);
+                break;
+            case 'surname':
+                setInfo(surname);
+                break;
+            default:
+                break;
+        }
+        setInfoToEdit(info);
+        setUpdateInfoDialogOpened(true);
+    };
+
     const refresh = () => {
-        getFavoritesFollowing();
+        setFavoritesFollowing();
         getClientInfo();
     };
 
@@ -240,17 +241,29 @@ export default function Client() {
                             <Tab icon={<StoreIcon/>} label="NEGOZI CHE SEGUI" value='shops'/>
                         </TabList>
                     </Box>
+                    <br/>
                     <TabPanel value='favorites'>
                         {favoriteProducts.length > 0 &&
                             <GridSystem
-                            loadingProducts={loadingProducts}
-                            isProducts={true}
-                            products={favoriteProducts}
-                            isUser={false}/>
+                                loadingProducts={loadingProducts}
+                                isProducts={true}
+                                products={favoriteProducts}
+                                isUser={false}/>
                         }
                         {
                             favoriteProducts.length === 0 &&
-                            <Typography variant='h3' className='text-center'>Nessun prodotto aggiunto...</Typography>
+                            <Box sx={{
+                                width: '100%',
+                                color: 'darkred',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                gap: 2,
+                                justifyContent: 'center'
+                            }}>
+                                <img src={favoriteSVG} alt="" style={{width: '30%', height: 'auto'}}/>
+                                <Typography variant='h4' className='text-center'>Nessun prodotto preferito...</Typography>
+                            </Box>
                         }
                     </TabPanel>
                     <TabPanel value='shops'>
@@ -260,12 +273,8 @@ export default function Client() {
             <UpdateInfoDialog
                 open={updateInfoDialogOpened}
                 infoToEdit={infoToEdit}
-                onClose={() => {
-                    setUpdateInfoDialogOpened(false)
-                }}
-                updateInfo={(e) => {
-                    updateInfo(infoToEdit, e)
-                }}
+                onClose={() => {setUpdateInfoDialogOpened(false)}}
+                updateInfo={(e) => {updateInfo(infoToEdit, e)}}
                 info={info}/>
         </>
     );

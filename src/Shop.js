@@ -22,6 +22,8 @@ import StoreIcon from "@mui/icons-material/Store";
 import {TabContext, TabList, TabPanel} from "@material-ui/lab";
 import Box from "@mui/material/Box";
 import CategoryIcon from '@mui/icons-material/Category';
+import favoriteSVG from "./assets/favorite.svg";
+import productSVG from "./assets/product.svg";
 
 export default function Shop() {
     const [tabValue, setTabValue] = useState('products');
@@ -88,7 +90,7 @@ export default function Shop() {
         });
     };
 
-    const getFavoritesFollowing = () => {
+    const setFavoritesFollowing = () => {
         axios.get(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "?username=" + myUsername,{
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
@@ -120,6 +122,16 @@ export default function Shop() {
         });
     };
 
+    const getCarousel = (...pictures) => {
+        let returnList = [];
+        for (let i = 0; i < pictures.length; i++) {
+            if (pictures[i] != null) {
+                returnList.push({index: i, image: appContext.HOST + pictures[i].url, rawImage: null, add: false});
+            }
+        }
+        return returnList;
+    };
+
     const getFavoriteProducts = (favorites) => {
         setLoadingProducts(true);
         let tmpProducts = [];
@@ -149,16 +161,6 @@ export default function Shop() {
 
     const checkSelfUser = () => {
         setSelfUser(username === myUsername);
-    };
-
-    const getCarousel = (...pictures) => {
-        let returnList = [];
-        for (let i = 0; i < pictures.length; i++) {
-            if (pictures[i] != null) {
-                returnList.push({index: i, image: appContext.HOST + pictures[i].url, rawImage: null, add: false});
-            }
-        }
-        return returnList;
     };
 
     const updateAvatar = (e) => {
@@ -445,7 +447,7 @@ export default function Shop() {
 
     const refresh = () => {
         checkSelfUser();
-        getFavoritesFollowing();
+        setFavoritesFollowing();
         getShopInfo();
         getProducts();
     };
@@ -528,7 +530,18 @@ export default function Shop() {
                             }}/>}
                         {
                             products.length === 0 &&
-                            <Typography variant='h3' className='text-center'>Nessun prodotto creato...</Typography>
+                            <Box sx={{
+                                width: '100%',
+                                color: 'darkred',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                gap: 2,
+                                justifyContent: 'center'
+                            }}>
+                                <img src={productSVG} alt="" style={{width: '30%', height: 'auto'}}/>
+                                <Typography variant='h4' className='text-center'>Nessun prodotto creato...</Typography>
+                            </Box>
                         }
                     </TabPanel>
                     <TabPanel value='favorites'>
@@ -540,7 +553,18 @@ export default function Shop() {
                             isUser={false}/>}
                         {
                             (favoriteProducts.length === 0 && !loadingProducts) &&
-                            <Typography variant='h3' className='text-center'>Nessun prodotto aggiunto...</Typography>
+                            <Box sx={{
+                                width: '100%',
+                                color: 'darkred',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                gap: 2,
+                                justifyContent: 'center'
+                            }}>
+                                <img src={favoriteSVG} alt="" style={{width: '30%', height: 'auto'}}/>
+                                <Typography variant='h4' className='text-center'>Nessun prodotto preferito...</Typography>
+                            </Box>
                         }
                     </TabPanel>
                 </TabContext>

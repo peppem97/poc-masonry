@@ -56,10 +56,6 @@ const useAvatarShadow = makeStyles(theme => ({
         boxShadow: theme.shadows[10],
     }
 }));
-const useActions = (theme) => ({
-    display: "flex",
-    justifyContent: "center"
-});
 const iconButtonStyle = {
     color: 'white',
     fontWeight: 'bold'
@@ -71,7 +67,6 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const avatarShadow = useAvatarShadow();
     const styles = useStyles();
-    const actions = useActions();
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
     const favorites = useSelector((state) => state.user.favorites);
@@ -144,7 +139,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                 <Box py={3} px={2} className={styles.contentDescription}>
                     <Info useStyles={useGalaxyInfoStyles} style={{position: 'absolute', bottom: 0}}>
                         <InfoTitle noWrap={false}>{props.product.title}</InfoTitle>
-                        <CardActions className={actions}>
+                        <CardActions>
                             {
                                 <IconButton style={iconButtonStyle} onClick={goToProduct}>
                                     <OpenInNewIcon/>
