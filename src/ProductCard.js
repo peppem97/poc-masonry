@@ -60,6 +60,10 @@ const useActions = (theme) => ({
     display: "flex",
     justifyContent: "center"
 });
+const iconButtonStyle = {
+    color: 'white',
+    fontWeight: 'bold'
+};
 
 export const ProductCard = React.memo(function GalaxyCard(props) {
     const [avatar, setAvatar] = useState(null);
@@ -142,7 +146,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                         <InfoTitle noWrap={false}>{props.product.title}</InfoTitle>
                         <CardActions className={actions}>
                             {
-                                <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={goToProduct}>
+                                <IconButton style={iconButtonStyle} onClick={goToProduct}>
                                     <OpenInNewIcon/>
                                 </IconButton>
                             }
@@ -151,20 +155,20 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
                                     <IconButton style={{color: 'red', fontWeight: 'bold'}} onClick={toggleFavorite}>
                                         <FavoriteIcon/>
                                     </IconButton> :
-                                    <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={toggleFavorite}>
+                                    <IconButton style={iconButtonStyle} onClick={toggleFavorite}>
                                         <FavoriteBorderIcon/>
                                     </IconButton>
                             }
                             {
                                 props.editable ?
-                                    <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {
+                                    <IconButton style={iconButtonStyle} onClick={() => {
                                         props.updateProduct(props.product.id)
                                     }}><EditIcon/>
                                     </IconButton> : null
                             }
                             {
                                 props.editable ?
-                                    <IconButton style={{color: 'white', fontWeight: 'bold'}} onClick={() => {
+                                    <IconButton style={iconButtonStyle} onClick={() => {
                                         props.deleteProduct(props.product.id)
                                     }}><DeleteForeverIcon/>
                                     </IconButton> : null

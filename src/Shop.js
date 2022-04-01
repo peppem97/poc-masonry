@@ -19,10 +19,10 @@ import {setFavorites, setFollowing, setId} from "./store/user";
 import {Tab} from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import StoreIcon from "@mui/icons-material/Store";
-import {TabContext, TabList} from "@material-ui/lab";
+import {TabContext, TabList, TabPanel} from "@material-ui/lab";
 import Box from "@mui/material/Box";
-import {makeStyles} from "@material-ui/core/styles";
 import CategoryIcon from '@mui/icons-material/Category';
+import qs from "qs";
 
 export default function Shop() {
     const [tabValue, setTabValue] = useState('products');
@@ -34,6 +34,7 @@ export default function Shop() {
     const [avatar, setAvatar] = useState(null);
     const [carousel, setCarousel] = useState([]);
     const [products, setProducts] = useState([]);
+    const [favoriteProducts, setFavoriteProducts] = useState([]);
     const [uploadProductDialogOpened, setUploadProductDialogOpened] = useState(false);
     const [updateCarouselDialogOpened, setUpdateCarouselDialogOpened] = useState(false);
     const [updateInfoDialogOpened, setUpdateInfoDialogOpened] = useState(false);
@@ -74,6 +75,7 @@ export default function Shop() {
                 setCarousel(getCarousel(response.data[0]?.carousel0, response.data[0]?.carousel1, response.data[0]?.carousel2));
                 setTelephone(response.data[0]?.telephone);
                 setWebsite(response.data[0]?.website);
+                getFavoriteProducts(response.data[0]?.favorites);
                 dispatch(setIdle());
             } else {
                 dispatch(setIdle());
@@ -114,6 +116,28 @@ export default function Shop() {
             setLoadingProducts(false);
             dispatch(setIdle());
             dispatch(isError('Si è verificato un errore nella ricezione dei prodotti. Riprovare ad aggiornare la pagina.'));
+        });
+    };
+
+    const getFavoriteProducts = (favorites) => {
+        setLoadingProducts(true);
+        const qs = require('qs');
+        const query = qs.stringify({_where: {id: favorites},}, {encodeValuesOnly: true});
+        axios.get(appContext.ENDPOINT_PRODUCTS + "?" + query, {
+            headers: {'Authorization': 'Bearer ' + token}
+        }).then((response) => {
+            console.log(response)
+            let tmpProducts = response.data.map((element) => ({
+                height: generateHeight(),
+                title: element.title,
+                id: element.id,
+                picture: appContext.HOST + element.cover?.url,
+                username: element.username
+            }))
+            setFavoriteProducts(tmpProducts);
+            setLoadingProducts(false);
+        }).catch(() => {
+            dispatch(setIdle());
         });
     };
 
@@ -459,12 +483,6 @@ export default function Shop() {
                 <br/>
                 <br/>
                 <br/>
-                {/*<Row className="justify-content-center">*/}
-                {/*    <Typography variant="h3" gutterBottom component="div" className="text-center"*/}
-                {/*                style={{color: 'darkred', fontWeight: 'bold'}}>*/}
-                {/*        Tutti i prodotti:*/}
-                {/*    </Typography>*/}
-                {/*</Row>*/}
             </Container>
             <Container>
                 <TabContext value={tabValue}>
@@ -477,35 +495,40 @@ export default function Shop() {
                         gap: 2,
                         justifyContent: 'center'
                     }}>
+                        <TabList
+                            onChange={onChangeTabValue}
+                            textColor='inherit' TabIndicatorProps={{style: {backgroundColor: "darkred"}}}>
+                            <Tab icon={<CategoryIcon/>} label="I TUOI PRODOTTI" value='products'/>
+                            <Tab icon={<FavoriteIcon/>} label="PRODOTTI PREFERITI" value='favorites'/>
+                            <Tab icon={<StoreIcon/>} label="NEGOZI CHE SEGUI" value='shops'/>
+                        </TabList>
                     </Box>
-                    <TabList
-                        onChange={onChangeTabValue}
-                        textColor='inherit' TabIndicatorProps={{style: {backgroundColor: "darkred"}}}>
-                        <Tab icon={<CategoryIcon/>} label="I TUOI PRODOTTI" value='products'/>
-                        <Tab icon={<FavoriteIcon/>} label="PRODOTT PREFERITI" value='favorites'/>
-                        <Tab icon={<StoreIcon/>} label="NEGOZI CHE SEGUI" value='shops'/>
 
-                    </TabList>
+                    <TabPanel value='products'>
+                        <GridSystem
+                            loadingProducts={loadingProducts}
+                            isProducts={true}
+                            products={products}
+                            isUser={true}
+                            isSelfUser={selfUser}
+                            updateProduct={(id) => {
+                                setProductToUpdate(id);
+                                setUpdateProductDialogOpened(true);
+                            }}
+                            deleteProduct={(id) => {
+                                setProductToDelete(id);
+                                setDeleteProductDialogOpened(true);
+                            }}/>
+                    </TabPanel>
+                    <TabPanel value='favorites'>
+                        <GridSystem
+                            loadingProducts={loadingProducts}
+                            isProducts={true}
+                            products={favoriteProducts}
+                            isUser={false}/>
+                    </TabPanel>
                 </TabContext>
                 <br/>
-
-
-
-
-                <GridSystem
-                    loadingProducts={loadingProducts}
-                    isProducts={true}
-                    products={products}
-                    isUser={true}
-                    isSelfUser={selfUser}
-                    updateProduct={(id) => {
-                        setProductToUpdate(id);
-                        setUpdateProductDialogOpened(true);
-                    }}
-                    deleteProduct={(id) => {
-                        setProductToDelete(id);
-                        setDeleteProductDialogOpened(true);
-                    }}/>
             </Container>
             <br/>
             <br/>

@@ -32,7 +32,7 @@ export default function Client() {
     const [surname, setSurname] = useState(null);
     const [avatar, setAvatar] = useState(null);
     const [favoriteProducts, setFavoriteProducts] = useState([]);
-    const [loadingProduct, setLoadingProduct] = useState(false);
+    const [loadingProducts, setLoadingProducts] = useState(false);
     const [editAvatar, setEditAvatar] = useState(false);
     const [info, setInfo] = useState(null);
     const [infoToEdit, setInfoToEdit] = useState(null);
@@ -71,7 +71,7 @@ export default function Client() {
             setName(response.data[0]?.name);
             setSurname(response.data[0]?.surname);
             setAvatar(response.data[0]?.avatar?.url);
-            getProducts(response.data[0]?.favorites);
+            getFavoriteProducts(response.data[0]?.favorites);
             dispatch(setIdle());
         }).catch(() => {
             dispatch(setIdle());
@@ -79,8 +79,8 @@ export default function Client() {
         });
     };
 
-    const getProducts = (favorites) => {
-        setLoadingProduct(true);
+    const getFavoriteProducts = (favorites) => {
+        setLoadingProducts(true);
         const qs = require('qs');
         const query = qs.stringify({_where: {id: favorites},}, {encodeValuesOnly: true});
         axios.get(appContext.ENDPOINT_PRODUCTS + "?" + query, {
@@ -94,7 +94,7 @@ export default function Client() {
                 username: element.username
             }))
             setFavoriteProducts(tmpProducts);
-            setLoadingProduct(false);
+            setLoadingProducts(false);
         }).catch(() => {
             dispatch(setIdle());
         });
@@ -236,7 +236,7 @@ export default function Client() {
                     </Box>
                     <TabPanel value='favorites'>
                         <GridSystem
-                            loadingProducts={loadingProduct}
+                            loadingProducts={loadingProducts}
                             isProducts={true}
                             products={favoriteProducts}
                             isUser={false}/>
