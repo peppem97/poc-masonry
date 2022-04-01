@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import Typography from '@material-ui/core/Typography';
-import {Row, Container} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 import GridSystem from "./GridSystem";
 import axios from "axios";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
@@ -22,7 +22,6 @@ import StoreIcon from "@mui/icons-material/Store";
 import {TabContext, TabList, TabPanel} from "@material-ui/lab";
 import Box from "@mui/material/Box";
 import CategoryIcon from '@mui/icons-material/Category';
-import qs from "qs";
 
 export default function Shop() {
     const [tabValue, setTabValue] = useState('products');
@@ -59,6 +58,7 @@ export default function Shop() {
 
     const onChangeTabValue = (e, value) => {
         setTabValue(value);
+        refresh();
     };
 
     const getShopInfo = () => {
@@ -67,6 +67,7 @@ export default function Shop() {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             if (response.data.length > 0) {
+                console.log(response.data[0]?.favorites)
                 setId(response.data[0]?.id);
                 setEmail(response.data[0]?.email);
                 setTitle(response.data[0]?.title);
@@ -121,24 +122,29 @@ export default function Shop() {
 
     const getFavoriteProducts = (favorites) => {
         setLoadingProducts(true);
-        const qs = require('qs');
-        const query = qs.stringify({_where: {id: favorites},}, {encodeValuesOnly: true});
-        axios.get(appContext.ENDPOINT_PRODUCTS + "?" + query, {
-            headers: {'Authorization': 'Bearer ' + token}
-        }).then((response) => {
-            console.log(response)
-            let tmpProducts = response.data.map((element) => ({
-                height: generateHeight(),
-                title: element.title,
-                id: element.id,
-                picture: appContext.HOST + element.cover?.url,
-                username: element.username
-            }))
+        let tmpProducts = [];
+        if (favorites.length > 0) {
+            const qs = require('qs');
+            const query = qs.stringify({_where: {id: favorites},}, {encodeValuesOnly: true});
+            axios.get(appContext.ENDPOINT_PRODUCTS + "?" + query, {
+                headers: {'Authorization': 'Bearer ' + token}
+            }).then((response) => {
+                tmpProducts = response.data.map((element) => ({
+                    height: generateHeight(),
+                    title: element.title,
+                    id: element.id,
+                    picture: appContext.HOST + element.cover?.url,
+                    username: element.username
+                }));
+                setFavoriteProducts(tmpProducts);
+                setLoadingProducts(false);
+            }).catch(() => {
+                dispatch(setIdle());
+            });
+        } else {
             setFavoriteProducts(tmpProducts);
             setLoadingProducts(false);
-        }).catch(() => {
-            dispatch(setIdle());
-        });
+        }
     };
 
     const checkSelfUser = () => {
@@ -505,7 +511,8 @@ export default function Shop() {
                     </Box>
 
                     <TabPanel value='products'>
-                        <GridSystem
+                        {products.length > 0 &&
+                            <GridSystem
                             loadingProducts={loadingProducts}
                             isProducts={true}
                             products={products}
@@ -518,14 +525,23 @@ export default function Shop() {
                             deleteProduct={(id) => {
                                 setProductToDelete(id);
                                 setDeleteProductDialogOpened(true);
-                            }}/>
+                            }}/>}
+                        {
+                            products.length === 0 &&
+                            <Typography variant='h3' className='text-center'>Nessun prodotto creato...</Typography>
+                        }
                     </TabPanel>
                     <TabPanel value='favorites'>
-                        <GridSystem
+                        {favoriteProducts.length > 0 &&
+                            <GridSystem
                             loadingProducts={loadingProducts}
                             isProducts={true}
                             products={favoriteProducts}
-                            isUser={false}/>
+                            isUser={false}/>}
+                        {
+                            (favoriteProducts.length === 0 && !loadingProducts) &&
+                            <Typography variant='h3' className='text-center'>Nessun prodotto aggiunto...</Typography>
+                        }
                     </TabPanel>
                 </TabContext>
                 <br/>

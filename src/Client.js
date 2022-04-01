@@ -1,4 +1,4 @@
-import {Col, Container, Row} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 import Avatar from "@material-ui/core/Avatar";
 import {useNavigate, useParams} from "react-router-dom";
 import React, {useContext, useEffect, useState} from "react";
@@ -6,7 +6,7 @@ import GlobalContext from "./GlobalContext";
 import {setBusy, setIdle} from "./store/loading";
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
-import {Divider, IconButton, Input, Tab, Tabs, Typography} from "@mui/material";
+import {Divider, IconButton, Input, Tab, Typography} from "@mui/material";
 import Box from "@mui/material/Box";
 import {makeStyles} from "@material-ui/core/styles";
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -54,7 +54,7 @@ export default function Client() {
     };
 
     const getFavoritesFollowing = () => {
-        axios.get(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "?username=" + myUsername,{
+        axios.get(userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS + "?username=" + myUsername, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             dispatch(setId(response.data[0].id));
@@ -81,23 +81,29 @@ export default function Client() {
 
     const getFavoriteProducts = (favorites) => {
         setLoadingProducts(true);
-        const qs = require('qs');
-        const query = qs.stringify({_where: {id: favorites},}, {encodeValuesOnly: true});
-        axios.get(appContext.ENDPOINT_PRODUCTS + "?" + query, {
-            headers: {'Authorization': 'Bearer ' + token}
-        }).then((response) => {
-            let tmpProducts = response.data.map((element) => ({
-                height: generateHeight(),
-                title: element.title,
-                id: element.id,
-                picture: appContext.HOST + element.cover?.url,
-                username: element.username
-            }))
+        let tmpProducts = [];
+        if (favorites.length > 0) {
+            const qs = require('qs');
+            const query = qs.stringify({_where: {id: favorites},}, {encodeValuesOnly: true});
+            axios.get(appContext.ENDPOINT_PRODUCTS + "?" + query, {
+                headers: {'Authorization': 'Bearer ' + token}
+            }).then((response) => {
+                tmpProducts = response.data.map((element) => ({
+                    height: generateHeight(),
+                    title: element.title,
+                    id: element.id,
+                    picture: appContext.HOST + element.cover?.url,
+                    username: element.username
+                }))
+                setFavoriteProducts(tmpProducts);
+                setLoadingProducts(false);
+            }).catch(() => {
+                dispatch(setIdle());
+            });
+        } else {
             setFavoriteProducts(tmpProducts);
             setLoadingProducts(false);
-        }).catch(() => {
-            dispatch(setIdle());
-        });
+        }
     };
 
     const updateAvatar = (e) => {
@@ -235,11 +241,17 @@ export default function Client() {
                         </TabList>
                     </Box>
                     <TabPanel value='favorites'>
-                        <GridSystem
+                        {favoriteProducts.length > 0 &&
+                            <GridSystem
                             loadingProducts={loadingProducts}
                             isProducts={true}
                             products={favoriteProducts}
                             isUser={false}/>
+                        }
+                        {
+                            favoriteProducts.length === 0 &&
+                            <Typography variant='h3' className='text-center'>Nessun prodotto aggiunto...</Typography>
+                        }
                     </TabPanel>
                     <TabPanel value='shops'>
                     </TabPanel>
