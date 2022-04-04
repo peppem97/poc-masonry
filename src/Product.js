@@ -23,6 +23,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import {setFavorites} from "./store/user";
+import FavoritesDialog from "./dialogs/FavoritesDialog";
 
 const useStyles = makeStyles(({breakpoints, spacing}) => ({
     root: {
@@ -101,17 +102,16 @@ export default function Product() {
     const [price, setPrice] = useState(null);
     const [pieces, setPieces] = useState(null);
     const [favorite, setFavorite] = useState(false);
-    const [favoritesDialog, setFavoriteDialog] = useState(false);
+    const [favoritesOfProduct, setFavoritesOfProduct] = useState([]);
+    const [favoritesDialog, setFavoritesDialog] = useState(false);
     const appContext = useContext(GlobalContext);
     const avatarShadow = useAvatarShadow();
     const token = useSelector((state) => state.token.value);
-    const favorites = useSelector((state) => state.user.favorites);
+    const favoritesOfUser = useSelector((state) => state.user.favorites);
+    const myUsername = useSelector((state) => state.user.username);
+
     const userType = useSelector((state) => state.user.type);
-    // const userType = useSelector((state) => state.user.type);
     const idUser = useSelector((state) => state.user.id);
-
-
-
     const dispatch = useDispatch();
     const {id} = useParams();
     const navigate = useNavigate();
@@ -126,7 +126,6 @@ export default function Product() {
         axios.get(appContext.ENDPOINT_PRODUCTS + "?id=" + id, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
-            console.log(response.data[0].favorites)
             let tmpPictures = setPicturesList(
                 response.data[0].picture0,
                 response.data[0].picture1,
@@ -145,6 +144,7 @@ export default function Product() {
             setPrice(response.data[0]?.price);
             setPieces(response.data[0]?.pieces);
             setDescription(response.data[0]?.description);
+            setFavoritesOfProduct(response.data[0]?.favorites);
             dispatch(setIdle());
         }).catch(() => {
             dispatch(setIdle());
@@ -177,17 +177,26 @@ export default function Product() {
     };
 
     const toggleFavorite = () => {
-        let tmp;
+        let tmpFavoritesOfUser;
+        let tmpFavoritesOfProduct;
         if (favorite) {
-            tmp = favorites.filter((element) => (element !== id));
+            tmpFavoritesOfUser = favoritesOfUser.filter((element) => (element !== id));
+            tmpFavoritesOfProduct = favoritesOfUser.filter((element) => (element !== myUsername));
+
         } else {
-            tmp = JSON.parse(JSON.stringify(favorites));
-            tmp.push(id);
+            tmpFavoritesOfUser = JSON.parse(JSON.stringify(favoritesOfUser));
+            tmpFavoritesOfUser.push(id);
+
+            tmpFavoritesOfProduct = JSON.parse(JSON.stringify(favoritesOfProduct));
+            tmpFavoritesOfProduct.push(myUsername);
         }
-        let data = {
-            favorites: tmp
+        let dataUser = {
+            favorites: tmpFavoritesOfUser
         };
-        axios.put((userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS) + "/" + idUser, data,{
+        let dataProduct = {
+            favorites: tmpFavoritesOfProduct
+        };
+        axios.put((userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS) + "/" + idUser, dataUser ,{
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
             dispatch(setFavorites(response.data.favorites));
@@ -208,7 +217,7 @@ export default function Product() {
     }, [username]);
 
     useEffect(() => {
-        setFavorite(favorites.includes(id));
+        setFavorite(favoritesOfUser.includes(id));
     }, [id]);
 
     return (
@@ -283,7 +292,7 @@ export default function Product() {
                                             <IconButton><WhatsAppIcon/></IconButton>
                                         </Col>
                                         <Col>
-                                            <AvatarGroup max={4}>
+                                            <AvatarGroup max={4} onClick={() => setFavoritesDialog(true)}>
                                                 <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
                                                 <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
                                                 <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
@@ -304,6 +313,7 @@ export default function Product() {
                 </Row>
                 <br/>
                 <br/>
+                <FavoritesDialog open={favoritesDialog} onClose={() => setFavoritesDialog(false)}/>
 
             </Container>
         </>

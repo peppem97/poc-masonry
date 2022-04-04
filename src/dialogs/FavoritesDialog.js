@@ -10,7 +10,7 @@ export default function FavoritesDialog(props) {
 
     return (
         <Dialog onClose={closeDialog} open={props.open}>
-            <DialogTitle>Set backup account</DialogTitle>
+            <DialogTitle>Utenti che hanno apprezzato il prodotto:</DialogTitle>
             <List sx={{ pt: 0 }}>
                 <ListItem button>
                     <ListItemAvatar>
