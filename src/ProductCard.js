@@ -66,6 +66,8 @@ const iconButtonStyle = {
 
 export const ProductCard = React.memo(function GalaxyCard(props) {
     const [avatar, setAvatar] = useState(null);
+    const [favoritesOfProduct, setFavoritesOfProduct] = useState(null);
+
     const [favorite, setFavorite] = useState(false);
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const avatarShadow = useAvatarShadow();
@@ -73,7 +75,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     const theme = responsiveFontSizes(createTheme());
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
-    const favorites = useSelector((state) => state.user.favorites);
+    const favoritesOfUser = useSelector((state) => state.user.favorites);
     const userType = useSelector((state) => state.user.type);
     const id = useSelector((state) => state.user.id);
     const navigate = useNavigate();
@@ -100,15 +102,17 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     };
 
     const toggleFavorite = () => {
-        let tmp;
+        let tmpFavoritesOfUser;
+        let tmpFavoritesOfProduct;
+
         if (favorite) {
-            tmp = favorites.filter((element) => (element !== props.product.id));
+            tmpFavoritesOfUser = favoritesOfUser.filter((element) => (element !== props.product.id));
         } else {
-            tmp = JSON.parse(JSON.stringify(favorites));
-            tmp.push(props.product.id);
+            tmpFavoritesOfUser = JSON.parse(JSON.stringify(favoritesOfUser));
+            tmpFavoritesOfUser.push(props.product.id);
         }
         let data = {
-            favorites: tmp
+            favorites: tmpFavoritesOfUser
         };
         axios.put((userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS) + "/" + id, data,{
             headers: {'Authorization': 'Bearer ' + token}
@@ -127,7 +131,7 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
     }, []);
 
     useEffect(() => {
-        checkFavorites(favorites);
+        checkFavorites(favoritesOfUser);
     }, [props.product.id]);
 
     return (

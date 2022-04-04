@@ -181,7 +181,7 @@ export default function Product() {
         let tmpFavoritesOfProduct;
         if (favorite) {
             tmpFavoritesOfUser = favoritesOfUser.filter((element) => (element !== id));
-            tmpFavoritesOfProduct = favoritesOfUser.filter((element) => (element !== myUsername));
+            tmpFavoritesOfProduct = favoritesOfProduct.filter((element) => (element !== myUsername));
 
         } else {
             tmpFavoritesOfUser = JSON.parse(JSON.stringify(favoritesOfUser));
@@ -201,6 +201,10 @@ export default function Product() {
         }).then((response) => {
             dispatch(setFavorites(response.data.favorites));
             checkFavorites(response.data.favorites);
+        });
+        axios.put(appContext.ENDPOINT_PRODUCTS + "/" + id, dataProduct, {
+            headers: {'Authorization': 'Bearer ' + token}
+        }).then(() => {
         });
     };
 
@@ -313,7 +317,10 @@ export default function Product() {
                 </Row>
                 <br/>
                 <br/>
-                <FavoritesDialog open={favoritesDialog} onClose={() => setFavoritesDialog(false)}/>
+                <FavoritesDialog
+                    open={favoritesDialog}
+                    users={favoritesOfProduct}
+                    onClose={() => setFavoritesDialog(false)}/>
 
             </Container>
         </>

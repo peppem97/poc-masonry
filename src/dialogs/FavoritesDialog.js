@@ -12,14 +12,19 @@ export default function FavoritesDialog(props) {
         <Dialog onClose={closeDialog} open={props.open}>
             <DialogTitle>Utenti che hanno apprezzato il prodotto:</DialogTitle>
             <List sx={{ pt: 0 }}>
-                <ListItem button>
-                    <ListItemAvatar>
-                        <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                            <PersonIcon />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText/>
-                </ListItem>
+                {
+                    props.users.map((user) =>
+                        <ListItem button>
+                            <ListItemAvatar>
+                                <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
+                                    <PersonIcon />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary={user}/>
+                        </ListItem>
+
+                    )
+                }
             </List>
         </Dialog>
     )
