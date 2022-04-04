@@ -1,4 +1,5 @@
 import {
+    AvatarGroup,
     Card,
     CardContent, IconButton
 } from "@mui/material";
@@ -100,6 +101,7 @@ export default function Product() {
     const [price, setPrice] = useState(null);
     const [pieces, setPieces] = useState(null);
     const [favorite, setFavorite] = useState(false);
+    const [favoritesDialog, setFavoriteDialog] = useState(false);
     const appContext = useContext(GlobalContext);
     const avatarShadow = useAvatarShadow();
     const token = useSelector((state) => state.token.value);
@@ -124,6 +126,7 @@ export default function Product() {
         axios.get(appContext.ENDPOINT_PRODUCTS + "?id=" + id, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then((response) => {
+            console.log(response.data[0].favorites)
             let tmpPictures = setPicturesList(
                 response.data[0].picture0,
                 response.data[0].picture1,
@@ -279,6 +282,15 @@ export default function Product() {
                                         <Col>
                                             <IconButton><WhatsAppIcon/></IconButton>
                                         </Col>
+                                        <Col>
+                                            <AvatarGroup max={4}>
+                                                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                                                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
+                                                <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
+                                                <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
+                                                <Avatar alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />
+                                            </AvatarGroup>
+                                        </Col>
                                     </Row>}
                                 <br/>
                                 <Row>
@@ -292,6 +304,7 @@ export default function Product() {
                 </Row>
                 <br/>
                 <br/>
+
             </Container>
         </>
     );

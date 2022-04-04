@@ -1,6 +1,6 @@
 import {Container} from "react-bootstrap";
 import Avatar from "@material-ui/core/Avatar";
-import {useNavigate, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {useContext, useEffect, useState} from "react";
 import GlobalContext from "./GlobalContext";
 import {setBusy, setIdle} from "./store/loading";
@@ -49,6 +49,8 @@ export default function Client() {
     const id = useSelector((state) => state.user.id);
     const appContext = useContext(GlobalContext);
     const navigate = useNavigate();
+    const location = useLocation();
+
 
     const onChangeTabValue = (e, value) => {
         setTabValue(value);
@@ -176,7 +178,7 @@ export default function Client() {
 
     useEffect(() => {
         refresh();
-    }, []);
+    }, [location]);
 
     return (
         <>
@@ -192,7 +194,7 @@ export default function Client() {
                     gap: 1,
                     justifyContent: 'center'
                 }}>
-                    <label htmlFor="avatar-uploader" className='text-center'>
+                    {selfUser && <label htmlFor="avatar-uploader" className='text-center'>
                         <Input accept="image/*" id="avatar-uploader" type="file" hidden
                                onChange={updateAvatar}/>
                         <Avatar
@@ -206,22 +208,33 @@ export default function Client() {
                                 setEditAvatar(false)
                             }}>{editAvatar && <AddPhotoAlternateIcon sx={{fontSize: 70}}/>}
                         </Avatar>
-                    </label>
+                    </label>}
+                    {
+                        !selfUser &&
+                        <Avatar
+                            className={avatarShadow.avatar}
+                            src={appContext.HOST + avatar}
+                            style={{width: '200px', height: '200px'}}>
+                        </Avatar>
+                    }
                     <br/>
 
                     <Typography className='text-center' variant='h4'>{name}
-                        <IconButton color="inherit" size="medium" onClick={() => {
-                            openInfoDialog('name')
-                        }}>
-                            <EditIcon fontSize="inherit"/>
-                        </IconButton>
+                        {selfUser &&
+                            <IconButton color="inherit" size="medium" onClick={() => {
+                                openInfoDialog('name')
+                            }}>
+                                <EditIcon fontSize="inherit"/>
+                            </IconButton>
+                        }
                     </Typography>
                     <Typography className='text-center' variant='h4'>{surname}
-                        <IconButton color="inherit" size="medium" onClick={() => {
-                            openInfoDialog('surname')
-                        }}>
-                            <EditIcon fontSize="inherit"/>
-                        </IconButton>
+                        {selfUser &&
+                            <IconButton color="inherit" size="medium" onClick={() => {
+                                openInfoDialog('surname')
+                            }}>
+                                <EditIcon fontSize="inherit"/>
+                            </IconButton>}
                     </Typography>
                     <Typography variant='h5' className='text-center' color="text.secondary">{username}
                     </Typography>
@@ -243,7 +256,7 @@ export default function Client() {
                             onChange={onChangeTabValue}
                             textColor='inherit' TabIndicatorProps={{style: {backgroundColor: "darkred"}}}>
                             <Tab icon={<FavoriteIcon/>} label="PRODOTTI PREFERITI" value='favorites'/>
-                            <Tab icon={<StoreIcon/>} label="NEGOZI CHE SEGUI" value='shops'/>
+                            <Tab icon={<StoreIcon/>} label="NEGOZI SEGUITI" value='shops'/>
                         </TabList>
                     </Box>
                     <br/>
@@ -267,7 +280,8 @@ export default function Client() {
                                 justifyContent: 'center'
                             }}>
                                 <img src={favoriteSVG} alt="" style={{width: '30%', height: 'auto'}}/>
-                                <Typography variant='h4' className='text-center'>Nessun prodotto preferito...</Typography>
+                                <Typography variant='h4' className='text-center'>Nessun prodotto
+                                    preferito...</Typography>
                             </Box>
                         }
                     </TabPanel>
@@ -278,8 +292,12 @@ export default function Client() {
             <UpdateInfoDialog
                 open={updateInfoDialogOpened}
                 infoToEdit={infoToEdit}
-                onClose={() => {setUpdateInfoDialogOpened(false)}}
-                updateInfo={(e) => {updateInfo(infoToEdit, e)}}
+                onClose={() => {
+                    setUpdateInfoDialogOpened(false)
+                }}
+                updateInfo={(e) => {
+                    updateInfo(infoToEdit, e)
+                }}
                 info={info}/>
         </>
     );
