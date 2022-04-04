@@ -164,7 +164,12 @@ export default function Client() {
         setUpdateInfoDialogOpened(true);
     };
 
+    const checkSelfUser = () => {
+        setSelfUser(username === myUsername);
+    };
+
     const refresh = () => {
+        checkSelfUser();
         setFavoritesFollowing();
         getClientInfo();
     };
