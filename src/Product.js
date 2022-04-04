@@ -24,6 +24,7 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import {setFavorites} from "./store/user";
 import FavoritesDialog from "./dialogs/FavoritesDialog";
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 
 const useStyles = makeStyles(({breakpoints, spacing}) => ({
     root: {
@@ -205,6 +206,8 @@ export default function Product() {
         axios.put(appContext.ENDPOINT_PRODUCTS + "/" + id, dataProduct, {
             headers: {'Authorization': 'Bearer ' + token}
         }).then(() => {
+            setFavoritesOfProduct(tmpFavoritesOfProduct);
+
         });
     };
 
@@ -284,8 +287,11 @@ export default function Product() {
                                         <Col>
                                             {
                                                 favorite ?
-                                                    <IconButton style={{color: 'red', fontWeight: 'bold'}} onClick={toggleFavorite}>
-                                                        <FavoriteIcon/>
+                                                    <IconButton style={{color: 'red', fontWeight: 'bold'}}
+                                                                onClick={toggleFavorite} >
+                                                        <FavoriteIcon/>&nbsp;
+                                                        <Typography variant='h5'>{favoritesOfProduct.length}</Typography>
+
                                                     </IconButton> :
                                                     <IconButton onClick={toggleFavorite}>
                                                         <FavoriteBorderIcon/>
@@ -293,17 +299,19 @@ export default function Product() {
                                             }
                                         </Col>
                                         <Col>
-                                            <IconButton><WhatsAppIcon/></IconButton>
+                                            <IconButton onClick={() => setFavoritesDialog(true)}>
+                                                <PeopleOutlineIcon/>
+                                            </IconButton>
                                         </Col>
-                                        <Col>
-                                            <AvatarGroup max={4} onClick={() => setFavoritesDialog(true)}>
-                                                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                                                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-                                                <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-                                                <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
-                                                <Avatar alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />
-                                            </AvatarGroup>
-                                        </Col>
+                                        {/*<Col>*/}
+                                        {/*    <AvatarGroup max={4} onClick={() => setFavoritesDialog(true)}>*/}
+                                        {/*        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />*/}
+                                        {/*        <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />*/}
+                                        {/*        <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />*/}
+                                        {/*        <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />*/}
+                                        {/*        <Avatar alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />*/}
+                                        {/*    </AvatarGroup>*/}
+                                        {/*</Col>*/}
                                     </Row>}
                                 <br/>
                                 <Row>
