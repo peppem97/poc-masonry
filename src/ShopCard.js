@@ -16,6 +16,7 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import PanoramaIcon from "@mui/icons-material/Panorama";
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -101,7 +102,7 @@ export const ShopCard = React.memo(function News3Card(props) {
                         image={''}
                         children={<Suspense fallback={<></>}><ShopCarousel pictures={props.carousel}/></Suspense>}/>
                     <div className={styles.content}>
-                        <Typography variant={'h2'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
+                        <Typography variant={'h3'} className="text-center" style={{color: 'white', fontWeight: 'bold'}}>
                             {props.title}
                             {props.selfUser &&
                                 <>
@@ -152,18 +153,19 @@ export const ShopCard = React.memo(function News3Card(props) {
                             }
                         </Item>
                         <Info position={'middle'} useStyles={useNewsInfoStyles}>
+
+                            <InfoTitle style={{fontWeight: 'bold'}}>{props.email}
+                                {/*{props.selfUser && <IconButton color="inherit" size="small" onClick={() => {*/}
+                                {/*    props.openUpdateInfoDialog('email')*/}
+                                {/*}}><EditIcon*/}
+                                {/*    fontSize="inherit"/>*/}
+                                {/*</IconButton>}*/}
+                            </InfoTitle>
                             <InfoTitle style={{fontWeight: 'bold'}}>{props.website}
                                 {props.selfUser && <IconButton color="inherit" size="small" onClick={() => {
                                     props.openUpdateInfoDialog('website')
                                 }}>
                                     <EditIcon fontSize="inherit"/>
-                                </IconButton>}
-                            </InfoTitle>
-                            <InfoTitle style={{fontWeight: 'bold'}}>{props.email}
-                                {props.selfUser && <IconButton color="inherit" size="small" onClick={() => {
-                                    props.openUpdateInfoDialog('email')
-                                }}><EditIcon
-                                    fontSize="inherit"/>
                                 </IconButton>}
                             </InfoTitle>
                             <InfoSubtitle>{props.telephone}
@@ -175,6 +177,19 @@ export const ShopCard = React.memo(function News3Card(props) {
                             </InfoSubtitle>
                         </Info>
                     </Box>
+                </Row>
+                <Row className={styles.author}
+                     m={0}
+                     p={1}
+                     pt={2}
+                     gap={1}
+                     bgcolor={'common.white'}>
+                    {props.following ?
+                        <Button>SEGUITO</Button> :
+                        <Button variant="contained" endIcon={<AddBusinessIcon/>} style={{backgroundColor: 'darkred'}}>
+                            Segui
+                        </Button>
+                    }
                 </Row>
                 <Row className={styles.author}
                      m={0}

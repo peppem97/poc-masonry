@@ -110,7 +110,6 @@ export default function Product() {
     const token = useSelector((state) => state.token.value);
     const favoritesOfUser = useSelector((state) => state.user.favorites);
     const myUsername = useSelector((state) => state.user.username);
-
     const userType = useSelector((state) => state.user.type);
     const idUser = useSelector((state) => state.user.id);
     const dispatch = useDispatch();
@@ -224,7 +223,7 @@ export default function Product() {
     }, [username]);
 
     useEffect(() => {
-        setFavorite(favoritesOfUser.includes(id));
+        checkFavorites(favoritesOfUser);
     }, [id]);
 
     return (

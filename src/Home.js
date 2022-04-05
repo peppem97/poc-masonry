@@ -32,7 +32,7 @@ export default function Home() {
             dispatch(setId(response.data[0].id));
             dispatch(setFavorites(response.data[0].favorites));
             dispatch(setFollowing(response.data[0].following));
-        })
+        });
     };
 
     const getProducts = () => {

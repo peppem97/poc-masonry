@@ -35,6 +35,7 @@ export default function Shop() {
     const [avatar, setAvatar] = useState(null);
     const [carousel, setCarousel] = useState([]);
     const [products, setProducts] = useState([]);
+    const [followed, setFollowed] = useState(false)
     const [favoriteProducts, setFavoriteProducts] = useState([]);
     const [uploadProductDialogOpened, setUploadProductDialogOpened] = useState(false);
     const [updateCarouselDialogOpened, setUpdateCarouselDialogOpened] = useState(false);
@@ -51,6 +52,8 @@ export default function Shop() {
     const myUsername = useSelector((state) => state.user.username);
     const firstAccess = useSelector((state) => state.user.firstAccess);
     const userType = useSelector((state) => state.user.type);
+    const following = useSelector((state) => state.user.following);
+
     const id = useSelector((state) => state.user.id);
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
@@ -445,6 +448,10 @@ export default function Shop() {
         setUpdateInfoDialogOpened(true);
     };
 
+    const checkFollowed = (following) => {
+        setFollowed(following.includes(username));
+    };
+
     const refresh = () => {
         checkSelfUser();
         setFavoritesFollowing();
@@ -464,6 +471,10 @@ export default function Shop() {
         refresh();
     }, [location]);
 
+    useEffect(() => {
+        checkFollowed(following);
+    }, [username])
+
     return (
         <>
             <Container>
@@ -473,6 +484,7 @@ export default function Shop() {
                 <br/>
                 <ShopCard
                     email={email}
+                    following={followed}
                     title={title}
                     description={description}
                     avatar={avatar}
