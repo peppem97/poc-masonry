@@ -16,6 +16,8 @@ import {isNotError, isNotNotice} from "./store/dialogs";
 import UnprotectedRoute from "./UnprotectedRoute";
 import Wizard from "./Wizard";
 import Client from "./Client";
+import axios from "axios";
+import {setFavorites, setFollowing, setId} from "./store/user";
 
 export default function App() {
     const host = "http://zion.datafactor.it:40505"
@@ -23,7 +25,21 @@ export default function App() {
     const errorState = useSelector((state) => state.dialogs.error);
     const message = useSelector((state) => state.dialogs.message);
     const noticeState = useSelector((state) => state.dialogs.notice);
+    const userType = useSelector((state) => state.user.type);
+    const token = useSelector((state) => state.token.value);
+    const username = useSelector((state) => state.user.username);
     const dispatch = useDispatch();
+
+    const setFavoritesFollowing = () => {
+        axios.get((userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS) + "?username=" + username, {
+            headers: {'Authorization': 'Bearer ' + token}
+        }).then((response) => {
+            dispatch(setId(response.data[0].id));
+            dispatch(setFavorites(response.data[0].favorites));
+            dispatch(setFollowing(response.data[0].following));
+        });
+    };
+
     const routes = {
         welcome: '/masonry/welcome',
         home: '/masonry/home',
@@ -44,8 +60,11 @@ export default function App() {
         ENDPOINT_PRODUCTS: host + "/products",
         ENDPOINT_PENDENTS: host + "/pendents",
         ENDPOINT_AUTH: host + "/auth/local",
-        ENDPOINT_REGISTER: host + "/auth/local/register"
+        ENDPOINT_REGISTER: host + "/auth/local/register",
+        setFavoritesFollowing: setFavoritesFollowing
     };
+
+
 
     return (
         <>

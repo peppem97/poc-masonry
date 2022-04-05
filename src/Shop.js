@@ -52,7 +52,6 @@ export default function Shop() {
     const token = useSelector((state) => state.token.value);
     const myUsername = useSelector((state) => state.user.username);
     const firstAccess = useSelector((state) => state.user.firstAccess);
-    const userType = useSelector((state) => state.user.type);
     const following = useSelector((state) => state.user.following);
     const id = useSelector((state) => state.user.id);
     const {username} = useParams();
@@ -140,16 +139,6 @@ export default function Shop() {
             setFavoriteProducts(tmpProducts);
             setLoadingProducts(false);
         }
-    };
-
-    const setFavoritesFollowing = () => {
-        axios.get((userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS) + "?username=" + myUsername,{
-            headers: {'Authorization': 'Bearer ' + token}
-        }).then((response) => {
-            dispatch(setId(response.data[0].id));
-            dispatch(setFavorites(response.data[0].favorites));
-            dispatch(setFollowing(response.data[0].following));
-        })
     };
 
     const getCarousel = (...pictures) => {
@@ -455,7 +444,7 @@ export default function Shop() {
     const refresh = (all=true) => {
 
         checkSelfUser();
-        setFavoritesFollowing();
+        appContext.setFavoritesFollowing();
         getShopInfo();
         getProducts();
         if (all) {

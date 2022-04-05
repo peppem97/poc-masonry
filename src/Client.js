@@ -26,6 +26,8 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import FollowCard from "./FollowCard";
 import AlertDialog from "./dialogs/AlertDialog";
+import AddBusinessIcon from "@mui/icons-material/AddBusiness";
+import Button from "@mui/material/Button";
 
 const useAvatarShadow = makeStyles(theme => ({
     avatar: {
@@ -41,17 +43,17 @@ export default function Client() {
     const [followingShops, setFollowingShops] = useState([]);
     const [loadingProducts, setLoadingProducts] = useState(false);
     const [editAvatar, setEditAvatar] = useState(false);
+    const [alertDialog, setAlertDialog] = useState(false);
     const [info, setInfo] = useState(null);
     const [infoToEdit, setInfoToEdit] = useState(null);
     const [updateInfoDialogOpened, setUpdateInfoDialogOpened] = useState(false);
     const [tabValue, setTabValue] = useState('favorites');
-    const [selfUser, setSelfUser] = useState(false); //TODO
+    const [selfUser, setSelfUser] = useState(false);
     const avatarShadow = useAvatarShadow();
     const {username} = useParams();
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token.value);
     const myUsername = useSelector((state) => state.user.username);
-    const userType = useSelector((state) => state.user.type);
     const id = useSelector((state) => state.user.id);
     const appContext = useContext(GlobalContext);
     const navigate = useNavigate();
@@ -59,16 +61,6 @@ export default function Client() {
 
     const onChangeTabValue = (e, value) => {
         setTabValue(value);
-    };
-
-    const setFavoritesFollowing = () => {
-        axios.get((userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS) + "?username=" + myUsername, {
-            headers: {'Authorization': 'Bearer ' + token}
-        }).then((response) => {
-            dispatch(setId(response.data[0].id));
-            dispatch(setFavorites(response.data[0].favorites));
-            dispatch(setFollowing(response.data[0].following));
-        });
     };
 
     const getClientInfo = () => {
@@ -202,7 +194,7 @@ export default function Client() {
 
     const refresh = () => {
         checkSelfUser();
-        setFavoritesFollowing();
+        appContext.setFavoritesFollowing();
         getClientInfo();
     };
 
@@ -327,9 +319,12 @@ export default function Client() {
                                         [<IconButton edge="start">
                                             <OpenInNewIcon/>
                                         </IconButton>,
-                                            <IconButton edge="end">
-                                                <RemoveCircleIcon/>
-                                            </IconButton>
+                                            <Button variant="contained" endIcon={<AddBusinessIcon/>} style={{backgroundColor: 'darkred'}}>
+                                                Segui
+                                            </Button>
+                                            // <IconButton edge="end" onClick={() => setAlertDialog(true)}>
+                                            //     <RemoveCircleIcon/>
+                                            // </IconButton>
                                         ]
                                     }>
                                         <ListItemAvatar>
@@ -362,7 +357,7 @@ export default function Client() {
                     updateInfo(infoToEdit, e)
                 }}
                 info={info}/>
-            {/*<AlertDialog open={}/>*/}
+            <AlertDialog open={alertDialog} onClose={() => setAlertDialog(false)}/>
         </>
     );
 }
