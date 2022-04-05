@@ -362,7 +362,7 @@ export default function Client() {
                     updateInfo(infoToEdit, e)
                 }}
                 info={info}/>
-            <AlertDialog open={}/>
+            {/*<AlertDialog open={}/>*/}
         </>
     );
 }
