@@ -64,8 +64,6 @@ export default function App() {
         setFavoritesFollowing: setFavoritesFollowing
     };
 
-
-
     return (
         <>
             <GlobalContext.Provider value={appContext}>

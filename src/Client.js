@@ -19,12 +19,8 @@ import UpdateInfoDialog from "./dialogs/UpdateInfoDialog";
 import {generateHeight} from "./Utility";
 import GridSystem from "./GridSystem";
 import {TabContext, TabList, TabPanel} from "@material-ui/lab";
-import {setFavorites, setFollowing, setId} from "./store/user";
 import favoriteSVG from "./assets/favorite.svg"
-import qs from "qs";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import FollowCard from "./FollowCard";
 import AlertDialog from "./dialogs/AlertDialog";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import Button from "@mui/material/Button";
@@ -54,6 +50,8 @@ export default function Client() {
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token.value);
     const myUsername = useSelector((state) => state.user.username);
+    const myFavorites = useSelector((state) => state.user.favorites);
+    const myFollowing = useSelector((state) => state.user.following);
     const id = useSelector((state) => state.user.id);
     const appContext = useContext(GlobalContext);
     const navigate = useNavigate();
@@ -71,8 +69,6 @@ export default function Client() {
             setName(response.data[0]?.name);
             setSurname(response.data[0]?.surname);
             setAvatar(response.data[0]?.avatar?.url);
-            getFavoriteProducts(response.data[0]?.favorites);
-            getFollowingShops(response.data[0]?.following);
             dispatch(setIdle());
         }).catch(() => {
             dispatch(setIdle());
@@ -80,12 +76,12 @@ export default function Client() {
         });
     };
 
-    const getFavoriteProducts = (favorites) => {
+    const getFavoriteProducts = () => {
         setLoadingProducts(true);
         let tmpProducts = [];
-        if (favorites.length > 0) {
+        if (myFavorites.length > 0) {
             const qs = require('qs');
-            const query = qs.stringify({_where: {id: favorites},}, {encodeValuesOnly: true});
+            const query = qs.stringify({_where: {id: myFavorites},}, {encodeValuesOnly: true});
             axios.get(appContext.ENDPOINT_PRODUCTS + "?" + query, {
                 headers: {'Authorization': 'Bearer ' + token}
             }).then((response) => {
@@ -107,12 +103,12 @@ export default function Client() {
         }
     };
 
-    const getFollowingShops = (following) => {
+    const getFollowingShops = () => {
         setLoadingProducts(true);
         let tmpShops = [];
-        if (following.length > 0) {
+        if (myFollowing.length > 0) {
             const qs = require('qs');
-            const query = qs.stringify({_where: {username: following},}, {encodeValuesOnly: true});
+            const query = qs.stringify({_where: {username: myFollowing},}, {encodeValuesOnly: true});
             axios.get(appContext.ENDPOINT_SHOPS + "?" + query, {
                 headers: {'Authorization': 'Bearer ' + token}
             }).then((response) => {
@@ -192,15 +188,16 @@ export default function Client() {
         setSelfUser(username === myUsername);
     };
 
-    const refresh = () => {
+    useEffect(() => {
         checkSelfUser();
         appContext.setFavoritesFollowing();
         getClientInfo();
-    };
+    }, [location]);
 
     useEffect(() => {
-        refresh();
-    }, [location]);
+        getFavoriteProducts();
+        getFollowingShops();
+    }, [myFavorites, myFollowing]);
 
     return (
         <>

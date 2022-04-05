@@ -48,9 +48,10 @@ export default function Shop() {
     const [productToDelete, setProductToDelete] = useState(null);
     const [productToUpdate, setProductToUpdate] = useState(null);
     const [loadingProducts, setLoadingProducts] = useState(false);
-    const [selfUser, setSelfUser] = useState(false);
     const token = useSelector((state) => state.token.value);
     const myUsername = useSelector((state) => state.user.username);
+    const myFavorites = useSelector((state) => state.user.favorites);
+    const myFollowing = useSelector((state) => state.user.following);
     const firstAccess = useSelector((state) => state.user.firstAccess);
     const following = useSelector((state) => state.user.following);
     const id = useSelector((state) => state.user.id);
@@ -62,10 +63,8 @@ export default function Shop() {
 
     const onChangeTabValue = (e, value) => {
         setTabValue(value);
-        refresh();
     };
 
-    //TODO: per riaggiornare i dati dei prodotti preferiti, faccio il fetch di tutte le info del negozio
     const getShopInfo = () => {
         dispatch(setBusy());
         axios.get(appContext.ENDPOINT_SHOPS + "?username=" + username, {
@@ -80,7 +79,6 @@ export default function Shop() {
                 setCarousel(getCarousel(response.data[0]?.carousel0, response.data[0]?.carousel1, response.data[0]?.carousel2));
                 setTelephone(response.data[0]?.telephone);
                 setWebsite(response.data[0]?.website);
-                getFavoriteProducts(response.data[0]?.favorites);
                 dispatch(setIdle());
             } else {
                 dispatch(setIdle());
@@ -114,12 +112,12 @@ export default function Shop() {
         });
     };
 
-    const getFavoriteProducts = (favorites) => {
+    const getFavoriteProducts = () => {
         setLoadingProducts(true);
         let tmpProducts = [];
-        if (favorites.length > 0) {
+        if (myFavorites.length > 0) {
             const qs = require('qs');
-            const query = qs.stringify({_where: {id: favorites},}, {encodeValuesOnly: true});
+            const query = qs.stringify({_where: {id: myFavorites},}, {encodeValuesOnly: true});
             axios.get(appContext.ENDPOINT_PRODUCTS + "?" + query, {
                 headers: {'Authorization': 'Bearer ' + token}
             }).then((response) => {
@@ -141,6 +139,8 @@ export default function Shop() {
         }
     };
 
+    const getFollowingShops = () => {};
+
     const getCarousel = (...pictures) => {
         let returnList = [];
         for (let i = 0; i < pictures.length; i++) {
@@ -149,10 +149,6 @@ export default function Shop() {
             }
         }
         return returnList;
-    };
-
-    const checkSelfUser = () => {
-        setSelfUser(username === myUsername);
     };
 
     const updateAvatar = (e) => {
@@ -411,7 +407,7 @@ export default function Shop() {
                 dispatch(isError('Si è verificato un errore nella cancellazione del prodotto. Riprovare.'));
             });
         }
-    }
+    };
 
     const openInfoDialog = (info) => {
         switch (info) {
@@ -441,32 +437,32 @@ export default function Shop() {
         setFollowed(following.includes(username));
     };
 
-    const refresh = (all=true) => {
-
-        checkSelfUser();
-        appContext.setFavoritesFollowing();
-        getShopInfo();
-        getProducts();
-        if (all) {
-
-        }
-    };
-
     useEffect(() => {
         if (firstAccess) {
             navigate(appContext.routes.wizard);
         } else {
-            refresh();
+            // checkSelfUser();
+            appContext.setFavoritesFollowing();
+            getShopInfo();
+            getProducts();
         }
     }, []);
 
     useEffect(() => {
-        refresh();
+        // checkSelfUser();
+        appContext.setFavoritesFollowing();
+        getShopInfo();
+        getProducts();
     }, [location]);
 
     useEffect(() => {
         checkFollowed(following);
-    }, [username])
+    }, [username]);
+
+    useEffect(() =>  {
+        getFavoriteProducts();
+        getFollowingShops();
+    }, [myFavorites, myFollowing]);
 
     return (
         <>
@@ -484,7 +480,7 @@ export default function Shop() {
                     carousel={carousel}
                     website={website}
                     telephone={telephone}
-                    selfUser={selfUser}
+                    selfUser={username === myUsername}
                     openUpdateCarouselDialog={() => {
                         setUpdateCarouselDialogOpened(true)
                     }}
@@ -512,7 +508,7 @@ export default function Shop() {
                             onChange={onChangeTabValue}
                             textColor='inherit' TabIndicatorProps={{style: {backgroundColor: "darkred"}}}>
                             {
-                                selfUser ?
+                                (username === myUsername) ?
                                     [
                                         <Tab icon={<CategoryIcon/>} label="I TUOI PRODOTTI" value='products'/>,
                                         <Tab icon={<FavoriteIcon/>} label="PRODOTTI PREFERITI" value='favorites'/>,
@@ -531,7 +527,7 @@ export default function Shop() {
                             isProducts={true}
                             products={products}
                             isUser={true}
-                            isSelfUser={selfUser}
+                            isSelfUser={username === myUsername}
                             updateProduct={(id) => {
                                 setProductToUpdate(id);
                                 setUpdateProductDialogOpened(true);

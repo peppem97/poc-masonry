@@ -66,8 +66,6 @@ const iconButtonStyle = {
 
 export const ProductCard = React.memo(function GalaxyCard(props) {
     const [avatar, setAvatar] = useState(null);
-    const [favoritesOfProduct, setFavoritesOfProduct] = useState(null);
-
     const [favorite, setFavorite] = useState(false);
     const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const avatarShadow = useAvatarShadow();
@@ -103,7 +101,6 @@ export const ProductCard = React.memo(function GalaxyCard(props) {
 
     const toggleFavorite = () => {
         let tmpFavoritesOfUser;
-        let tmpFavoritesOfProduct;
 
         if (favorite) {
             tmpFavoritesOfUser = favoritesOfUser.filter((element) => (element !== props.product.id));
