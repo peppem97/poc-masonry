@@ -1,5 +1,4 @@
 import {
-    AvatarGroup,
     Card,
     CardContent, IconButton
 } from "@mui/material";
@@ -144,6 +143,7 @@ export default function Product() {
             setPrice(response.data[0]?.price);
             setPieces(response.data[0]?.pieces);
             setDescription(response.data[0]?.description);
+            //TODO: fare in modo che si prendano sia avatar che username
             setFavoritesOfProduct(response.data[0]?.favorites);
             dispatch(setIdle());
         }).catch(() => {

@@ -24,6 +24,7 @@ import Box from "@mui/material/Box";
 import CategoryIcon from '@mui/icons-material/Category';
 import favoriteSVG from "./assets/favorite.svg";
 import productSVG from "./assets/product.svg";
+import qs from "qs";
 
 export default function Shop() {
     const [tabValue, setTabValue] = useState('products');
@@ -53,7 +54,6 @@ export default function Shop() {
     const firstAccess = useSelector((state) => state.user.firstAccess);
     const userType = useSelector((state) => state.user.type);
     const following = useSelector((state) => state.user.following);
-
     const id = useSelector((state) => state.user.id);
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
@@ -66,7 +66,7 @@ export default function Shop() {
         refresh();
     };
 
-    //TODO: per riaggiornare i dati dei prodtti preferiti, faccio il fetch di tutte le info del negozio
+    //TODO: per riaggiornare i dati dei prodotti preferiti, faccio il fetch di tutte le info del negozio
     const getShopInfo = () => {
         dispatch(setBusy());
         axios.get(appContext.ENDPOINT_SHOPS + "?username=" + username, {
@@ -93,16 +93,6 @@ export default function Shop() {
         });
     };
 
-    const setFavoritesFollowing = () => {
-        axios.get((userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS) + "?username=" + myUsername,{
-            headers: {'Authorization': 'Bearer ' + token}
-        }).then((response) => {
-            dispatch(setId(response.data[0].id));
-            dispatch(setFavorites(response.data[0].favorites));
-            dispatch(setFollowing(response.data[0].following));
-        })
-    };
-
     const getProducts = () => {
         setLoadingProducts(true);
         axios.get(appContext.ENDPOINT_PRODUCTS + "?username=" + username, {
@@ -123,16 +113,6 @@ export default function Shop() {
             dispatch(setIdle());
             dispatch(isError('Si è verificato un errore nella ricezione dei prodotti. Riprovare ad aggiornare la pagina.'));
         });
-    };
-
-    const getCarousel = (...pictures) => {
-        let returnList = [];
-        for (let i = 0; i < pictures.length; i++) {
-            if (pictures[i] != null) {
-                returnList.push({index: i, image: appContext.HOST + pictures[i].url, rawImage: null, add: false});
-            }
-        }
-        return returnList;
     };
 
     const getFavoriteProducts = (favorites) => {
@@ -160,6 +140,26 @@ export default function Shop() {
             setFavoriteProducts(tmpProducts);
             setLoadingProducts(false);
         }
+    };
+
+    const setFavoritesFollowing = () => {
+        axios.get((userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS) + "?username=" + myUsername,{
+            headers: {'Authorization': 'Bearer ' + token}
+        }).then((response) => {
+            dispatch(setId(response.data[0].id));
+            dispatch(setFavorites(response.data[0].favorites));
+            dispatch(setFollowing(response.data[0].following));
+        })
+    };
+
+    const getCarousel = (...pictures) => {
+        let returnList = [];
+        for (let i = 0; i < pictures.length; i++) {
+            if (pictures[i] != null) {
+                returnList.push({index: i, image: appContext.HOST + pictures[i].url, rawImage: null, add: false});
+            }
+        }
+        return returnList;
     };
 
     const checkSelfUser = () => {
@@ -452,11 +452,15 @@ export default function Shop() {
         setFollowed(following.includes(username));
     };
 
-    const refresh = () => {
+    const refresh = (all=true) => {
+
         checkSelfUser();
         setFavoritesFollowing();
         getShopInfo();
         getProducts();
+        if (all) {
+
+        }
     };
 
     useEffect(() => {

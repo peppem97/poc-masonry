@@ -21,6 +21,7 @@ import GridSystem from "./GridSystem";
 import {TabContext, TabList, TabPanel} from "@material-ui/lab";
 import {setFavorites, setFollowing, setId} from "./store/user";
 import favoriteSVG from "./assets/favorite.svg"
+import qs from "qs";
 
 const useAvatarShadow = makeStyles(theme => ({
     avatar: {
@@ -33,6 +34,8 @@ export default function Client() {
     const [surname, setSurname] = useState(null);
     const [avatar, setAvatar] = useState(null);
     const [favoriteProducts, setFavoriteProducts] = useState([]);
+    const [followingShops, setFollowingShops] = useState([]);
+
     const [loadingProducts, setLoadingProducts] = useState(false);
     const [editAvatar, setEditAvatar] = useState(false);
     const [info, setInfo] = useState(null);
@@ -75,6 +78,7 @@ export default function Client() {
             setSurname(response.data[0]?.surname);
             setAvatar(response.data[0]?.avatar?.url);
             getFavoriteProducts(response.data[0]?.favorites);
+            getFollowingShops(response.data[0]?.following);
             dispatch(setIdle());
         }).catch(() => {
             dispatch(setIdle());
@@ -108,6 +112,28 @@ export default function Client() {
             setLoadingProducts(false);
         }
     };
+
+    const getFollowingShops = (following) => {
+        setLoadingProducts(true);
+        let tmpShops = [];
+        if (following.length > 0) {
+            const qs = require('qs');
+            const query = qs.stringify({_where: {username: following},}, {encodeValuesOnly: true});
+            axios.get(appContext.ENDPOINT_SHOPS + "?" + query, {
+                headers: {'Authorization': 'Bearer ' + token}
+            }).then((response) => {
+                tmpShops = response.data.map((element) => ({avatar: element.avatar.url, username: element.username}));
+                setFollowingShops(tmpShops);
+                setLoadingProducts(false);
+            }).catch(() => {
+                dispatch(setIdle());
+            });
+        } else {
+            setFollowingShops(tmpShops);
+            setLoadingProducts(false);
+        }
+    };
+
 
     const updateAvatar = (e) => {
         dispatch(setBusy());
