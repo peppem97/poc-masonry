@@ -6,7 +6,7 @@ import GlobalContext from "./GlobalContext";
 import {setBusy, setIdle} from "./store/loading";
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
-import {Divider, IconButton, Input, Tab, Typography} from "@mui/material";
+import {Divider, IconButton, Input, List, ListItem, ListItemAvatar, ListItemText, Tab, Typography} from "@mui/material";
 import Box from "@mui/material/Box";
 import {makeStyles} from "@material-ui/core/styles";
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -22,6 +22,10 @@ import {TabContext, TabList, TabPanel} from "@material-ui/lab";
 import {setFavorites, setFollowing, setId} from "./store/user";
 import favoriteSVG from "./assets/favorite.svg"
 import qs from "qs";
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import FollowCard from "./FollowCard";
+import AlertDialog from "./dialogs/AlertDialog";
 
 const useAvatarShadow = makeStyles(theme => ({
     avatar: {
@@ -35,7 +39,6 @@ export default function Client() {
     const [avatar, setAvatar] = useState(null);
     const [favoriteProducts, setFavoriteProducts] = useState([]);
     const [followingShops, setFollowingShops] = useState([]);
-
     const [loadingProducts, setLoadingProducts] = useState(false);
     const [editAvatar, setEditAvatar] = useState(false);
     const [info, setInfo] = useState(null);
@@ -53,7 +56,6 @@ export default function Client() {
     const appContext = useContext(GlobalContext);
     const navigate = useNavigate();
     const location = useLocation();
-
 
     const onChangeTabValue = (e, value) => {
         setTabValue(value);
@@ -122,7 +124,10 @@ export default function Client() {
             axios.get(appContext.ENDPOINT_SHOPS + "?" + query, {
                 headers: {'Authorization': 'Bearer ' + token}
             }).then((response) => {
-                tmpShops = response.data.map((element) => ({avatar: element.avatar.url, username: element.username}));
+                tmpShops = response.data.map((element) => ({
+                    avatar: element.avatar.url,
+                    username: element.username,
+                    title: element.title}));
                 setFollowingShops(tmpShops);
                 setLoadingProducts(false);
             }).catch(() => {
@@ -133,7 +138,6 @@ export default function Client() {
             setLoadingProducts(false);
         }
     };
-
 
     const updateAvatar = (e) => {
         dispatch(setBusy());
@@ -312,6 +316,39 @@ export default function Client() {
                         }
                     </TabPanel>
                     <TabPanel value='shops'>
+
+                        <List sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}>
+                            {
+                                followingShops.map((element) => (
+                                    // <FollowCard
+                                    //     avatar={appContext.HOST + element.avatar}
+                                    //     title={element.title} username={element.username}/>
+                                    <ListItem alignItems="flex-start" secondaryAction={
+                                        [<IconButton edge="start">
+                                            <OpenInNewIcon/>
+                                        </IconButton>,
+                                            <IconButton edge="end">
+                                                <RemoveCircleIcon/>
+                                            </IconButton>
+                                        ]
+                                    }>
+                                        <ListItemAvatar>
+                                            <Avatar alt="" src={appContext.HOST + element.avatar}/>
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={element.title}
+                                            secondary={
+                                                <>
+                                                    {element.username}
+                                                </>
+                                            }
+                                        />
+                                    </ListItem>
+                                ))
+                            }
+                        </List>
+
+
                     </TabPanel>
                 </TabContext>
             </Container>
@@ -325,6 +362,7 @@ export default function Client() {
                     updateInfo(infoToEdit, e)
                 }}
                 info={info}/>
+            <AlertDialog open={}/>
         </>
     );
 }
