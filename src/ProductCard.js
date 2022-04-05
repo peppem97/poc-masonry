@@ -19,7 +19,6 @@ import {setBusy, setIdle} from "./store/loading";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import {setFavorites, setFollowing} from "./store/user";
-import Typography from "@mui/material/Typography";
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -65,12 +64,12 @@ const iconButtonStyle = {
 };
 
 export const ProductCard = React.memo(function GalaxyCard(props) {
-    const [avatar, setAvatar] = useState(null);
-    const [favorite, setFavorite] = useState(false);
-    const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const avatarShadow = useAvatarShadow();
     const styles = useStyles();
     const theme = responsiveFontSizes(createTheme());
+    const [avatar, setAvatar] = useState(null);
+    const [favorite, setFavorite] = useState(false);
+    const mediaStyles = useCoverCardMediaStyles({bgPosition: 'top'});
     const appContext = useContext(GlobalContext);
     const token = useSelector((state) => state.token.value);
     const favoritesOfUser = useSelector((state) => state.user.favorites);

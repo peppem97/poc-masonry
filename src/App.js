@@ -20,7 +20,7 @@ import axios from "axios";
 import {setFavorites, setFollowing, setId} from "./store/user";
 
 export default function App() {
-    const host = "http://zion.datafactor.it:40505"
+    const host = "http://zion.datafactor.it:40505";
     const loading = useSelector((state) => state.loading.value);
     const errorState = useSelector((state) => state.dialogs.error);
     const message = useSelector((state) => state.dialogs.message);

@@ -92,6 +92,9 @@ const useAvatarShadow = makeStyles(theme => ({
 }));
 
 export default function Product() {
+    const avatarShadow = useAvatarShadow();
+    const styles = useStyles();
+
     const [pictures, setPictures] = useState([]);
     const [cover, setCover] = useState(null);
     const [title, setTitle] = useState(null);
@@ -105,7 +108,6 @@ export default function Product() {
     const [favoritesOfProduct, setFavoritesOfProduct] = useState([]);
     const [favoritesDialog, setFavoritesDialog] = useState(false);
     const appContext = useContext(GlobalContext);
-    const avatarShadow = useAvatarShadow();
     const token = useSelector((state) => state.token.value);
     const favoritesOfUser = useSelector((state) => state.user.favorites);
     const myUsername = useSelector((state) => state.user.username);
@@ -114,7 +116,6 @@ export default function Product() {
     const dispatch = useDispatch();
     const {id} = useParams();
     const navigate = useNavigate();
-    const styles = useStyles();
 
     const goToShop = () => {
         navigate(appContext.routes.shop + "/" + username);

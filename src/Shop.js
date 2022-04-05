@@ -437,11 +437,13 @@ export default function Shop() {
         setFollowed(following.includes(username));
     };
 
+
+
+
     useEffect(() => {
         if (firstAccess) {
             navigate(appContext.routes.wizard);
         } else {
-            // checkSelfUser();
             appContext.setFavoritesFollowing();
             getShopInfo();
             getProducts();
@@ -449,7 +451,6 @@ export default function Shop() {
     }, []);
 
     useEffect(() => {
-        // checkSelfUser();
         appContext.setFavoritesFollowing();
         getShopInfo();
         getProducts();

@@ -44,16 +44,15 @@ export default function Client() {
     const [infoToEdit, setInfoToEdit] = useState(null);
     const [updateInfoDialogOpened, setUpdateInfoDialogOpened] = useState(false);
     const [tabValue, setTabValue] = useState('favorites');
-    const [selfUser, setSelfUser] = useState(false);
     const avatarShadow = useAvatarShadow();
-    const {username} = useParams();
-    const dispatch = useDispatch();
     const token = useSelector((state) => state.token.value);
     const myUsername = useSelector((state) => state.user.username);
     const myFavorites = useSelector((state) => state.user.favorites);
     const myFollowing = useSelector((state) => state.user.following);
     const id = useSelector((state) => state.user.id);
     const appContext = useContext(GlobalContext);
+    const {username} = useParams();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -184,12 +183,7 @@ export default function Client() {
         setUpdateInfoDialogOpened(true);
     };
 
-    const checkSelfUser = () => {
-        setSelfUser(username === myUsername);
-    };
-
     useEffect(() => {
-        checkSelfUser();
         appContext.setFavoritesFollowing();
         getClientInfo();
     }, [location]);
@@ -213,7 +207,7 @@ export default function Client() {
                     gap: 1,
                     justifyContent: 'center'
                 }}>
-                    {selfUser && <label htmlFor="avatar-uploader" className='text-center'>
+                    {(username === myUsername) && <label htmlFor="avatar-uploader" className='text-center'>
                         <Input accept="image/*" id="avatar-uploader" type="file" hidden
                                onChange={updateAvatar}/>
                         <Avatar
@@ -229,7 +223,7 @@ export default function Client() {
                         </Avatar>
                     </label>}
                     {
-                        !selfUser &&
+                        !(username === myUsername) &&
                         <Avatar
                             className={avatarShadow.avatar}
                             src={appContext.HOST + avatar}
@@ -239,7 +233,7 @@ export default function Client() {
                     <br/>
 
                     <Typography className='text-center' variant='h4'>{name}
-                        {selfUser &&
+                        {(username === myUsername) &&
                             <IconButton color="inherit" size="medium" onClick={() => {
                                 openInfoDialog('name')
                             }}>
@@ -248,7 +242,7 @@ export default function Client() {
                         }
                     </Typography>
                     <Typography className='text-center' variant='h4'>{surname}
-                        {selfUser &&
+                        {(username === myUsername) &&
                             <IconButton color="inherit" size="medium" onClick={() => {
                                 openInfoDialog('surname')
                             }}>
