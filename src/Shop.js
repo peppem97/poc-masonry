@@ -16,7 +16,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setBusy, setIdle} from "./store/loading";
 import {isError} from "./store/dialogs";
 import {setFavorites, setFollowing, setId} from "./store/user";
-import {Tab} from "@mui/material";
+import {IconButton, List, ListItem, ListItemAvatar, ListItemText, Tab} from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import StoreIcon from "@mui/icons-material/Store";
 import {TabContext, TabList, TabPanel} from "@material-ui/lab";
@@ -24,6 +24,10 @@ import Box from "@mui/material/Box";
 import CategoryIcon from '@mui/icons-material/Category';
 import favoriteSVG from "./assets/favorite.svg";
 import productSVG from "./assets/product.svg";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import Button from "@mui/material/Button";
+import AddBusinessIcon from "@mui/icons-material/AddBusiness";
+import Avatar from "@material-ui/core/Avatar";
 
 export default function Shop() {
     const [tabValue, setTabValue] = useState('products');
@@ -166,6 +170,7 @@ export default function Shop() {
                     avatar: element.avatar.url,
                     username: element.username,
                     title: element.title}));
+                console.log(tmpShops)
                 setFollowingShops(tmpShops);
                 setLoadingProducts(false);
             }).catch(() => {
@@ -466,7 +471,6 @@ export default function Shop() {
     const toggleFollow = () => {
     };
 
-
     useEffect(() => {
         if (firstAccess) {
             navigate(appContext.routes.wizard);
@@ -605,6 +609,40 @@ export default function Shop() {
                         }
                     </TabPanel>
                     <TabPanel value='shops'>
+
+                        <List sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}>
+                            {
+                                followingShops.map((element) => (
+                                    // <FollowCard
+                                    //     avatar={appContext.HOST + element.avatar}
+                                    //     title={element.title} username={element.username}/>
+                                    <ListItem alignItems="flex-start" secondaryAction={
+                                        [<IconButton edge="start">
+                                            <OpenInNewIcon/>
+                                        </IconButton>,
+                                            <Button variant="contained" endIcon={<AddBusinessIcon/>} style={{backgroundColor: 'darkred'}}>
+                                                Segui
+                                            </Button>
+                                            // <IconButton edge="end" onClick={() => setAlertDialog(true)}>
+                                            //     <RemoveCircleIcon/>
+                                            // </IconButton>
+                                        ]
+                                    }>
+                                        <ListItemAvatar>
+                                            <Avatar alt="" src={appContext.HOST + element.avatar}/>
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={element.title}
+                                            secondary={
+                                                <>
+                                                    {element.username}
+                                                </>
+                                            }
+                                        />
+                                    </ListItem>
+                                ))
+                            }
+                        </List>
 
                     </TabPanel>
 
