@@ -32,18 +32,21 @@ const useAvatarShadow = makeStyles(theme => ({
 }));
 
 export default function Client() {
+    const [tabValue, setTabValue] = useState('favorites');
+
     const [name, setName] = useState(null);
     const [surname, setSurname] = useState(null);
     const [avatar, setAvatar] = useState(null);
     const [favoriteProducts, setFavoriteProducts] = useState([]);
     const [followingShops, setFollowingShops] = useState([]);
+
+
     const [loadingProducts, setLoadingProducts] = useState(false);
     const [editAvatar, setEditAvatar] = useState(false);
     const [alertDialog, setAlertDialog] = useState(false);
     const [info, setInfo] = useState(null);
     const [infoToEdit, setInfoToEdit] = useState(null);
     const [updateInfoDialogOpened, setUpdateInfoDialogOpened] = useState(false);
-    const [tabValue, setTabValue] = useState('favorites');
     const avatarShadow = useAvatarShadow();
     const token = useSelector((state) => state.token.value);
     const myUsername = useSelector((state) => state.user.username);

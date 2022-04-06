@@ -24,7 +24,6 @@ import Box from "@mui/material/Box";
 import CategoryIcon from '@mui/icons-material/Category';
 import favoriteSVG from "./assets/favorite.svg";
 import productSVG from "./assets/product.svg";
-import qs from "qs";
 
 export default function Shop() {
     const [tabValue, setTabValue] = useState('products');
@@ -36,7 +35,9 @@ export default function Shop() {
     const [avatar, setAvatar] = useState(null);
     const [carousel, setCarousel] = useState([]);
     const [products, setProducts] = useState([]);
-    const [followed, setFollowed] = useState(false)
+    const [followed, setFollowed] = useState(false);
+
+
     const [favoriteProducts, setFavoriteProducts] = useState([]);
     const [followingShops, setFollowingShops] = useState([]);
 
@@ -56,7 +57,6 @@ export default function Shop() {
     const myFavorites = useSelector((state) => state.user.favorites);
     const myFollowing = useSelector((state) => state.user.following);
     const firstAccess = useSelector((state) => state.user.firstAccess);
-    const following = useSelector((state) => state.user.following);
     const id = useSelector((state) => state.user.id);
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
@@ -91,6 +91,16 @@ export default function Shop() {
             dispatch(setIdle());
             navigate(appContext.routes.noUser);
         });
+    };
+
+    const getCarousel = (...pictures) => {
+        let returnList = [];
+        for (let i = 0; i < pictures.length; i++) {
+            if (pictures[i] != null) {
+                returnList.push({index: i, image: appContext.HOST + pictures[i].url, rawImage: null, add: false});
+            }
+        }
+        return returnList;
     };
 
     const getProducts = () => {
@@ -148,6 +158,7 @@ export default function Shop() {
         if (myFollowing.length > 0) {
             const qs = require('qs');
             const query = qs.stringify({_where: {username: myFollowing},}, {encodeValuesOnly: true});
+
             axios.get(appContext.ENDPOINT_SHOPS + "?" + query, {
                 headers: {'Authorization': 'Bearer ' + token}
             }).then((response) => {
@@ -164,16 +175,6 @@ export default function Shop() {
             setFollowingShops(tmpShops);
             setLoadingProducts(false);
         }
-    };
-
-    const getCarousel = (...pictures) => {
-        let returnList = [];
-        for (let i = 0; i < pictures.length; i++) {
-            if (pictures[i] != null) {
-                returnList.push({index: i, image: appContext.HOST + pictures[i].url, rawImage: null, add: false});
-            }
-        }
-        return returnList;
     };
 
     const updateAvatar = (e) => {
@@ -463,7 +464,6 @@ export default function Shop() {
     };
 
     const toggleFollow = () => {
-      console.log('segui non segui');
     };
 
 
@@ -484,7 +484,7 @@ export default function Shop() {
     }, [location]);
 
     useEffect(() => {
-        checkFollowed(following);
+        checkFollowed(myFollowing);
     }, [username]);
 
     useEffect(() =>  {
@@ -604,6 +604,10 @@ export default function Shop() {
                             </Box>
                         }
                     </TabPanel>
+                    <TabPanel value='shops'>
+
+                    </TabPanel>
+
                 </TabContext>
                 <br/>
             </Container>
