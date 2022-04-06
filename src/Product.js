@@ -207,7 +207,6 @@ export default function Product() {
             headers: {'Authorization': 'Bearer ' + token}
         }).then(() => {
             setFavoritesOfProduct(tmpFavoritesOfProduct);
-
         });
     };
 

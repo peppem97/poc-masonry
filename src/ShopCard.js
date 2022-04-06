@@ -178,19 +178,24 @@ export const ShopCard = React.memo(function News3Card(props) {
                         </Info>
                     </Box>
                 </Row>
-                <Row className={styles.author}
-                     m={0}
-                     p={1}
-                     pt={2}
-                     gap={1}
-                     bgcolor={'common.white'}>
-                    {props.following ?
-                        <Button>SEGUITO</Button> :
-                        <Button variant="contained" endIcon={<AddBusinessIcon/>} style={{backgroundColor: 'darkred'}}>
-                            Segui
-                        </Button>
-                    }
-                </Row>
+                {!props.selfUser &&
+                    <Row className={styles.author}
+                         m={0}
+                         p={1}
+                         pt={2}
+                         gap={1}
+                         bgcolor={'common.white'}>
+                        {props.following ?
+                            <Button onClick={props.toggleFollow}>SEGUITO</Button> :
+                            <Button variant="contained"
+                                    onClick={props.toggleFollow}
+                                    endIcon={<AddBusinessIcon/>}
+                                    style={{backgroundColor: 'darkred'}}>
+                                Segui
+                            </Button>
+                        }
+                    </Row>
+                }
                 <Row className={styles.author}
                      m={0}
                      p={3}

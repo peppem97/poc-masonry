@@ -38,6 +38,9 @@ export default function Shop() {
     const [products, setProducts] = useState([]);
     const [followed, setFollowed] = useState(false)
     const [favoriteProducts, setFavoriteProducts] = useState([]);
+    const [followingShops, setFollowingShops] = useState([]);
+
+
     const [uploadProductDialogOpened, setUploadProductDialogOpened] = useState(false);
     const [updateCarouselDialogOpened, setUpdateCarouselDialogOpened] = useState(false);
     const [updateInfoDialogOpened, setUpdateInfoDialogOpened] = useState(false);
@@ -139,7 +142,29 @@ export default function Shop() {
         }
     };
 
-    const getFollowingShops = () => {};
+    const getFollowingShops = () => {
+        setLoadingProducts(true);
+        let tmpShops = [];
+        if (myFollowing.length > 0) {
+            const qs = require('qs');
+            const query = qs.stringify({_where: {username: myFollowing},}, {encodeValuesOnly: true});
+            axios.get(appContext.ENDPOINT_SHOPS + "?" + query, {
+                headers: {'Authorization': 'Bearer ' + token}
+            }).then((response) => {
+                tmpShops = response.data.map((element) => ({
+                    avatar: element.avatar.url,
+                    username: element.username,
+                    title: element.title}));
+                setFollowingShops(tmpShops);
+                setLoadingProducts(false);
+            }).catch(() => {
+                dispatch(setIdle());
+            });
+        } else {
+            setFollowingShops(tmpShops);
+            setLoadingProducts(false);
+        }
+    };
 
     const getCarousel = (...pictures) => {
         let returnList = [];
@@ -437,7 +462,9 @@ export default function Shop() {
         setFollowed(following.includes(username));
     };
 
-
+    const toggleFollow = () => {
+      console.log('segui non segui');
+    };
 
 
     useEffect(() => {
@@ -480,6 +507,7 @@ export default function Shop() {
                     avatar={avatar}
                     carousel={carousel}
                     website={website}
+                    toggleFollow={toggleFollow}
                     telephone={telephone}
                     selfUser={username === myUsername}
                     openUpdateCarouselDialog={() => {
