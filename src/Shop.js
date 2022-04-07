@@ -61,7 +61,9 @@ export default function Shop() {
     const myFavorites = useSelector((state) => state.user.favorites);
     const myFollowing = useSelector((state) => state.user.following);
     const firstAccess = useSelector((state) => state.user.firstAccess);
-    const id = useSelector((state) => state.user.id);
+    const userType = useSelector((state) => state.user.firstAccess);
+
+    const myId = useSelector((state) => state.user.id);
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
     const dispatch = useDispatch();
@@ -189,7 +191,7 @@ export default function Shop() {
             quality: appContext.COMPRESSION_QUALITY, success(result) {
                 formData.append('files.avatar', result, 'avatar.jpg');
                 formData.append('data', JSON.stringify({}));
-                axios.put(appContext.ENDPOINT_SHOPS + "/" + id, formData, {
+                axios.put(appContext.ENDPOINT_SHOPS + "/" + myId, formData, {
                     headers: {'Authorization': 'Bearer ' + token}
                 }).then(() => {
                     dispatch(setIdle());
@@ -216,7 +218,7 @@ export default function Shop() {
                             const formData = new FormData();
                             formData.append('files.carousel' + picture.index, result, 'example.jpg');
                             formData.append('data', JSON.stringify({}));
-                            axios.put(appContext.ENDPOINT_SHOPS + "/" + id, formData, {
+                            axios.put(appContext.ENDPOINT_SHOPS + "/" + myId, formData, {
                                 headers: {'Authorization': 'Bearer ' + token}
                             }).then(() => {
                                 fetched++;
@@ -244,7 +246,7 @@ export default function Shop() {
                 dispatch(setBusy());
                 let data = {};
                 data['carousel' + picture.index] = null;
-                axios.put(appContext.ENDPOINT_SHOPS + "/" + id, data, {
+                axios.put(appContext.ENDPOINT_SHOPS + "/" + myId, data, {
                     headers: {'Authorization': 'Bearer ' + token}
                 }).then(() => {
                     fetched++;
@@ -266,7 +268,7 @@ export default function Shop() {
         const formData = new FormData();
         data[type] = value;
         formData.append('data', JSON.stringify(data));
-        axios.put(appContext.ENDPOINT_SHOPS + "/" + id, formData, {
+        axios.put(appContext.ENDPOINT_SHOPS + "/" + myId, formData, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -469,6 +471,23 @@ export default function Shop() {
     };
 
     const toggleFollow = () => {
+        let tmpFollow;
+        if (followed) {
+            tmpFollow = myFollowing.filter((element) => (element !== username));
+
+        } else {
+            tmpFollow = JSON.parse(JSON.stringify(myFollowing));
+            tmpFollow.push(username);
+        }
+        let data = {
+            following: tmpFollow
+        };
+        axios.put((userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS) + "/" + myId, data ,{
+            headers: {'Authorization': 'Bearer ' + token}
+        }).then((response) => {
+            dispatch(setFollowing(response.data.following));
+            checkFollowed(response.data.following);
+        });
     };
 
     useEffect(() => {

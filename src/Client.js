@@ -321,12 +321,11 @@ export default function Client() {
                                     //     title={element.title} username={element.username}/>
                                     <ListItem alignItems="flex-start" secondaryAction={
                                         [<>
-                                            {element.followed ? <Button variant="outlined" endIcon={<AddBusinessIcon/>}
+                                            {element.followed ? <Button variant="outlined"
                                                                         style={{color: 'darkred', borderColor: 'darkred'}}>
                                                     seguito
                                                 </Button> :
-                                                <Button variant="contained" endIcon={<AddBusinessIcon/>}
-                                                        style={{backgroundColor: 'darkred'}}>
+                                                <Button variant="contained" style={{backgroundColor: 'darkred'}}>
                                                     Segui
                                                 </Button>}
                                         </>

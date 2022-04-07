@@ -186,7 +186,8 @@ export const ShopCard = React.memo(function News3Card(props) {
                          gap={1}
                          bgcolor={'common.white'}>
                         {props.following ?
-                            <Button onClick={props.toggleFollow}>SEGUITO</Button> :
+                            <Button onClick={props.toggleFollow}
+                                    variant='outlined' style={{color: 'darkred', borderColor: 'darkred'}}>SEGUITO</Button> :
                             <Button variant="contained"
                                     onClick={props.toggleFollow}
                                     endIcon={<AddBusinessIcon/>}
