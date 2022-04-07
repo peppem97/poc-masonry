@@ -17,6 +17,7 @@ import PanoramaIcon from "@mui/icons-material/Panorama";
 import {useCoverCardMediaStyles} from '@mui-treasury/styles/cardMedia/cover';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
+import CheckIcon from '@mui/icons-material/Check';
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -187,7 +188,11 @@ export const ShopCard = React.memo(function News3Card(props) {
                          bgcolor={'common.white'}>
                         {props.following ?
                             <Button onClick={props.toggleFollow}
-                                    variant='outlined' style={{color: 'darkred', borderColor: 'darkred'}}>SEGUITO</Button> :
+                                    variant='outlined'
+                                    endIcon={<CheckIcon/>}
+                                    style={{color: 'darkred', borderColor: 'darkred'}}>
+                                SEGUITO
+                            </Button> :
                             <Button variant="contained"
                                     onClick={props.toggleFollow}
                                     endIcon={<AddBusinessIcon/>}
