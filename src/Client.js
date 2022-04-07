@@ -23,6 +23,7 @@ import favoriteSVG from "./assets/favorite.svg";
 import followSVG from "./assets/follow.svg"
 
 import Button from "@mui/material/Button";
+import {setFollowing} from "./store/user";
 
 const useAvatarShadow = makeStyles(theme => ({
     avatar: {
@@ -47,6 +48,9 @@ export default function Client() {
     const myUsername = useSelector((state) => state.user.username);
     const myFavorites = useSelector((state) => state.user.favorites);
     const myFollowing = useSelector((state) => state.user.following);
+    const userType = useSelector((state) => state.user.type);
+    const myId = useSelector((state) => state.user.id);
+
     const firstAccess = useSelector((state) => state.user.firstAccess);
 
     const id = useSelector((state) => state.user.id);
@@ -54,7 +58,6 @@ export default function Client() {
     const {username} = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const location = useLocation();
 
     const onChangeTabValue = (e, value) => {
         setTabValue(value);
@@ -170,6 +173,27 @@ export default function Client() {
         }).catch(() => {
             dispatch(setIdle());
             dispatch(isError('Si è verificato un errore nell\'aggiornamento dell\'informazione. Riprovare.'));
+        });
+    };
+
+    const toggleFollow = (followed, username) => {
+        let tmpFollow;
+        if (followed) {
+            tmpFollow = myFollowing.filter((element) => (element !== username));
+
+        } else {
+            tmpFollow = JSON.parse(JSON.stringify(myFollowing));
+            tmpFollow.push(username);
+        }
+        let data = {
+            following: tmpFollow
+        };
+        axios.put((userType === 'negozio' ? appContext.ENDPOINT_SHOPS : appContext.ENDPOINT_CLIENTS) + "/" + myId, data ,{
+            headers: {'Authorization': 'Bearer ' + token}
+        }).then((response) => {
+            followed = false;
+            // dispatch(setFollowing(response.data.following));
+            // checkFollowed(response.data.following);
         });
     };
 
@@ -316,11 +340,15 @@ export default function Client() {
                                 followingShops.map((element) => (
                                     <ListItem alignItems="flex-start" secondaryAction={
                                         [<>
-                                            {element.followed ? <Button variant="outlined"
-                                                                        style={{color: 'darkred', borderColor: 'darkred'}}>
+                                            {element.followed ?
+                                                <Button variant="outlined"
+                                                        style={{color: 'darkred', borderColor: 'darkred'}}
+                                                        onClick={() => {toggleFollow(element.followed, element.username)}}>
                                                     seguito
                                                 </Button> :
-                                                <Button variant="contained" style={{backgroundColor: 'darkred'}}>
+                                                <Button variant="contained"
+                                                        style={{backgroundColor: 'darkred'}}
+                                                        onClick={() => {toggleFollow(element.followed, element.username)}}>
                                                     Segui
                                                 </Button>}
                                         </>

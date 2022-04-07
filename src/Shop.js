@@ -641,8 +641,9 @@ export default function Shop() {
                                     //     title={element.title} username={element.username}/>
                                     <ListItem alignItems="flex-start" secondaryAction={
                                         [<>
-                                            {element.followed ? <Button variant="outlined"
-                                                                        style={{color: 'darkred', borderColor: 'darkred'}}>
+                                            {element.followed ?
+                                                <Button variant="outlined"
+                                                        style={{color: 'darkred', borderColor: 'darkred'}}>
                                                     seguito
                                                 </Button> :
                                                 <Button variant="contained" style={{backgroundColor: 'darkred'}}>
