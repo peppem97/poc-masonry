@@ -40,12 +40,8 @@ export default function Shop() {
     const [carousel, setCarousel] = useState([]);
     const [products, setProducts] = useState([]);
     const [followed, setFollowed] = useState(false);
-
-
     const [favoriteProducts, setFavoriteProducts] = useState([]);
     const [followingShops, setFollowingShops] = useState([]);
-
-
     const [uploadProductDialogOpened, setUploadProductDialogOpened] = useState(false);
     const [updateCarouselDialogOpened, setUpdateCarouselDialogOpened] = useState(false);
     const [updateInfoDialogOpened, setUpdateInfoDialogOpened] = useState(false);
@@ -62,7 +58,6 @@ export default function Shop() {
     const myFollowing = useSelector((state) => state.user.following);
     const firstAccess = useSelector((state) => state.user.firstAccess);
     const userType = useSelector((state) => state.user.firstAccess);
-
     const myId = useSelector((state) => state.user.id);
     const {username} = useParams();
     const appContext = useContext(GlobalContext);
@@ -72,6 +67,10 @@ export default function Shop() {
 
     const onChangeTabValue = (e, value) => {
         setTabValue(value);
+    };
+
+    const goToShop = (username) => {
+        navigate(appContext.routes.shop + '/' + username);
     };
 
     const getShopInfo = () => {
@@ -170,9 +169,9 @@ export default function Shop() {
             }).then((response) => {
                 tmpShops = response.data.map((element) => ({
                     avatar: element.avatar.url,
+                    followed: true,
                     username: element.username,
                     title: element.title}));
-                console.log(tmpShops)
                 setFollowingShops(tmpShops);
                 setLoadingProducts(false);
             }).catch(() => {
@@ -636,27 +635,25 @@ export default function Shop() {
                                     //     avatar={appContext.HOST + element.avatar}
                                     //     title={element.title} username={element.username}/>
                                     <ListItem alignItems="flex-start" secondaryAction={
-                                        [<IconButton edge="start">
-                                            <OpenInNewIcon/>
-                                        </IconButton>,
-                                            <Button variant="contained" endIcon={<AddBusinessIcon/>} style={{backgroundColor: 'darkred'}}>
-                                                Segui
-                                            </Button>
-                                            // <IconButton edge="end" onClick={() => setAlertDialog(true)}>
-                                            //     <RemoveCircleIcon/>
-                                            // </IconButton>
+                                        [<>
+                                            {element.followed ? <Button variant="outlined"
+                                                                        style={{color: 'darkred', borderColor: 'darkred'}}>
+                                                    seguito
+                                                </Button> :
+                                                <Button variant="contained" style={{backgroundColor: 'darkred'}}>
+                                                    Segui
+                                                </Button>}
+                                        </>
                                         ]
                                     }>
                                         <ListItemAvatar>
-                                            <Avatar alt="" src={appContext.HOST + element.avatar}/>
+                                            <IconButton onClick={() => goToShop(element.username)}>
+                                                <Avatar alt="" src={appContext.HOST + element.avatar}/>
+                                            </IconButton>
                                         </ListItemAvatar>
                                         <ListItemText
                                             primary={element.title}
-                                            secondary={
-                                                <>
-                                                    {element.username}
-                                                </>
-                                            }
+                                            secondary={element.username}
                                         />
                                     </ListItem>
                                 ))

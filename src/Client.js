@@ -19,10 +19,9 @@ import UpdateInfoDialog from "./dialogs/UpdateInfoDialog";
 import {generateHeight} from "./Utility";
 import GridSystem from "./GridSystem";
 import {TabContext, TabList, TabPanel} from "@material-ui/lab";
-import favoriteSVG from "./assets/favorite.svg"
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import AlertDialog from "./dialogs/AlertDialog";
-import AddBusinessIcon from "@mui/icons-material/AddBusiness";
+import favoriteSVG from "./assets/favorite.svg";
+import followSVG from "./assets/follow.svg"
+
 import Button from "@mui/material/Button";
 
 const useAvatarShadow = makeStyles(theme => ({
@@ -316,9 +315,6 @@ export default function Client() {
                         <List sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}>
                             {
                                 followingShops.map((element) => (
-                                    // <FollowCard
-                                    //     avatar={appContext.HOST + element.avatar}
-                                    //     title={element.title} username={element.username}/>
                                     <ListItem alignItems="flex-start" secondaryAction={
                                         [<>
                                             {element.followed ? <Button variant="outlined"
@@ -338,16 +334,28 @@ export default function Client() {
                                         </ListItemAvatar>
                                         <ListItemText
                                             primary={element.title}
-                                            secondary={
-                                                <>
-                                                    {element.username}
-                                                </>
-                                            }
+                                            secondary={element.username}
                                         />
                                     </ListItem>
                                 ))
                             }
                         </List>
+                        {
+                            followingShops.length === 0 &&
+                            <Box sx={{
+                                width: '100%',
+                                color: 'darkred',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                gap: 2,
+                                justifyContent: 'center'
+                            }}>
+                                <img src={followSVG} alt="" style={{width: '30%', height: 'auto'}}/>
+                                <Typography variant='h4' className='text-center'>Nessun negozio
+                                    seguito...</Typography>
+                            </Box>
+                        }
 
 
                     </TabPanel>
