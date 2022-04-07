@@ -32,14 +32,11 @@ const useAvatarShadow = makeStyles(theme => ({
 
 export default function Client() {
     const [tabValue, setTabValue] = useState('favorites');
-
     const [name, setName] = useState(null);
     const [surname, setSurname] = useState(null);
     const [avatar, setAvatar] = useState(null);
     const [favoriteProducts, setFavoriteProducts] = useState([]);
     const [followingShops, setFollowingShops] = useState([]);
-
-
     const [loadingProducts, setLoadingProducts] = useState(false);
     const [editAvatar, setEditAvatar] = useState(false);
     const [info, setInfo] = useState(null);
@@ -198,7 +195,9 @@ export default function Client() {
             appContext.setFavoritesFollowing();
             getClientInfo();
         }
-    }, [location]);
+    }, []);
+
+    useEffect(() => {}, [username]);
 
     useEffect(() => {
         getFavoriteProducts();

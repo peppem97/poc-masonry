@@ -499,19 +499,24 @@ export default function Shop() {
         }
     }, []);
 
+    // useEffect(() => {
+    //     appContext.setFavoritesFollowing();
+    //     getShopInfo();
+    //     getProducts();
+    // }, [location]);
+
     useEffect(() => {
+        setTabValue('products')
         appContext.setFavoritesFollowing();
         getShopInfo();
         getProducts();
-    }, [location]);
-
-    useEffect(() => {
         checkFollowed(myFollowing);
     }, [username]);
 
     useEffect(() =>  {
         getFavoriteProducts();
         getFollowingShops();
+        checkFollowed(myFollowing);
     }, [myFavorites, myFollowing]);
 
     return (
@@ -523,7 +528,7 @@ export default function Shop() {
                 <br/>
                 <ShopCard
                     email={email}
-                    following={followed}
+                    followed={followed}
                     title={title}
                     description={description}
                     avatar={avatar}
